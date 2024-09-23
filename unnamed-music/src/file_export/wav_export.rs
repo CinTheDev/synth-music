@@ -5,7 +5,7 @@ pub struct WavExport {
 }
 
 impl FileExport for WavExport {
-    fn export(buffer: &[u8], path: std::path::PathBuf) -> Result<(), ()> {
+    fn export(buffer: &[u8]) -> Result<(), ()> {
         unimplemented!();
     }
 }
