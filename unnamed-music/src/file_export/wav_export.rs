@@ -2,7 +2,9 @@ use super::FileExport;
 use std::{fs::File, io::{BufWriter, Write}, path::PathBuf};
 
 pub struct WavExport {
-    path: PathBuf,
+    pub path: PathBuf,
+    pub sample_rate: u32,
+    pub bits_per_sample: u16,
 }
 
 impl WavExport {
@@ -19,12 +21,11 @@ impl WavExport {
 
         let format_data_length: u32 = 16;
         let format_type: u16 = 1;
-        // TODO: Make these configurable
+        // TODO: Make this configurable
         let num_channels: u16 = 1;
-        let sample_rate: u32 = 44100;
-        let bits_per_sample: u16 = 16;
 
-        let sample_rate_bits_channels: u32 = sample_rate * bits_per_sample as u32 * num_channels as u32 / 8;
+        let sample_rate_bits_channels: u32 =
+            self.sample_rate * self.bits_per_sample as u32 * num_channels as u32 / 8;
 
         writer.write(&RIFF)?;
         writer.write(bytes_of(&file_size))?;
@@ -33,10 +34,10 @@ impl WavExport {
         writer.write(bytes_of(&format_data_length))?;
         writer.write(bytes_of(&format_type))?;
         writer.write(bytes_of(&num_channels))?;
-        writer.write(bytes_of(&sample_rate))?;
+        writer.write(bytes_of(&self.sample_rate))?;
         writer.write(bytes_of(&sample_rate_bits_channels))?;
-        writer.write(bytes_of(&(bits_per_sample * num_channels / 8)))?;
-        writer.write(bytes_of(&bits_per_sample))?;
+        writer.write(bytes_of(&(self.bits_per_sample * num_channels / 8)))?;
+        writer.write(bytes_of(&self.bits_per_sample))?;
         writer.write(&DATA)?;
         writer.write(bytes_of(&data_size))?;
 
