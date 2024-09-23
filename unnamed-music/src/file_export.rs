@@ -1,5 +1,5 @@
-pub mod wav_writer;
+pub mod wav_export;
 
-pub trait FileWriter {
+pub trait FileExport {
     fn export(buffer: &[u8], path: std::path::PathBuf);
 }
