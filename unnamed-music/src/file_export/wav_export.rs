@@ -1,10 +1,10 @@
 use super::FileExport;
 
-pub struct WAVWriter {
+pub struct WavExport {
 
 }
 
-impl FileExport for WAVWriter {
+impl FileExport for WavExport {
     fn export(buffer: &[u8], path: std::path::PathBuf) -> Result<(), ()> {
         unimplemented!();
     }
