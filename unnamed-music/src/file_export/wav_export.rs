@@ -24,6 +24,7 @@ impl WavExport {
         let file_size = data_size + 44 - 8;
 
         let format_data_length: u16 = 16;
+        let format_type: u16 = 1;
         // TODO: Make these configurable
         let num_channels: u16 = 1;
         let sample_rate: u32 = 44100;
@@ -36,6 +37,7 @@ impl WavExport {
         writer.write(&WAVE)?;
         writer.write(&FMT0)?;
         writer.write(bytes_of(&format_data_length))?;
+        writer.write(bytes_of(&format_type))?;
         writer.write(bytes_of(&num_channels))?;
         writer.write(bytes_of(&sample_rate))?;
         writer.write(bytes_of(&sample_rate_bits_channels))?;
