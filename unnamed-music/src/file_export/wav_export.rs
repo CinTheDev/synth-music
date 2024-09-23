@@ -12,7 +12,7 @@ impl WavExport {
         }
     }
 
-    fn write_header(&self, writer: &mut BufWriter<File>) -> std::io::Result<()> {
+    fn write_header(&self, writer: &mut BufWriter<File>, buffer_size: usize) -> std::io::Result<()> {
         use bytemuck::bytes_of;
 
         const RIFF: [u8; 4] = [b'R', b'I', b'F', b'F'];
@@ -20,7 +20,7 @@ impl WavExport {
         const FMT0: [u8; 4] = [b'f', b'm', b't', b' '];
         const DATA: [u8; 4] = [b'd', b'a', b't', b'a'];
 
-        let data_size: u32 = 0; // TODO: Implement this
+        let data_size: u32 = buffer_size.try_into().unwrap();
         let file_size = data_size + 44 - 8;
 
         let format_data_length: u16 = 16;
