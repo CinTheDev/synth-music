@@ -13,31 +13,36 @@ impl WavExport {
     }
 
     fn write_header(&self, writer: &mut BufWriter<File>) -> std::io::Result<()> {
+        use bytemuck::bytes_of;
+
         const RIFF: [u8; 4] = [b'R', b'I', b'F', b'F'];
         const WAVE: [u8; 4] = [b'W', b'A', b'V', b'E'];
         const FMT0: [u8; 4] = [b'f', b'm', b't', b' '];
         const DATA: [u8; 4] = [b'd', b'a', b't', b'a'];
 
-        let data_size: u32 = 0;
+        let data_size: u32 = 0; // TODO: Implement this
         let file_size = data_size + 44 - 8;
 
         let format_data_length: u16 = 16;
+        // TODO: Make these configurable
         let num_channels: u16 = 1;
         let sample_rate: u32 = 44100;
         let bits_per_sample: u16 = 16;
 
+        let sample_rate_bits_channels: u32 = sample_rate * bits_per_sample as u32 * num_channels as u32 / 8;
+
         writer.write(&RIFF)?;
-        writer.write(file_size: &[u8])?; // TODO: File size
+        writer.write(bytes_of(&file_size))?;
         writer.write(&WAVE)?;
         writer.write(&FMT0)?;
-        writer.write(format_data_length as &[u8])?; // TODO: Length of format data
-        writer.write(num_channels as &[u8])?;// TODO: Number of channels
-        writer.write(sample_rate as &[u8])?;// TODO: Sample rate
-        writer.write(sample_rate * bits_per_sample.into() * num_channels.into() / 8 as &[u8])?; // TODO: Sample rate calculations
-        writer.write(bits_per_sample * num_channels / 8 as &[u8])?;
-        writer.write(bits_per_sample as &[u8])?;// TODO: Bits per sample
+        writer.write(bytes_of(&format_data_length))?;
+        writer.write(bytes_of(&num_channels))?;
+        writer.write(bytes_of(&sample_rate))?;
+        writer.write(bytes_of(&sample_rate_bits_channels))?;
+        writer.write(bytes_of(&(bits_per_sample * num_channels / 8)))?;
+        writer.write(bytes_of(&bits_per_sample))?;
         writer.write(&DATA)?;
-        writer.write(data_size as &[u8])?;// TODO: Data section size
+        writer.write(bytes_of(&data_size))?;
 
         Ok(())
     }
