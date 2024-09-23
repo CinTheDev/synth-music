@@ -1,5 +1,5 @@
 use super::FileExport;
-use std::path::PathBuf;
+use std::{fs::File, io::{BufWriter, Write}, path::PathBuf};
 
 pub struct WavExport {
     path: PathBuf,
@@ -14,7 +14,11 @@ impl WavExport {
 }
 
 impl FileExport for WavExport {
-    fn export(buffer: &[u8]) -> Result<(), ()> {
-        unimplemented!();
+    fn export(&self, buffer: &[u8]) -> std::io::Result<()> {
+        let f = File::create(&self.path)?;
+        let mut writer = BufWriter::new(f);
+        writer.write(buffer)?;
+
+        Ok(())
     }
 }
