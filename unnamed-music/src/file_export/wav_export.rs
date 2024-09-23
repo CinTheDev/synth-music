@@ -1,5 +1,7 @@
 use super::FileExport;
-use std::{fs::File, io::{BufWriter, Write}, path::PathBuf};
+use std::fs::File;
+use std::io::{BufWriter, Write};
+use std::path::PathBuf;
 
 pub struct WavExport {
     pub path: PathBuf,
