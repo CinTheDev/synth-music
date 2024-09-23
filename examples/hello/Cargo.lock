@@ -3,6 +3,12 @@
 version = 3
 
 [[package]]
+name = "bytemuck"
+version = "1.18.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "94bbb0ad554ad961ddc5da507a12a29b14e4ae5bda06b19f575a3e6079d2e2ae"
+
+[[package]]
 name = "hello"
 version = "0.1.0"
 dependencies = [
@@ -12,3 +18,6 @@ dependencies = [
 [[package]]
 name = "unnamed-music"
 version = "0.1.0"
+dependencies = [
+ "bytemuck",
+]
