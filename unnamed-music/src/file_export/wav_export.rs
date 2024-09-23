@@ -52,6 +52,8 @@ impl FileExport for WavExport {
     fn export(&self, buffer: &[u8]) -> std::io::Result<()> {
         let f = File::create(&self.path)?;
         let mut writer = BufWriter::new(f);
+
+        self.write_header(&mut writer, buffer.len())?;
         writer.write(buffer)?;
 
         Ok(())
