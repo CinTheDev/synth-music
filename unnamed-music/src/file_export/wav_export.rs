@@ -6,12 +6,6 @@ pub struct WavExport {
 }
 
 impl WavExport {
-    pub fn new(path: PathBuf) -> Self {
-        Self {
-            path,
-        }
-    }
-
     fn write_header(&self, writer: &mut BufWriter<File>, buffer_size: usize) -> std::io::Result<()> {
         use bytemuck::bytes_of;
 
