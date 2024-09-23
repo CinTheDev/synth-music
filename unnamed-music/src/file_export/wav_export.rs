@@ -24,8 +24,11 @@ impl WavExport {
         // TODO: Make this configurable
         let num_channels: u16 = 1;
 
-        let sample_rate_bits_channels: u32 =
+        let sample_rate_calculation: u32 =
             self.sample_rate * self.bits_per_sample as u32 * num_channels as u32 / 8;
+        
+        let bits_sample_calculation: u16 =
+            self.bits_per_sample * num_channels / 8;
 
         writer.write(&RIFF)?;
         writer.write(bytes_of(&file_size))?;
@@ -35,8 +38,8 @@ impl WavExport {
         writer.write(bytes_of(&format_type))?;
         writer.write(bytes_of(&num_channels))?;
         writer.write(bytes_of(&self.sample_rate))?;
-        writer.write(bytes_of(&sample_rate_bits_channels))?;
-        writer.write(bytes_of(&(self.bits_per_sample * num_channels / 8)))?;
+        writer.write(bytes_of(&sample_rate_calculation))?;
+        writer.write(bytes_of(&bits_sample_calculation))?;
         writer.write(bytes_of(&self.bits_per_sample))?;
         writer.write(&DATA)?;
         writer.write(bytes_of(&data_size))?;
