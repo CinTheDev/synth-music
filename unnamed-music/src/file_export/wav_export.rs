@@ -23,7 +23,7 @@ impl WavExport {
         let data_size: u32 = buffer_size.try_into().unwrap();
         let file_size = data_size + 44 - 8;
 
-        let format_data_length: u16 = 16;
+        let format_data_length: u32 = 16;
         let format_type: u16 = 1;
         // TODO: Make these configurable
         let num_channels: u16 = 1;
