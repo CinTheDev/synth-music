@@ -23,5 +23,5 @@ fn main() {
         buffer[i] = value;
     }
 
-    wav_export.export(&buffer).unwrap();
+    wav_export.export(bytemuck::cast_slice(&buffer)).unwrap();
 }
