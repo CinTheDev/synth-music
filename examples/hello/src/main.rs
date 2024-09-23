@@ -1,5 +1,7 @@
-use unnamed_music as _;
+use unnamed_music;
 
 fn main() {
-    println!("Hello, world!");
+    println!("Add 2+2:");
+    let result = unnamed_music::add(2, 2);
+    println!("Result: {}", result);
 }
