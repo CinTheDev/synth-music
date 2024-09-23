@@ -9,13 +9,10 @@ fn main() {
         std::fs::create_dir("export").unwrap();
     }
 
-    let wav_export = unnamed_music::file_export::wav_export::WavExport::new(
-        std::path::PathBuf::from_str("export/test.wav").unwrap(),
-    );
     let mut buffer = [0_i16; 44100];
-
-    let frequency = 440.0;
+    
     let sample_rate = 44100;
+    let frequency = 440.0;
     let amplitude = 0xFFFF as f32 * 0.1;
 
     for i in 0..buffer.len() {
@@ -24,6 +21,13 @@ fn main() {
 
         buffer[i] = value.round() as i16;
     }
+
+    let wav_export = unnamed_music::file_export::wav_export::WavExport{
+        path: std::path::PathBuf::from_str("export/test.wav").unwrap(),
+        sample_rate,
+        bits_per_sample: 16,
+
+    };
 
     wav_export.export(bytemuck::cast_slice(&buffer)).unwrap();
 }
