@@ -2,6 +2,7 @@ use super::FileExport;
 use std::fs::File;
 use std::io::{BufWriter, Write};
 use std::path::PathBuf;
+use std::str::FromStr;
 
 pub struct WavExport {
     pub path: PathBuf,
@@ -59,5 +60,15 @@ impl FileExport for WavExport {
         writer.write(buffer)?;
 
         Ok(())
+    }
+}
+
+impl Default for WavExport {
+    fn default() -> Self {
+        Self {
+            path: PathBuf::from_str("unnamed.wav").unwrap(),
+            sample_rate: 44100,
+            bits_per_sample: 16,
+        }
     }
 }
