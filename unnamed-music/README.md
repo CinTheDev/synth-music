@@ -36,3 +36,19 @@ This buffer shall implement a function to generate and return a byte buffer
 of a specific time segment in a given time interval. This buffer is then used
 by export to be written into a file periodically until the entire buffer is
 exhausted.
+
+### Melodies
+
+TODOs regarding the melodies submodule
+
+#### Base of Melodies
+
+Create the base of the submodule and integrate it into the library.
+
+### Sound samples
+
+TODOs regarding generation of sound samples
+
+#### Base of Sound samples
+
+Create the base of the submodule and integrate it into the library.
