@@ -26,7 +26,6 @@ fn main() {
         path: std::path::PathBuf::from_str("export/test.wav").unwrap(),
         sample_rate,
         bits_per_sample: 16,
-
     };
 
     wav_export.export(bytemuck::cast_slice(&buffer)).unwrap();
