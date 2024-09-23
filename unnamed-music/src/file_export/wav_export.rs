@@ -27,7 +27,7 @@ impl WavExport {
         // TODO: Make these configurable
         let num_channels: u16 = 1;
         let sample_rate: u32 = 44100;
-        let bits_per_sample: u16 = 16;
+        let bits_per_sample: u16 = 32;
 
         let sample_rate_bits_channels: u32 = sample_rate * bits_per_sample as u32 * num_channels as u32 / 8;
 
