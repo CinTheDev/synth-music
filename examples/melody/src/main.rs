@@ -4,12 +4,16 @@ use unnamed_music::melody::*;
 fn main() {
     println!("Melody Example");
 
-    let melody_1 = melody_1();
-
     let debug_instrument = instrument::Instrument {
         tracks: vec![
-            melody_1,
+            melody_1(),
         ]
+    };
+
+    let second_instrument = instrument::Instrument {
+        tracks: vec![
+            melody_2(),
+        ],
     };
 
     let first_section = Section {
@@ -19,9 +23,17 @@ fn main() {
         ]
     };
 
+    let second_section = Section {
+        bpm: 120,
+        instruments: vec![
+            second_instrument
+        ],
+    };
+
     let piece = MusicPiece {
         sections: vec![
             first_section,
+            second_section,
         ]
     };
 
@@ -73,6 +85,63 @@ fn melody_1() -> Track {
             .tone(Tone::C, 1)
     );
     
+    return track;
+}
+
+fn melody_2() -> Track {
+    use instrument::note::{Length, Tone};
+
+    let mut track = Track::new();
+
+    track.note(
+        Note::new(Length::Quarter)
+            .tone(Tone::A, -1)
+            .dotted()
+    );
+
+    track.note(
+        Note::new(Length::Eigth)
+            .tone(Tone::B, -1)
+    );
+
+    track.note(
+        Note::new(Length::Quarter)
+            .tone(Tone::C, 0)
+            .dotted()
+    );
+
+    track.note(
+        Note::new(Length::Eigth)
+            .tone(Tone::A, -1)
+    );
+
+    track.note(
+        Note::new(Length::Eigth)
+            .tone(Tone::C, 0)
+    );
+    track.note(
+        Note::new(Length::Eigth)
+            .tone(Tone::C, 0)
+    );
+    track.note(
+        Note::new(Length::Eigth)
+            .tone(Tone::B, -1)
+    );
+    track.note(
+        Note::new(Length::Eigth)
+            .tone(Tone::A, -1)
+    );
+
+    track.note(
+        Note::new(Length::Quarter)
+            .tone(Tone::B, -1)
+    );
+
+    track.note(
+        Note::new(Length::Quarter)
+            .tone(Tone::E, -1)
+    );
+
     return track;
 }
 
