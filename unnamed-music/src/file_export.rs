@@ -25,6 +25,8 @@ impl MusicBuffer {
     pub fn generate_whole_buffer(&self, sample_rate: u32) -> Vec<f32> {
         let mut buffer: Vec<f32> = Vec::new();
 
+        let mut time: f64 = 0.0;
+
         for section in &self.piece.sections {
             // Let's do one instrument and one track for now
             // TODO: Multiple instruments and tracks
@@ -39,8 +41,10 @@ impl MusicBuffer {
                 let note_time = note.length / measures_per_second;
                 let samples = (note_time * sample_rate as f32).floor() as u32;
 
-                for s in 0..samples {
-                    let time = s as f32 * note_time / samples as f32;
+                let delta_time = 1.0 / sample_rate as f64;
+
+                for _ in 0..samples {
+                    //let time = s as f32 * note_time / samples as f32;
 
                     // TODO: custom sound generation
                     let mut sample_value = 0.0;
@@ -48,6 +52,8 @@ impl MusicBuffer {
                     for frequency in &note.tones {
                         sample_value += dbg_sound_generator(*frequency, time) * note.intensity;
                     }
+
+                    time += delta_time;
 
                     buffer.push(sample_value);
                 }
@@ -58,8 +64,8 @@ impl MusicBuffer {
     }
 }
 
-fn dbg_sound_generator(frequency: f32, time: f32) -> f32 {
-    use std::f32::consts::PI;
+fn dbg_sound_generator(frequency: f32, time: f64) -> f32 {
+    use std::f64::consts::PI;
 
-    return (time * frequency * 2.0 * PI).sin();
+    return (time * frequency as f64 * 2.0 * PI).sin() as f32;
 }
