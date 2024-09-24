@@ -46,6 +46,11 @@ impl Note {
         self
     }
 
+    pub fn dotted(mut self) -> Self {
+        self.length *= 1.5;
+        self
+    }
+
     fn get_tone_frequency(tone: Tone) -> f32 {
         match tone {
             Tone::C => Self::get_frequency_from_a4(-9),
