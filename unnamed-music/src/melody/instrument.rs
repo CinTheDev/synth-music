@@ -1,3 +1,4 @@
+pub mod note;
 
 pub struct Instrument {
     // TODO: Sound generation
@@ -5,5 +6,5 @@ pub struct Instrument {
 }
 
 pub struct Track {
-    
+
 }
