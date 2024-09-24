@@ -58,6 +58,9 @@ The start of a section marks the start for all instruments on that section,
 if an instrument contains less measures than the other instruments, the
 remaining undefined measuers shall be filled in automatically with pauses.
 
+In addition to that, every section shall store the key, BPM, and Time Signature.
+This way those values can be changed during playtime.
+
 ### Instrument
 
 The instrument contains info about the sound generation (Later when it is
@@ -80,10 +83,6 @@ Not all features I'd like to implement are described in the structure above.
 To not accidentally forget some of them, here's a complete list of all these
 features:
 
-- Key
-- BPM
-- Time signature
-- Global parameters (e.g. BPM) can be altered during playtime
 - Trioles & dotted notes (probably)
 - Seperation of measures
 - Pause instead of note
