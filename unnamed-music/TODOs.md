@@ -40,3 +40,42 @@ TODOs regarding generation of sound samples
 ### Base of Sound samples
 
 Create the base of the submodule and integrate it into the library.
+
+## (Temporary section) Structure of Melody
+
+The submodule `melody` contains traits and structs for composing the music.
+
+### Piece
+
+Represents the whole music piece which will later be exported. A piece contains
+a specifiable number of instruments.
+
+### Instrument
+
+The instrument contains info about the sound generation (Later when it is
+implemented) and multiple tracks for the melody.
+
+### Track
+
+A track is like a single staff containing a melody (or notes). Therefore the
+track contains all of the notes in order.
+
+### Note
+
+A single note is represented by its tone (or height), its length measured
+in beats, and its intensity or loudness. It should be possible to have multiple
+tones in one note.
+
+### Missing features in the description above
+
+Not all features I'd like to implement are described in the structure above.
+To not accidentally forget some of them, here's a complete list of all these
+features:
+
+- Key
+- BPM
+- Time signature
+- Global parameters (e.g. BPM) can be altered during playtime
+- Trioles & dotted notes (probably)
+- Seperation of measures
+- Pause instead of note
