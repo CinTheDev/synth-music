@@ -33,18 +33,45 @@ fn melody_1() -> Track {
 
     let mut track = Track::new();
 
-    for _ in 0..4 {
-        track.note(
-            Note::new(Length::Quarter)
-                .tone(Tone::DbgA)
-        );
-    
-        track.note(
-            Note::new(Length::Quarter)
-                .tone(Tone::DbgB)
-                .intensity(0.2)
-        );
-    }
+    track.note(
+        Note::new(Length::Quarter)
+            .tone(Tone::C, 0)
+    );
+
+    track.note(
+        Note::new(Length::Quarter)
+            .tone(Tone::D, 0)
+    );
+
+    track.note(
+        Note::new(Length::Quarter)
+            .tone(Tone::E, 0)
+    );
+
+    track.note(
+        Note::new(Length::Quarter)
+            .tone(Tone::F, 0)
+    );
+
+    track.note(
+        Note::new(Length::Quarter)
+            .tone(Tone::G, 0)
+    );
+
+    track.note(
+        Note::new(Length::Quarter)
+            .tone(Tone::A, 0)
+    );
+
+    track.note(
+        Note::new(Length::Quarter)
+            .tone(Tone::B, 0)
+    );
+
+    track.note(
+        Note::new(Length::Quarter)
+            .tone(Tone::C, 1)
+    );
     
     return track;
 }
