@@ -62,7 +62,7 @@ impl FileExport for WavExport {
         let buffer = generate.unwrap();
 
         self.write_header(&mut writer, buffer.len())?;
-        writer.write(&buffer)?;
+        writer.write(buffer)?;
 
         Ok(())
     }
