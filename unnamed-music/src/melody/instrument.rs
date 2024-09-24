@@ -21,4 +21,8 @@ impl Track {
     pub fn note(&mut self, note: Note) {
         self.notes.push(note);
     }
+
+    pub fn get_notes(&self) -> &[Note] {
+        &self.notes
+    }
 }

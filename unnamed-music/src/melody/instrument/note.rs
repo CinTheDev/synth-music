@@ -1,9 +1,11 @@
 
+#[derive(Clone, Copy)]
 pub enum Tone {
     DbgA,
     DbgB,
 }
 
+#[derive(Clone, Copy)]
 pub enum Length {
     Whole,
     Half,
@@ -13,9 +15,9 @@ pub enum Length {
 }
 
 pub struct Note {
-    tones: Vec<Tone>,
-    length: Length,
-    intensity: f32,
+    pub tones: Vec<Tone>,
+    pub length: Length,
+    pub intensity: f32,
 }
 
 

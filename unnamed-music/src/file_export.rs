@@ -1,6 +1,5 @@
 pub mod wav_export;
 
-use std::time::Duration;
 use super::melody::MusicPiece;
 
 pub trait FileExport {
@@ -27,9 +26,56 @@ impl MusicBuffer {
         let mut buffer: Vec<f32> = Vec::new();
 
         for section in &self.piece.sections {
-            
+            // Let's do one instrument and one track for now
+            // TODO: Multiple instruments and tracks
+            let instrument = &section.instruments[0];
+            let track = &instrument.tracks[0];
+
+            let notes = track.get_notes();
+
+            for note in notes {
+                let quarters_per_second = section.bpm as f32 / 60.0;
+                let note_time = quarters_per_second * note_length_multiplier(note.length);
+                let samples = (note_time * sample_rate as f32).floor() as u32;
+
+                for s in 0..samples {
+                    let time = s as f32 * note_time / samples as f32;
+
+                    // TODO: custom sound generation
+                    let mut sample_value = 0.0;
+
+                    for tone in &note.tones {
+                        sample_value += dbg_sound_generator(*tone, time);
+                    }
+
+                    buffer.push(sample_value);
+                }
+            }
         }
 
         return buffer;
+    }
+}
+
+fn dbg_sound_generator(tone: crate::melody::instrument::note::Tone, time: f32) -> f32 {
+    use crate::melody::instrument::note::Tone;
+    use std::f32::consts::PI;
+
+    let frequency = match tone {
+        Tone::DbgA => 440.0,
+        Tone::DbgB => 880.0,
+    };
+
+    return (time * frequency * 2.0 * PI).sin();
+}
+
+fn note_length_multiplier(note_length: crate::melody::instrument::note::Length) -> f32 {
+    use crate::melody::instrument::note::Length;
+    match note_length {
+        Length::Whole => 4.0,
+        Length::Half => 2.0,
+        Length::Quarter => 1.0,
+        Length::Eigth => 0.5,
+        Length::Sixteenth => 0.25,
     }
 }
