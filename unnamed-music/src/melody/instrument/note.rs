@@ -35,8 +35,8 @@ impl Note {
         }
     }
 
-    pub fn tone(mut self, tone: Tone) -> Self {
-        let frequency = Self::get_tone_frequency(tone);
+    pub fn tone(mut self, tone: Tone, octave_shift: i32) -> Self {
+        let frequency = Self::get_tone_frequency(tone) * 2_f32.powi(octave_shift);
         self.tones.push(frequency);
         self
     }
