@@ -45,7 +45,7 @@ impl MusicBuffer {
                     let mut sample_value = 0.0;
 
                     for tone in &note.tones {
-                        sample_value += dbg_sound_generator(*tone, time);
+                        sample_value += dbg_sound_generator(*tone, time) * note.intensity;
                     }
 
                     buffer.push(sample_value);
