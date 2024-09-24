@@ -86,3 +86,4 @@ features:
 - Trioles & dotted notes (probably)
 - Seperation of measures
 - Pause instead of note
+- Accelerando and Ritardando
