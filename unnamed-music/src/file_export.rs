@@ -62,14 +62,3 @@ fn dbg_sound_generator(frequency: f32, time: f32) -> f32 {
 
     return (time * frequency * 2.0 * PI).sin();
 }
-
-fn note_length_multiplier(note_length: crate::melody::instrument::note::Length) -> f32 {
-    use crate::melody::instrument::note::Length;
-    match note_length {
-        Length::Whole => 4.0,
-        Length::Half => 2.0,
-        Length::Quarter => 1.0,
-        Length::Eigth => 0.5,
-        Length::Sixteenth => 0.25,
-    }
-}

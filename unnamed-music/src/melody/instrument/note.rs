@@ -21,7 +21,7 @@ pub enum Length {
 
 pub struct Note {
     pub tones: Vec<f32>,
-    pub length: Length,
+    pub length: f32,
     pub intensity: f32,
 }
 
@@ -30,7 +30,7 @@ impl Note {
     pub fn new(length: Length) -> Self {
         Self {
             tones: Vec::new(),
-            length: length,
+            length: length.get_time_length(),
             intensity: 1.0,
         }
     }
@@ -60,5 +60,19 @@ impl Note {
 
     fn get_frequency_from_a4(semitones: i32) -> f32 {
         2_f32.powf(semitones as f32 / 12.0) * 440.0
+    }
+}
+
+impl Length {
+    fn get_time_length(self) -> f32 {
+        let factor = match self {
+            Length::Whole => 0,
+            Length::Half => 1,
+            Length::Quarter => 2,
+            Length::Eigth => 3,
+            Length::Sixteenth => 4,
+        };
+
+        return 1.0 / 2_f32.powi(factor);
     }
 }
