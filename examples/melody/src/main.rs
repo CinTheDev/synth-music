@@ -42,7 +42,7 @@ fn melody_1() -> Track {
         track.note(
             Note::new(Length::Quarter)
                 .tone(Tone::DbgB)
-                .intensity(0.7)
+                .intensity(0.2)
         );
     }
     
