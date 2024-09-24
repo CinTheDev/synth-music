@@ -24,6 +24,8 @@ fn main() {
             first_section,
         ]
     };
+
+    export_piece(piece);
 }
 
 fn melody_1() -> Track {
@@ -42,4 +44,22 @@ fn melody_1() -> Track {
     );
 
     return track;
+}
+
+fn export_piece(piece: MusicPiece) {
+    use unnamed_music::file_export::*;
+    use unnamed_music::file_export::wav_export::WavExport;
+
+    if std::fs::read_dir("export").is_err() {
+        std::fs::create_dir("export").unwrap();
+    }
+
+    let music_buffer = MusicBuffer::new(piece);
+    let exporter = WavExport {
+        path: std::path::PathBuf::from("export/debug.wav"),
+        sample_rate: 44100,
+        bits_per_sample: 16,
+    };
+
+    exporter.export(music_buffer).unwrap();
 }
