@@ -3,6 +3,7 @@ use std::fs::File;
 use std::io::{BufWriter, Write};
 use std::path::PathBuf;
 use std::str::FromStr;
+use std::time::Duration;
 
 pub struct WavExport {
     pub path: PathBuf,
@@ -56,8 +57,12 @@ impl FileExport for WavExport {
         let f = File::create(&self.path)?;
         let mut writer = BufWriter::new(f);
 
+        // TODO: Generate chunks
+        let generate = buffer.generate_buffer(Duration::ZERO, Duration::ZERO);
+        let buffer = generate.unwrap();
+
         self.write_header(&mut writer, buffer.len())?;
-        writer.write(buffer)?;
+        writer.write(&buffer)?;
 
         Ok(())
     }
