@@ -1,14 +1,15 @@
 
 pub enum Tone {
-    
+    DbgA,
+    DbgB,
 }
 
 pub enum Length {
-    WHOLE,
-    HALF,
-    QUARTER,
-    EIGTH,
-    SIXTEENTH,
+    Whole,
+    Half,
+    Quarter,
+    Eigth,
+    Sixteenth,
 }
 
 pub struct Note {
