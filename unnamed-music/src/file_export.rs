@@ -35,7 +35,7 @@ impl MusicBuffer {
 
             for note in notes {
                 let quarters_per_second = section.bpm as f32 / 60.0;
-                let note_time = quarters_per_second * note_length_multiplier(note.length);
+                let note_time = note_length_multiplier(note.length) / quarters_per_second;
                 let samples = (note_time * sample_rate as f32).floor() as u32;
 
                 for s in 0..samples {
