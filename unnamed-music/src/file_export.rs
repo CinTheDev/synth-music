@@ -1,20 +1,20 @@
-use std::time::Duration;
-
 pub mod wav_export;
+
+use std::time::Duration;
+use super::melody::MusicPiece;
 
 pub trait FileExport {
     fn export(&self, buffer: MusicBuffer) -> std::io::Result<()>;
 }
 
 pub struct MusicBuffer {
-    // TODO: Generate buffer instead of storing
-    buffer: Vec<u8>,
+    piece: MusicPiece,
 }
 
 impl MusicBuffer {
-    pub fn new(buffer: Vec<u8>) -> Self {
+    pub fn new(piece: MusicPiece) -> Self {
         Self {
-            buffer
+            piece,
         }
     }
 
