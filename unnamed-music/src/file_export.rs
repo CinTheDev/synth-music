@@ -18,7 +18,18 @@ impl MusicBuffer {
         }
     }
 
+    /*
     pub fn generate_buffer(&self, start_time: Duration, end_time: Duration) -> Result<&[u8], &'static str> {
         Ok(&self.buffer)
+    }
+    */
+    pub fn generate_whole_buffer(&self, sample_rate: u32) -> Vec<f32> {
+        let mut buffer: Vec<f32> = Vec::new();
+
+        for section in &self.piece.sections {
+            
+        }
+
+        return buffer;
     }
 }
