@@ -50,6 +50,14 @@ The submodule `melody` contains traits and structs for composing the music.
 Represents the whole music piece which will later be exported. A piece contains
 a specifiable number of instruments.
 
+Since the individual melodies are seperated by instrument, it could be difficult
+to sight-read the whole piece. To improve readability and maintainability of
+the piece, it shall be seperated into multiple "sections".
+
+The start of a section marks the start for all instruments on that section,
+if an instrument contains less measures than the other instruments, the
+remaining undefined measuers shall be filled in automatically with pauses.
+
 ### Instrument
 
 The instrument contains info about the sound generation (Later when it is
