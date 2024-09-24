@@ -1,3 +1,6 @@
+pub mod instrument;
+
+use instrument::Instrument;
 
 // Represents the whole music which can be exported
 pub struct MusicPiece {
