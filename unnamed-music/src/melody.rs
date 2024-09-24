@@ -5,5 +5,9 @@ pub struct MusicPiece {
 }
 
 pub struct Section {
+    bpm: u32,
+    // TODO: Key
+    // TODO: Time Signature
 
+    instruments: Vec<Instrument>,
 }
