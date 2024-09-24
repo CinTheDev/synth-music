@@ -9,7 +9,7 @@ fn main() {
         std::fs::create_dir("export").unwrap();
     }
 
-    let mut buffer = [0_i16; 44100];
+    let mut buffer = vec![0_i16; 44100];
     
     let sample_rate = 44100;
     let frequency = 440.0;
@@ -28,5 +28,12 @@ fn main() {
         bits_per_sample: 16,
     };
 
-    wav_export.export(bytemuck::cast_slice(&buffer)).unwrap();
+    let byte_buffer: &[u8] = bytemuck::cast_slice(&buffer);
+    let vec_buffer = byte_buffer.to_vec();
+
+    let music_buffer = unnamed_music::file_export::MusicBuffer::new(
+        vec_buffer
+    );
+
+    wav_export.export(music_buffer).unwrap();
 }
