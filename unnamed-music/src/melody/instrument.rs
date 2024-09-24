@@ -4,7 +4,7 @@ use note::Note;
 
 pub struct Instrument {
     // TODO: Sound generation
-    tracks: Vec<Track>,
+    pub tracks: Vec<Track>,
 }
 
 pub struct Track {
