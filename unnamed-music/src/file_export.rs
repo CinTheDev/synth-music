@@ -44,8 +44,8 @@ impl MusicBuffer {
                     // TODO: custom sound generation
                     let mut sample_value = 0.0;
 
-                    for tone in &note.tones {
-                        sample_value += dbg_sound_generator(*tone, time) * note.intensity;
+                    for frequency in &note.tones {
+                        sample_value += dbg_sound_generator(*frequency, time) * note.intensity;
                     }
 
                     buffer.push(sample_value);
@@ -57,14 +57,8 @@ impl MusicBuffer {
     }
 }
 
-fn dbg_sound_generator(tone: crate::melody::instrument::note::Tone, time: f32) -> f32 {
-    use crate::melody::instrument::note::Tone;
+fn dbg_sound_generator(frequency: f32, time: f32) -> f32 {
     use std::f32::consts::PI;
-
-    let frequency = match tone {
-        Tone::DbgA => 440.0,
-        Tone::DbgB => 880.0,
-    };
 
     return (time * frequency * 2.0 * PI).sin();
 }
