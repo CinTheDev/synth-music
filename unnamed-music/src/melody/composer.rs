@@ -1,7 +1,7 @@
 pub mod instrument;
 use instrument::Instrument;
 
-enum MusicKey {
+pub enum MusicKey {
     C,
 }
 
