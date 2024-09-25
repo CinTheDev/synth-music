@@ -8,7 +8,7 @@ enum MusicKey {
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
 // generated from it.
 pub struct Composition {
-    sections: Vec<Section>,
+    pub sections: Vec<Section>,
 }
 
 pub struct Section {
