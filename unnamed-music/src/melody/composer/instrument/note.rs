@@ -19,6 +19,7 @@ pub enum Length {
     Sixteenth,
 }
 
+/*
 pub struct Note {
     pub tones: Vec<f32>,
     pub length: f32,
@@ -81,3 +82,4 @@ impl Length {
         return 1.0 / 2_f32.powi(factor);
     }
 }
+*/

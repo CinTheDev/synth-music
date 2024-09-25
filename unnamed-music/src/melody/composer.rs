@@ -1,4 +1,5 @@
 pub mod instrument;
+use instrument::Instrument;
 
 enum MusicKey {
     C,
@@ -14,4 +15,6 @@ pub struct Section {
     pub bpm: f32,
     pub key: MusicKey,
     pub time_signature: (u8, u8),
+
+    pub instruments: Vec<Instrument>,
 }
