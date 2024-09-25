@@ -22,7 +22,14 @@ pub enum Length {
 pub struct Note {
     pub values: Vec<Tone>,
     pub length: Length,
+    pub play_fraction: f32,
     pub intensity: f32,
+}
+
+impl Note {
+    pub fn staccato(&mut self) {
+        self.play_fraction = 0.1;
+    }
 }
 
 /*

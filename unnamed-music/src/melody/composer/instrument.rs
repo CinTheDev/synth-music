@@ -32,6 +32,7 @@ impl Track<'_> {
         self.notes.push(Note {
             values: vec![tone],
             length: self.current_length,
+            play_fraction: 1.0,
             intensity: self.current_intensity,
         });
 
