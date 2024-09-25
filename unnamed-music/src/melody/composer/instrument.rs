@@ -11,6 +11,9 @@ pub struct Track<'a> {
     instrument: &'a Instrument<'a>,
 
     notes: Vec<Note>,
+
+    current_length: note::Length,
+    current_intensity: f32,
 }
 
 impl Instrument<'_> {
@@ -19,5 +22,16 @@ impl Instrument<'_> {
             instrument: &self,
             notes: Vec::new(),
         }
+    }
+}
+
+impl Track<'_> {
+    pub fn note(mut self, tone: note::Tone) -> Self {
+        self.notes.push(Note {
+            values: vec![tone],
+            length: self.current_length,
+            intensity: self.current_intensity,
+        });
+        self
     }
 }
