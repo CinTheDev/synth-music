@@ -24,11 +24,3 @@ impl Composition {
         unimplemented!()
     }
 }
-
-impl Section {
-    pub fn new_instrument(&self) -> Instrument {
-        Instrument {
-            tracks: Vec::new(),
-        }
-    }
-}
