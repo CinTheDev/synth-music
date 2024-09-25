@@ -28,12 +28,15 @@ impl Instrument<'_> {
 }
 
 impl Track<'_> {
-    pub fn note(&mut self, tone: note::Tone) {
+    pub fn note(&mut self, tone: note::Tone) -> &mut Note {
         self.notes.push(Note {
             values: vec![tone],
             length: self.current_length,
             intensity: self.current_intensity,
         });
+
+        let last_index = self.notes.len() - 1;
+        return &mut self.notes[last_index];
     }
 
     pub fn set_length(&mut self, length: note::Length) {
