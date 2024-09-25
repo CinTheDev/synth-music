@@ -19,6 +19,12 @@ pub enum Length {
     Sixteenth,
 }
 
+pub struct Note {
+    pub values: Vec<Tone>,
+    pub length: Length,
+    pub intensity: f32,
+}
+
 /*
 pub struct Note {
     pub tones: Vec<f32>,
