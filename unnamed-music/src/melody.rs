@@ -1,5 +1,6 @@
 //pub mod instrument;
 pub mod export_info;
+pub mod composer;
 
 //use instrument::Instrument;
 
