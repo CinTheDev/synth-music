@@ -45,6 +45,22 @@ Create the base of the submodule and integrate it into the library.
 
 The submodule `melody` contains traits and structs for composing the music.
 
+### Seperation between info and construction
+
+There are two types of info that we need to store: The actual melody the program
+will export, and the composition from the user.
+
+The "export info" is basically just a collection of frequencies with their
+start times, durations and intensities. The program can generate the music from
+those things alone.
+
+The user however assigns many more abstract values that are important to them,
+but not to the program. Those things are the music Key, Time Signature, Notes,
+and other.
+
+Part of the exporting process would be to convert the composition info into
+the much more concrete export info, from which the sound is then generated.
+
 ### Piece
 
 Represents the whole music piece which will later be exported. A piece contains
