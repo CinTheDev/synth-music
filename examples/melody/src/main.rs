@@ -22,7 +22,9 @@ fn main() {
     };
 
     // TODO: More complex melody
-    // TODO: Export
+
+    let export_piece = composition.to_export_piece();
+    export(export_piece);
 }
 
 fn track_1() -> Track {
@@ -38,4 +40,19 @@ fn track_1() -> Track {
     track.note(Seventh);
 
     return track;
+}
+
+fn export(export_piece: ExportMusicPiece) {
+    use unnamed_music::file_export::*;
+    use wav_export::WavExport;
+    use std::path::PathBuf;
+
+    let music_buffer = MusicBuffer::new(export_piece);
+    let exporter = WavExport {
+        path: PathBuf::from("export/debug.wav"),
+        sample_rate: 44100,
+        ..Default::default()
+    };
+
+    exporter.export(music_buffer).unwrap();
 }
