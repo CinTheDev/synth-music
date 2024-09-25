@@ -28,7 +28,7 @@ pub struct Note {
 
 impl Note {
     pub fn staccato(&mut self) {
-        self.play_fraction = 0.1;
+        self.play_fraction = 0.2;
     }
 }
 
