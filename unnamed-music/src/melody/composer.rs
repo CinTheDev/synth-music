@@ -18,3 +18,9 @@ pub struct Section {
 
     pub instruments: Vec<Instrument>,
 }
+
+impl Composition {
+    fn to_export_piece(self) -> crate::melody::export_info::ExportMusicPiece {
+        unimplemented!()
+    }
+}
