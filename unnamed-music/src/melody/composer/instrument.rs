@@ -22,6 +22,10 @@ impl Track {
         }
     }
 
+    pub fn get_notes(self) -> Vec<Note> {
+        self.notes
+    }
+
     pub fn note(&mut self, tone: note::Tone) -> &mut Note {
         self.notes.push(Note {
             values: vec![tone],
