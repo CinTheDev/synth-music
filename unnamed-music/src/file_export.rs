@@ -30,8 +30,14 @@ impl MusicBuffer {
                 (tone.play_duration.as_secs_f32() * sample_rate as f32)
                 .floor() as u32;
 
+            let played_samples =
+                (tone.tone_duration.as_secs_f32() * sample_rate as f32)
+                .floor() as u32;
+
+            let silent_samples = samples - played_samples;
+
             let delta_time = Duration::from_secs_f64(1.0 / sample_rate as f64);
-            for _ in 0..samples {
+            for _ in 0..played_samples {
                 let mut sample_value = 0.0;
 
                 for frequency in &tone.frequencies {
@@ -40,6 +46,9 @@ impl MusicBuffer {
 
                 time += delta_time;
                 buffer.push(sample_value);
+            }
+            for _ in 0..silent_samples {
+                buffer.push(0.0);
             }
         }
 
