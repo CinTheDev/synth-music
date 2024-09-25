@@ -35,7 +35,7 @@ fn track_1() -> Track {
     track.note(Second);
     track.note(Third);
     track.note(Fourth);
-    track.note(Fith);
+    track.note(Fith).staccato();
     track.note(Sixth);
     track.note(Seventh);
 
