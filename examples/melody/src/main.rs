@@ -3,10 +3,11 @@ use unnamed_music::melody::prelude::*;
 fn main() {
     println!("Melody Example");
 
-    let track_1 = track_1();
-
     let instrument_1 = Instrument {
-        tracks: vec![track_1],
+        tracks: vec![track_1()],
+    };
+    let instrument_2 = Instrument {
+        tracks: vec![track_2()],
     };
 
     let section_1 = Section {
@@ -16,12 +17,17 @@ fn main() {
 
         instruments: vec![instrument_1],
     };
+    let section_2 = Section {
+        bpm: 120.0,
+        key: MusicKey::C,
+        time_signature: (4, 4),
 
-    let composition = Composition {
-        sections: vec![section_1],
+        instruments: vec![instrument_2],
     };
 
-    // TODO: More complex melody
+    let composition = Composition {
+        sections: vec![section_1, section_2],
+    };
 
     let export_piece = composition.to_export_piece();
     export(export_piece);
@@ -38,6 +44,30 @@ fn track_1() -> Track {
     track.note(Fith).staccato();
     track.note(Sixth);
     track.note(Seventh);
+
+    return track;
+}
+
+fn track_2() -> Track {
+    use note::Tone::*;
+    use note::Length::*;
+    let mut track = Track::new();
+
+    track.set_length(Quarter);
+    track.note(Sixth);
+    track.set_length(Eigth);
+    track.note(Seventh);
+    track.set_length(Quarter);
+    track.note(First);
+    track.set_length(Eigth);
+    track.note(Sixth);
+    track.note(First);
+    track.note(First);
+    track.note(Seventh);
+    track.note(Sixth);
+    track.set_length(Quarter);
+    track.note(Seventh);
+    track.note(Third);
 
     return track;
 }
