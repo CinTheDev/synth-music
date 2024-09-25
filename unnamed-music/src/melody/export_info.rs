@@ -20,3 +20,19 @@ pub struct Tone {
     pub tone_duration: Duration,
     pub intensity: f32,
 }
+
+impl ExportMusicPiece {
+    pub fn new() -> Self {
+        Self {
+            tracks: Vec::new(),
+        }
+    }
+}
+
+impl ExportTrack {
+    pub fn new() -> Self {
+        Self {
+            tones: Vec::new(),
+        }
+    }
+}

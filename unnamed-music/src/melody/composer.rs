@@ -21,6 +21,9 @@ pub struct Section {
 
 impl Composition {
     pub fn to_export_piece(self) -> crate::melody::export_info::ExportMusicPiece {
-        unimplemented!()
+        use crate::melody::export_info::*;
+        let mut result = ExportMusicPiece::new();
+
+        return result;
     }
 }
