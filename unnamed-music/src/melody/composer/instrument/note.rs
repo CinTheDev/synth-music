@@ -1,13 +1,13 @@
 
 #[derive(Clone, Copy)]
 pub enum Tone {
-    C,
-    D,
-    E,
-    F,
-    G,
-    A,
-    B,
+    First,
+    Second,
+    Third,
+    Fourth,
+    Fith,
+    Sixth,
+    Seventh,
 }
 
 #[derive(Clone, Copy)]
