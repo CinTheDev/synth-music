@@ -1,7 +1,11 @@
-pub mod instrument;
+//pub mod instrument;
+pub mod export_info;
+pub mod composer;
+pub mod prelude;
 
-use instrument::Instrument;
+//use instrument::Instrument;
 
+/*
 // Represents the whole music which can be exported
 pub struct MusicPiece {
     pub sections: Vec<Section>,
@@ -14,3 +18,4 @@ pub struct Section {
 
     pub instruments: Vec<Instrument>,
 }
+*/

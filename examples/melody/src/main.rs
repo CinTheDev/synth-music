@@ -1,163 +1,57 @@
-use instrument::{note::Note, Track};
-use unnamed_music::melody::*;
+use unnamed_music::melody::prelude::*;
 
 fn main() {
     println!("Melody Example");
 
-    let debug_instrument = instrument::Instrument {
-        tracks: vec![
-            melody_1(),
-        ]
+    let track_1 = track_1();
+
+    let instrument_1 = Instrument {
+        tracks: vec![track_1],
     };
 
-    let second_instrument = instrument::Instrument {
-        tracks: vec![
-            melody_2(),
-        ],
+    let section_1 = Section {
+        bpm: 120.0,
+        key: MusicKey::C,
+        time_signature: (4, 4),
+
+        instruments: vec![instrument_1],
     };
 
-    let first_section = Section {
-        bpm: 120,
-        instruments: vec![
-            debug_instrument,
-        ]
+    let composition = Composition {
+        sections: vec![section_1],
     };
 
-    let second_section = Section {
-        bpm: 120,
-        instruments: vec![
-            second_instrument
-        ],
-    };
+    // TODO: More complex melody
 
-    let piece = MusicPiece {
-        sections: vec![
-            first_section,
-            second_section,
-        ]
-    };
-
-    export_piece(piece);
+    let export_piece = composition.to_export_piece();
+    export(export_piece);
 }
 
-fn melody_1() -> Track {
-    use instrument::note::{Length, Tone};
-
+fn track_1() -> Track {
+    use note::Tone::*;
     let mut track = Track::new();
 
-    track.note(
-        Note::new(Length::Quarter)
-            .tone(Tone::C, 0)
-    );
-
-    track.note(
-        Note::new(Length::Quarter)
-            .tone(Tone::D, 0)
-    );
-
-    track.note(
-        Note::new(Length::Quarter)
-            .tone(Tone::E, 0)
-    );
-
-    track.note(
-        Note::new(Length::Quarter)
-            .tone(Tone::F, 0)
-    );
-
-    track.note(
-        Note::new(Length::Quarter)
-            .tone(Tone::G, 0)
-    );
-
-    track.note(
-        Note::new(Length::Quarter)
-            .tone(Tone::A, 0)
-    );
-
-    track.note(
-        Note::new(Length::Quarter)
-            .tone(Tone::B, 0)
-    );
-
-    track.note(
-        Note::new(Length::Quarter)
-            .tone(Tone::C, 1)
-    );
-    
-    return track;
-}
-
-fn melody_2() -> Track {
-    use instrument::note::{Length, Tone};
-
-    let mut track = Track::new();
-
-    track.note(
-        Note::new(Length::Quarter)
-            .tone(Tone::A, -1)
-            .dotted()
-    );
-
-    track.note(
-        Note::new(Length::Eigth)
-            .tone(Tone::B, -1)
-    );
-
-    track.note(
-        Note::new(Length::Quarter)
-            .tone(Tone::C, 0)
-            .dotted()
-    );
-
-    track.note(
-        Note::new(Length::Eigth)
-            .tone(Tone::A, -1)
-    );
-
-    track.note(
-        Note::new(Length::Eigth)
-            .tone(Tone::C, 0)
-    );
-    track.note(
-        Note::new(Length::Eigth)
-            .tone(Tone::C, 0)
-    );
-    track.note(
-        Note::new(Length::Eigth)
-            .tone(Tone::B, -1)
-    );
-    track.note(
-        Note::new(Length::Eigth)
-            .tone(Tone::A, -1)
-    );
-
-    track.note(
-        Note::new(Length::Quarter)
-            .tone(Tone::B, -1)
-    );
-
-    track.note(
-        Note::new(Length::Quarter)
-            .tone(Tone::E, -1)
-    );
+    track.note(First);
+    track.note(Second);
+    track.note(Third);
+    track.note(Fourth);
+    track.note(Fith).staccato();
+    track.note(Sixth);
+    track.note(Seventh);
 
     return track;
 }
 
-fn export_piece(piece: MusicPiece) {
+fn export(export_piece: ExportMusicPiece) {
     use unnamed_music::file_export::*;
-    use unnamed_music::file_export::wav_export::WavExport;
+    use wav_export::WavExport;
+    use std::path::PathBuf;
 
-    if std::fs::read_dir("export").is_err() {
-        std::fs::create_dir("export").unwrap();
-    }
-
-    let music_buffer = MusicBuffer::new(piece);
+    let music_buffer = MusicBuffer::new(export_piece);
     let exporter = WavExport {
-        path: std::path::PathBuf::from("export/debug.wav"),
+        path: PathBuf::from("export/debug.wav"),
         sample_rate: 44100,
-        bits_per_sample: 16,
+        ..Default::default()
     };
 
     exporter.export(music_buffer).unwrap();
