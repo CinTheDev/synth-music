@@ -21,6 +21,8 @@ impl Instrument<'_> {
         Track {
             instrument: &self,
             notes: Vec::new(),
+            current_length: note::Length::Quarter,
+            current_intensity: 1.0,
         }
     }
 }
@@ -32,6 +34,16 @@ impl Track<'_> {
             length: self.current_length,
             intensity: self.current_intensity,
         });
+        self
+    }
+
+    pub fn set_length(mut self, length: note::Length) -> Self {
+        self.current_length = length;
+        self
+    }
+
+    pub fn set_intensity(mut self, intensity: f32) -> Self {
+        self.current_intensity = intensity;
         self
     }
 }
