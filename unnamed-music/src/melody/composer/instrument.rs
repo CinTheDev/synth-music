@@ -1,33 +1,19 @@
 pub mod note;
 use note::Note;
 
-pub struct Instrument<'a> {
-    pub section: &'a super::Section<'a>,
+pub struct Instrument {
     // TODO: Sound generation
-    pub tracks: Vec<Track<'a>>,
+    pub tracks: Vec<Track>,
 }
 
-pub struct Track<'a> {
-    instrument: &'a Instrument<'a>,
-
+pub struct Track {
     notes: Vec<Note>,
 
     current_length: note::Length,
     current_intensity: f32,
 }
 
-impl Instrument<'_> {
-    pub fn new_track(&self) -> Track<'_> {
-        Track {
-            instrument: &self,
-            notes: Vec::new(),
-            current_length: note::Length::Quarter,
-            current_intensity: 1.0,
-        }
-    }
-}
-
-impl Track<'_> {
+impl Track {
     pub fn note(&mut self, tone: note::Tone) -> &mut Note {
         self.notes.push(Note {
             values: vec![tone],
