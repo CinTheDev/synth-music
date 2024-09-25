@@ -1,0 +1,7 @@
+[package]
+name = "melody"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+unnamed-music = { path = "../../unnamed-music" }

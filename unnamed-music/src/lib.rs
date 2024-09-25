@@ -1,4 +1,5 @@
 pub mod file_export;
+pub mod melody;
 
 #[cfg(test)]
 mod tests {
