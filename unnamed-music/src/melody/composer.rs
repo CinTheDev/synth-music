@@ -1,3 +1,4 @@
+pub mod instrument;
 
 enum MusicKey {
     C,
