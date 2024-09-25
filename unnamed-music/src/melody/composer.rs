@@ -7,19 +7,19 @@ enum MusicKey {
 
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
 // generated from it.
-pub struct Composition {
-    pub sections: Vec<Section>,
+pub struct Composition<'a> {
+    pub sections: Vec<Section<'a>>,
 }
 
-pub struct Section {
+pub struct Section<'a> {
     pub bpm: f32,
     pub key: MusicKey,
     pub time_signature: (u8, u8),
 
-    pub instruments: Vec<Instrument>,
+    pub instruments: Vec<Instrument<'a>>,
 }
 
-impl Composition {
+impl Composition<'_> {
     fn to_export_piece(self) -> crate::melody::export_info::ExportMusicPiece {
         unimplemented!()
     }
