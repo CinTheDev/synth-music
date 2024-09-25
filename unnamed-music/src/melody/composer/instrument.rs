@@ -14,6 +14,14 @@ pub struct Track {
 }
 
 impl Track {
+    pub fn new() -> Self {
+        Self {
+            notes: Vec::new(),
+            current_length: note::Length::Quarter,
+            current_intensity: 1.0,
+        }
+    }
+
     pub fn note(&mut self, tone: note::Tone) -> &mut Note {
         self.notes.push(Note {
             values: vec![tone],
