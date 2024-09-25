@@ -20,7 +20,16 @@ pub struct Section<'a> {
 }
 
 impl Composition<'_> {
-    fn to_export_piece(self) -> crate::melody::export_info::ExportMusicPiece {
+    pub fn to_export_piece(self) -> crate::melody::export_info::ExportMusicPiece {
         unimplemented!()
+    }
+}
+
+impl Section<'_> {
+    pub fn new_instrument(&self) -> Instrument<'_> {
+        Instrument {
+            section: &self,
+            tracks: Vec::new(),
+        }
     }
 }
