@@ -34,11 +34,11 @@ impl Composition {
             for note in track.get_notes() {
                 let mut frequencies = Vec::new();
 
-                for tone in note.values {
-                    frequencies.push(get_note_frequency(tone));
+                for tone in &note.values {
+                    frequencies.push(get_note_frequency(*tone));
                 }
 
-                let play_duration = note.length.get_duration(section.bpm);
+                let play_duration = note.get_duration(section.bpm);
 
                 result.tracks[0].tones.push(Tone {
                     frequencies,

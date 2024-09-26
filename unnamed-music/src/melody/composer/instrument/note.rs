@@ -36,6 +36,17 @@ impl Note {
     pub fn dotted(&mut self) {
         self.dotted = true;
     }
+
+    pub fn get_duration(&self, bpm: f32) -> std::time::Duration {
+        let quarters_per_second = bpm / 60.0;
+        let multiplier = self.length.get_time_length();
+        let time = (4.0 * multiplier) / quarters_per_second;
+
+        match self.dotted {
+            false => std::time::Duration::from_secs_f32(time),
+            true => std::time::Duration::from_secs_f32(time * 1.5),
+        }
+    }
 }
 
 impl Length {
@@ -49,12 +60,5 @@ impl Length {
         };
 
         return 1.0 / 2_f32.powi(factor);
-    }
-
-    pub fn get_duration(self, bpm: f32) -> std::time::Duration {
-        let quarters_per_second = bpm / 60.0;
-        let multiplier = self.get_time_length();
-        let time = (4.0 * multiplier) / quarters_per_second;
-        std::time::Duration::from_secs_f32(time)
     }
 }
