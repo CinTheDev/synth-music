@@ -24,9 +24,14 @@ impl Track {
         self.notes
     }
 
-    pub fn note(&mut self, length: note::Length, tone: note::Tone) -> &mut Note {
+    pub fn note(
+        &mut self,
+        length: note::Length,
+        tone: note::Tone,
+        octave: i32,
+    ) -> &mut Note {
         self.notes.push(Note {
-            values: vec![tone],
+            values: vec![(tone, octave)],
             length,
             play_fraction: 1.0,
             intensity: self.current_intensity,

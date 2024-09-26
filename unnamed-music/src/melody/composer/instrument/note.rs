@@ -20,7 +20,7 @@ pub enum Length {
 }
 
 pub struct Note {
-    pub values: Vec<Tone>,
+    pub values: Vec<(Tone, i32)>,
     pub length: Length,
     pub play_fraction: f32,
     pub intensity: f32,

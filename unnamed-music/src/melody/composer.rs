@@ -53,9 +53,9 @@ impl Composition {
     }
 }
 
-fn get_note_frequency(tone: instrument::note::Tone) -> f32 {
+fn get_note_frequency(tone: (instrument::note::Tone, i32)) -> f32 {
     use instrument::note::Tone;
-    match tone {
+    let base_frequency = match tone.0 {
         Tone::First => get_frequency_from_a4(-9),
         Tone::Second => get_frequency_from_a4(-7),
         Tone::Third => get_frequency_from_a4(-5),
@@ -63,7 +63,9 @@ fn get_note_frequency(tone: instrument::note::Tone) -> f32 {
         Tone::Fith => get_frequency_from_a4(-2),
         Tone::Sixth => get_frequency_from_a4(0),
         Tone::Seventh => get_frequency_from_a4(2),
-    }
+    };
+
+    base_frequency.powi(tone.1 - 4)
 }
 
 fn get_frequency_from_a4(semitones: i32) -> f32 {
