@@ -26,6 +26,7 @@ pub struct Note {
     pub intensity: f32,
 
     pub dotted: bool,
+    pub triole: bool,
 }
 
 impl Note {
@@ -42,10 +43,14 @@ impl Note {
         let multiplier = self.length.get_time_length();
         let time = (4.0 * multiplier) / quarters_per_second;
 
-        match self.dotted {
-            false => std::time::Duration::from_secs_f32(time),
-            true => std::time::Duration::from_secs_f32(time * 1.5),
+        if self.dotted {
+            return std::time::Duration::from_secs_f32(time * 1.5);
         }
+        if self.triole {
+            return std::time::Duration::from_secs_f32(time * 2.0 / 3.0);
+        }
+
+        return std::time::Duration::from_secs_f32(time);
     }
 }
 
