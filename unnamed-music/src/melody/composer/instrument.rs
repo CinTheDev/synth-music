@@ -35,6 +35,7 @@ impl Track {
             length,
             play_fraction: 1.0,
             intensity: self.current_intensity,
+            dotted: false,
         });
 
         let last_index = self.notes.len() - 1;

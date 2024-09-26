@@ -24,11 +24,17 @@ pub struct Note {
     pub length: Length,
     pub play_fraction: f32,
     pub intensity: f32,
+
+    pub dotted: bool,
 }
 
 impl Note {
     pub fn staccato(&mut self) {
         self.play_fraction = 0.2;
+    }
+
+    pub fn dotted(&mut self) {
+        self.dotted = true;
     }
 }
 
