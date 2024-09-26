@@ -35,7 +35,12 @@ impl Composition {
                 let mut frequencies = Vec::new();
 
                 for tone in &note.values {
-                    frequencies.push(get_note_frequency(*tone));
+                    frequencies.push(
+                        modify_frequency(
+                            get_note_frequency(*tone),
+                            note.semitones_offset,
+                        )
+                    );
                 }
 
                 let play_duration = note.get_duration(section.bpm);
@@ -70,4 +75,8 @@ fn get_note_frequency(tone: (instrument::note::Tone, i32)) -> f32 {
 
 fn get_frequency_from_a4(semitones: i32) -> f32 {
     2_f32.powf(semitones as f32 / 12.0) * 440.0
+}
+
+fn modify_frequency(frequency: f32, semitones: i32) -> f32 {
+    2_f32.powf(semitones as f32 / 12.0) * frequency
 }
