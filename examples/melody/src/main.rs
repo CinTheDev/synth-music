@@ -35,15 +35,16 @@ fn main() {
 
 fn track_1() -> Track {
     use note::Tone::*;
+    use note::Length::*;
     let mut track = Track::new();
 
-    track.note(First);
-    track.note(Second);
-    track.note(Third);
-    track.note(Fourth);
-    track.note(Fith).staccato();
-    track.note(Sixth);
-    track.note(Seventh);
+    track.note(Quarter, First);
+    track.note(Quarter, Second);
+    track.note(Quarter, Third);
+    track.note(Quarter, Fourth);
+    track.note(Quarter, Fith).staccato();
+    track.note(Quarter, Sixth);
+    track.note(Quarter, Seventh);
 
     return track;
 }
@@ -53,21 +54,16 @@ fn track_2() -> Track {
     use note::Length::*;
     let mut track = Track::new();
 
-    track.set_length(Quarter);
-    track.note(Sixth);
-    track.set_length(Eigth);
-    track.note(Seventh);
-    track.set_length(Quarter);
-    track.note(First);
-    track.set_length(Eigth);
-    track.note(Sixth);
-    track.note(First);
-    track.note(First);
-    track.note(Seventh);
-    track.note(Sixth);
-    track.set_length(Quarter);
-    track.note(Seventh);
-    track.note(Third);
+    track.note(Quarter, Sixth);
+    track.note(Eigth, Seventh);
+    track.note(Quarter, First);
+    track.note(Eigth, Sixth);
+    track.note(Eigth, First);
+    track.note(Eigth, First);
+    track.note(Eigth, Seventh);
+    track.note(Eigth, Sixth);
+    track.note(Quarter, Seventh);
+    track.note(Quarter, Third);
 
     return track;
 }
