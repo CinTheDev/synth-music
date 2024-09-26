@@ -35,6 +35,7 @@ impl Track {
             length,
             play_fraction: 1.0,
             intensity: self.current_intensity,
+            semitones_offset: 0,
             dotted: false,
             triole: false,
         });

@@ -25,6 +25,8 @@ pub struct Note {
     pub play_fraction: f32,
     pub intensity: f32,
 
+    pub semitones_offset: i32,
+
     pub dotted: bool,
     pub triole: bool,
 }
@@ -40,6 +42,14 @@ impl Note {
 
     pub fn triole(&mut self) {
         self.triole = true;
+    }
+
+    pub fn sharp(&mut self) {
+        self.semitones_offset += 1;
+    }
+
+    pub fn flat(&mut self) {
+        self.semitones_offset -= 1;
     }
 
     pub fn get_duration(&self, bpm: f32) -> std::time::Duration {
