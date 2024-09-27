@@ -1,15 +1,16 @@
 use std::time::Duration;
+use super::instrument::Instrument;
 
 // Holds all info of a piece relevant for exporting; consists of several
 // export tracks
-pub struct ExportMusicPiece {
-    pub tracks: Vec<ExportTrack>,
+pub struct ExportMusicPiece<T: Instrument> {
+    pub tracks: Vec<ExportTrack<T>>,
 }
 
 // Contains raw tones
-pub struct ExportTrack {
-    // TODO: Sound generator
+pub struct ExportTrack<T: Instrument> {
     pub tones: Vec<Tone>,
+    pub instrument: T,
 }
 
 // Represents a raw tone - just a frequency, duration, and intensity
@@ -20,7 +21,7 @@ pub struct Tone {
     pub intensity: f32,
 }
 
-impl ExportMusicPiece {
+impl<T: Instrument> ExportMusicPiece<T> {
     pub fn new() -> Self {
         Self {
             tracks: Vec::new(),
@@ -28,10 +29,11 @@ impl ExportMusicPiece {
     }
 }
 
-impl ExportTrack {
-    pub fn new() -> Self {
+impl<T: Instrument> ExportTrack<T> {
+    pub fn new(instrument: T) -> Self {
         Self {
             tones: Vec::new(),
+            instrument,
         }
     }
 }
