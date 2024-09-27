@@ -12,15 +12,15 @@ fn main() {
         key_type: MusicKeyType::Minor,
     };
 
-    let sine_generator = SineGenerator;
-    let harmonic_generator = HarmonicSineGenerator::new(100);
+    let sine_generator = Box::new(SineGenerator);
+    let harmonic_generator = Box::new(HarmonicSineGenerator::new(100));
 
     let section_1 = Section {
         bpm: 120.0,
         key: first_key,
         time_signature: (4, 4),
 
-        tracks: vec![track_1(harmonic_generator)],
+        tracks: vec![track_1(sine_generator)],
     };
     let section_2 = Section {
         bpm: 120.0,
@@ -38,7 +38,7 @@ fn main() {
     export(export_piece);
 }
 
-fn track_1<T: Instrument>(instrument: T) -> Track<T> {
+fn track_1(instrument: Box<dyn Instrument>) -> Track {
     use note::Tone::*;
     use note::Length::*;
     let mut track = Track::new(instrument);
@@ -55,7 +55,7 @@ fn track_1<T: Instrument>(instrument: T) -> Track<T> {
     return track;
 }
 
-fn track_2<T: Instrument>(instrument: T) -> Track<T> {
+fn track_2(instrument: Box<dyn Instrument>) -> Track {
     use note::Tone::*;
     use note::Length::*;
     let mut track = Track::new(instrument);
@@ -74,7 +74,7 @@ fn track_2<T: Instrument>(instrument: T) -> Track<T> {
     return track;
 }
 
-fn export<T: Instrument>(export_piece: ExportMusicPiece<T>) {
+fn export(export_piece: ExportMusicPiece) {
     use unnamed_music::file_export::*;
     use wav_export::WavExport;
     use std::path::PathBuf;
