@@ -1,5 +1,5 @@
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub enum Tone {
     First,
     Second,
@@ -20,15 +20,56 @@ pub enum Length {
 }
 
 pub struct Note {
-    pub values: Vec<Tone>,
+    pub values: Vec<(Tone, i32)>,
     pub length: Length,
     pub play_fraction: f32,
     pub intensity: f32,
+
+    pub semitones_offset: i32,
+
+    pub dotted: bool,
+    pub triole: bool,
 }
 
 impl Note {
-    pub fn staccato(&mut self) {
+    pub fn staccato(&mut self) -> &mut Self {
         self.play_fraction = 0.2;
+        self
+    }
+
+    pub fn dotted(&mut self) -> &mut Self {
+        self.dotted = true;
+        self
+    }
+
+    pub fn triole(&mut self) -> &mut Self {
+        self.triole = true;
+        self
+    }
+
+    pub fn sharp(&mut self) -> &mut Self {
+        self.semitones_offset += 1;
+        self
+    }
+
+    pub fn flat(&mut self) -> &mut Self {
+        self.semitones_offset -= 1;
+        self
+    }
+
+    pub fn get_duration(&self, bpm: f32) -> std::time::Duration {
+        let quarters_per_second = bpm / 60.0;
+        let multiplier = self.length.get_time_length();
+        let time = (4.0 * multiplier) / quarters_per_second;
+
+        if self.dotted {
+            return std::time::Duration::from_secs_f32(time * 1.5);
+        }
+        if self.triole {
+            return std::time::Duration::from_secs_f32(time * 2.0 / 3.0);
+        }
+
+        return std::time::Duration::from_secs_f32(time);
     }
 }
 
@@ -43,12 +84,5 @@ impl Length {
         };
 
         return 1.0 / 2_f32.powi(factor);
-    }
-
-    pub fn get_duration(self, bpm: f32) -> std::time::Duration {
-        let quarters_per_second = bpm / 60.0;
-        let multiplier = self.get_time_length();
-        let time = (4.0 * multiplier) / quarters_per_second;
-        std::time::Duration::from_secs_f32(time)
     }
 }

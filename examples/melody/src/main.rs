@@ -10,16 +10,25 @@ fn main() {
         tracks: vec![track_2()],
     };
 
+    let first_key = MusicKey {
+        base: MusicKeyBase::C,
+        key_type: MusicKeyType::Major,
+    };
+    let second_key = MusicKey {
+        base: MusicKeyBase::A,
+        key_type: MusicKeyType::Minor,
+    };
+
     let section_1 = Section {
         bpm: 120.0,
-        key: MusicKey::C,
+        key: first_key,
         time_signature: (4, 4),
 
         instruments: vec![instrument_1],
     };
     let section_2 = Section {
         bpm: 120.0,
-        key: MusicKey::C,
+        key: second_key,
         time_signature: (4, 4),
 
         instruments: vec![instrument_2],
@@ -35,15 +44,17 @@ fn main() {
 
 fn track_1() -> Track {
     use note::Tone::*;
+    use note::Length::*;
     let mut track = Track::new();
 
-    track.note(First);
-    track.note(Second);
-    track.note(Third);
-    track.note(Fourth);
-    track.note(Fith).staccato();
-    track.note(Sixth);
-    track.note(Seventh);
+    track.note(Quarter, First, 4);
+    track.note(Quarter, Second, 4);
+    track.note(Quarter, Third, 4);
+    track.note(Quarter, Fourth, 4);
+    track.note(Quarter, Fith, 4).staccato();
+    track.note(Quarter, Sixth, 4);
+    track.note(Quarter, Seventh, 4);
+    track.note(Quarter, First, 5);
 
     return track;
 }
@@ -53,21 +64,16 @@ fn track_2() -> Track {
     use note::Length::*;
     let mut track = Track::new();
 
-    track.set_length(Quarter);
-    track.note(Sixth);
-    track.set_length(Eigth);
-    track.note(Seventh);
-    track.set_length(Quarter);
-    track.note(First);
-    track.set_length(Eigth);
-    track.note(Sixth);
-    track.note(First);
-    track.note(First);
-    track.note(Seventh);
-    track.note(Sixth);
-    track.set_length(Quarter);
-    track.note(Seventh);
-    track.note(Third);
+    track.note(Quarter, First, 4).dotted();
+    track.note(Eigth, Second, 4);
+    track.note(Quarter, Third, 4).dotted();
+    track.note(Eigth, First, 4);
+    track.note(Eigth, Third, 4);
+    track.note(Eigth, Third, 4);
+    track.note(Eigth, Second, 4);
+    track.note(Eigth, First, 4);
+    track.note(Quarter, Second, 4);
+    track.note(Quarter, Fith, 3);
 
     return track;
 }
