@@ -3,6 +3,7 @@ use note::Note;
 
 pub struct Track {
     notes: Vec<Note>,
+    // TODO: add instrument / sound generator here
 
     current_intensity: f32,
 }
