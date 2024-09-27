@@ -1,5 +1,5 @@
 pub mod instrument;
-use instrument::Instrument;
+use instrument::Track;
 
 #[derive(Clone, Copy)]
 pub enum MusicKeyBase {
@@ -41,7 +41,7 @@ pub struct Section {
     pub key: MusicKey,
     pub time_signature: (u8, u8),
 
-    pub instruments: Vec<Instrument>,
+    pub tracks: Vec<Track>,
 }
 
 impl Composition {
@@ -53,8 +53,7 @@ impl Composition {
         result.tracks.push(ExportTrack::new());
 
         for mut section in self.sections {
-            let mut instrument = section.instruments.pop().unwrap();
-            let track = instrument.tracks.pop().unwrap();
+            let track = section.tracks.pop().unwrap();
 
             for note in track.get_notes() {
                 let mut frequencies = Vec::new();
