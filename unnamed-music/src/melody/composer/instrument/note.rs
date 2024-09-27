@@ -32,24 +32,29 @@ pub struct Note {
 }
 
 impl Note {
-    pub fn staccato(&mut self) {
+    pub fn staccato(&mut self) -> &mut Self {
         self.play_fraction = 0.2;
+        self
     }
 
-    pub fn dotted(&mut self) {
+    pub fn dotted(&mut self) -> &mut Self {
         self.dotted = true;
+        self
     }
 
-    pub fn triole(&mut self) {
+    pub fn triole(&mut self) -> &mut Self {
         self.triole = true;
+        self
     }
 
-    pub fn sharp(&mut self) {
+    pub fn sharp(&mut self) -> &mut Self {
         self.semitones_offset += 1;
+        self
     }
 
-    pub fn flat(&mut self) {
+    pub fn flat(&mut self) -> &mut Self {
         self.semitones_offset -= 1;
+        self
     }
 
     pub fn get_duration(&self, bpm: f32) -> std::time::Duration {
