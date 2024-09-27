@@ -55,8 +55,9 @@ impl<T: Instrument> Composition<T> {
         for mut section in self.sections {
             let track = section.tracks.pop().unwrap();
             let (notes, instrument) = track.into_parts();
-            result.tracks.push(ExportTrack::new(instrument));
-            let current_track_index = result.tracks.len() - 1;
+
+            let mut export_section = ExportSection::new();
+            let mut export_track = ExportTrack::new(instrument);
 
             for note in notes {
                 let mut frequencies = Vec::new();
@@ -73,13 +74,16 @@ impl<T: Instrument> Composition<T> {
 
                 let play_duration = note.get_duration(section.bpm);
 
-                result.tracks[current_track_index].tones.push(Tone {
+                export_track.tones.push(Tone {
                     frequencies,
                     play_duration,
                     tone_duration: play_duration.mul_f32(note.play_fraction),
                     intensity: note.intensity,
-                })
+                });
             }
+
+            export_section.tracks.push(export_track);
+            result.sections.push(export_section);
         }
 
         return result;
