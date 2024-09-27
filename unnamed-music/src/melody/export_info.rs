@@ -4,6 +4,10 @@ use super::instrument::Instrument;
 // Holds all info of a piece relevant for exporting; consists of several
 // export tracks
 pub struct ExportMusicPiece<T: Instrument> {
+    pub sections: Vec<ExportSection<T>>,
+}
+
+pub struct ExportSection<T: Instrument> {
     pub tracks: Vec<ExportTrack<T>>,
 }
 
@@ -22,6 +26,14 @@ pub struct Tone {
 }
 
 impl<T: Instrument> ExportMusicPiece<T> {
+    pub fn new() -> Self {
+        Self {
+            sections: Vec::new(),
+        }
+    }
+}
+
+impl<T: Instrument> ExportSection<T> {
     pub fn new() -> Self {
         Self {
             tracks: Vec::new(),
