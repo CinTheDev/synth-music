@@ -4,11 +4,6 @@ All TODOs of this project are written here when needed; after completion the
 relevant points will be removed again. Though, through versioning (git) it's
 possible to still read finished (and therefore deleted) points.
 
-## Support multiple tracks
-
-Right now only one track and one instrument can be used. Improve implementation
-so that any number of tracks is possible.
-
 ## Missing features for composing
 
 There are some missing features that are crucial for composing music.
@@ -46,3 +41,8 @@ TODOs regarding generation of sound samples
 ### Base of Sound samples
 
 Create the base of the submodule and integrate it into the library.
+
+## Support multiple tracks
+
+Right now only one track and one instrument can be used. Improve implementation
+so that any number of tracks is possible.
