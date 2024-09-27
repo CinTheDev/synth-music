@@ -3,18 +3,18 @@ use super::instrument::Instrument;
 
 // Holds all info of a piece relevant for exporting; consists of several
 // export tracks
-pub struct ExportMusicPiece<T: Instrument> {
-    pub sections: Vec<ExportSection<T>>,
+pub struct ExportMusicPiece {
+    pub sections: Vec<ExportSection>,
 }
 
-pub struct ExportSection<T: Instrument> {
-    pub tracks: Vec<ExportTrack<T>>,
+pub struct ExportSection {
+    pub tracks: Vec<ExportTrack>,
 }
 
 // Contains raw tones
-pub struct ExportTrack<T: Instrument> {
+pub struct ExportTrack {
     pub tones: Vec<Tone>,
-    pub instrument: T,
+    pub instrument: Box<dyn Instrument>,
 }
 
 // Represents a raw tone - just a frequency, duration, and intensity
@@ -25,7 +25,7 @@ pub struct Tone {
     pub intensity: f32,
 }
 
-impl<T: Instrument> ExportMusicPiece<T> {
+impl ExportMusicPiece {
     pub fn new() -> Self {
         Self {
             sections: Vec::new(),
@@ -33,7 +33,7 @@ impl<T: Instrument> ExportMusicPiece<T> {
     }
 }
 
-impl<T: Instrument> ExportSection<T> {
+impl ExportSection {
     pub fn new() -> Self {
         Self {
             tracks: Vec::new(),
@@ -41,8 +41,8 @@ impl<T: Instrument> ExportSection<T> {
     }
 }
 
-impl<T: Instrument> ExportTrack<T> {
-    pub fn new(instrument: T) -> Self {
+impl ExportTrack {
+    pub fn new(instrument: Box<dyn Instrument>) -> Self {
         Self {
             tones: Vec::new(),
             instrument,

@@ -3,18 +3,17 @@ pub mod wav_export;
 use std::time::Duration;
 
 use crate::melody::export_info::ExportMusicPiece;
-use crate::melody::instrument::Instrument;
 
-pub trait FileExport<T: Instrument> {
-    fn export(&self, buffer: MusicBuffer<T>) -> std::io::Result<()>;
+pub trait FileExport {
+    fn export(&self, buffer: MusicBuffer) -> std::io::Result<()>;
 }
 
-pub struct MusicBuffer<T: Instrument> {
-    piece: ExportMusicPiece<T>,
+pub struct MusicBuffer {
+    piece: ExportMusicPiece,
 }
 
-impl<T: Instrument> MusicBuffer<T> {
-    pub fn new(piece: ExportMusicPiece<T>) -> Self {
+impl MusicBuffer {
+    pub fn new(piece: ExportMusicPiece) -> Self {
         Self {
             piece,
         }

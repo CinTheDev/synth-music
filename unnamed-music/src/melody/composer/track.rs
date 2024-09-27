@@ -2,15 +2,15 @@ pub mod note;
 use note::Note;
 use crate::melody::instrument::Instrument;
 
-pub struct Track<T: Instrument> {
+pub struct Track {
     notes: Vec<Note>,
-    instrument: T,
+    instrument: Box<dyn Instrument>,
 
     current_intensity: f32,
 }
 
-impl<T: Instrument> Track<T> {
-    pub fn new(instrument: T) -> Self {
+impl Track {
+    pub fn new(instrument: Box<dyn Instrument>) -> Self {
         Self {
             notes: Vec::new(),
             instrument,
@@ -18,7 +18,7 @@ impl<T: Instrument> Track<T> {
         }
     }
 
-    pub fn into_parts(self) -> (Vec<Note>, T) {
+    pub fn into_parts(self) -> (Vec<Note>, Box<dyn Instrument>) {
         (self.notes, self.instrument)
     }
 
