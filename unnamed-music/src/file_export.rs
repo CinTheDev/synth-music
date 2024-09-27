@@ -42,7 +42,6 @@ impl<T: Instrument> MusicBuffer<T> {
                 let mut sample_value = 0.0;
 
                 for frequency in &tone.frequencies {
-                    //sample_value += dbg_sound_generator(*frequency as f64, time) * tone.intensity;
                     sample_value += track.instrument.generate_sound(*frequency as f64, time) * tone.intensity;
                 }
 
@@ -57,11 +56,3 @@ impl<T: Instrument> MusicBuffer<T> {
         return buffer;
     }
 }
-
-/*
-fn dbg_sound_generator(frequency: f64, time: Duration) -> f32 {
-    use std::f64::consts::PI;
-
-    return (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32;
-}
-*/
