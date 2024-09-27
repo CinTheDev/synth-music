@@ -1,17 +1,18 @@
 pub mod note;
 use note::Note;
 
-pub struct Track {
+pub struct Track<T> {
     notes: Vec<Note>,
-    // TODO: add instrument / sound generator here
+    instrument: T,
 
     current_intensity: f32,
 }
 
-impl Track {
-    pub fn new() -> Self {
+impl<T> Track<T> {
+    pub fn new(instrument: T) -> Self {
         Self {
             notes: Vec::new(),
+            instrument,
             current_intensity: 1.0,
         }
     }
