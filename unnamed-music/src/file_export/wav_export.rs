@@ -1,4 +1,4 @@
-use super::{FileExport, MusicBuffer};
+use super::{FileExport, Instrument, MusicBuffer};
 use std::fs::File;
 use std::io::{BufWriter, Write};
 use std::path::PathBuf;
@@ -51,8 +51,8 @@ impl WavExport {
     }
 }
 
-impl FileExport for WavExport {
-    fn export(&self, buffer: MusicBuffer) -> std::io::Result<()> {
+impl<T: Instrument> FileExport<T> for WavExport {
+    fn export(&self, buffer: MusicBuffer<T>) -> std::io::Result<()> {
         let f = File::create(&self.path)?;
         let mut writer = BufWriter::new(f);
 
