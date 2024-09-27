@@ -9,18 +9,6 @@ possible to still read finished (and therefore deleted) points.
 Right now only one track and one instrument can be used. Improve implementation
 so that any number of tracks is possible.
 
-## Remove instrument encapsulation
-
-Right now, tracks are wrapped inside instruments. Right now, instruments do not
-contain any info about sound, so there's no additional info there.
-
-This has the side effect that instruments have to be recreated for every section
-in a composition, which feels unnecessary. Especially later when instruments
-will contain more info about themselves, this will add a lot of repeated code.
-
-Rework the structure so that a section contains Tracks, and every track must be
-assigned an instrument.
-
 ## Missing features for composing
 
 There are some missing features that are crucial for composing music.

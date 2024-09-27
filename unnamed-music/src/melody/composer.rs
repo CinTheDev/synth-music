@@ -1,5 +1,5 @@
-pub mod instrument;
-use instrument::Instrument;
+pub mod track;
+use track::Track;
 
 #[derive(Clone, Copy)]
 pub enum MusicKeyBase {
@@ -41,7 +41,7 @@ pub struct Section {
     pub key: MusicKey,
     pub time_signature: (u8, u8),
 
-    pub instruments: Vec<Instrument>,
+    pub tracks: Vec<Track>,
 }
 
 impl Composition {
@@ -53,8 +53,7 @@ impl Composition {
         result.tracks.push(ExportTrack::new());
 
         for mut section in self.sections {
-            let mut instrument = section.instruments.pop().unwrap();
-            let track = instrument.tracks.pop().unwrap();
+            let track = section.tracks.pop().unwrap();
 
             for note in track.get_notes() {
                 let mut frequencies = Vec::new();
@@ -84,7 +83,7 @@ impl Composition {
     }
 }
 
-fn get_note_base_frequency(tone: (instrument::note::Tone, i32), key_type: MusicKeyType) -> f32 {
+fn get_note_base_frequency(tone: (track::note::Tone, i32), key_type: MusicKeyType) -> f32 {
     // Major keys are here in C
     // Minor keys in A
     match key_type {
@@ -144,8 +143,8 @@ fn transpose_minor(frequency: f32, key: MusicKeyBase) -> f32 {
     modify_frequency(frequency, offset)
 }
 
-fn get_note_base_frequency_major(tone: (instrument::note::Tone, i32)) -> f32 {
-    use instrument::note::Tone;
+fn get_note_base_frequency_major(tone: (track::note::Tone, i32)) -> f32 {
+    use track::note::Tone;
     let base_frequency = match tone.0 {
         Tone::First => get_frequency_from_a4(-9),
         Tone::Second => get_frequency_from_a4(-7),
@@ -159,8 +158,8 @@ fn get_note_base_frequency_major(tone: (instrument::note::Tone, i32)) -> f32 {
     base_frequency * 2_f32.powi(tone.1 - 4)
 }
 
-fn get_note_base_frequency_minor(tone: (instrument::note::Tone, i32)) -> f32 {
-    use instrument::note::Tone;
+fn get_note_base_frequency_minor(tone: (track::note::Tone, i32)) -> f32 {
+    use track::note::Tone;
     let base_frequency = match tone.0 {
         Tone::First => get_frequency_from_a4(0),
         Tone::Second => get_frequency_from_a4(2),

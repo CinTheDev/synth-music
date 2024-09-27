@@ -3,13 +3,6 @@ use unnamed_music::melody::prelude::*;
 fn main() {
     println!("Melody Example");
 
-    let instrument_1 = Instrument {
-        tracks: vec![track_1()],
-    };
-    let instrument_2 = Instrument {
-        tracks: vec![track_2()],
-    };
-
     let first_key = MusicKey {
         base: MusicKeyBase::C,
         key_type: MusicKeyType::Major,
@@ -24,14 +17,14 @@ fn main() {
         key: first_key,
         time_signature: (4, 4),
 
-        instruments: vec![instrument_1],
+        tracks: vec![track_1()],
     };
     let section_2 = Section {
         bpm: 120.0,
         key: second_key,
         time_signature: (4, 4),
 
-        instruments: vec![instrument_2],
+        tracks: vec![track_2()],
     };
 
     let composition = Composition {
