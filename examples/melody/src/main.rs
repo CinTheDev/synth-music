@@ -47,13 +47,14 @@ fn track_1() -> Track {
     use note::Length::*;
     let mut track = Track::new();
 
-    track.note(Quarter, First, 0);
-    track.note(Quarter, Second, 0);
-    track.note(Quarter, Third, 0);
-    track.note(Quarter, Fourth, 0);
-    track.note(Quarter, Fith, 0).staccato();
-    track.note(Quarter, Sixth, 0);
-    track.note(Quarter, Seventh, 0);
+    track.note(Quarter, First, 4);
+    track.note(Quarter, Second, 4);
+    track.note(Quarter, Third, 4);
+    track.note(Quarter, Fourth, 4);
+    track.note(Quarter, Fith, 4).staccato();
+    track.note(Quarter, Sixth, 4);
+    track.note(Quarter, Seventh, 4);
+    track.note(Quarter, First, 5);
 
     return track;
 }
@@ -63,16 +64,16 @@ fn track_2() -> Track {
     use note::Length::*;
     let mut track = Track::new();
 
-    track.note(Quarter, Sixth, 0);
-    track.note(Eigth, Seventh, 0);
-    track.note(Quarter, First, 1);
-    track.note(Eigth, Sixth, 0);
-    track.note(Eigth, First, 1);
-    track.note(Eigth, First, 1);
-    track.note(Eigth, Seventh, 0);
-    track.note(Eigth, Sixth, 0);
-    track.note(Quarter, Seventh, 0);
-    track.note(Quarter, Third, 0);
+    track.note(Quarter, Sixth, 4);
+    track.note(Eigth, Seventh, 4);
+    track.note(Quarter, First, 5);
+    track.note(Eigth, Sixth, 4);
+    track.note(Eigth, First, 5);
+    track.note(Eigth, First, 5);
+    track.note(Eigth, Seventh, 4);
+    track.note(Eigth, Sixth, 4);
+    track.note(Quarter, Seventh, 4);
+    track.note(Quarter, Third, 4);
 
     return track;
 }
