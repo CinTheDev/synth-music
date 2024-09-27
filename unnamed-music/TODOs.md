@@ -92,6 +92,13 @@ This shall be implemented at export-conversion level and not at instrument
 level. Just make sure the code doesn't become really messy for this. (Though,
 this code section kinda needs to be reworked anyway).
 
+#### Idea 3: Making it reach zero
+
+The problem comes from the sound sample stopping during an oscillation period.
+We could manually shorten the played tone until the oscillation reaches 0
+guranteed, (so that the wavelength divides the sound evenly), and fill the rest
+of the time with zero amplitude.
+
 ## Support multiple tracks
 
 Right now only one track and one instrument can be used. Improve implementation
