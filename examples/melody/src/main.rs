@@ -10,16 +10,25 @@ fn main() {
         tracks: vec![track_2()],
     };
 
+    let first_key = MusicKey {
+        base: MusicKeyBase::C,
+        key_type: MusicKeyType::Major,
+    };
+    let second_key = MusicKey {
+        base: MusicKeyBase::A,
+        key_type: MusicKeyType::Minor,
+    };
+
     let section_1 = Section {
         bpm: 120.0,
-        key: MusicKey::C,
+        key: first_key,
         time_signature: (4, 4),
 
         instruments: vec![instrument_1],
     };
     let section_2 = Section {
         bpm: 120.0,
-        key: MusicKey::C,
+        key: second_key,
         time_signature: (4, 4),
 
         instruments: vec![instrument_2],
