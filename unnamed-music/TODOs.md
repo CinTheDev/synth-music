@@ -34,6 +34,17 @@ represented individually.
 
 Implement it and restructure if needed.
 
+## Music Key & Notes cleanup
+
+Right now notes, tones, and music keys have been implemented as closly to
+traditional music theory as possible. The problem is that traditional music
+theory is kinda inconsistent with definitions sometimes, and the code looks
+really messy.
+
+Try to make the implementations for getting the note frequencies more efficient
+and readable, ideally using as few magic numbers and long match lists as
+possible. Also try to relocate the code to a better place than `composer.rs`.
+
 ## Sound samples
 
 TODOs regarding generation of sound samples
