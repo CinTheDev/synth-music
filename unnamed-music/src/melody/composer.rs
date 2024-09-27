@@ -60,12 +60,13 @@ impl Composition {
                 let mut frequencies = Vec::new();
 
                 for tone in &note.values {
-                    frequencies.push(
-                        modify_frequency(
-                            get_note_base_frequency(*tone, section.key.key_type),
-                            note.semitones_offset,
-                        )
+                    let base_frequency = modify_frequency(
+                        get_note_base_frequency(*tone, section.key.key_type),
+                        note.semitones_offset,
                     );
+                    let keyed_frequency = transpose_from_base(base_frequency, section.key);
+                    
+                    frequencies.push(keyed_frequency);
                 }
 
                 let play_duration = note.get_duration(section.bpm);
@@ -90,6 +91,57 @@ fn get_note_base_frequency(tone: (instrument::note::Tone, i32), key_type: MusicK
         MusicKeyType::Major => get_note_base_frequency_major(tone),
         MusicKeyType::Minor => get_note_base_frequency_minor(tone),
     }
+}
+
+fn transpose_from_base(frequency: f32, key: MusicKey) -> f32 {
+    match key.key_type {
+        MusicKeyType::Major => transpose_major(frequency, key.base),
+        MusicKeyType::Minor => transpose_minor(frequency, key.base),
+    }
+}
+
+fn transpose_major(frequency: f32, key: MusicKeyBase) -> f32 {
+    let offset = match key {
+        MusicKeyBase::Gflat => -6,
+        MusicKeyBase::G => -5,
+        MusicKeyBase::Aflat => -4,
+        MusicKeyBase::A => -3,
+        MusicKeyBase::Bflat => -2,
+        MusicKeyBase::B |
+        MusicKeyBase::Cflat => -1,
+        MusicKeyBase::C => 0,
+        MusicKeyBase::Csharp |
+        MusicKeyBase::Dflat => 1,
+        MusicKeyBase::D => 2,
+        MusicKeyBase::Eflat => 3,
+        MusicKeyBase::E => 4,
+        MusicKeyBase::F => 5,
+        MusicKeyBase::Fsharp => 6,
+    };
+
+    modify_frequency(frequency, offset)
+}
+
+fn transpose_minor(frequency: f32, key: MusicKeyBase) -> f32 {
+    let offset = match key {
+        MusicKeyBase::Eflat => -6,
+        MusicKeyBase::E => -5,
+        MusicKeyBase::F => -4,
+        MusicKeyBase::Fsharp |
+        MusicKeyBase::Gflat => -3,
+        MusicKeyBase::G => -2,
+        MusicKeyBase::Aflat => -1,
+        MusicKeyBase::A => 0,
+        MusicKeyBase::Bflat => 1,
+        MusicKeyBase::B => 2,
+        MusicKeyBase::Cflat => 3,
+        MusicKeyBase::C => 4,
+        MusicKeyBase::Csharp |
+        MusicKeyBase::Dflat => 5,
+        MusicKeyBase::D => 6,
+    };
+
+    modify_frequency(frequency, offset)
 }
 
 fn get_note_base_frequency_major(tone: (instrument::note::Tone, i32)) -> f32 {
