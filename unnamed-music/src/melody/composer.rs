@@ -156,7 +156,7 @@ fn get_note_base_frequency_major(tone: (instrument::note::Tone, i32)) -> f32 {
         Tone::Seventh => get_frequency_from_a4(2),
     };
 
-    base_frequency.powi(tone.1 - 4)
+    base_frequency * 2_f32.powi(tone.1 - 4)
 }
 
 fn get_note_base_frequency_minor(tone: (instrument::note::Tone, i32)) -> f32 {
@@ -171,7 +171,7 @@ fn get_note_base_frequency_minor(tone: (instrument::note::Tone, i32)) -> f32 {
         Tone::Seventh => get_frequency_from_a4(10),
     };
 
-    base_frequency.powi(tone.1 - 4)
+    base_frequency * 2_f32.powi(tone.1 - 4)
 }
 
 fn get_frequency_from_a4(semitones: i32) -> f32 {
