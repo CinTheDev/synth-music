@@ -1,14 +1,15 @@
 pub mod note;
 use note::Note;
+use crate::melody::instrument::Instrument;
 
-pub struct Track<T> {
+pub struct Track<T: Instrument> {
     notes: Vec<Note>,
     instrument: T,
 
     current_intensity: f32,
 }
 
-impl<T> Track<T> {
+impl<T: Instrument> Track<T> {
     pub fn new(instrument: T) -> Self {
         Self {
             notes: Vec::new(),
