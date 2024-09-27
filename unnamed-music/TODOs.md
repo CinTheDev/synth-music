@@ -25,25 +25,6 @@ assigned an instrument.
 
 There are some missing features that are crucial for composing music.
 
-### Octaves
-
-Make it possible for notes to reach other octaves
-
-### Dotted notes and trioles
-
-Note lengths cannot be modified as of now, change that so dotted notes and maybe
-even trioles are possible.
-
-### Sharps and flats
-
-It should be possible to manually sharpen of flatten a note. Optionally several
-times.
-
-### Music Key
-
-The library right now just ignores the specified music key. Make it possible
-to use different keys, including major and minor keys.
-
 ### Intervals and pauses
 
 For now, the function to place a note only takes a single value. This is by
