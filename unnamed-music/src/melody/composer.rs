@@ -1,5 +1,5 @@
-pub mod instrument;
-use instrument::Track;
+pub mod track;
+use track::Track;
 
 #[derive(Clone, Copy)]
 pub enum MusicKeyBase {
@@ -83,7 +83,7 @@ impl Composition {
     }
 }
 
-fn get_note_base_frequency(tone: (instrument::note::Tone, i32), key_type: MusicKeyType) -> f32 {
+fn get_note_base_frequency(tone: (track::note::Tone, i32), key_type: MusicKeyType) -> f32 {
     // Major keys are here in C
     // Minor keys in A
     match key_type {
@@ -143,8 +143,8 @@ fn transpose_minor(frequency: f32, key: MusicKeyBase) -> f32 {
     modify_frequency(frequency, offset)
 }
 
-fn get_note_base_frequency_major(tone: (instrument::note::Tone, i32)) -> f32 {
-    use instrument::note::Tone;
+fn get_note_base_frequency_major(tone: (track::note::Tone, i32)) -> f32 {
+    use track::note::Tone;
     let base_frequency = match tone.0 {
         Tone::First => get_frequency_from_a4(-9),
         Tone::Second => get_frequency_from_a4(-7),
@@ -158,8 +158,8 @@ fn get_note_base_frequency_major(tone: (instrument::note::Tone, i32)) -> f32 {
     base_frequency * 2_f32.powi(tone.1 - 4)
 }
 
-fn get_note_base_frequency_minor(tone: (instrument::note::Tone, i32)) -> f32 {
-    use instrument::note::Tone;
+fn get_note_base_frequency_minor(tone: (track::note::Tone, i32)) -> f32 {
+    use track::note::Tone;
     let base_frequency = match tone.0 {
         Tone::First => get_frequency_from_a4(0),
         Tone::Second => get_frequency_from_a4(2),
