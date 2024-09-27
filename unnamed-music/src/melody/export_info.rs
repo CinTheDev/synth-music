@@ -1,6 +1,5 @@
 use std::time::Duration;
 
-
 // Holds all info of a piece relevant for exporting; consists of several
 // export tracks
 pub struct ExportMusicPiece {
