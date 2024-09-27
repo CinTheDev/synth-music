@@ -1,5 +1,6 @@
 pub mod track;
 use track::Track;
+use super::instrument::Instrument;
 
 #[derive(Clone, Copy)]
 pub enum MusicKeyBase {
@@ -32,19 +33,19 @@ pub struct MusicKey {
 
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
 // generated from it.
-pub struct Composition {
-    pub sections: Vec<Section>,
+pub struct Composition<T: Instrument> {
+    pub sections: Vec<Section<T>>,
 }
 
-pub struct Section {
+pub struct Section<T: Instrument> {
     pub bpm: f32,
     pub key: MusicKey,
     pub time_signature: (u8, u8),
 
-    pub tracks: Vec<Track>,
+    pub tracks: Vec<Track<T>>,
 }
 
-impl Composition {
+impl<T: Instrument> Composition<T> {
     pub fn to_export_piece(self) -> crate::melody::export_info::ExportMusicPiece {
         use crate::melody::export_info::*;
         let mut result = ExportMusicPiece::new();
