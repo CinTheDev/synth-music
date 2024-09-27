@@ -62,7 +62,7 @@ impl Composition {
                 for tone in &note.values {
                     frequencies.push(
                         modify_frequency(
-                            get_note_frequency(*tone),
+                            get_note_base_frequency(*tone, section.key.key_type),
                             note.semitones_offset,
                         )
                     );
@@ -83,7 +83,16 @@ impl Composition {
     }
 }
 
-fn get_note_frequency(tone: (instrument::note::Tone, i32)) -> f32 {
+fn get_note_base_frequency(tone: (instrument::note::Tone, i32), key_type: MusicKeyType) -> f32 {
+    // Major keys are here in C
+    // Minor keys in A
+    match key_type {
+        MusicKeyType::Major => get_note_base_frequency_major(tone),
+        MusicKeyType::Minor => get_note_base_frequency_minor(tone),
+    }
+}
+
+fn get_note_base_frequency_major(tone: (instrument::note::Tone, i32)) -> f32 {
     use instrument::note::Tone;
     let base_frequency = match tone.0 {
         Tone::First => get_frequency_from_a4(-9),
@@ -93,6 +102,21 @@ fn get_note_frequency(tone: (instrument::note::Tone, i32)) -> f32 {
         Tone::Fith => get_frequency_from_a4(-2),
         Tone::Sixth => get_frequency_from_a4(0),
         Tone::Seventh => get_frequency_from_a4(2),
+    };
+
+    base_frequency.powi(tone.1 - 4)
+}
+
+fn get_note_base_frequency_minor(tone: (instrument::note::Tone, i32)) -> f32 {
+    use instrument::note::Tone;
+    let base_frequency = match tone.0 {
+        Tone::First => get_frequency_from_a4(0),
+        Tone::Second => get_frequency_from_a4(2),
+        Tone::Third => get_frequency_from_a4(3),
+        Tone::Fourth => get_frequency_from_a4(5),
+        Tone::Fith => get_frequency_from_a4(7),
+        Tone::Sixth => get_frequency_from_a4(8),
+        Tone::Seventh => get_frequency_from_a4(10),
     };
 
     base_frequency.powi(tone.1 - 4)
