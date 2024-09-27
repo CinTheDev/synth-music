@@ -64,16 +64,16 @@ fn track_2() -> Track {
     use note::Length::*;
     let mut track = Track::new();
 
-    track.note(Quarter, Sixth, 4);
-    track.note(Eigth, Seventh, 4);
-    track.note(Quarter, First, 5);
-    track.note(Eigth, Sixth, 4);
-    track.note(Eigth, First, 5);
-    track.note(Eigth, First, 5);
-    track.note(Eigth, Seventh, 4);
-    track.note(Eigth, Sixth, 4);
-    track.note(Quarter, Seventh, 4);
-    track.note(Quarter, Third, 4);
+    track.note(Quarter, First, 4).dotted();
+    track.note(Eigth, Second, 4);
+    track.note(Quarter, Third, 4).dotted();
+    track.note(Eigth, First, 4);
+    track.note(Eigth, Third, 4);
+    track.note(Eigth, Third, 4);
+    track.note(Eigth, Second, 4);
+    track.note(Eigth, First, 4);
+    track.note(Quarter, Second, 4);
+    track.note(Quarter, Fith, 3);
 
     return track;
 }
