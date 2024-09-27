@@ -46,17 +46,19 @@ pub struct Section<T: Instrument> {
 }
 
 impl<T: Instrument> Composition<T> {
-    pub fn to_export_piece(self) -> crate::melody::export_info::ExportMusicPiece {
+    pub fn to_export_piece(self) -> crate::melody::export_info::ExportMusicPiece<T> {
         use crate::melody::export_info::*;
         let mut result = ExportMusicPiece::new();
 
         // TODO: Multiple tracks
-        result.tracks.push(ExportTrack::new());
 
         for mut section in self.sections {
             let track = section.tracks.pop().unwrap();
+            let (notes, instrument) = track.into_parts();
+            result.tracks.push(ExportTrack::new(instrument));
+            let current_track_index = result.tracks.len() - 1;
 
-            for note in track.get_notes() {
+            for note in notes {
                 let mut frequencies = Vec::new();
 
                 for tone in &note.values {
@@ -71,7 +73,7 @@ impl<T: Instrument> Composition<T> {
 
                 let play_duration = note.get_duration(section.bpm);
 
-                result.tracks[0].tones.push(Tone {
+                result.tracks[current_track_index].tones.push(Tone {
                     frequencies,
                     play_duration,
                     tone_duration: play_duration.mul_f32(note.play_fraction),

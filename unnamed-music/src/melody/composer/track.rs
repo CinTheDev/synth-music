@@ -18,8 +18,8 @@ impl<T: Instrument> Track<T> {
         }
     }
 
-    pub fn get_notes(self) -> Vec<Note> {
-        self.notes
+    pub fn into_parts(self) -> (Vec<Note>, T) {
+        (self.notes, self.instrument)
     }
 
     pub fn note(
