@@ -1,8 +1,28 @@
 pub mod instrument;
 use instrument::Instrument;
 
+#[derive(Clone, Copy)]
 pub enum MusicKey {
     C,
+    Csharp,
+    Cflat,
+    D,
+    Dflat,
+    E,
+    Eflat,
+    F,
+    Fsharp,
+    G,
+    Gflat,
+    A,
+    Aflat,
+    B,
+    Bflat,
+}
+#[derive(Clone, Copy)]
+pub enum MusicKeyType {
+    Major,
+    Minor,
 }
 
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
