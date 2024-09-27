@@ -2,7 +2,7 @@ pub mod instrument;
 use instrument::Instrument;
 
 #[derive(Clone, Copy)]
-pub enum MusicKey {
+pub enum MusicKeyBase {
     C,
     Csharp,
     Cflat,
@@ -23,6 +23,11 @@ pub enum MusicKey {
 pub enum MusicKeyType {
     Major,
     Minor,
+}
+#[derive(Clone, Copy)]
+pub struct MusicKey {
+    pub base: MusicKeyBase,
+    pub key_type: MusicKeyType,
 }
 
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
