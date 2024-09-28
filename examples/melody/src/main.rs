@@ -3,41 +3,30 @@ use unnamed_music::melody::prelude::*;
 fn main() {
     println!("Melody Example");
 
-    let first_key = MusicKey {
-        base: MusicKeyBase::C,
-        key_type: MusicKeyType::Major,
-    };
-    let second_key = MusicKey {
+    let key = MusicKey {
         base: MusicKeyBase::A,
         key_type: MusicKeyType::Minor,
     };
 
-    let sine_generator = Box::new(SineGenerator);
-    let harmonic_generator = Box::new(HarmonicSineGenerator::new(100));
+    let harmonic_generator = Box::new(HarmonicSineGenerator::new(10));
 
-    let section_1 = Section {
+    let section = Section {
         bpm: 120.0,
-        key: first_key,
+        key,
         time_signature: (4, 4),
 
-        tracks: vec![track_1(sine_generator)],
-    };
-    let section_2 = Section {
-        bpm: 120.0,
-        key: second_key,
-        time_signature: (4, 4),
-
-        tracks: vec![track_2(harmonic_generator)],
+        tracks: vec![],
     };
 
     let composition = Composition {
-        sections: vec![section_1, section_2],
+        sections: vec![section],
     };
 
     let export_piece = composition.to_export_piece();
     export(export_piece);
 }
 
+/*
 fn track_1(instrument: Box<dyn Instrument>) -> Track {
     use note::Tone::*;
     use note::Length::*;
@@ -73,6 +62,7 @@ fn track_2(instrument: Box<dyn Instrument>) -> Track {
 
     return track;
 }
+*/
 
 fn export(export_piece: ExportMusicPiece) {
     use unnamed_music::file_export::*;
