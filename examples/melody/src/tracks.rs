@@ -1,5 +1,5 @@
 use unnamed_music::melody::prelude::*;
-use unnamed_music::notes;
+use unnamed_music::{notes, sequential_notes};
 
 // BEGIN PART
 
@@ -149,12 +149,13 @@ pub fn melody_b_section(instrument: Box<dyn Instrument>, repeat: bool) -> Track 
     use note::Length::*;
     let mut track = Track::new(instrument);
 
-    track.note(Half, Fith, 3);
-    track.note(Half, Third, 3);
-
-    track.note(Half, Fourth, 3);
-    track.note(Half, Second, 3);
-
+    sequential_notes!(
+        track, Half,
+        (Fith, 3),
+        (Third, 3),
+        (Fourth, 3),
+        (Second, 3)
+    );
 
     if repeat {
         track.note(Half, Third, 3);
