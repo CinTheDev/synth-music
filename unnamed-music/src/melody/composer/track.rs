@@ -43,6 +43,25 @@ impl Track {
         return &mut self.notes[last_index];
     }
 
+    pub fn notes(
+        &mut self,
+        length: note::Length,
+        tones: &[(note::Tone, i32)],
+    ) -> &mut Note {
+        self.notes.push(Note {
+            values: tones.to_vec(),
+            length,
+            play_fraction: 1.0,
+            intensity: self.current_intensity,
+            semitones_offset: 0,
+            dotted: false,
+            triole: false,
+        });
+
+        let last_index = self.notes.len() - 1;
+        return &mut self.notes[last_index];
+    }
+
     pub fn pause(&mut self, length: note::Length) {
         self.notes.push(Note {
             values: vec![],
