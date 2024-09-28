@@ -4,7 +4,7 @@ use std::time::Duration;
 
 use crate::melody;
 use melody::export_info::{ExportMusicPiece, ExportSection, Tone};
-use melody::instrument::Instrument;
+use melody::instrument::{Instrument, ToneInfo};
 
 pub trait FileExport {
     fn export(&self, buffer: MusicBuffer) -> std::io::Result<()>;
@@ -66,7 +66,11 @@ impl MusicBuffer {
             let mut sample_value = 0.0;
 
             for frequency in &tone.frequencies {
-                sample_value += instrument.generate_sound(*frequency as f64, time) * tone.intensity;
+                let info = ToneInfo {
+                    frequency: *frequency as f64,
+                    time,
+                };
+                sample_value += instrument.generate_sound(info) * tone.intensity;
             }
             sample_value *= Self::get_fade_amplitude(&tone, time);
 
