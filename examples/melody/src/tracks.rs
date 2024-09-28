@@ -1,4 +1,5 @@
 use unnamed_music::melody::prelude::*;
+use unnamed_music::{notes, sequential_notes};
 
 // BEGIN PART
 
@@ -148,12 +149,13 @@ pub fn melody_b_section(instrument: Box<dyn Instrument>, repeat: bool) -> Track 
     use note::Length::*;
     let mut track = Track::new(instrument);
 
-    track.note(Half, Fith, 3);
-    track.note(Half, Third, 3);
-
-    track.note(Half, Fourth, 3);
-    track.note(Half, Second, 3);
-
+    sequential_notes!(
+        track, Half,
+        (Fith, 3),
+        (Third, 3),
+        (Fourth, 3),
+        (Second, 3)
+    );
 
     if repeat {
         track.note(Half, Third, 3);
@@ -208,7 +210,12 @@ fn apply_chord_first(track: &mut Track) {
 
     for _ in 0..4 {
         track.note(Eigth, First, 2);
-        track.note(Eigth, Fith, 2);
+        notes!(
+            track, Eigth,
+            (First, 2),
+            (Third, 2),
+            (Fith, 2)
+        );
     }
 }
 
@@ -218,7 +225,12 @@ fn apply_chord_third(track: &mut Track) {
 
     for _ in 0..4 {
         track.note(Eigth, Third, 2);
-        track.note(Eigth, Seventh, 2);
+        notes!(
+            track, Eigth,
+            (Third, 2),
+            (Fith, 2),
+            (Seventh, 2)
+        );
     }
 }
 
@@ -228,7 +240,12 @@ fn apply_chord_fourth(track: &mut Track) {
 
     for _ in 0..4 {
         track.note(Eigth, Fourth, 2);
-        track.note(Eigth, First, 3);
+        notes!(
+            track, Eigth,
+            (Fourth, 2),
+            (Sixth, 2),
+            (First, 3)
+        );
     }
 }
 
@@ -238,6 +255,11 @@ fn apply_chord_fifth(track: &mut Track) {
 
     for _ in 0..4 {
         track.note(Eigth, Fith, 1);
-        track.note(Eigth, Second, 2);
+        notes!(
+            track, Eigth,
+            (Fith, 1),
+            //(Seventh, 1),
+            (Second, 2)
+        );
     }
 }

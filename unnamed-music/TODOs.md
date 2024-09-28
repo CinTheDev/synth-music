@@ -8,16 +8,6 @@ possible to still read finished (and therefore deleted) points.
 
 There are some missing features that are crucial for composing music.
 
-### Intervals and pauses
-
-For now, the function to place a note only takes a single value. This is by
-design to be as short as possible. Though, tones are actually stored as vectors
-to be able to represent intervals or even pauses.
-
-Convert the note placement function into a macro so the amount of parameters
-is variable. With this it should be possible to provide multiple tones or
-even no tones to represent a pause.
-
 ### Seperation of measures
 
 Measures are kind of invisible/non-existant in code right now. This isn't the
@@ -34,7 +24,7 @@ represented individually.
 
 Implement it and restructure if needed.
 
-## Music Key & Notes cleanup
+## Music Key & Notes rework
 
 Right now notes, tones, and music keys have been implemented as closly to
 traditional music theory as possible. The problem is that traditional music
@@ -44,6 +34,20 @@ really messy.
 Try to make the implementations for getting the note frequencies more efficient
 and readable, ideally using as few magic numbers and long match lists as
 possible. Also try to relocate the code to a better place than `composer.rs`.
+
+### Sharps and flats inside intervals
+
+I've noticed that it's impossible to represent and interval with one note being
+sharpened or flattened. The current way of applying these things affects all
+notes in the interval, it's impossible to target a single note.
+
+This is quite unfortunate, a "common" thing in music that is impossible
+because of that is for example the chord V in harmonic minor scales. With the
+regular (natural) minor scale this chord would be minor, but in harmonic minor
+this is almost always manually changed to be major. The only way to do this is
+to sharpen the "middle" note of the chord.
+
+Rethink the note system that such things can be represented.
 
 ## Chunked rendering
 
