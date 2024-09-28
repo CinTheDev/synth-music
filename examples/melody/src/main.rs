@@ -137,7 +137,9 @@ fn export(export_piece: ExportMusicPiece) {
 }
 
 #[derive(Clone, Copy)]
-struct SoftBass;
+struct SoftBass {
+    decay_speed: f32,
+}
 
 #[derive(Clone, Copy)]
 struct HardBass {
@@ -145,10 +147,20 @@ struct HardBass {
 }
 
 impl SoftBass {
+    pub fn new(decay_speed: f32) -> Self {
+        Self {
+            decay_speed,
+        }
+    }
+
     fn triangle_wave(info: ToneInfo) -> f32 {
         use std::f64::consts::PI;
         let x = info.time.as_secs_f64() * info.frequency * 2.0 * PI;
         x.sin().asin() as f32
+    }
+
+    fn decay_function(&self, info: ToneInfo) -> f32 {
+        0.5_f32.powf(info.time.as_secs_f32() * self.decay_speed)
     }
 }
 
@@ -172,7 +184,7 @@ impl HardBass {
 
 impl Instrument for SoftBass {
     fn generate_sound(&self, info: ToneInfo) -> f32 {
-        Self::triangle_wave(info)
+        Self::triangle_wave(info) * self.decay_function(info)
     }
 }
 
