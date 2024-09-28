@@ -3,8 +3,8 @@ use track::Track;
 
 use std::time::Duration;
 
-const DEFAULT_FADE_IN: Duration = Duration::from_millis(10);
-const DEFAULT_FADE_OUT: Duration = Duration::from_millis(100);
+const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
+const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
 
 #[derive(Clone, Copy)]
 pub enum MusicKeyBase {

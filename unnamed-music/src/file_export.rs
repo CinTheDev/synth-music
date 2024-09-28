@@ -79,7 +79,7 @@ impl MusicBuffer {
     }
 
     fn get_fade_amplitude(tone: &Tone, time: Duration) -> f32 {
-        if tone.fade_in > tone.play_duration || tone.fade_out > tone.play_duration {
+        if tone.fade_in > tone.tone_duration || tone.fade_out > tone.tone_duration {
             return 1.0;
         }
 
@@ -89,8 +89,8 @@ impl MusicBuffer {
             return Self::fade_in_smooth(t);
         }
         // Apply fade-out
-        else if time > tone.play_duration - tone.fade_out {
-            let t_time = time - (tone.play_duration - tone.fade_out);
+        else if time > tone.tone_duration - tone.fade_out {
+            let t_time = time - (tone.tone_duration - tone.fade_out);
             let t = t_time.as_secs_f32() / tone.fade_out.as_secs_f32();
             return Self::fade_out_smooth(t);
         }
