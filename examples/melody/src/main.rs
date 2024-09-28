@@ -138,6 +138,12 @@ impl SoftBass {
     pub fn new() -> Self {
         Self { }
     }
+
+    fn triangle_wave(info: ToneInfo) -> f32 {
+        use std::f64::consts::PI;
+        let x = info.time.as_secs_f64() * info.frequency * 2.0 * PI;
+        x.sin().asin() as f32
+    }
 }
 
 impl HardBass {
@@ -164,7 +170,7 @@ impl Instrument for Lead {
 
 impl Instrument for SoftBass {
     fn generate_sound(&self, info: ToneInfo) -> f32 {
-        unimplemented!()
+        Self::triangle_wave(info)
     }
 }
 
