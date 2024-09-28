@@ -68,6 +68,7 @@ impl MusicBuffer {
             for frequency in &tone.frequencies {
                 sample_value += instrument.generate_sound(*frequency as f64, time) * tone.intensity;
             }
+            sample_value *= Self::get_fade_amplitude(&tone, time);
 
             buffer.push(sample_value);
         }
