@@ -79,6 +79,10 @@ impl MusicBuffer {
     }
 
     fn get_fade_amplitude(tone: &Tone, time: Duration) -> f32 {
+        if tone.fade_in > tone.play_duration || tone.fade_out > tone.play_duration {
+            return 1.0;
+        }
+
         // Apply fade-in
         if time < tone.fade_in {
             let t = time.as_secs_f32() / tone.fade_in.as_secs_f32();
