@@ -91,3 +91,12 @@ macro_rules! notes {
         }
     };
 }
+
+#[macro_export]
+macro_rules! sequential_notes {
+    ( $track:expr, $len:expr, $( $args:expr ),+ ) => {
+        $(
+            $track.note($len, $args.0, $args.1);
+        )*
+    };
+}
