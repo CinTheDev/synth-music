@@ -10,7 +10,7 @@ fn main() {
         key_type: MusicKeyType::Minor,
     };
 
-    let instrument_softbass = SoftBass;
+    let instrument_softbass = SoftBass::new(1.0);
     let instrument_hardbass = HardBass::new(10);
 
     let melody = track_melody(Box::new(instrument_softbass));
