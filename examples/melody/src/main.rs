@@ -8,10 +8,11 @@ fn main() {
         key_type: MusicKeyType::Minor,
     };
 
-    let harmonic_generator = Box::new(HarmonicSineGenerator::new(10));
+    let instrument_lead = Lead::new();
+    let instrument_bass = Bass::new();
 
-    let melody = track_melody(harmonic_generator.clone());
-    let chords = track_chords(harmonic_generator);
+    let melody = track_melody(Box::new(instrument_lead));
+    let chords = track_chords(Box::new(instrument_bass));
 
     let section = Section {
         info: SectionInfo {
@@ -108,46 +109,34 @@ fn export(export_piece: ExportMusicPiece) {
     exporter.export(music_buffer).unwrap();
 }
 
-#[derive(Clone, Copy)]
-struct SineGenerator;
+struct Lead {
 
-impl Instrument for SineGenerator {
+}
+
+struct Bass {
+
+}
+
+impl Lead {
+    pub fn new() -> Self {
+        Self { }
+    }
+}
+
+impl Bass {
+    pub fn new() -> Self {
+        Self { }
+    }
+}
+
+impl Instrument for Lead {
     fn generate_sound(&self, info: ToneInfo) -> f32 {
-        use std::f64::consts::PI;
-        (info.time.as_secs_f64() * info.frequency * 2.0 * PI).sin() as f32
+        unimplemented!();
     }
 }
 
-#[derive(Clone, Copy)]
-struct HarmonicSineGenerator {
-    count: u32,
-}
-
-impl HarmonicSineGenerator {
-    pub fn new(count: u32) -> Self {
-        Self {
-            count,
-        }
-    }
-
-    fn get_harmonic_frequency(n: u32, info: &ToneInfo) -> f32 {
-        use std::f64::consts::PI;
-        (info.time.as_secs_f64() * info.frequency * 2.0 * PI * n as f64).sin() as f32
-    }
-
-    fn dropoff(n: u32) -> f32 {
-        0.5_f32.powi(n as i32)
-    }
-}
-
-impl Instrument for HarmonicSineGenerator {
+impl Instrument for Bass {
     fn generate_sound(&self, info: ToneInfo) -> f32 {
-        let mut value = 0.0;
-
-        for i in 0..self.count {
-            value += Self::get_harmonic_frequency(i, &info) * Self::dropoff(i);
-        }
-
-        return value;
+        unimplemented!();
     }
 }
