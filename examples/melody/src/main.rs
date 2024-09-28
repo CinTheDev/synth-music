@@ -10,12 +10,15 @@ fn main() {
 
     let harmonic_generator = Box::new(HarmonicSineGenerator::new(10));
 
+    let melody = track_melody(harmonic_generator.clone());
+    let chords = track_chords(harmonic_generator);
+
     let section = Section {
         bpm: 120.0,
         key,
         time_signature: (4, 4),
 
-        tracks: vec![],
+        tracks: vec![melody, chords],
     };
 
     let composition = Composition {
@@ -24,6 +27,68 @@ fn main() {
 
     let export_piece = composition.to_export_piece();
     export(export_piece);
+}
+
+fn track_melody(instrument: Box<dyn Instrument>) -> Track {
+    use note::Tone::*;
+    use note::Length::*;
+    let mut track = Track::new(instrument);
+
+    track.note(Quarter, Sixth, 4).dotted();
+    track.note(Eigth, Seventh, 4);
+    track.note(Quarter, First, 5);
+    track.note(Eigth, Seventh, 4);
+    track.note(Eigth, Sixth, 4);
+
+    track.note(Quarter, Fith, 4).dotted();
+    track.note(Eigth, Third, 4);
+    track.note(Quarter, Fith, 4);
+    track.note(Eigth, Fourth, 4);
+    track.note(Eigth, Third, 4);
+
+    track.note(Quarter, Second, 4);
+    track.note(Eigth, Second, 4);
+    track.note(Eigth, Third, 4);
+    track.note(Quarter, Fourth, 4);
+    track.note(Quarter, Fith, 4);
+
+    track.note(Quarter, Third, 4);
+    track.note(Quarter, First, 4);
+    track.note(Half, First, 4);
+
+    return track;
+}
+
+fn track_chords(instrument: Box<dyn Instrument>) -> Track {
+    use note::Tone::*;
+    use note::Length::*;
+    let mut track = Track::new(instrument);
+
+    // Chord IV
+    for _ in 0..4 {
+        track.note(Eigth, Fourth, 2);
+        track.note(Eigth, First, 3);
+    }
+
+    // Chord I
+    for _ in 0..4 {
+        track.note(Eigth, First, 2);
+        track.note(Eigth, Fith, 2);
+    }
+
+    // Chord V
+    for _ in 0..4 {
+        track.note(Eigth, Fith, 2);
+        track.note(Eigth, Second, 3);
+    }
+
+    // Chord I
+    for _ in 0..4 {
+        track.note(Eigth, First, 2);
+        track.note(Eigth, Fith, 2);
+    }
+
+    return track;
 }
 
 /*
