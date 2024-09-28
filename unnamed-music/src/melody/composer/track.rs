@@ -46,10 +46,10 @@ impl Track {
     pub fn notes(
         &mut self,
         length: note::Length,
-        tones: &[(note::Tone, i32)],
+        values: Vec<(note::Tone, i32)>,
     ) -> &mut Note {
         self.notes.push(Note {
-            values: tones.to_vec(),
+            values,
             length,
             play_fraction: 1.0,
             intensity: self.current_intensity,
@@ -80,8 +80,14 @@ impl Track {
 }
 
 #[macro_export]
-macro_rules! note {
+macro_rules! notes {
     ( $track:expr, $len:expr, $( $args:expr ),* ) => {
-        $track.note($len, $($args, )*);
+        {
+            let mut temp_vec = Vec::new();
+            $(
+                temp_vec.push($args);
+            )*
+            $track.notes($len, temp_vec)
+        }
     };
 }
