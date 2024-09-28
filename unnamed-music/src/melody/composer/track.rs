@@ -59,3 +59,10 @@ impl Track {
         self.current_intensity = intensity;
     }
 }
+
+#[macro_export]
+macro_rules! note {
+    ( $track:expr, $len:expr, $( $args:expr ),* ) => {
+        $track.note($len, $($args, )*);
+    };
+}
