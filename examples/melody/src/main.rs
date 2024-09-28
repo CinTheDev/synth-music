@@ -13,9 +13,9 @@ fn main() {
     let instrument_softbass = SoftBass::new(1.0);
     let instrument_hardbass = HardBass::new(10);
 
-    let melody = track_melody(Box::new(instrument_softbass));
-    let chords = track_chords(Box::new(instrument_softbass));
-    let bass = track_bass(Box::new(instrument_hardbass));
+    let melody_begin = track_melody_begin(Box::new(instrument_softbass));
+    let chords_begin = track_chords_begin(Box::new(instrument_softbass));
+    let bass_begin = track_bass_begin(Box::new(instrument_hardbass));
 
     let section = Section {
         info: SectionInfo {
@@ -24,7 +24,7 @@ fn main() {
             time_signature: (4, 4),
         },
 
-        tracks: vec![melody, chords, bass],
+        tracks: vec![melody_begin, chords_begin, bass_begin],
     };
 
     let composition = Composition {
@@ -35,7 +35,73 @@ fn main() {
     export(export_piece);
 }
 
-fn track_melody(instrument: Box<dyn Instrument>) -> Track {
+fn track_melody_begin(instrument: Box<dyn Instrument>) -> Track {
+    use note::Tone::*;
+    use note::Length::*;
+    let mut track = Track::new(instrument);
+
+    track.note(Quarter, Second, 4).dotted();
+    track.note(Eigth, Third, 4);
+    track.note(Quarter, Fourth, 4);
+    track.note(Quarter, Fith, 4);
+
+    track.note(Quarter, Third, 4);
+    track.note(Quarter, First, 4);
+    track.note(Quarter, Fith, 4);
+    track.note(Eigth, Fourth, 4);
+    track.note(Eigth, Third, 4);
+
+    track.note(Quarter, Second, 4).dotted();
+    track.note(Eigth, Third, 4);
+    track.note(Quarter, Fourth, 4);
+    track.note(Quarter, Fith, 4);
+
+    track.note(Quarter, Third, 4);
+    track.note(Quarter, First, 4);
+    track.note(Half, First, 4);
+
+    return track;
+}
+
+fn track_chords_begin(instrument: Box<dyn Instrument>) -> Track {
+    use note::Tone::*;
+    use note::Length::*;
+    let mut track = Track::new(instrument);
+
+    for _ in 0..2 {
+        // Chord V
+        for _ in 0..4 {
+            track.note(Eigth, Fith, 1);
+            track.note(Eigth, Second, 2);
+        }
+
+        // Chord I
+        for _ in 0..4 {
+            track.note(Eigth, First, 2);
+            track.note(Eigth, Fith, 2);
+        }
+    }
+
+    return track;
+}
+
+fn track_bass_begin(instrument: Box<dyn Instrument>) -> Track {
+    use note::Tone::*;
+    use note::Length::*;
+    let mut track = Track::new(instrument);
+
+    for _ in 0..2 {
+        // Chord V
+        track.note(Whole, Fith, 0);
+
+        // Chord I
+        track.note(Whole, First, 1);
+    }
+
+    return track;
+}
+
+fn track_melody_repeated(instrument: Box<dyn Instrument>) -> Track {
     use note::Tone::*;
     use note::Length::*;
     let mut track = Track::new(instrument);
@@ -65,7 +131,7 @@ fn track_melody(instrument: Box<dyn Instrument>) -> Track {
     return track;
 }
 
-fn track_chords(instrument: Box<dyn Instrument>) -> Track {
+fn track_chords_repeated(instrument: Box<dyn Instrument>) -> Track {
     use note::Tone::*;
     use note::Length::*;
     let mut track = Track::new(instrument);
@@ -99,7 +165,7 @@ fn track_chords(instrument: Box<dyn Instrument>) -> Track {
     return track;
 }
 
-fn track_bass(instrument: Box<dyn Instrument>) -> Track {
+fn track_bass_repeated(instrument: Box<dyn Instrument>) -> Track {
     use note::Tone::*;
     use note::Length::*;
     let mut track = Track::new(instrument);
