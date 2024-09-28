@@ -78,8 +78,8 @@ fn track_chords(instrument: Box<dyn Instrument>) -> Track {
 
     // Chord V
     for _ in 0..4 {
-        track.note(Eigth, Fith, 2);
-        track.note(Eigth, Second, 3);
+        track.note(Eigth, Fith, 1);
+        track.note(Eigth, Second, 2);
     }
 
     // Chord I
