@@ -1,5 +1,6 @@
 pub mod track;
 use track::Track;
+use crate::melody::export_info::*;
 
 use std::time::Duration;
 
@@ -50,49 +51,53 @@ pub struct Section {
 }
 
 impl Composition {
-    pub fn to_export_piece(self) -> crate::melody::export_info::ExportMusicPiece {
-        use crate::melody::export_info::*;
+    pub fn to_export_piece(self) -> ExportMusicPiece {
         let mut result = ExportMusicPiece::new();
 
         // TODO: Multiple tracks
 
-        for mut section in self.sections {
-            let track = section.tracks.pop().unwrap();
-            let (notes, instrument) = track.into_parts();
-
-            let mut export_section = ExportSection::new();
-            let mut export_track = ExportTrack::new(instrument);
-
-            for note in notes {
-                let mut frequencies = Vec::new();
-
-                for tone in &note.values {
-                    let base_frequency = modify_frequency(
-                        get_note_base_frequency(*tone, section.key.key_type),
-                        note.semitones_offset,
-                    );
-                    let keyed_frequency = transpose_from_base(base_frequency, section.key);
-                    
-                    frequencies.push(keyed_frequency);
-                }
-
-                let play_duration = note.get_duration(section.bpm);
-
-                export_track.tones.push(Tone {
-                    frequencies,
-                    play_duration,
-                    tone_duration: play_duration.mul_f32(note.play_fraction),
-                    intensity: note.intensity,
-                    fade_in: DEFAULT_FADE_IN,
-                    fade_out: DEFAULT_FADE_OUT,
-                });
-            }
-
-            export_section.tracks.push(export_track);
+        for section in self.sections {
+            let export_section = Self::generate_export_section(section);
             result.sections.push(export_section);
         }
 
         return result;
+    }
+
+    fn generate_export_section(mut section: Section) -> ExportSection {
+        let track = section.tracks.pop().unwrap();
+        let (notes, instrument) = track.into_parts();
+
+        let mut export_section = ExportSection::new();
+        let mut export_track = ExportTrack::new(instrument);
+
+        for note in notes {
+            let mut frequencies = Vec::new();
+
+            for tone in &note.values {
+                let base_frequency = modify_frequency(
+                    get_note_base_frequency(*tone, section.key.key_type),
+                    note.semitones_offset,
+                );
+                let keyed_frequency = transpose_from_base(base_frequency, section.key);
+                
+                frequencies.push(keyed_frequency);
+            }
+
+            let play_duration = note.get_duration(section.bpm);
+
+            export_track.tones.push(Tone {
+                frequencies,
+                play_duration,
+                tone_duration: play_duration.mul_f32(note.play_fraction),
+                intensity: note.intensity,
+                fade_in: DEFAULT_FADE_IN,
+                fade_out: DEFAULT_FADE_OUT,
+            });
+        }
+
+        export_section.tracks.push(export_track);
+        return export_section;
     }
 }
 
