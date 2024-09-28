@@ -72,10 +72,10 @@ fn track_chords(instrument: Box<dyn Instrument>) -> Track {
         track.note(Eigth, First, 3);
     }
 
-    // Chord I
+    // Chord III
     for _ in 0..4 {
-        track.note(Eigth, First, 2);
-        track.note(Eigth, Fith, 2);
+        track.note(Eigth, Third, 2);
+        track.note(Eigth, Seventh, 2);
     }
 
     // Chord V
