@@ -72,13 +72,16 @@ fn track_melody_begin(instrument: Box<dyn Instrument>) -> Track {
     use note::Length::*;
     let mut track = Track::new(instrument);
 
-    track.note(Quarter, Second, 3).dotted();
+    track.note(Quarter, Fith, 3);
+    track.note(Eigth, Second, 3);
     track.note(Eigth, Third, 3);
     track.note(Quarter, Fourth, 3);
-    track.note(Quarter, Fith, 3);
+    track.note(Eigth, Third, 3);
+    track.note(Eigth, Second, 3);
 
-    track.note(Quarter, Third, 3);
     track.note(Quarter, First, 3);
+    track.note(Eigth, First, 3);
+    track.note(Eigth, Third, 3);
     track.note(Quarter, Fith, 3);
     track.note(Eigth, Fourth, 3);
     track.note(Eigth, Third, 3);
@@ -152,8 +155,7 @@ fn track_melody_repeated(instrument: Box<dyn Instrument>, repeat: bool) -> Track
     track.note(Eigth, Fourth, 3);
     track.note(Eigth, Third, 3);
 
-    track.note(Quarter, Second, 3);
-    track.note(Eigth, Second, 3);
+    track.note(Quarter, Second, 3).dotted();
     track.note(Eigth, Third, 3);
     track.note(Quarter, Fourth, 3);
     track.note(Quarter, Fith, 3);
