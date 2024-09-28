@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use unnamed_music::melody::prelude::*;
 
 fn main() {
@@ -10,7 +12,7 @@ fn main() {
 
     let instrument_lead = Lead::new();
     let instrument_softbass = SoftBass::new();
-    let instrument_hardbass = HardBass::new();
+    let instrument_hardbass = HardBass::new(2);
 
     let melody = track_melody(Box::new(instrument_lead));
     let chords = track_chords(Box::new(instrument_softbass));
@@ -144,7 +146,7 @@ struct SoftBass {
 }
 
 struct HardBass {
-
+    harmonics: u32,
 }
 
 impl Lead {
@@ -171,18 +173,30 @@ impl SoftBass {
 }
 
 impl HardBass {
-    pub fn new() -> Self {
-        Self { }
+    pub fn new(harmonics: u32) -> Self {
+        Self {
+            harmonics,
+        }
     }
 
-    pub fn square_wave(info: ToneInfo) -> f32 {
-        let value = (info.time.as_secs_f64() * info.frequency).floor() as u32;
-        if value % 2 == 1 {
-            return 1.0;
-        }
-        else {
-            return -1.0;
-        }
+    //fn square_wave(info: ToneInfo) -> f32 {
+    //    let value = (info.time.as_secs_f64() * info.frequency).floor() as u32;
+    //    if value % 2 == 1 {
+    //        return 1.0;
+    //    }
+    //    else {
+    //        return -1.0;
+    //    }
+    //}
+
+    fn sine_wave(time: Duration, frequency: f64) -> f32 {
+        use std::f64::consts::PI;
+        (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
+    }
+
+    fn harmonic(n: u32, info: &ToneInfo) -> f32 {
+        let factor = (2 * n + 1) as f32;
+        Self::sine_wave(info.time, info.frequency * factor as f64) / factor
     }
 }
 
@@ -200,6 +214,12 @@ impl Instrument for SoftBass {
 
 impl Instrument for HardBass {
     fn generate_sound(&self, info: ToneInfo) -> f32 {
-        Self::square_wave(info)
+        let mut amplitude = 0.0;
+
+        for n in 0..self.harmonics {
+            amplitude += Self::harmonic(n, &info);
+        }
+
+        return amplitude;
     }
 }
