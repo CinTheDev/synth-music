@@ -76,4 +76,18 @@ impl MusicBuffer {
         }
         return buffer;
     }
+
+    fn fade_in_smooth(t: f32) -> f32 {
+        3.0*t*t - 2.0*t*t*t
+    }
+    fn fade_out_smooth(t: f32) -> f32 {
+        Self::fade_in_smooth(1.0 - t)
+    }
+
+    fn fade_in_circular(t: f32) -> f32 {
+        Self::fade_out_circular(1.0 - t)
+    }
+    fn fade_out_circular(t: f32) -> f32 {
+        (1.0 - t*t).sqrt()
+    }
 }
