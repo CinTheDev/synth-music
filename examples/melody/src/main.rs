@@ -9,10 +9,12 @@ fn main() {
     };
 
     let instrument_lead = Lead::new();
-    let instrument_bass = SoftBass::new();
+    let instrument_softbass = SoftBass::new();
+    let instrument_hardbass = HardBass::new();
 
     let melody = track_melody(Box::new(instrument_lead));
-    let chords = track_chords(Box::new(instrument_bass));
+    let chords = track_chords(Box::new(instrument_softbass));
+    let bass = track_bass(Box::new(instrument_hardbass));
 
     let section = Section {
         info: SectionInfo {
@@ -21,7 +23,7 @@ fn main() {
             time_signature: (4, 4),
         },
 
-        tracks: vec![melody, chords],
+        tracks: vec![melody, chords, bass],
     };
 
     let composition = Composition {
@@ -92,6 +94,28 @@ fn track_chords(instrument: Box<dyn Instrument>) -> Track {
         track.note(Eigth, First, 2);
         track.note(Eigth, Fith, 2);
     }
+
+    return track;
+}
+
+fn track_bass(instrument: Box<dyn Instrument>) -> Track {
+    use note::Tone::*;
+    use note::Length::*;
+    let mut track = Track::new(instrument);
+
+    track.set_intensity(0.1);
+
+    // Chord IV
+    track.note(Whole, Fourth, 1);
+
+    // Chord III
+    track.note(Whole, Third, 1);
+
+    // Chord V
+    track.note(Whole, Fith, 0);
+
+    // Chord I
+    track.note(Whole, First, 1);
 
     return track;
 }
