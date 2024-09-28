@@ -1,4 +1,5 @@
 use std::time::Duration;
+use dyn_clone::DynClone;
 
 #[derive(Clone, Copy)]
 pub struct ToneInfo {
@@ -6,6 +7,8 @@ pub struct ToneInfo {
     pub time: Duration,
 }
 
-pub trait Instrument {
+pub trait Instrument : DynClone {
     fn generate_sound(&self, info: ToneInfo) -> f32;
 }
+
+dyn_clone::clone_trait_object!(Instrument);
