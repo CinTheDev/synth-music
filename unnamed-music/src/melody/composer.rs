@@ -1,6 +1,11 @@
 pub mod track;
 use track::Track;
 
+use std::time::Duration;
+
+const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
+const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
+
 #[derive(Clone, Copy)]
 pub enum MusicKeyBase {
     C,
@@ -50,12 +55,15 @@ impl Composition {
         let mut result = ExportMusicPiece::new();
 
         // TODO: Multiple tracks
-        result.tracks.push(ExportTrack::new());
 
         for mut section in self.sections {
             let track = section.tracks.pop().unwrap();
+            let (notes, instrument) = track.into_parts();
 
-            for note in track.get_notes() {
+            let mut export_section = ExportSection::new();
+            let mut export_track = ExportTrack::new(instrument);
+
+            for note in notes {
                 let mut frequencies = Vec::new();
 
                 for tone in &note.values {
@@ -70,13 +78,18 @@ impl Composition {
 
                 let play_duration = note.get_duration(section.bpm);
 
-                result.tracks[0].tones.push(Tone {
+                export_track.tones.push(Tone {
                     frequencies,
                     play_duration,
                     tone_duration: play_duration.mul_f32(note.play_fraction),
                     intensity: note.intensity,
-                })
+                    fade_in: DEFAULT_FADE_IN,
+                    fade_out: DEFAULT_FADE_OUT,
+                });
             }
+
+            export_section.tracks.push(export_track);
+            result.sections.push(export_section);
         }
 
         return result;

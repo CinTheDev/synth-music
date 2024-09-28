@@ -12,19 +12,22 @@ fn main() {
         key_type: MusicKeyType::Minor,
     };
 
+    let sine_generator = Box::new(SineGenerator);
+    let harmonic_generator = Box::new(HarmonicSineGenerator::new(100));
+
     let section_1 = Section {
         bpm: 120.0,
         key: first_key,
         time_signature: (4, 4),
 
-        tracks: vec![track_1()],
+        tracks: vec![track_1(sine_generator)],
     };
     let section_2 = Section {
         bpm: 120.0,
         key: second_key,
         time_signature: (4, 4),
 
-        tracks: vec![track_2()],
+        tracks: vec![track_2(harmonic_generator)],
     };
 
     let composition = Composition {
@@ -35,10 +38,10 @@ fn main() {
     export(export_piece);
 }
 
-fn track_1() -> Track {
+fn track_1(instrument: Box<dyn Instrument>) -> Track {
     use note::Tone::*;
     use note::Length::*;
-    let mut track = Track::new();
+    let mut track = Track::new(instrument);
 
     track.note(Quarter, First, 4);
     track.note(Quarter, Second, 4);
@@ -52,10 +55,10 @@ fn track_1() -> Track {
     return track;
 }
 
-fn track_2() -> Track {
+fn track_2(instrument: Box<dyn Instrument>) -> Track {
     use note::Tone::*;
     use note::Length::*;
-    let mut track = Track::new();
+    let mut track = Track::new(instrument);
 
     track.note(Quarter, First, 4).dotted();
     track.note(Eigth, Second, 4);
@@ -84,4 +87,48 @@ fn export(export_piece: ExportMusicPiece) {
     };
 
     exporter.export(music_buffer).unwrap();
+}
+
+#[derive(Clone, Copy)]
+struct SineGenerator;
+
+impl Instrument for SineGenerator {
+    fn generate_sound(&self, frequency: f64, time: std::time::Duration) -> f32 {
+        use std::f64::consts::PI;
+        (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
+    }
+}
+
+#[derive(Clone, Copy)]
+struct HarmonicSineGenerator {
+    count: u32,
+}
+
+impl HarmonicSineGenerator {
+    pub fn new(count: u32) -> Self {
+        Self {
+            count,
+        }
+    }
+
+    fn get_harmonic_frequency(n: u32, frequency: f64, time: std::time::Duration) -> f32 {
+        use std::f64::consts::PI;
+        (time.as_secs_f64() * frequency * 2.0 * PI * n as f64).sin() as f32
+    }
+
+    fn dropoff(n: u32) -> f32 {
+        0.5_f32.powi(n as i32)
+    }
+}
+
+impl Instrument for HarmonicSineGenerator {
+    fn generate_sound(&self, frequency: f64, time: std::time::Duration) -> f32 {
+        let mut value = 0.0;
+
+        for i in 0..self.count {
+            value += Self::get_harmonic_frequency(i, frequency, time) * Self::dropoff(i);
+        }
+
+        return value;
+    }
 }

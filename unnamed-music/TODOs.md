@@ -45,14 +45,6 @@ Try to make the implementations for getting the note frequencies more efficient
 and readable, ideally using as few magic numbers and long match lists as
 possible. Also try to relocate the code to a better place than `composer.rs`.
 
-## Sound samples
-
-TODOs regarding generation of sound samples
-
-### Base of Sound samples
-
-Create the base of the submodule and integrate it into the library.
-
 ## Support multiple tracks
 
 Right now only one track and one instrument can be used. Improve implementation

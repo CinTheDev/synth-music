@@ -1,23 +1,25 @@
 pub mod note;
 use note::Note;
+use crate::melody::instrument::Instrument;
 
 pub struct Track {
     notes: Vec<Note>,
-    // TODO: add instrument / sound generator here
+    instrument: Box<dyn Instrument>,
 
     current_intensity: f32,
 }
 
 impl Track {
-    pub fn new() -> Self {
+    pub fn new(instrument: Box<dyn Instrument>) -> Self {
         Self {
             notes: Vec::new(),
+            instrument,
             current_intensity: 1.0,
         }
     }
 
-    pub fn get_notes(self) -> Vec<Note> {
-        self.notes
+    pub fn into_parts(self) -> (Vec<Note>, Box<dyn Instrument>) {
+        (self.notes, self.instrument)
     }
 
     pub fn note(
