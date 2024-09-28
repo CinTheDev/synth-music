@@ -41,27 +41,27 @@ fn track_melody(instrument: Box<dyn Instrument>) -> Track {
     use note::Length::*;
     let mut track = Track::new(instrument);
 
-    track.note(Quarter, Sixth, 4).dotted();
-    track.note(Eigth, Seventh, 4);
-    track.note(Quarter, First, 5);
-    track.note(Eigth, Seventh, 4);
-    track.note(Eigth, Sixth, 4);
-
-    track.note(Quarter, Fith, 4).dotted();
-    track.note(Eigth, Third, 4);
-    track.note(Quarter, Fith, 4);
-    track.note(Eigth, Fourth, 4);
-    track.note(Eigth, Third, 4);
-
-    track.note(Quarter, Second, 4);
-    track.note(Eigth, Second, 4);
-    track.note(Eigth, Third, 4);
-    track.note(Quarter, Fourth, 4);
-    track.note(Quarter, Fith, 4);
-
-    track.note(Quarter, Third, 4);
+    track.note(Quarter, Sixth, 3).dotted();
+    track.note(Eigth, Seventh, 3);
     track.note(Quarter, First, 4);
-    track.note(Half, First, 4);
+    track.note(Eigth, Seventh, 3);
+    track.note(Eigth, Sixth, 3);
+
+    track.note(Quarter, Fith, 3).dotted();
+    track.note(Eigth, Third, 3);
+    track.note(Quarter, Fith, 3);
+    track.note(Eigth, Fourth, 3);
+    track.note(Eigth, Third, 3);
+
+    track.note(Quarter, Second, 3);
+    track.note(Eigth, Second, 3);
+    track.note(Eigth, Third, 3);
+    track.note(Quarter, Fourth, 3);
+    track.note(Quarter, Fith, 3);
+
+    track.note(Quarter, Third, 3);
+    track.note(Quarter, First, 3);
+    track.note(Half, First, 3);
 
     return track;
 }
