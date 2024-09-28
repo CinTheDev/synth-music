@@ -59,8 +59,6 @@ impl Composition {
     pub fn to_export_piece(self) -> ExportMusicPiece {
         let mut result = ExportMusicPiece::new();
 
-        // TODO: Multiple tracks
-
         for section in self.sections {
             let export_section = Self::generate_export_section(section);
             result.sections.push(export_section);
@@ -69,13 +67,14 @@ impl Composition {
         return result;
     }
 
-    fn generate_export_section(mut section: Section) -> ExportSection {
+    fn generate_export_section(section: Section) -> ExportSection {
         let mut export_section = ExportSection::new();
 
-        let track = section.tracks.pop().unwrap();
-        let export_track = Self::generate_export_track(track, section.info);
+        for track in section.tracks {
+            let export_track = Self::generate_export_track(track, section.info);
+            export_section.tracks.push(export_track);
+        }
 
-        export_section.tracks.push(export_track);
         return export_section;
     }
 
