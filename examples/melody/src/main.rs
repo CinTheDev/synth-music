@@ -67,6 +67,8 @@ fn track_chords(instrument: Box<dyn Instrument>) -> Track {
     use note::Length::*;
     let mut track = Track::new(instrument);
 
+    track.set_intensity(0.2);
+
     // Chord IV
     for _ in 0..4 {
         track.note(Eigth, Fourth, 2);
@@ -121,22 +123,37 @@ impl Lead {
     pub fn new() -> Self {
         Self { }
     }
+
+    pub fn sine_wave(info: ToneInfo) -> f32 {
+        use std::f64::consts::PI;
+        (info.time.as_secs_f64() * info.frequency * 2.0 * PI).sin() as f32
+    }
 }
 
 impl Bass {
     pub fn new() -> Self {
         Self { }
     }
+
+    pub fn square_wave(info: ToneInfo) -> f32 {
+        let value = (info.time.as_secs_f64() * info.frequency).floor() as u32;
+        if value % 2 == 1 {
+            return 1.0;
+        }
+        else {
+            return -1.0;
+        }
+    }
 }
 
 impl Instrument for Lead {
     fn generate_sound(&self, info: ToneInfo) -> f32 {
-        unimplemented!();
+        Self::sine_wave(info)
     }
 }
 
 impl Instrument for Bass {
     fn generate_sound(&self, info: ToneInfo) -> f32 {
-        unimplemented!();
+        Self::square_wave(info)
     }
 }
