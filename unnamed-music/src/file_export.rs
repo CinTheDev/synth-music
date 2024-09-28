@@ -2,7 +2,9 @@ pub mod wav_export;
 
 use std::time::Duration;
 
-use crate::melody::{export_info::{ExportMusicPiece, ExportSection, Tone}, prelude::Instrument};
+use crate::melody;
+use melody::export_info::{ExportMusicPiece, ExportSection, Tone};
+use melody::instrument::Instrument;
 
 pub trait FileExport {
     fn export(&self, buffer: MusicBuffer) -> std::io::Result<()>;
