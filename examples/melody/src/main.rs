@@ -93,9 +93,9 @@ fn export(export_piece: ExportMusicPiece) {
 struct SineGenerator;
 
 impl Instrument for SineGenerator {
-    fn generate_sound(&self, frequency: f64, time: std::time::Duration) -> f32 {
+    fn generate_sound(&self, info: ToneInfo) -> f32 {
         use std::f64::consts::PI;
-        (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
+        (info.time.as_secs_f64() * info.frequency * 2.0 * PI).sin() as f32
     }
 }
 
@@ -111,9 +111,9 @@ impl HarmonicSineGenerator {
         }
     }
 
-    fn get_harmonic_frequency(n: u32, frequency: f64, time: std::time::Duration) -> f32 {
+    fn get_harmonic_frequency(n: u32, info: &ToneInfo) -> f32 {
         use std::f64::consts::PI;
-        (time.as_secs_f64() * frequency * 2.0 * PI * n as f64).sin() as f32
+        (info.time.as_secs_f64() * info.frequency * 2.0 * PI * n as f64).sin() as f32
     }
 
     fn dropoff(n: u32) -> f32 {
@@ -122,11 +122,11 @@ impl HarmonicSineGenerator {
 }
 
 impl Instrument for HarmonicSineGenerator {
-    fn generate_sound(&self, frequency: f64, time: std::time::Duration) -> f32 {
+    fn generate_sound(&self, info: ToneInfo) -> f32 {
         let mut value = 0.0;
 
         for i in 0..self.count {
-            value += Self::get_harmonic_frequency(i, frequency, time) * Self::dropoff(i);
+            value += Self::get_harmonic_frequency(i, &info) * Self::dropoff(i);
         }
 
         return value;
