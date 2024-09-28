@@ -91,44 +91,6 @@ fn track_chords(instrument: Box<dyn Instrument>) -> Track {
     return track;
 }
 
-/*
-fn track_1(instrument: Box<dyn Instrument>) -> Track {
-    use note::Tone::*;
-    use note::Length::*;
-    let mut track = Track::new(instrument);
-
-    track.note(Quarter, First, 4);
-    track.note(Quarter, Second, 4);
-    track.note(Quarter, Third, 4);
-    track.note(Quarter, Fourth, 4);
-    track.note(Quarter, Fith, 4).staccato();
-    track.note(Quarter, Sixth, 4);
-    track.note(Quarter, Seventh, 4);
-    track.note(Quarter, First, 5);
-
-    return track;
-}
-
-fn track_2(instrument: Box<dyn Instrument>) -> Track {
-    use note::Tone::*;
-    use note::Length::*;
-    let mut track = Track::new(instrument);
-
-    track.note(Quarter, First, 4).dotted();
-    track.note(Eigth, Second, 4);
-    track.note(Quarter, Third, 4).dotted();
-    track.note(Eigth, First, 4);
-    track.note(Eigth, Third, 4);
-    track.note(Eigth, Third, 4);
-    track.note(Eigth, Second, 4);
-    track.note(Eigth, First, 4);
-    track.note(Quarter, Second, 4);
-    track.note(Quarter, Fith, 3);
-
-    return track;
-}
-*/
-
 fn export(export_piece: ExportMusicPiece) {
     use unnamed_music::file_export::*;
     use wav_export::WavExport;
