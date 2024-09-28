@@ -9,7 +9,7 @@ fn main() {
     };
 
     let instrument_lead = Lead::new();
-    let instrument_bass = Bass::new();
+    let instrument_bass = SoftBass::new();
 
     let melody = track_melody(Box::new(instrument_lead));
     let chords = track_chords(Box::new(instrument_bass));
@@ -115,7 +115,11 @@ struct Lead {
 
 }
 
-struct Bass {
+struct SoftBass {
+
+}
+
+struct HardBass {
 
 }
 
@@ -130,7 +134,13 @@ impl Lead {
     }
 }
 
-impl Bass {
+impl SoftBass {
+    pub fn new() -> Self {
+        Self { }
+    }
+}
+
+impl HardBass {
     pub fn new() -> Self {
         Self { }
     }
@@ -152,7 +162,13 @@ impl Instrument for Lead {
     }
 }
 
-impl Instrument for Bass {
+impl Instrument for SoftBass {
+    fn generate_sound(&self, info: ToneInfo) -> f32 {
+        unimplemented!()
+    }
+}
+
+impl Instrument for HardBass {
     fn generate_sound(&self, info: ToneInfo) -> f32 {
         Self::square_wave(info)
     }
