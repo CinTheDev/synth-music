@@ -54,25 +54,25 @@ fn track_melody_begin(instrument: Box<dyn Instrument>) -> Track {
     use note::Length::*;
     let mut track = Track::new(instrument);
 
-    track.note(Quarter, Second, 4).dotted();
-    track.note(Eigth, Third, 4);
-    track.note(Quarter, Fourth, 4);
-    track.note(Quarter, Fith, 4);
+    track.note(Quarter, Second, 3).dotted();
+    track.note(Eigth, Third, 3);
+    track.note(Quarter, Fourth, 3);
+    track.note(Quarter, Fith, 3);
 
-    track.note(Quarter, Third, 4);
-    track.note(Quarter, First, 4);
-    track.note(Quarter, Fith, 4);
-    track.note(Eigth, Fourth, 4);
-    track.note(Eigth, Third, 4);
+    track.note(Quarter, Third, 3);
+    track.note(Quarter, First, 3);
+    track.note(Quarter, Fith, 3);
+    track.note(Eigth, Fourth, 3);
+    track.note(Eigth, Third, 3);
 
-    track.note(Quarter, Second, 4).dotted();
-    track.note(Eigth, Third, 4);
-    track.note(Quarter, Fourth, 4);
-    track.note(Quarter, Fith, 4);
+    track.note(Quarter, Second, 3).dotted();
+    track.note(Eigth, Third, 3);
+    track.note(Quarter, Fourth, 3);
+    track.note(Quarter, Fith, 3);
 
-    track.note(Quarter, Third, 4);
-    track.note(Quarter, First, 4);
-    track.note(Half, First, 4);
+    track.note(Quarter, Third, 3);
+    track.note(Quarter, First, 3);
+    track.note(Half, First, 3);
 
     return track;
 }
@@ -81,6 +81,8 @@ fn track_chords_begin(instrument: Box<dyn Instrument>) -> Track {
     use note::Tone::*;
     use note::Length::*;
     let mut track = Track::new(instrument);
+
+    track.set_intensity(0.2);
 
     for _ in 0..2 {
         // Chord V
@@ -103,6 +105,8 @@ fn track_bass_begin(instrument: Box<dyn Instrument>) -> Track {
     use note::Tone::*;
     use note::Length::*;
     let mut track = Track::new(instrument);
+
+    track.set_intensity(0.15);
 
     for _ in 0..2 {
         // Chord V
