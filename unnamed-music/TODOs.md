@@ -24,7 +24,7 @@ represented individually.
 
 Implement it and restructure if needed.
 
-## Music Key & Notes cleanup
+## Music Key & Notes rework
 
 Right now notes, tones, and music keys have been implemented as closly to
 traditional music theory as possible. The problem is that traditional music
