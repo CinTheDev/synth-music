@@ -2,7 +2,7 @@ pub mod wav_export;
 
 use std::time::Duration;
 
-use crate::melody::export_info::ExportMusicPiece;
+use crate::melody::export_info::{ExportMusicPiece, ExportSection};
 
 pub trait FileExport {
     fn export(&self, buffer: MusicBuffer) -> std::io::Result<()>;
@@ -21,36 +21,46 @@ impl MusicBuffer {
 
     pub fn generate_whole_buffer(&self, sample_rate: u32) -> Vec<f32> {
         let mut buffer: Vec<f32> = Vec::new();
-        let mut time: Duration = Duration::ZERO;
 
         for section in &self.piece.sections {
-            // TODO: Do all tracks
-            let track = &section.tracks[0];
-            for tone in &track.tones {
-                let samples =
-                    (tone.play_duration.as_secs_f32() * sample_rate as f32)
-                    .floor() as u32;
+            let mut section_buffer = Self::generate_section(section, sample_rate);
+            buffer.append(&mut section_buffer);
+        }
 
-                let played_samples =
-                    (tone.tone_duration.as_secs_f32() * sample_rate as f32)
-                    .floor() as u32;
+        return buffer;
+    }
 
-                let silent_samples = samples - played_samples;
+    fn generate_section(section: &ExportSection, sample_rate: u32) -> Vec<f32> {
+        let mut buffer = Vec::new();
 
-                let delta_time = Duration::from_secs_f64(1.0 / sample_rate as f64);
-                for _ in 0..played_samples {
-                    let mut sample_value = 0.0;
+        // TODO: Do all tracks
+        let track = &section.tracks[0];
+        for tone in &track.tones {
+            let samples =
+                (tone.play_duration.as_secs_f32() * sample_rate as f32)
+                .floor() as u32;
 
-                    for frequency in &tone.frequencies {
-                        sample_value += track.instrument.generate_sound(*frequency as f64, time) * tone.intensity;
-                    }
+            let played_samples =
+                (tone.tone_duration.as_secs_f32() * sample_rate as f32)
+                .floor() as u32;
 
-                    time += delta_time;
-                    buffer.push(sample_value);
+            let silent_samples = samples - played_samples;
+
+            for i in 0..played_samples {
+                let time = Duration::from_secs_f64(
+                    i as f64 / samples as f64 * tone.play_duration.as_secs_f64()
+                );
+
+                let mut sample_value = 0.0;
+
+                for frequency in &tone.frequencies {
+                    sample_value += track.instrument.generate_sound(*frequency as f64, time) * tone.intensity;
                 }
-                for _ in 0..silent_samples {
-                    buffer.push(0.0);
-                }
+
+                buffer.push(sample_value);
+            }
+            for _ in 0..silent_samples {
+                buffer.push(0.0);
             }
         }
 
