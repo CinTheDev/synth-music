@@ -1,4 +1,5 @@
 use unnamed_music::melody::prelude::*;
+use unnamed_music::notes;
 
 // BEGIN PART
 
@@ -208,7 +209,12 @@ fn apply_chord_first(track: &mut Track) {
 
     for _ in 0..4 {
         track.note(Eigth, First, 2);
-        track.note(Eigth, Fith, 2);
+        notes!(
+            track, Eigth,
+            (First, 2),
+            (Third, 2),
+            (Fith, 2)
+        );
     }
 }
 
@@ -218,7 +224,12 @@ fn apply_chord_third(track: &mut Track) {
 
     for _ in 0..4 {
         track.note(Eigth, Third, 2);
-        track.note(Eigth, Seventh, 2);
+        notes!(
+            track, Eigth,
+            (Third, 2),
+            (Fith, 2),
+            (Seventh, 2)
+        );
     }
 }
 
@@ -228,7 +239,12 @@ fn apply_chord_fourth(track: &mut Track) {
 
     for _ in 0..4 {
         track.note(Eigth, Fourth, 2);
-        track.note(Eigth, First, 3);
+        notes!(
+            track, Eigth,
+            (Fourth, 2),
+            (Sixth, 2),
+            (First, 3)
+        );
     }
 }
 
@@ -238,6 +254,11 @@ fn apply_chord_fifth(track: &mut Track) {
 
     for _ in 0..4 {
         track.note(Eigth, Fith, 1);
-        track.note(Eigth, Second, 2);
+        notes!(
+            track, Eigth,
+            (Fith, 1),
+            //(Seventh, 1),
+            (Second, 2)
+        );
     }
 }
