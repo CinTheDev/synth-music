@@ -14,9 +14,11 @@ fn main() {
     let chords = track_chords(harmonic_generator);
 
     let section = Section {
-        bpm: 120.0,
-        key,
-        time_signature: (4, 4),
+        info: SectionInfo {
+            bpm: 120.0,
+            key,
+            time_signature: (4, 4),
+        },
 
         tracks: vec![melody, chords],
     };
