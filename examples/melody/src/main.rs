@@ -10,11 +10,10 @@ fn main() {
         key_type: MusicKeyType::Minor,
     };
 
-    let instrument_lead = Lead::new();
-    let instrument_softbass = SoftBass::new();
+    let instrument_softbass = SoftBass;
     let instrument_hardbass = HardBass::new(10);
 
-    let melody = track_melody(Box::new(instrument_lead));
+    let melody = track_melody(Box::new(instrument_softbass));
     let chords = track_chords(Box::new(instrument_softbass));
     let bass = track_bass(Box::new(instrument_hardbass));
 
@@ -137,34 +136,15 @@ fn export(export_piece: ExportMusicPiece) {
     exporter.export(music_buffer).unwrap();
 }
 
-struct Lead {
+#[derive(Clone, Copy)]
+struct SoftBass;
 
-}
-
-struct SoftBass {
-
-}
-
+#[derive(Clone, Copy)]
 struct HardBass {
     harmonics: u32,
 }
 
-impl Lead {
-    pub fn new() -> Self {
-        Self { }
-    }
-
-    pub fn sine_wave(info: ToneInfo) -> f32 {
-        use std::f64::consts::PI;
-        (info.time.as_secs_f64() * info.frequency * 2.0 * PI).sin() as f32
-    }
-}
-
 impl SoftBass {
-    pub fn new() -> Self {
-        Self { }
-    }
-
     fn triangle_wave(info: ToneInfo) -> f32 {
         use std::f64::consts::PI;
         let x = info.time.as_secs_f64() * info.frequency * 2.0 * PI;
@@ -187,12 +167,6 @@ impl HardBass {
     fn harmonic(n: u32, info: &ToneInfo) -> f32 {
         let factor = (2 * n + 1) as f32;
         Self::sine_wave(info.time, info.frequency * factor as f64) / factor
-    }
-}
-
-impl Instrument for Lead {
-    fn generate_sound(&self, info: ToneInfo) -> f32 {
-        Self::sine_wave(info)
     }
 }
 
