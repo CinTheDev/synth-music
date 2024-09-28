@@ -179,16 +179,6 @@ impl HardBass {
         }
     }
 
-    //fn square_wave(info: ToneInfo) -> f32 {
-    //    let value = (info.time.as_secs_f64() * info.frequency).floor() as u32;
-    //    if value % 2 == 1 {
-    //        return 1.0;
-    //    }
-    //    else {
-    //        return -1.0;
-    //    }
-    //}
-
     fn sine_wave(time: Duration, frequency: f64) -> f32 {
         use std::f64::consts::PI;
         (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
