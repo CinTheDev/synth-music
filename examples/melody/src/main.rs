@@ -17,7 +17,11 @@ fn main() {
     let chords_begin = track_chords_begin(Box::new(instrument_softbass));
     let bass_begin = track_bass_begin(Box::new(instrument_hardbass));
 
-    let section = Section {
+    let melody_repeated = track_melody_repeated(Box::new(instrument_softbass));
+    let chords_repeated = track_chords_repeated(Box::new(instrument_softbass));
+    let bass_repeated = track_bass_repeated(Box::new(instrument_hardbass));
+
+    let section_begin = Section {
         info: SectionInfo {
             bpm: 120.0,
             key,
@@ -27,8 +31,18 @@ fn main() {
         tracks: vec![melody_begin, chords_begin, bass_begin],
     };
 
+    let section_repeated = Section {
+        info: SectionInfo {
+            bpm: 120.0,
+            key,
+            time_signature: (4, 4),
+        },
+
+        tracks: vec![melody_repeated, chords_repeated, bass_repeated],
+    };
+
     let composition = Composition {
-        sections: vec![section],
+        sections: vec![section_begin, section_repeated.clone(), section_repeated],
     };
 
     let export_piece = composition.to_export_piece();
