@@ -29,6 +29,11 @@ fn main() {
     let chords_repeated = tracks::chords_repeated(Box::new(instrument_softbass));
     let bass_repeated = tracks::bass_repeated(Box::new(instrument_hardbass));
 
+    let melody_b_section_first = tracks::melody_b_section(Box::new(instrument_softbass), true);
+    let melody_b_section_second = tracks::melody_b_section(Box::new(instrument_softbass), false);
+    let chords_b_section = tracks::chords_b_section(Box::new(instrument_softbass));
+    let bass_b_section = tracks::bass_b_section(Box::new(instrument_hardbass));
+
     let section_begin = Section {
         info,
         tracks: vec![
@@ -56,11 +61,35 @@ fn main() {
         ],
     };
 
+    let b_section_first = Section {
+        info,
+        tracks: vec![
+            melody_b_section_first,
+            chords_b_section.clone(),
+            bass_b_section.clone(),
+        ],
+    };
+    let b_section_second = Section {
+        info,
+        tracks: vec![
+            melody_b_section_second,
+            chords_b_section.clone(),
+            bass_b_section.clone(),
+        ],
+    };
+
     let composition = Composition {
         sections: vec![
+            section_begin.clone(),
+            section_repeated_first.clone(),
+            section_repeated_second.clone(),
+
+            b_section_first,
+            b_section_second,
+
             section_begin,
             section_repeated_first,
-            section_repeated_second
+            section_repeated_second,
         ],
     };
 

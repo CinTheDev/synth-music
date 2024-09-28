@@ -1,5 +1,7 @@
 use unnamed_music::melody::prelude::*;
 
+// BEGIN PART
+
 pub fn melody_begin(instrument: Box<dyn Instrument>) -> Track {
     use note::Tone::*;
     use note::Length::*;
@@ -24,30 +26,23 @@ pub fn melody_begin(instrument: Box<dyn Instrument>) -> Track {
     track.note(Quarter, Fourth, 3);
     track.note(Quarter, Fith, 3);
 
-    apply_melody_end_part(&mut track);
+    track.note(Quarter, Third, 3);
+    track.note(Quarter, First, 3);
+    track.note(Quarter, First, 3);
+    track.note(Eigth, Fourth, 3);
+    track.note(Eigth, Fith, 3);
 
     return track;
 }
 
 pub fn chords_begin(instrument: Box<dyn Instrument>) -> Track {
-    use note::Tone::*;
-    use note::Length::*;
     let mut track = Track::new(instrument);
 
     track.set_intensity(0.2);
 
     for _ in 0..2 {
-        // Chord V
-        for _ in 0..4 {
-            track.note(Eigth, Fith, 1);
-            track.note(Eigth, Second, 2);
-        }
-
-        // Chord I
-        for _ in 0..4 {
-            track.note(Eigth, First, 2);
-            track.note(Eigth, Fith, 2);
-        }
+        apply_chord_fifth(&mut track);
+        apply_chord_first(&mut track);
     }
 
     return track;
@@ -70,6 +65,8 @@ pub fn bass_begin(instrument: Box<dyn Instrument>) -> Track {
 
     return track;
 }
+
+// REPEATED PART
 
 pub fn melody_repeated(instrument: Box<dyn Instrument>, repeat: bool) -> Track {
     use note::Tone::*;
@@ -94,45 +91,30 @@ pub fn melody_repeated(instrument: Box<dyn Instrument>, repeat: bool) -> Track {
     track.note(Quarter, Fith, 3);
 
     if repeat {
-        apply_melody_end_part(&mut track);
+        track.note(Quarter, Third, 3);
+        track.note(Quarter, First, 3);
+        track.note(Quarter, First, 3);
+        track.note(Eigth, Fourth, 3);
+        track.note(Eigth, Fith, 3);
     }
     else {
-        apply_melody_end_full(&mut track);
+        track.note(Quarter, Third, 3);
+        track.note(Quarter, First, 3);
+        track.note(Half, First, 3);
     }
 
     return track;
 }
 
 pub fn chords_repeated(instrument: Box<dyn Instrument>) -> Track {
-    use note::Tone::*;
-    use note::Length::*;
     let mut track = Track::new(instrument);
 
     track.set_intensity(0.2);
 
-    // Chord IV
-    for _ in 0..4 {
-        track.note(Eigth, Fourth, 2);
-        track.note(Eigth, First, 3);
-    }
-
-    // Chord III
-    for _ in 0..4 {
-        track.note(Eigth, Third, 2);
-        track.note(Eigth, Seventh, 2);
-    }
-
-    // Chord V
-    for _ in 0..4 {
-        track.note(Eigth, Fith, 1);
-        track.note(Eigth, Second, 2);
-    }
-
-    // Chord I
-    for _ in 0..4 {
-        track.note(Eigth, First, 2);
-        track.note(Eigth, Fith, 2);
-    }
+    apply_chord_fourth(&mut track);
+    apply_chord_third(&mut track);
+    apply_chord_fifth(&mut track);
+    apply_chord_first(&mut track);
 
     return track;
 }
@@ -159,22 +141,103 @@ pub fn bass_repeated(instrument: Box<dyn Instrument>) -> Track {
     return track;
 }
 
-fn apply_melody_end_full(track: &mut Track) {
+// B SECTION (repeated)
+
+pub fn melody_b_section(instrument: Box<dyn Instrument>, repeat: bool) -> Track {
     use note::Tone::*;
     use note::Length::*;
+    let mut track = Track::new(instrument);
 
-    track.note(Quarter, Third, 3);
-    track.note(Quarter, First, 3);
-    track.note(Half, First, 3);
+    track.note(Half, Fith, 3);
+    track.note(Half, Third, 3);
+
+    track.note(Half, Fourth, 3);
+    track.note(Half, Second, 3);
+
+
+    if repeat {
+        track.note(Half, Third, 3);
+        track.note(Half, First, 3);
+
+        track.note(Half, Seventh, 2).sharp();
+        track.note(Half, Second, 3);
+    }
+    else {
+        track.note(Quarter, Third, 3);
+        track.note(Quarter, Fith, 3);
+        track.note(Half, First, 4);
+
+        track.note(Whole, Seventh, 3).sharp();
+    }
+
+    return track;
 }
 
-fn apply_melody_end_part(track: &mut Track) {
+pub fn chords_b_section(instrument: Box<dyn Instrument>) -> Track {
+    let mut track = Track::new(instrument);
+    track.set_intensity(0.4);
+
+    for _ in 0..2 {
+        apply_chord_first(&mut track);
+        apply_chord_fifth(&mut track);
+    }
+
+    return track;
+}
+
+pub fn bass_b_section(instrument: Box<dyn Instrument>) -> Track {
     use note::Tone::*;
     use note::Length::*;
-    
-    track.note(Quarter, Third, 3);
-    track.note(Quarter, First, 3);
-    track.note(Quarter, First, 3);
-    track.note(Eigth, Fourth, 3);
-    track.note(Eigth, Fith, 3);
+
+    let mut track = Track::new(instrument);
+    track.set_intensity(0.2);
+
+    for _ in 0..2 {
+        track.note(Whole, First, 1);
+        track.note(Whole, Fith, 0);
+    }
+
+    return track;
+}
+
+// Chord functions
+
+fn apply_chord_first(track: &mut Track) {
+    use note::Tone::*;
+    use note::Length::*;
+
+    for _ in 0..4 {
+        track.note(Eigth, First, 2);
+        track.note(Eigth, Fith, 2);
+    }
+}
+
+fn apply_chord_third(track: &mut Track) {
+    use note::Tone::*;
+    use note::Length::*;
+
+    for _ in 0..4 {
+        track.note(Eigth, Third, 2);
+        track.note(Eigth, Seventh, 2);
+    }
+}
+
+fn apply_chord_fourth(track: &mut Track) {
+    use note::Tone::*;
+    use note::Length::*;
+
+    for _ in 0..4 {
+        track.note(Eigth, Fourth, 2);
+        track.note(Eigth, First, 3);
+    }
+}
+
+fn apply_chord_fifth(track: &mut Track) {
+    use note::Tone::*;
+    use note::Length::*;
+
+    for _ in 0..4 {
+        track.note(Eigth, Fith, 1);
+        track.note(Eigth, Second, 2);
+    }
 }
