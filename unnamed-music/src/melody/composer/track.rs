@@ -43,6 +43,18 @@ impl Track {
         return &mut self.notes[last_index];
     }
 
+    pub fn pause(&mut self, length: note::Length) {
+        self.notes.push(Note {
+            values: vec![],
+            length,
+            play_fraction: 1.0,
+            intensity: self.current_intensity,
+            semitones_offset: 0,
+            dotted: false,
+            triole: false,
+        });
+    }
+
     pub fn set_intensity(&mut self, intensity: f32) {
         self.current_intensity = intensity;
     }
