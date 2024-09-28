@@ -3,7 +3,7 @@ pub mod wav_export;
 use std::time::Duration;
 
 use crate::melody;
-use melody::export_info::{ExportMusicPiece, ExportSection, Tone};
+use melody::export_info::*;
 use melody::instrument::{Instrument, ToneInfo};
 
 pub trait FileExport {
@@ -37,8 +37,20 @@ impl MusicBuffer {
 
         // TODO: Do all tracks
         let track = &section.tracks[0];
+        buffer.append(&mut Self::generate_track(&track, sample_rate));
+
+        return buffer;
+    }
+
+    fn generate_track(track: &ExportTrack, sample_rate: u32) -> Vec<f32> {
+        let mut buffer = Vec::new();
+
         for tone in &track.tones {
-            let mut tone_buffer = Self::generate_tone(tone, sample_rate, &track.instrument);
+            let mut tone_buffer = Self::generate_tone(
+                tone,
+                sample_rate,
+                &track.instrument
+            );
             buffer.append(&mut tone_buffer);
         }
 
