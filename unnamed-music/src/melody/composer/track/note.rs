@@ -19,6 +19,7 @@ pub enum Length {
     Sixteenth,
 }
 
+#[derive(Clone)]
 pub struct Note {
     pub values: Vec<(Tone, i32)>,
     pub length: Length,

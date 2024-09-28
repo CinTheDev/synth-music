@@ -50,6 +50,7 @@ pub struct SectionInfo {
     pub time_signature: (u8, u8),
 }
 
+#[derive(Clone)]
 pub struct Section {
     pub info: SectionInfo,
     pub tracks: Vec<Track>,

@@ -2,6 +2,7 @@ pub mod note;
 use note::Note;
 use crate::melody::instrument::Instrument;
 
+#[derive(Clone)]
 pub struct Track {
     notes: Vec<Note>,
     instrument: Box<dyn Instrument>,
