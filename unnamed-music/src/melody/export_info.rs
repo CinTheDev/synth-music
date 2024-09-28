@@ -22,7 +22,10 @@ pub struct Tone {
     pub frequencies: Vec<f32>,
     pub play_duration: Duration,
     pub tone_duration: Duration,
+
     pub intensity: f32,
+    pub fade_in: Duration,
+    pub fade_out: Duration,
 }
 
 impl ExportMusicPiece {
