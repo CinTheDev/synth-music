@@ -43,11 +43,14 @@ pub struct Composition {
     pub sections: Vec<Section>,
 }
 
-pub struct Section {
+struct SectionInfo {
     pub bpm: f32,
     pub key: MusicKey,
     pub time_signature: (u8, u8),
+}
 
+pub struct Section {
+    pub info: SectionInfo,
     pub tracks: Vec<Track>,
 }
 
