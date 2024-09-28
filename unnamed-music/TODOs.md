@@ -8,16 +8,6 @@ possible to still read finished (and therefore deleted) points.
 
 There are some missing features that are crucial for composing music.
 
-### Intervals and pauses
-
-For now, the function to place a note only takes a single value. This is by
-design to be as short as possible. Though, tones are actually stored as vectors
-to be able to represent intervals or even pauses.
-
-Convert the note placement function into a macro so the amount of parameters
-is variable. With this it should be possible to provide multiple tones or
-even no tones to represent a pause.
-
 ### Seperation of measures
 
 Measures are kind of invisible/non-existant in code right now. This isn't the
