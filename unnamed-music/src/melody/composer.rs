@@ -66,10 +66,18 @@ impl Composition {
     }
 
     fn generate_export_section(mut section: Section) -> ExportSection {
+        let mut export_section = ExportSection::new();
+
         let track = section.tracks.pop().unwrap();
+        let export_track = Self::generate_export_track(track, &section);
+
+        export_section.tracks.push(export_track);
+        return export_section;
+    }
+
+    fn generate_export_track(track: Track, section: &Section) -> ExportTrack {
         let (notes, instrument) = track.into_parts();
 
-        let mut export_section = ExportSection::new();
         let mut export_track = ExportTrack::new(instrument);
 
         for note in notes {
@@ -77,8 +85,7 @@ impl Composition {
             export_track.tones.push(tone);
         }
 
-        export_section.tracks.push(export_track);
-        return export_section;
+        return export_track;
     }
 
     fn generate_tone(note: Note, section: &Section) -> Tone {
