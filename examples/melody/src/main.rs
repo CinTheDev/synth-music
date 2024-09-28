@@ -12,7 +12,7 @@ fn main() {
 
     let instrument_lead = Lead::new();
     let instrument_softbass = SoftBass::new();
-    let instrument_hardbass = HardBass::new(2);
+    let instrument_hardbass = HardBass::new(10);
 
     let melody = track_melody(Box::new(instrument_lead));
     let chords = track_chords(Box::new(instrument_softbass));
@@ -105,7 +105,7 @@ fn track_bass(instrument: Box<dyn Instrument>) -> Track {
     use note::Length::*;
     let mut track = Track::new(instrument);
 
-    track.set_intensity(0.1);
+    track.set_intensity(0.15);
 
     // Chord IV
     track.note(Whole, Fourth, 1);
