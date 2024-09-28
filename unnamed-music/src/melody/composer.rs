@@ -43,7 +43,8 @@ pub struct Composition {
     pub sections: Vec<Section>,
 }
 
-struct SectionInfo {
+#[derive(Clone, Copy)]
+pub struct SectionInfo {
     pub bpm: f32,
     pub key: MusicKey,
     pub time_signature: (u8, u8),
@@ -72,39 +73,39 @@ impl Composition {
         let mut export_section = ExportSection::new();
 
         let track = section.tracks.pop().unwrap();
-        let export_track = Self::generate_export_track(track, &section);
+        let export_track = Self::generate_export_track(track, section.info);
 
         export_section.tracks.push(export_track);
         return export_section;
     }
 
-    fn generate_export_track(track: Track, section: &Section) -> ExportTrack {
+    fn generate_export_track(track: Track, section_info: SectionInfo) -> ExportTrack {
         let (notes, instrument) = track.into_parts();
 
         let mut export_track = ExportTrack::new(instrument);
 
         for note in notes {
-            let tone = Self::generate_tone(note, &section);
+            let tone = Self::generate_tone(note, section_info);
             export_track.tones.push(tone);
         }
 
         return export_track;
     }
 
-    fn generate_tone(note: Note, section: &Section) -> Tone {
+    fn generate_tone(note: Note, section_info: SectionInfo) -> Tone {
         let mut frequencies = Vec::new();
 
         for tone in &note.values {
             let base_frequency = modify_frequency(
-                get_note_base_frequency(*tone, section.key.key_type),
+                get_note_base_frequency(*tone, section_info.key.key_type),
                 note.semitones_offset,
             );
-            let keyed_frequency = transpose_from_base(base_frequency, section.key);
+            let keyed_frequency = transpose_from_base(base_frequency, section_info.key);
             
             frequencies.push(keyed_frequency);
         }
 
-        let play_duration = note.get_duration(section.bpm);
+        let play_duration = note.get_duration(section_info.bpm);
         let tone_duration = play_duration.mul_f32(note.play_fraction);
 
         Tone {
