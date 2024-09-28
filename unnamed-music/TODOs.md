@@ -45,7 +45,14 @@ Try to make the implementations for getting the note frequencies more efficient
 and readable, ideally using as few magic numbers and long match lists as
 possible. Also try to relocate the code to a better place than `composer.rs`.
 
-## Support multiple tracks
+## Chunked rendering
 
-Right now only one track and one instrument can be used. Improve implementation
-so that any number of tracks is possible.
+Currently the exporter renders the whole music piece into one buffer which then
+is written to the disk. The memory consumption might not be that big of a deal
+(@ 44100Hz the buffer would take around 10MB for every minute of music), but
+there are is another reason to make the rendering chunked.
+
+Rendering can take a bit because it's currently single threaded. Chunked
+rendering allows for Multi-Threaded rendering of the file, which will speed up
+the rendering process by quite a bit. Also, the reduced memory consumption is
+also not bad.

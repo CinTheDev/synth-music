@@ -3,7 +3,7 @@ pub mod wav_export;
 use std::time::Duration;
 
 use crate::melody;
-use melody::export_info::{ExportMusicPiece, ExportSection, Tone};
+use melody::export_info::*;
 use melody::instrument::{Instrument, ToneInfo};
 
 pub trait FileExport {
@@ -35,10 +35,23 @@ impl MusicBuffer {
     fn generate_section(section: &ExportSection, sample_rate: u32) -> Vec<f32> {
         let mut buffer = Vec::new();
 
-        // TODO: Do all tracks
-        let track = &section.tracks[0];
+        for track in &section.tracks {
+            let track_buffer = Self::generate_track(track, sample_rate);
+            buffer = Self::mix_buffers(buffer, track_buffer);
+        }
+
+        return buffer;
+    }
+
+    fn generate_track(track: &ExportTrack, sample_rate: u32) -> Vec<f32> {
+        let mut buffer = Vec::new();
+
         for tone in &track.tones {
-            let mut tone_buffer = Self::generate_tone(tone, sample_rate, &track.instrument);
+            let mut tone_buffer = Self::generate_tone(
+                tone,
+                sample_rate,
+                &track.instrument
+            );
             buffer.append(&mut tone_buffer);
         }
 
@@ -109,5 +122,18 @@ impl MusicBuffer {
     }
     fn fade_out_smooth(t: f32) -> f32 {
         Self::fade_in_smooth(1.0 - t)
+    }
+
+    fn mix_buffers(a: Vec<f32>, b: Vec<f32>) -> Vec<f32> {
+        let (mut larger_buffer, smaller_buffer) = match a.len() >= b.len() {
+            true => (a, b),
+            false => (b, a),
+        };
+
+        for i in 0..smaller_buffer.len() {
+            larger_buffer[i] += smaller_buffer[i];
+        }
+
+        return larger_buffer;
     }
 }

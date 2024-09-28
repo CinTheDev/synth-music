@@ -1,77 +1,100 @@
 use unnamed_music::melody::prelude::*;
 
+mod instruments;
+mod tracks;
+
 fn main() {
     println!("Melody Example");
 
-    let first_key = MusicKey {
-        base: MusicKeyBase::C,
-        key_type: MusicKeyType::Major,
-    };
-    let second_key = MusicKey {
+    let key = MusicKey {
         base: MusicKeyBase::A,
         key_type: MusicKeyType::Minor,
     };
 
-    let sine_generator = Box::new(SineGenerator);
-    let harmonic_generator = Box::new(HarmonicSineGenerator::new(100));
-
-    let section_1 = Section {
+    let info = SectionInfo {
         bpm: 120.0,
-        key: first_key,
+        key,
         time_signature: (4, 4),
-
-        tracks: vec![track_1(sine_generator)],
     };
-    let section_2 = Section {
-        bpm: 120.0,
-        key: second_key,
-        time_signature: (4, 4),
 
-        tracks: vec![track_2(harmonic_generator)],
+    let instrument_softbass = instruments::SoftBass::new(1.0);
+    let instrument_hardbass = instruments::HardBass::new(10);
+
+    let melody_begin = tracks::melody_begin(Box::new(instrument_softbass));
+    let chords_begin = tracks::chords_begin(Box::new(instrument_softbass));
+    let bass_begin = tracks::bass_begin(Box::new(instrument_hardbass));
+
+    let melody_repeated_first = tracks::melody_repeated(Box::new(instrument_softbass), true);
+    let melody_repeated_second = tracks::melody_repeated(Box::new(instrument_softbass), false);
+    let chords_repeated = tracks::chords_repeated(Box::new(instrument_softbass));
+    let bass_repeated = tracks::bass_repeated(Box::new(instrument_hardbass));
+
+    let melody_b_section_first = tracks::melody_b_section(Box::new(instrument_softbass), true);
+    let melody_b_section_second = tracks::melody_b_section(Box::new(instrument_softbass), false);
+    let chords_b_section = tracks::chords_b_section(Box::new(instrument_softbass));
+    let bass_b_section = tracks::bass_b_section(Box::new(instrument_hardbass));
+
+    let section_begin = Section {
+        info,
+        tracks: vec![
+            melody_begin,
+            chords_begin,
+            bass_begin,
+        ],
+    };
+
+    let section_repeated_first = Section {
+        info,
+        tracks: vec![
+            melody_repeated_first,
+            chords_repeated.clone(),
+            bass_repeated.clone(),
+        ],
+    };
+
+    let section_repeated_second = Section {
+        info,
+        tracks: vec![
+            melody_repeated_second,
+            chords_repeated.clone(),
+            bass_repeated.clone(),
+        ],
+    };
+
+    let b_section_first = Section {
+        info,
+        tracks: vec![
+            melody_b_section_first,
+            chords_b_section.clone(),
+            bass_b_section.clone(),
+        ],
+    };
+    let b_section_second = Section {
+        info,
+        tracks: vec![
+            melody_b_section_second,
+            chords_b_section.clone(),
+            bass_b_section.clone(),
+        ],
     };
 
     let composition = Composition {
-        sections: vec![section_1, section_2],
+        sections: vec![
+            section_begin.clone(),
+            section_repeated_first.clone(),
+            section_repeated_second.clone(),
+
+            b_section_first,
+            b_section_second,
+
+            section_begin,
+            section_repeated_first,
+            section_repeated_second,
+        ],
     };
 
     let export_piece = composition.to_export_piece();
     export(export_piece);
-}
-
-fn track_1(instrument: Box<dyn Instrument>) -> Track {
-    use note::Tone::*;
-    use note::Length::*;
-    let mut track = Track::new(instrument);
-
-    track.note(Quarter, First, 4);
-    track.note(Quarter, Second, 4);
-    track.note(Quarter, Third, 4);
-    track.note(Quarter, Fourth, 4);
-    track.note(Quarter, Fith, 4).staccato();
-    track.note(Quarter, Sixth, 4);
-    track.note(Quarter, Seventh, 4);
-    track.note(Quarter, First, 5);
-
-    return track;
-}
-
-fn track_2(instrument: Box<dyn Instrument>) -> Track {
-    use note::Tone::*;
-    use note::Length::*;
-    let mut track = Track::new(instrument);
-
-    track.note(Quarter, First, 4).dotted();
-    track.note(Eigth, Second, 4);
-    track.note(Quarter, Third, 4).dotted();
-    track.note(Eigth, First, 4);
-    track.note(Eigth, Third, 4);
-    track.note(Eigth, Third, 4);
-    track.note(Eigth, Second, 4);
-    track.note(Eigth, First, 4);
-    track.note(Quarter, Second, 4);
-    track.note(Quarter, Fith, 3);
-
-    return track;
 }
 
 fn export(export_piece: ExportMusicPiece) {
@@ -87,48 +110,4 @@ fn export(export_piece: ExportMusicPiece) {
     };
 
     exporter.export(music_buffer).unwrap();
-}
-
-#[derive(Clone, Copy)]
-struct SineGenerator;
-
-impl Instrument for SineGenerator {
-    fn generate_sound(&self, info: ToneInfo) -> f32 {
-        use std::f64::consts::PI;
-        (info.time.as_secs_f64() * info.frequency * 2.0 * PI).sin() as f32
-    }
-}
-
-#[derive(Clone, Copy)]
-struct HarmonicSineGenerator {
-    count: u32,
-}
-
-impl HarmonicSineGenerator {
-    pub fn new(count: u32) -> Self {
-        Self {
-            count,
-        }
-    }
-
-    fn get_harmonic_frequency(n: u32, info: &ToneInfo) -> f32 {
-        use std::f64::consts::PI;
-        (info.time.as_secs_f64() * info.frequency * 2.0 * PI * n as f64).sin() as f32
-    }
-
-    fn dropoff(n: u32) -> f32 {
-        0.5_f32.powi(n as i32)
-    }
-}
-
-impl Instrument for HarmonicSineGenerator {
-    fn generate_sound(&self, info: ToneInfo) -> f32 {
-        let mut value = 0.0;
-
-        for i in 0..self.count {
-            value += Self::get_harmonic_frequency(i, &info) * Self::dropoff(i);
-        }
-
-        return value;
-    }
 }
