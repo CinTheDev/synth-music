@@ -1,9 +1,11 @@
 use std::time::Duration;
 use dyn_clone::DynClone;
 
+use crate::melody::export_info::ConcreteValue;
+
 #[derive(Clone, Copy)]
 pub struct ToneInfo {
-    pub frequency: f64,
+    pub tone: ConcreteValue,
     pub time: Duration,
 }
 

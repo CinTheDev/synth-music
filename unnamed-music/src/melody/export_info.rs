@@ -19,7 +19,7 @@ pub struct ExportTrack {
 
 // Represents a raw tone - just a frequency, duration, and intensity
 pub struct Tone {
-    pub concrete_values: Vec<i32>,
+    pub concrete_values: Vec<ConcreteValue>,
     pub play_duration: Duration,
     pub tone_duration: Duration,
 
@@ -27,6 +27,9 @@ pub struct Tone {
     //pub fade_in: Duration,
     //pub fade_out: Duration,
 }
+
+#[derive(Clone, Copy)]
+pub struct ConcreteValue(pub i32);
 
 impl ExportMusicPiece {
     pub fn new() -> Self {
