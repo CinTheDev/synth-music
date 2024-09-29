@@ -1,4 +1,4 @@
-use unnamed_music::{melody::prelude::*, sequential_notes};
+use unnamed_music::melody::prelude::*;
 
 fn main() {
     println!("Hello example");
