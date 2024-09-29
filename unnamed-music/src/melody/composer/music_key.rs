@@ -2,7 +2,6 @@
 pub enum MusicKeyBase {
     C,
     Csharp,
-    Cflat,
     D,
     Dflat,
     E,
