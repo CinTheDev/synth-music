@@ -1,4 +1,4 @@
-use crate::melody::composer::{MusicKey, MusicKeyBase, MusicKeyType};
+use crate::melody::composer::music_key::{MusicKey, MusicKeyBase, MusicKeyType};
 
 #[derive(Clone, Copy)]
 pub struct ScaledValue {

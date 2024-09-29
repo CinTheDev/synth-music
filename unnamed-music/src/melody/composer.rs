@@ -1,6 +1,9 @@
 pub mod track;
+pub mod music_key;
+
 use track::Track;
 use track::note::Note;
+use music_key::MusicKey;
 use super::export_info::*;
 
 use std::time::Duration;
@@ -8,36 +11,6 @@ use std::time::Duration;
 // TODO: Move somewhere better
 const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
 const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
-
-// TODO: Move somewhere better
-#[derive(Clone, Copy)]
-pub enum MusicKeyBase {
-    C,
-    Csharp,
-    Cflat,
-    D,
-    Dflat,
-    E,
-    Eflat,
-    F,
-    Fsharp,
-    G,
-    Gflat,
-    A,
-    Aflat,
-    B,
-    Bflat,
-}
-#[derive(Clone, Copy)]
-pub enum MusicKeyType {
-    Major,
-    Minor,
-}
-#[derive(Clone, Copy)]
-pub struct MusicKey {
-    pub base: MusicKeyBase,
-    pub key_type: MusicKeyType,
-}
 
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
 // generated from it.
