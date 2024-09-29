@@ -1,10 +1,13 @@
 pub mod wav_export;
 
-use std::time::Duration;
-
 use crate::melody;
 use melody::export_info::*;
 use melody::instrument::{Instrument, ToneInfo};
+
+use std::time::Duration;
+
+const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
+const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
 
 pub trait FileExport {
     fn export(&self, buffer: MusicBuffer) -> std::io::Result<()>;

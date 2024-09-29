@@ -6,12 +6,6 @@ use track::note::Note;
 use music_key::MusicKey;
 use super::export_info::*;
 
-use std::time::Duration;
-
-// TODO: Move somewhere better
-const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
-const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
-
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
 // generated from it.
 pub struct Composition {
