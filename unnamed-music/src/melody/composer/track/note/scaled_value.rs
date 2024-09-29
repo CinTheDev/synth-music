@@ -1,4 +1,4 @@
-use crate::melody::composer::music_key::{MusicKey, MusicKeyBase, MusicKeyType};
+use crate::melody::composer::music_key::{MusicKey, KeyTonic, KeyType};
 
 #[derive(Clone, Copy)]
 pub struct ScaledValue {
@@ -20,7 +20,7 @@ impl ScaledValue {
 
     pub fn get_concrete_value(self, key: MusicKey) -> i32 {
         let distance_from_tonic = Self::get_distance_from_tonic(key.key_type, self.index);
-        let distance_tonic_from_a4 = Self::distance_from_a4(key.base);
+        let distance_tonic_from_a4 = Self::distance_from_a4(key.tonic);
         let octave_offset = self.octave * 12;
 
         return 
@@ -30,38 +30,38 @@ impl ScaledValue {
             + self.offset;
     }
 
-    fn distance_from_a4(tonic: MusicKeyBase) -> i32 {
+    fn distance_from_a4(tonic: KeyTonic) -> i32 {
         match tonic {
-            MusicKeyBase::Dsharp =>  6,
-            MusicKeyBase::D      =>  5,
-            MusicKeyBase::Dflat  =>  4,
+            KeyTonic::Dsharp =>  6,
+            KeyTonic::D      =>  5,
+            KeyTonic::Dflat  =>  4,
 
-            MusicKeyBase::Csharp =>  4,
-            MusicKeyBase::C      =>  3,
+            KeyTonic::Csharp =>  4,
+            KeyTonic::C      =>  3,
 
-            MusicKeyBase::B      =>  2,
-            MusicKeyBase::Bflat  =>  1,
+            KeyTonic::B      =>  2,
+            KeyTonic::Bflat  =>  1,
 
-            MusicKeyBase::Asharp =>  1,
-            MusicKeyBase::A      =>  0,
-            MusicKeyBase::Aflat  => -1,
+            KeyTonic::Asharp =>  1,
+            KeyTonic::A      =>  0,
+            KeyTonic::Aflat  => -1,
 
-            MusicKeyBase::Gsharp => -1,
-            MusicKeyBase::G      => -2,
-            MusicKeyBase::Gflat  => -3,
+            KeyTonic::Gsharp => -1,
+            KeyTonic::G      => -2,
+            KeyTonic::Gflat  => -3,
 
-            MusicKeyBase::Fsharp => -3,
-            MusicKeyBase::F      => -4,
-            
-            MusicKeyBase::E      => -5,
-            MusicKeyBase::Eflat  => -6,
+            KeyTonic::Fsharp => -3,
+            KeyTonic::F      => -4,
+
+            KeyTonic::E      => -5,
+            KeyTonic::Eflat  => -6,
         }
     }
 
-    fn get_distance_from_tonic(key_type: MusicKeyType, index: u8) -> i32 {
+    fn get_distance_from_tonic(key_type: KeyType, index: u8) -> i32 {
         match key_type {
-            MusicKeyType::Major => Self::get_distance_major(index),
-            MusicKeyType::Minor => Self::get_distance_minor(index),
+            KeyType::Major => Self::get_distance_major(index),
+            KeyType::Minor => Self::get_distance_minor(index),
         }
     }
 

@@ -1,6 +1,6 @@
 pub use super::composer;
 pub use composer::{Composition, Section, SectionInfo};
-pub use composer::music_key::{MusicKey, MusicKeyBase, MusicKeyType};
+pub use composer::music_key::{MusicKey, KeyTonic, KeyType};
 pub use composer::track::Track;
 pub use composer::track::note;
 

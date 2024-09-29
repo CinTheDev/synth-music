@@ -1,5 +1,5 @@
 #[derive(Clone, Copy)]
-pub enum MusicKeyBase {
+pub enum KeyTonic {
     Dsharp,
     D,
     Dflat,
@@ -25,12 +25,12 @@ pub enum MusicKeyBase {
     Eflat,
 }
 #[derive(Clone, Copy)]
-pub enum MusicKeyType {
+pub enum KeyType {
     Major,
     Minor,
 }
 #[derive(Clone, Copy)]
 pub struct MusicKey {
-    pub base: MusicKeyBase,
-    pub key_type: MusicKeyType,
+    pub tonic: KeyTonic,
+    pub key_type: KeyType,
 }
