@@ -120,3 +120,21 @@ An ExportTone represents the following info:
 
 Note: the "fade-in" or "fade-out" times should still be applied in rendering,
 but it does not need to be stored for every tone individually.
+
+## Representation of Note (Composition Tones)
+
+The Notes are what is stored when composing a piece. These are later converted
+into ExportTones.
+
+Note: The placement interface does not necessarily need to match the
+representation of a note. E.g.: Notes are stored independent of key, but placing
+Notes is not; as a result, stored notes are fundamentally different than placed
+notes. Placed notes are not stored.
+
+A Note represents the following info:
+
+- All concrete tones
+- A note length (time until next tone)
+- A play fraction (fraction for which note is played)
+- An intensity or transition of intensity (make it crescendo-friendly)
+- Some flags (e.g. if they're dotted, legato, etc.)
