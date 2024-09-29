@@ -1,12 +1,5 @@
 #[derive(Clone, Copy)]
 pub enum KeyTonic {
-    Dsharp,
-    D,
-    Dflat,
-
-    Csharp,
-    C,
-
     B,
     Bflat,
 
@@ -23,6 +16,13 @@ pub enum KeyTonic {
 
     E,
     Eflat,
+
+    Dsharp,
+    D,
+    Dflat,
+
+    Csharp,
+    C,
 }
 #[derive(Clone, Copy)]
 pub enum KeyType {

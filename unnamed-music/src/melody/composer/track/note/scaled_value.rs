@@ -32,13 +32,6 @@ impl ScaledValue {
 
     fn distance_from_a4(tonic: KeyTonic) -> i32 {
         match tonic {
-            KeyTonic::Dsharp =>  6,
-            KeyTonic::D      =>  5,
-            KeyTonic::Dflat  =>  4,
-
-            KeyTonic::Csharp =>  4,
-            KeyTonic::C      =>  3,
-
             KeyTonic::B      =>  2,
             KeyTonic::Bflat  =>  1,
 
@@ -55,6 +48,13 @@ impl ScaledValue {
 
             KeyTonic::E      => -5,
             KeyTonic::Eflat  => -6,
+
+            KeyTonic::Dsharp => -6,
+            KeyTonic::D      => -7,
+            KeyTonic::Dflat  => -8,
+
+            KeyTonic::Csharp => -8,
+            KeyTonic::C      => -9,
         }
     }
 
