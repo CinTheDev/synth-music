@@ -93,6 +93,17 @@ impl Composition {
     }
 
     fn generate_tone(note: Note, section_info: SectionInfo) -> Tone {
+
+        let play_duration = note.get_duration(section_info.bpm);
+        let tone_duration = play_duration.mul_f32(note.play_fraction);
+
+        Tone {
+            concrete_values: todo!(),
+            play_duration,
+            tone_duration,
+            intensity: note.intensity,
+        }
+        /*
         let mut frequencies = Vec::new();
 
         for tone in &note.values {
@@ -116,6 +127,7 @@ impl Composition {
             fade_in: DEFAULT_FADE_IN,
             fade_out: DEFAULT_FADE_OUT,
         }
+        */
     }
 }
 
