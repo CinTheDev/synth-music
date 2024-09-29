@@ -22,8 +22,6 @@ pub struct Note {
     pub triole: bool,
 }
 
-// OLD CODE
-
 impl Note {
     pub fn staccato(&mut self) -> &mut Self {
         self.play_fraction = 0.2;
