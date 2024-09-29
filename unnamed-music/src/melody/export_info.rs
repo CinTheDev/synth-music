@@ -24,8 +24,6 @@ pub struct Tone {
     pub tone_duration: Duration,
 
     pub intensity: f32,
-    //pub fade_in: Duration,
-    //pub fade_out: Duration,
 }
 
 #[derive(Clone, Copy)]
