@@ -26,7 +26,7 @@ impl Track {
     pub fn note(
         &mut self,
         length: note::Length,
-        tone: note::Tone,
+        tone: note::ScaledValue,
         octave: i32,
     ) -> &mut Note {
         self.notes.push(Note {
@@ -34,7 +34,6 @@ impl Track {
             length,
             play_fraction: 1.0,
             intensity: self.current_intensity,
-            semitones_offset: 0,
             dotted: false,
             triole: false,
         });
@@ -46,14 +45,13 @@ impl Track {
     pub fn notes(
         &mut self,
         length: note::Length,
-        values: Vec<(note::Tone, i32)>,
+        values: Vec<(note::ScaledValue, i32)>,
     ) -> &mut Note {
         self.notes.push(Note {
             values,
             length,
             play_fraction: 1.0,
             intensity: self.current_intensity,
-            semitones_offset: 0,
             dotted: false,
             triole: false,
         });
@@ -68,7 +66,6 @@ impl Track {
             length,
             play_fraction: 1.0,
             intensity: self.current_intensity,
-            semitones_offset: 0,
             dotted: false,
             triole: false,
         });
