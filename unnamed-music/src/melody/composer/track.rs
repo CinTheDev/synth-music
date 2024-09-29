@@ -1,5 +1,6 @@
 pub mod note;
 use note::Note;
+use note::scaled_value::ScaledValue;
 use crate::melody::instrument::Instrument;
 
 #[derive(Clone)]
@@ -26,11 +27,10 @@ impl Track {
     pub fn note(
         &mut self,
         length: note::Length,
-        tone: note::ScaledValue,
-        octave: i32,
+        value: ScaledValue,
     ) -> &mut Note {
         self.notes.push(Note {
-            values: vec![(tone, octave)],
+            values: vec![value],
             length,
             play_fraction: 1.0,
             intensity: self.current_intensity,
@@ -45,7 +45,7 @@ impl Track {
     pub fn notes(
         &mut self,
         length: note::Length,
-        values: Vec<(note::ScaledValue, i32)>,
+        values: Vec<ScaledValue>,
     ) -> &mut Note {
         self.notes.push(Note {
             values,

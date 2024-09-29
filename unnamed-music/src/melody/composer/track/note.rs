@@ -13,7 +13,7 @@ pub enum Length {
 // Abstract note
 #[derive(Clone)]
 pub struct Note {
-    pub values: Vec<(ScaledValue, i32)>,
+    pub values: Vec<ScaledValue>,
     pub length: Length,
     pub play_fraction: f32,
     pub intensity: f32,

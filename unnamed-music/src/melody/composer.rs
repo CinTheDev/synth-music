@@ -96,7 +96,6 @@ impl Composition {
         let mut concrete_values = Vec::new();
 
         for scaled_value in &note.values {
-            let scaled_value = scaled_value.0;
             concrete_values.push(scaled_value.get_concrete_value(section_info.key));
         }
 
