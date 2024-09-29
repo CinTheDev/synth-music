@@ -76,7 +76,7 @@ fn example_2() {
             fourth(3),
             fifth(3),
             sixth(3),
-            seventh(3),
+            seventh(3).sharp(),
             first(4)
         );
 
