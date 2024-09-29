@@ -23,10 +23,58 @@ impl ScaledValue {
     }
 }
 
-//pub const FIRST:   ScaledValue = ScaledValue { index: 0, offset: 0 };
-//pub const SECOND:  ScaledValue = ScaledValue { index: 1, offset: 0 };
-//pub const THIRD:   ScaledValue = ScaledValue { index: 2, offset: 0 };
-//pub const FOURTH:  ScaledValue = ScaledValue { index: 3, offset: 0 };
-//pub const FIFTH:   ScaledValue = ScaledValue { index: 4, offset: 0 };
-//pub const SIXTH:   ScaledValue = ScaledValue { index: 5, offset: 0 };
-//pub const SEVENTH: ScaledValue = ScaledValue { index: 6, offset: 0 };
+pub fn first(octave: i32) -> ScaledValue {
+    ScaledValue {
+        index: 0,
+        octave,
+        offset: 0,
+    }
+}
+
+pub fn second(octave: i32) -> ScaledValue {
+    ScaledValue {
+        index: 1,
+        octave,
+        offset: 0,
+    }
+}
+
+pub fn third(octave: i32) -> ScaledValue {
+    ScaledValue {
+        index: 2,
+        octave,
+        offset: 0,
+    }
+}
+
+pub fn fourth(octave: i32) -> ScaledValue {
+    ScaledValue {
+        index: 3,
+        octave,
+        offset: 0,
+    }
+}
+
+pub fn fifth(octave: i32) -> ScaledValue {
+    ScaledValue {
+        index: 4,
+        octave,
+        offset: 0,
+    }
+}
+
+pub fn sixth(octave: i32) -> ScaledValue {
+    ScaledValue {
+        index: 5,
+        octave,
+        offset: 0,
+    }
+}
+
+pub fn seventh(octave: i32) -> ScaledValue {
+    ScaledValue {
+        index: 6,
+        octave,
+        offset: 0,
+    }
+}
