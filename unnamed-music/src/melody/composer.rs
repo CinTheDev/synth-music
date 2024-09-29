@@ -112,6 +112,7 @@ impl Composition {
     }
 }
 
+/*
 fn get_note_base_frequency(tone: (track::note::Tone, i32), key_type: MusicKeyType) -> f32 {
     // Major keys are here in C
     // Minor keys in A
@@ -209,3 +210,4 @@ fn get_frequency_from_a4(semitones: i32) -> f32 {
 fn modify_frequency(frequency: f32, semitones: i32) -> f32 {
     2_f32.powf(semitones as f32 / 12.0) * frequency
 }
+*/
