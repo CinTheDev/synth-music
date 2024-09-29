@@ -2,7 +2,7 @@ use unnamed_music::melody::prelude::*;
 
 fn main() {
     println!("Hello example");
-    
+
     example_1();
 }
 
@@ -75,6 +75,10 @@ struct SineGenerator;
 
 impl Instrument for SineGenerator {
     fn generate_sound(&self, info: ToneInfo) -> f32 {
-        todo!()
+        use std::f32::consts::PI;
+
+        let frequency = info.tone.to_frequency();
+
+        return (info.time.as_secs_f32() * frequency * 2.0 * PI).sin();
     }
 }
