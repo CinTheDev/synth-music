@@ -21,7 +21,7 @@ impl ScaledValue {
     pub fn get_concrete_value(self, key: MusicKey) -> i32 {
         let distance_from_tonic = Self::get_distance_from_tonic(key.key_type, self.index);
         let distance_tonic_from_a4 = Self::distance_from_a4(key.tonic);
-        let octave_offset = self.octave * 12;
+        let octave_offset = (self.octave - 4) * 12;
 
         return 
             distance_from_tonic
