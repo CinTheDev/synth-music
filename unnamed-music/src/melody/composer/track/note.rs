@@ -1,17 +1,3 @@
-
-/*
-#[derive(Clone, Copy, Debug)]
-pub enum Tone {
-    First,
-    Second,
-    Third,
-    Fourth,
-    Fith,
-    Sixth,
-    Seventh,
-}
-*/
-
 #[derive(Clone, Copy)]
 pub struct ScaledNote {
     index: u8,
