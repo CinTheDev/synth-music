@@ -30,16 +30,6 @@ impl ScaledNote {
     }
 }
 
-pub const FIRST:   ScaledNote = ScaledNote { index: 0, offset: 0 };
-pub const SECOND:  ScaledNote = ScaledNote { index: 1, offset: 0 };
-pub const THIRD:   ScaledNote = ScaledNote { index: 2, offset: 0 };
-pub const FOURTH:  ScaledNote = ScaledNote { index: 3, offset: 0 };
-pub const FIFTH:   ScaledNote = ScaledNote { index: 4, offset: 0 };
-pub const SIXTH:   ScaledNote = ScaledNote { index: 5, offset: 0 };
-pub const SEVENTH: ScaledNote = ScaledNote { index: 6, offset: 0 };
-
-// OLD CODE
-
 #[derive(Clone, Copy)]
 pub enum Length {
     Whole,
@@ -49,18 +39,27 @@ pub enum Length {
     Sixteenth,
 }
 
+pub const FIRST:   ScaledNote = ScaledNote { index: 0, offset: 0 };
+pub const SECOND:  ScaledNote = ScaledNote { index: 1, offset: 0 };
+pub const THIRD:   ScaledNote = ScaledNote { index: 2, offset: 0 };
+pub const FOURTH:  ScaledNote = ScaledNote { index: 3, offset: 0 };
+pub const FIFTH:   ScaledNote = ScaledNote { index: 4, offset: 0 };
+pub const SIXTH:   ScaledNote = ScaledNote { index: 5, offset: 0 };
+pub const SEVENTH: ScaledNote = ScaledNote { index: 6, offset: 0 };
+
+// Concrete note
 #[derive(Clone)]
 pub struct Note {
-    pub values: Vec<(Tone, i32)>,
+    pub values: Vec<i32>,
     pub length: Length,
     pub play_fraction: f32,
     pub intensity: f32,
 
-    pub semitones_offset: i32,
-
     pub dotted: bool,
     pub triole: bool,
 }
+
+// OLD CODE
 
 impl Note {
     pub fn staccato(&mut self) -> &mut Self {
