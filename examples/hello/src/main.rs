@@ -25,14 +25,14 @@ fn example_1() {
         use note::Length::*;
         let mut track = Track::new(Box::new(instrument));
 
-        track.note(Quarter, first(3));
-        track.note(Quarter, second(3));
-        track.note(Quarter, third(3));
-        track.note(Quarter, fourth(3));
-        track.note(Quarter, fifth(3));
-        track.note(Quarter, sixth(3));
-        track.note(Quarter, seventh(3));
         track.note(Quarter, first(4));
+        track.note(Quarter, second(4));
+        track.note(Quarter, third(4));
+        track.note(Quarter, fourth(4));
+        track.note(Quarter, fifth(4));
+        track.note(Quarter, sixth(4));
+        track.note(Quarter, seventh(4));
+        track.note(Quarter, first(5));
 
         track
     };
