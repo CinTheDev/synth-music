@@ -80,16 +80,6 @@ impl Note {
         self
     }
 
-    pub fn sharp(&mut self) -> &mut Self {
-        self.semitones_offset += 1;
-        self
-    }
-
-    pub fn flat(&mut self) -> &mut Self {
-        self.semitones_offset -= 1;
-        self
-    }
-
     pub fn get_duration(&self, bpm: f32) -> std::time::Duration {
         let quarters_per_second = bpm / 60.0;
         let multiplier = self.length.get_time_length();
