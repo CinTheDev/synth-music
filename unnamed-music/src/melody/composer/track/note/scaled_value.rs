@@ -22,7 +22,7 @@ impl ScaledValue {
         let distance_from_tonic = Self::get_distance_from_tonic(key.key_type, self.index);
         let distance_tonic_from_a4 = Self::distance_from_a4(key.base);
         let octave_offset = self.octave * 12;
-        
+
         return 
             distance_from_tonic
             + distance_tonic_from_a4
@@ -32,21 +32,27 @@ impl ScaledValue {
 
     fn distance_from_a4(tonic: MusicKeyBase) -> i32 {
         match tonic {
-            // TODO: D#
+            MusicKeyBase::Dsharp =>  6,
             MusicKeyBase::D      =>  5,
             MusicKeyBase::Dflat  =>  4,
+
             MusicKeyBase::Csharp =>  4,
             MusicKeyBase::C      =>  3,
+
             MusicKeyBase::B      =>  2,
             MusicKeyBase::Bflat  =>  1,
-            // TODO: A#
+
+            MusicKeyBase::Asharp =>  1,
             MusicKeyBase::A      =>  0,
             MusicKeyBase::Aflat  => -1,
-            // TODO: G#
+
+            MusicKeyBase::Gsharp => -1,
             MusicKeyBase::G      => -2,
             MusicKeyBase::Gflat  => -3,
+
             MusicKeyBase::Fsharp => -3,
             MusicKeyBase::F      => -4,
+            
             MusicKeyBase::E      => -5,
             MusicKeyBase::Eflat  => -6,
         }

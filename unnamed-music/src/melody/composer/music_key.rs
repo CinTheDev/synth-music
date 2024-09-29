@@ -1,19 +1,28 @@
 #[derive(Clone, Copy)]
 pub enum MusicKeyBase {
-    C,
-    Csharp,
+    Dsharp,
     D,
     Dflat,
-    E,
-    Eflat,
-    F,
-    Fsharp,
-    G,
-    Gflat,
-    A,
-    Aflat,
+
+    Csharp,
+    C,
+
     B,
     Bflat,
+
+    Asharp,
+    A,
+    Aflat,
+
+    Gsharp,
+    G,
+    Gflat,
+
+    Fsharp,
+    F,
+
+    E,
+    Eflat,
 }
 #[derive(Clone, Copy)]
 pub enum MusicKeyType {
