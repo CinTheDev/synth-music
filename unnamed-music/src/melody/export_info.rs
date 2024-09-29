@@ -19,13 +19,13 @@ pub struct ExportTrack {
 
 // Represents a raw tone - just a frequency, duration, and intensity
 pub struct Tone {
-    pub frequencies: Vec<f32>,
+    pub concrete_values: Vec<i32>,
     pub play_duration: Duration,
     pub tone_duration: Duration,
 
     pub intensity: f32,
-    pub fade_in: Duration,
-    pub fade_out: Duration,
+    //pub fade_in: Duration,
+    //pub fade_out: Duration,
 }
 
 impl ExportMusicPiece {
