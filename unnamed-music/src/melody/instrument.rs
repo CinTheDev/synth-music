@@ -1,5 +1,4 @@
 use std::time::Duration;
-use dyn_clone::DynClone;
 
 use crate::melody::export_info::ConcreteValue;
 
@@ -10,8 +9,6 @@ pub struct ToneInfo {
     pub intensity: f32,
 }
 
-pub trait Instrument : DynClone {
+pub trait Instrument {
     fn generate_sound(&self, info: ToneInfo) -> f32;
 }
-
-dyn_clone::clone_trait_object!(Instrument);
