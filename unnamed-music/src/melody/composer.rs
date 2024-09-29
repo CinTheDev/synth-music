@@ -5,9 +5,11 @@ use super::export_info::*;
 
 use std::time::Duration;
 
+// TODO: Move somewhere better
 const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
 const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
 
+// TODO: Move somewhere better
 #[derive(Clone, Copy)]
 pub enum MusicKeyBase {
     C,
