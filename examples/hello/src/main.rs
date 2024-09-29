@@ -1,9 +1,10 @@
-use unnamed_music::melody::prelude::*;
+use unnamed_music::{melody::prelude::*, sequential_notes};
 
 fn main() {
     println!("Hello example");
 
     example_1();
+    example_2();
 }
 
 fn example_1() {
@@ -47,6 +48,51 @@ fn example_1() {
     };
 
     export(composition.to_export_piece(), "first_example.wav");
+}
+
+fn example_2() {
+    let key = MusicKey {
+        tonic: KeyTonic::A,
+        key_type: KeyType::Minor,
+    };
+
+    let info = SectionInfo {
+        bpm: 120.0,
+        key,
+        time_signature: (4, 4),
+    };
+
+    let instrument = SineGenerator;
+
+    let track = {
+        use note::scaled_value::*;
+        use note::Length::*;
+        let mut track = Track::new(Box::new(instrument));
+
+        sequential_notes!(track, Quarter,
+            first(3),
+            second(3),
+            third(3),
+            fourth(3),
+            fifth(3),
+            sixth(3),
+            seventh(3),
+            first(4)
+        );
+
+        track
+    };
+
+    let section = Section {
+        info,
+        tracks: vec![track],
+    };
+
+    let composition = Composition {
+        sections: vec![section],
+    };
+
+    export(composition.to_export_piece(), "second_example.wav");
 }
 
 fn export(export_piece: ExportMusicPiece, name: &str) {
