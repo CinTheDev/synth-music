@@ -1,4 +1,5 @@
 
+/*
 #[derive(Clone, Copy, Debug)]
 pub enum Tone {
     First,
@@ -8,6 +9,12 @@ pub enum Tone {
     Fith,
     Sixth,
     Seventh,
+}
+*/
+
+pub struct ScaledNote {
+    index: u8,
+    offset: i32,
 }
 
 #[derive(Clone, Copy)]
