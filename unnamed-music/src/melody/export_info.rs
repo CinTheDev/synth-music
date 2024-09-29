@@ -55,3 +55,13 @@ impl ExportTrack {
         }
     }
 }
+
+impl ConcreteValue {
+    pub fn to_frequency(self) -> f32 {
+        Self::frequency_from_a4_distance(self.0)
+    }
+
+    fn frequency_from_a4_distance(semitones: i32) -> f32 {
+        2_f32.powf(semitones as f32 / 12.0) * 440.0
+    }
+}
