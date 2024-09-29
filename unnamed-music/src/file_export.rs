@@ -81,9 +81,9 @@ impl MusicBuffer {
 
             let mut sample_value = 0.0;
 
-            for frequency in &tone.frequencies {
+            for value in &tone.concrete_values {
                 let info = ToneInfo {
-                    frequency: *frequency as f64,
+                    tone: *value,
                     time,
                 };
                 sample_value += instrument.generate_sound(info) * tone.intensity;
