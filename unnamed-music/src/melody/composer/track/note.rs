@@ -12,10 +12,25 @@ pub enum Tone {
 }
 */
 
+#[derive(Clone, Copy)]
 pub struct ScaledNote {
     index: u8,
     offset: i32,
 }
+
+impl ScaledNote {
+    pub fn sharp(mut self) -> Self {
+        self.offset += 1;
+        self
+    }
+
+    pub fn flat(mut self) -> Self {
+        self.offset -= 1;
+        self
+    }
+}
+
+// OLD CODE
 
 #[derive(Clone, Copy)]
 pub enum Length {
