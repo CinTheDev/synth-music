@@ -47,10 +47,13 @@ pub const FIFTH:   ScaledNote = ScaledNote { index: 4, offset: 0 };
 pub const SIXTH:   ScaledNote = ScaledNote { index: 5, offset: 0 };
 pub const SEVENTH: ScaledNote = ScaledNote { index: 6, offset: 0 };
 
+#[derive(Clone, Copy)]
+pub struct ConcreteTone(i32);
+
 // Concrete note
 #[derive(Clone)]
 pub struct Note {
-    pub values: Vec<i32>,
+    pub values: Vec<ConcreteTone>,
     pub length: Length,
     pub play_fraction: f32,
     pub intensity: f32,
