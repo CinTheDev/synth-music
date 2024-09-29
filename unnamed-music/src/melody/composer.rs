@@ -93,41 +93,22 @@ impl Composition {
     }
 
     fn generate_tone(note: Note, section_info: SectionInfo) -> Tone {
+        let mut concrete_values = Vec::new();
 
-        let play_duration = note.get_duration(section_info.bpm);
-        let tone_duration = play_duration.mul_f32(note.play_fraction);
-
-        Tone {
-            concrete_values: todo!(),
-            play_duration,
-            tone_duration,
-            intensity: note.intensity,
-        }
-        /*
-        let mut frequencies = Vec::new();
-
-        for tone in &note.values {
-            let base_frequency = modify_frequency(
-                get_note_base_frequency(*tone, section_info.key.key_type),
-                note.semitones_offset,
-            );
-            let keyed_frequency = transpose_from_base(base_frequency, section_info.key);
-            
-            frequencies.push(keyed_frequency);
+        for scaled_value in &note.values {
+            let scaled_value = scaled_value.0;
+            concrete_values.push(scaled_value.get_concrete_value(section_info.key));
         }
 
         let play_duration = note.get_duration(section_info.bpm);
         let tone_duration = play_duration.mul_f32(note.play_fraction);
 
         Tone {
-            frequencies,
+            concrete_values,
             play_duration,
             tone_duration,
             intensity: note.intensity,
-            fade_in: DEFAULT_FADE_IN,
-            fade_out: DEFAULT_FADE_OUT,
         }
-        */
     }
 }
 

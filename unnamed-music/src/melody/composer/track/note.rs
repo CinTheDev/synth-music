@@ -1,5 +1,6 @@
 #[derive(Clone, Copy)]
 pub struct ScaledValue {
+    // TODO: Put octaves inside here
     index: u8,
     offset: i32,
 }
@@ -13,6 +14,10 @@ impl ScaledValue {
     pub fn flat(mut self) -> Self {
         self.offset -= 1;
         self
+    }
+
+    pub fn get_concrete_value(self, key: crate::melody::composer::MusicKey) -> i32 {
+        unimplemented!();
     }
 }
 
