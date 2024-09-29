@@ -1,10 +1,10 @@
 #[derive(Clone, Copy)]
-pub struct ScaledNote {
+pub struct ScaledValue {
     index: u8,
     offset: i32,
 }
 
-impl ScaledNote {
+impl ScaledValue {
     pub fn sharp(mut self) -> Self {
         self.offset += 1;
         self
@@ -25,21 +25,18 @@ pub enum Length {
     Sixteenth,
 }
 
-pub const FIRST:   ScaledNote = ScaledNote { index: 0, offset: 0 };
-pub const SECOND:  ScaledNote = ScaledNote { index: 1, offset: 0 };
-pub const THIRD:   ScaledNote = ScaledNote { index: 2, offset: 0 };
-pub const FOURTH:  ScaledNote = ScaledNote { index: 3, offset: 0 };
-pub const FIFTH:   ScaledNote = ScaledNote { index: 4, offset: 0 };
-pub const SIXTH:   ScaledNote = ScaledNote { index: 5, offset: 0 };
-pub const SEVENTH: ScaledNote = ScaledNote { index: 6, offset: 0 };
+pub const FIRST:   ScaledValue = ScaledValue { index: 0, offset: 0 };
+pub const SECOND:  ScaledValue = ScaledValue { index: 1, offset: 0 };
+pub const THIRD:   ScaledValue = ScaledValue { index: 2, offset: 0 };
+pub const FOURTH:  ScaledValue = ScaledValue { index: 3, offset: 0 };
+pub const FIFTH:   ScaledValue = ScaledValue { index: 4, offset: 0 };
+pub const SIXTH:   ScaledValue = ScaledValue { index: 5, offset: 0 };
+pub const SEVENTH: ScaledValue = ScaledValue { index: 6, offset: 0 };
 
-#[derive(Clone, Copy)]
-pub struct ConcreteTone(i32);
-
-// Concrete note
+// Abstract note
 #[derive(Clone)]
 pub struct Note {
-    pub values: Vec<ConcreteTone>,
+    pub values: Vec<ScaledValue>,
     pub length: Length,
     pub play_fraction: f32,
     pub intensity: f32,
