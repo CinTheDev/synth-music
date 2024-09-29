@@ -80,6 +80,15 @@ fn example_2() {
             first(4)
         );
 
+        notes!(track, Quarter, first(3));
+        notes!(track, Quarter, first(3), second(3));
+        notes!(track, Quarter, first(3), third(3));
+        notes!(track, Quarter, first(3), fourth(3));
+        notes!(track, Quarter, first(3), fifth(3));
+        notes!(track, Quarter, first(3), sixth(3));
+        notes!(track, Quarter, first(3), seventh(3));
+        notes!(track, Quarter, first(3), first(4));
+
         track
     };
 
