@@ -85,8 +85,9 @@ impl MusicBuffer {
                 let info = ToneInfo {
                     tone: *value,
                     time,
+                    intensity: tone.intensity,
                 };
-                sample_value += instrument.generate_sound(info) * tone.intensity;
+                sample_value += instrument.generate_sound(info);
             }
             sample_value *= Self::get_fade_amplitude(&tone, time);
 

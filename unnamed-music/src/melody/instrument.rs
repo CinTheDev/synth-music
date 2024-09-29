@@ -7,6 +7,7 @@ use crate::melody::export_info::ConcreteValue;
 pub struct ToneInfo {
     pub tone: ConcreteValue,
     pub time: Duration,
+    pub intensity: f32,
 }
 
 pub trait Instrument : DynClone {
