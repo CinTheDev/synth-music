@@ -105,3 +105,18 @@ of these instruments would have constant loudness when held for longer time.
 
 Since both behaviours are possible, even for two instruments playing at the
 same time, the type of behaviour should be (easily) determined by the user.
+
+## Representation of ExportTone
+
+The export tones are generated from composition tones, and are given to the
+instrument sound generator to render a tone.
+
+An ExportTone represents the following info:
+
+- All concrete Tones
+- A *total* duration (time until the next tone)
+- A *tone* duration (time for which tone is played)
+- An intensity or transition of intensity
+
+Note: the "fade-in" or "fade-out" times should still be applied in rendering,
+but it does not need to be stored for every tone individually.
