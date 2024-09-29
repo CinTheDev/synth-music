@@ -36,7 +36,7 @@ pub const SEVENTH: ScaledValue = ScaledValue { index: 6, offset: 0 };
 // Abstract note
 #[derive(Clone)]
 pub struct Note {
-    pub values: Vec<ScaledValue>,
+    pub values: Vec<(ScaledValue, i32)>,
     pub length: Length,
     pub play_fraction: f32,
     pub intensity: f32,
