@@ -28,7 +28,8 @@ impl Instruments {
         let mut result = 0.0;
 
         for i in 0..attributes.count {
-            let frequency = base_frequency as f64 * i as f64;
+            let n = i + 1;
+            let frequency = base_frequency as f64 * n as f64;
             result += Self::sine_wave(frequency, seconds) * info.intensity * Self::intensity_factor(i);
         }
 

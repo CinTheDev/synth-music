@@ -22,7 +22,7 @@ fn example_1() {
         time_signature: (4, 4),
     };
 
-    let instrument = Instruments::new_harmonic_wave(1);
+    let instrument = Instruments::new_harmonic_wave(10);
 
     let track = {
         use note::scaled_value::*;
