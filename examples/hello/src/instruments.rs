@@ -29,10 +29,14 @@ impl Instruments {
 
         for i in 0..attributes.count {
             let frequency = base_frequency as f64 * i as f64;
-            result += Self::sine_wave(frequency, seconds);
+            result += Self::sine_wave(frequency, seconds) * info.intensity * Self::intensity_factor(i);
         }
 
         return result;
+    }
+
+    fn intensity_factor(n: u32) -> f32 {
+        0.5_f32.powi(n as i32)
     }
 
     fn sine_wave(frequency: f64, seconds: f64) -> f32 {
