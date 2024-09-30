@@ -1,4 +1,7 @@
 use unnamed_music::melody::prelude::*;
+mod instruments;
+
+use instruments::Instruments;
 
 fn main() {
     println!("Hello example");
@@ -19,12 +22,12 @@ fn example_1() {
         time_signature: (4, 4),
     };
 
-    let instrument = SineGenerator;
+    let instrument = Instruments::new_harmonic_wave(1);
 
     let track = {
         use note::scaled_value::*;
         use note::Length::*;
-        let mut track = Track::new(Box::new(instrument));
+        let mut track = Track::new(instrument);
 
         track.note(Quarter, first(4));
         track.note(Quarter, second(4));
@@ -62,12 +65,14 @@ fn example_2() {
         time_signature: (4, 4),
     };
 
-    let instrument = SineGenerator;
+    let instrument = Instruments::Predefined(
+        instrument::predefined::PredefinedInstrument::SineGenerator
+    );
 
     let track = {
         use note::scaled_value::*;
         use note::Length::*;
-        let mut track = Track::new(Box::new(instrument));
+        let mut track = Track::new(instrument);
 
         sequential_notes!(track, Quarter,
             first(3),
@@ -104,7 +109,7 @@ fn example_2() {
     export(composition.to_export_piece(), "second_example.wav");
 }
 
-fn export(export_piece: ExportMusicPiece, name: &str) {
+fn export<T: Instrument>(export_piece: ExportMusicPiece<T>, name: &str) {
     use unnamed_music::file_export::*;
     use wav_export::WavExport;
     use std::path::PathBuf;
@@ -123,17 +128,4 @@ fn export(export_piece: ExportMusicPiece, name: &str) {
     };
 
     exporter.export(music_buffer).unwrap();
-}
-
-#[derive(Clone, Copy)]
-struct SineGenerator;
-
-impl Instrument for SineGenerator {
-    fn generate_sound(&self, info: ToneInfo) -> f32 {
-        use std::f32::consts::PI;
-
-        let frequency = info.tone.to_frequency();
-
-        return (info.time.as_secs_f32() * frequency * 2.0 * PI).sin();
-    }
 }
