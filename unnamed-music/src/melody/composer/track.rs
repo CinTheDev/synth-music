@@ -4,15 +4,15 @@ use note::scaled_value::ScaledValue;
 use crate::melody::instrument::Instrument;
 
 #[derive(Clone)]
-pub struct Track {
+pub struct Track<T: Instrument> {
     notes: Vec<Note>,
-    instrument: Box<dyn Instrument>,
+    instrument: T,
 
     current_intensity: f32,
 }
 
-impl Track {
-    pub fn new(instrument: Box<dyn Instrument>) -> Self {
+impl<T: Instrument> Track<T> {
+    pub fn new(instrument: T) -> Self {
         Self {
             notes: Vec::new(),
             instrument,
@@ -20,7 +20,7 @@ impl Track {
         }
     }
 
-    pub fn into_parts(self) -> (Vec<Note>, Box<dyn Instrument>) {
+    pub fn into_parts(self) -> (Vec<Note>, T) {
         (self.notes, self.instrument)
     }
 
