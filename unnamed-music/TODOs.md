@@ -35,17 +35,6 @@ Try to make the implementations for getting the note frequencies more efficient
 and readable, ideally using as few magic numbers and long match lists as
 possible. Also try to relocate the code to a better place than `composer.rs`.
 
-### Instrument rework
-
-As part of the notes rework I wanted to make the tones given to the instruments
-also generic, so users could define their own tones. This somehow broke the
-old dyn-clone functionality though, and tracks and sections weren't copyable
-anymore.
-
-I experimented around a little with an external example, and I figured out
-a new approach for this: Represent instruments as enum variants. The example
-is still on my disk so use that for additional info on the implementation.
-
 ### Sharps and flats inside intervals
 
 I've noticed that it's impossible to represent and interval with one note being
