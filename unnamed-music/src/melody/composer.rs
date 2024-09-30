@@ -5,11 +5,12 @@ use track::Track;
 use track::note::Note;
 use music_key::MusicKey;
 use super::export_info::*;
+use super::instrument::Instrument;
 
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
 // generated from it.
-pub struct Composition {
-    pub sections: Vec<Section>,
+pub struct Composition<T: Instrument> {
+    pub sections: Vec<Section<T>>,
 }
 
 #[derive(Clone, Copy)]
@@ -20,13 +21,13 @@ pub struct SectionInfo {
 }
 
 #[derive(Clone)]
-pub struct Section {
+pub struct Section<T: Instrument> {
     pub info: SectionInfo,
-    pub tracks: Vec<Track>,
+    pub tracks: Vec<Track<T>>,
 }
 
-impl Composition {
-    pub fn to_export_piece(self) -> ExportMusicPiece {
+impl<T: Instrument> Composition<T> {
+    pub fn to_export_piece(self) -> ExportMusicPiece<T> {
         let mut result = ExportMusicPiece::new();
 
         for section in self.sections {
@@ -37,7 +38,7 @@ impl Composition {
         return result;
     }
 
-    fn generate_export_section(section: Section) -> ExportSection {
+    fn generate_export_section(section: Section<T>) -> ExportSection<T> {
         let mut export_section = ExportSection::new();
 
         for track in section.tracks {
@@ -48,7 +49,7 @@ impl Composition {
         return export_section;
     }
 
-    fn generate_export_track(track: Track, section_info: SectionInfo) -> ExportTrack {
+    fn generate_export_track(track: Track<T>, section_info: SectionInfo) -> ExportTrack<T> {
         let (notes, instrument) = track.into_parts();
 
         let mut export_track = ExportTrack::new(instrument);

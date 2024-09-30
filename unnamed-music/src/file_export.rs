@@ -9,16 +9,16 @@ use std::time::Duration;
 const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
 const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
 
-pub trait FileExport {
-    fn export(&self, buffer: MusicBuffer) -> std::io::Result<()>;
+pub trait FileExport<T: Instrument> {
+    fn export(&self, buffer: MusicBuffer<T>) -> std::io::Result<()>;
 }
 
-pub struct MusicBuffer {
-    piece: ExportMusicPiece,
+pub struct MusicBuffer<T: Instrument> {
+    piece: ExportMusicPiece<T>,
 }
 
-impl MusicBuffer {
-    pub fn new(piece: ExportMusicPiece) -> Self {
+impl<T: Instrument> MusicBuffer<T> {
+    pub fn new(piece: ExportMusicPiece<T>) -> Self {
         Self {
             piece,
         }
@@ -35,7 +35,7 @@ impl MusicBuffer {
         return buffer;
     }
 
-    fn generate_section(section: &ExportSection, sample_rate: u32) -> Vec<f32> {
+    fn generate_section(section: &ExportSection<T>, sample_rate: u32) -> Vec<f32> {
         let mut buffer = Vec::new();
 
         for track in &section.tracks {
@@ -46,7 +46,7 @@ impl MusicBuffer {
         return buffer;
     }
 
-    fn generate_track(track: &ExportTrack, sample_rate: u32) -> Vec<f32> {
+    fn generate_track(track: &ExportTrack<T>, sample_rate: u32) -> Vec<f32> {
         let mut buffer = Vec::new();
 
         for tone in &track.tones {
@@ -61,7 +61,7 @@ impl MusicBuffer {
         return buffer;
     }
 
-    fn generate_tone(tone: &Tone, sample_rate: u32, instrument: &Box<dyn Instrument>) -> Vec<f32> {
+    fn generate_tone(tone: &Tone, sample_rate: u32, instrument: &T) -> Vec<f32> {
         let mut buffer = Vec::new();
 
         let samples =
