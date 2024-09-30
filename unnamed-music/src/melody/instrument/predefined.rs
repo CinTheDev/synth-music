@@ -1,17 +1,13 @@
 use super::Instrument;
 use super::ToneInfo;
 
-pub struct SineGenerator;
-
-pub struct TriangleGenerator;
-
 pub enum PredefinedInstrument {
-    SineGenerator(SineGenerator),
-    TriangleGenerator(TriangleGenerator),
+    SineGenerator,
+    TriangleGenerator,
 }
 
 impl PredefinedInstrument {
-    pub fn sine_generator(_attributes: &SineGenerator, info: ToneInfo) -> f32 {
+    pub fn sine_generator(info: ToneInfo) -> f32 {
         use std::f64::consts::PI;
         
         let frequency = info.tone.to_frequency() as f64;
@@ -19,7 +15,7 @@ impl PredefinedInstrument {
         return x.sin() as f32 * info.intensity;
     }
 
-    pub fn triangle_generator(_attributes: &TriangleGenerator, info: ToneInfo) -> f32 {
+    pub fn triangle_generator(info: ToneInfo) -> f32 {
         use std::f64::consts::PI;
 
         let frequency = info.tone.to_frequency() as f64;
@@ -31,8 +27,8 @@ impl PredefinedInstrument {
 impl Instrument for PredefinedInstrument {
     fn generate_sound(&self, info: ToneInfo) -> f32 {
         match self {
-            Self::SineGenerator(attributes) => Self::sine_generator(attributes, info),
-            Self::TriangleGenerator(attributes) => Self::triangle_generator(attributes, info),
+            Self::SineGenerator => Self::sine_generator(info),
+            Self::TriangleGenerator => Self::triangle_generator(info),
         }
     }
 }
