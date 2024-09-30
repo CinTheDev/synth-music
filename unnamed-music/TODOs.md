@@ -35,6 +35,11 @@ Try to make the implementations for getting the note frequencies more efficient
 and readable, ideally using as few magic numbers and long match lists as
 possible. Also try to relocate the code to a better place than `composer.rs`.
 
+### What's left to do for now
+
+- Make notes and tones generic
+- Cleanup; change location of code and submodule structure if applicable
+
 ### Sharps and flats inside intervals
 
 I've noticed that it's impossible to represent and interval with one note being
