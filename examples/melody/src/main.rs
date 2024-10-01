@@ -3,6 +3,8 @@ use unnamed_music::prelude::*;
 mod instruments;
 mod tracks;
 
+use instruments::Instruments;
+
 fn main() {
     println!("Melody Example");
 
@@ -17,8 +19,8 @@ fn main() {
         time_signature: (4, 4),
     };
 
-    let instrument_softbass = instruments::SoftBass::new(1.0);
-    let instrument_hardbass = instruments::HardBass::new(10);
+    let instrument_softbass = Instruments::new_softbass(1.0);
+    let instrument_hardbass = Instruments::new_hardbass(10);
 
     let melody_begin = tracks::melody_begin(Box::new(instrument_softbass));
     let chords_begin = tracks::chords_begin(Box::new(instrument_softbass));
