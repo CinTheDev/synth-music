@@ -9,7 +9,8 @@ pub use crate::{notes, sequential_notes};
 // Instrument imports
 pub use crate::instrument;
 pub use instrument::{Instrument, ToneInfo};
-//pub use instrument::predefined;
+pub use instrument::predefined;
+pub use predefined::tet12;
 
 // File-export imports
 pub use crate::file_export;
