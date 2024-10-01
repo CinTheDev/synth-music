@@ -109,7 +109,7 @@ fn example_2() {
     export(composition.to_export_piece(), "second_example.wav");
 }
 
-fn export<T: Instrument>(export_piece: export_info::ExportMusicPiece<T::ConcreteValue, T>, name: &str) {
+fn export<T: Instrument>(export_piece: export_info::ExportMusicPiece<T>, name: &str) {
     use std::path::PathBuf;
 
     if std::fs::read_dir("export").is_err() {
