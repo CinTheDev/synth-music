@@ -4,7 +4,7 @@ pub mod music_key;
 use track::Track;
 use track::note::{Note, ScaledValue};
 use music_key::MusicKey;
-//use super::export_info::*;
+use super::export_info::*;
 use super::instrument::Instrument;
 
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
@@ -27,7 +27,7 @@ pub struct Section<T: ScaledValue<T>, U: Instrument<U>> {
 }
 
 impl<T: ScaledValue<T>, U: Instrument<U>> Composition<T, U> {
-    pub fn to_export_piece(self) -> ExportMusicPiece<T> {
+    pub fn to_export_piece<V>(self) -> ExportMusicPiece<V, U> {
         let mut result = ExportMusicPiece::new();
 
         for section in self.sections {
@@ -38,7 +38,7 @@ impl<T: ScaledValue<T>, U: Instrument<U>> Composition<T, U> {
         return result;
     }
 
-    fn generate_export_section(section: Section<T, U>) -> ExportSection<T> {
+    fn generate_export_section<V>(section: Section<T, U>) -> ExportSection<V, U> {
         let mut export_section = ExportSection::new();
 
         for track in section.tracks {
@@ -49,7 +49,7 @@ impl<T: ScaledValue<T>, U: Instrument<U>> Composition<T, U> {
         return export_section;
     }
 
-    fn generate_export_track(track: Track<T, U>, section_info: SectionInfo) -> ExportTrack<T> {
+    fn generate_export_track<V>(track: Track<T, U>, section_info: SectionInfo) -> ExportTrack<V, U> {
         let (notes, instrument) = track.into_parts();
 
         let mut export_track = ExportTrack::new(instrument);
@@ -62,12 +62,14 @@ impl<T: ScaledValue<T>, U: Instrument<U>> Composition<T, U> {
         return export_track;
     }
 
-    fn generate_tone(note: Note<T>, section_info: SectionInfo) -> Tone {
+    fn generate_tone<V>(note: Note<T>, section_info: SectionInfo) -> Tone<V> {
         let mut concrete_values = Vec::new();
 
         for scaled_value in &note.values {
-            let concrete_value = TET12ConcreteValue(scaled_value.get_concrete_value(section_info.key));
+            let concrete_value = scaled_value.to_concrete_value();
             concrete_values.push(concrete_value);
+            //let concrete_value = TET12ConcreteValue(scaled_value.get_concrete_value(section_info.key));
+            //concrete_values.push(concrete_value);
         }
 
         let play_duration = note.get_duration(section_info.bpm);
