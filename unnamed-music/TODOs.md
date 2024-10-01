@@ -37,7 +37,6 @@ possible. Also try to relocate the code to a better place than `composer.rs`.
 
 ### What's left to do for now
 
-- Make notes and tones generic
 - Cleanup; change location of code and submodule structure if applicable
 
 ### Sharps and flats inside intervals
