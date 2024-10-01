@@ -20,7 +20,7 @@ pub enum Instruments {
 
 impl SoftBass {
     pub fn generate(&self, info: ToneInfo<TET12ConcreteTone>) -> f32 {
-        Self::triangle_wave(info) * self.decay_function(info)
+        Self::triangle_wave(info) * self.decay_function(info) * info.intensity
     }
 
     fn triangle_wave(info: ToneInfo<TET12ConcreteTone>) -> f32 {
@@ -43,7 +43,7 @@ impl HardBass {
             amplitude += Self::harmonic(n, &info);
         }
 
-        return amplitude;
+        return amplitude * info.intensity;
     }
 
     fn sine_wave(time: Duration, frequency: f64) -> f32 {
