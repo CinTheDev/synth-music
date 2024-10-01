@@ -51,3 +51,10 @@ Rendering can take a bit because it's currently single threaded. Chunked
 rendering allows for Multi-Threaded rendering of the file, which will speed up
 the rendering process by quite a bit. Also, the reduced memory consumption is
 also not bad.
+
+### Loading bar for exporting
+
+Bigger projects (even the ones from the examples) take a few seconds to export.
+It would be nice to have a loading bar that shows how much of the piece has
+been rendered out already. It's probably related with the chunked rendering
+stuff above.
