@@ -14,11 +14,11 @@ pub trait FileExport<T: Instrument> {
 }
 
 pub struct MusicBuffer<T: Instrument> {
-    piece: ExportMusicPiece<T::ConcreteValue, T>,
+    piece: ExportMusicPiece<T>,
 }
 
 impl<T: Instrument> MusicBuffer<T> {
-    pub fn new(piece: ExportMusicPiece<T::ConcreteValue, T>) -> Self {
+    pub fn new(piece: ExportMusicPiece<T>) -> Self {
         Self {
             piece,
         }
@@ -35,7 +35,7 @@ impl<T: Instrument> MusicBuffer<T> {
         return buffer;
     }
 
-    fn generate_section(section: &ExportSection<T::ConcreteValue, T>, sample_rate: u32) -> Vec<f32> {
+    fn generate_section(section: &ExportSection<T>, sample_rate: u32) -> Vec<f32> {
         let mut buffer = Vec::new();
 
         for track in &section.tracks {
@@ -46,7 +46,7 @@ impl<T: Instrument> MusicBuffer<T> {
         return buffer;
     }
 
-    fn generate_track(track: &ExportTrack<T::ConcreteValue, T>, sample_rate: u32) -> Vec<f32> {
+    fn generate_track(track: &ExportTrack<T>, sample_rate: u32) -> Vec<f32> {
         let mut buffer = Vec::new();
 
         for tone in &track.tones {
