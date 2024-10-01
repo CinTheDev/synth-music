@@ -1,6 +1,5 @@
-// Implementation of the 12-TET system
-use crate::melody::composer::music_key::{MusicKey, KeyType, KeyTonic};
-use crate::melody::composer::track::note::ScaledValue;
+use crate::composer::music_key::{MusicKey, KeyType, KeyTonic};
+use crate::composer::note::ScaledValue;
 
 #[derive(Clone, Copy)]
 pub struct TET12ScaledTone {
