@@ -1,4 +1,4 @@
-pub mod scaled_value;
+//pub mod scaled_value;
 //use scaled_value::TET12ScaledValue;
 
 pub trait ScaledValue {

@@ -1,4 +1,3 @@
-/*
 use crate::melody::composer::music_key::{MusicKey, KeyTonic, KeyType};
 
 #[derive(Clone, Copy)]
@@ -150,4 +149,3 @@ pub fn seventh(octave: i32) -> TET12ScaledValue {
         offset: 0,
     }
 }
-*/
