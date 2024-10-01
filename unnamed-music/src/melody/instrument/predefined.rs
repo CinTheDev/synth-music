@@ -37,15 +37,37 @@ impl Instrument for PredefinedInstrument {
 
 // Implementation of the 12-TET system
 use crate::melody::composer::music_key::{MusicKey, KeyType, KeyTonic};
+use crate::melody::composer::track::note::ScaledValue;
 
 #[derive(Clone, Copy)]
-pub struct TET12Tone {
+pub struct TET12ScaledTone {
     index: u8,
     octave: i32,
     offset: i32,
 }
 
-impl TET12Tone {
+#[derive(Clone, Copy)]
+pub struct TET12ConcreteTone(pub i32);
+
+impl ScaledValue for TET12ScaledTone {
+    type ConcreteValue = TET12ConcreteTone;
+
+    fn to_concrete_value(&self, key: MusicKey) -> Self::ConcreteValue {
+        TET12ConcreteTone(self.get_concrete_value(key))
+    }
+}
+
+impl TET12ConcreteTone {
+    pub fn to_frequency(self) -> f32 {
+        Self::frequency_from_a4_distance(self.0)
+    }
+
+    fn frequency_from_a4_distance(semitones: i32) -> f32 {
+        2_f32.powf(semitones as f32 / 12.0) * 440.0
+    }
+}
+
+impl TET12ScaledTone {
     pub fn sharp(mut self) -> Self {
         self.offset += 1;
         self
@@ -132,56 +154,56 @@ impl TET12Tone {
     }
 }
 
-pub fn first(octave: i32) -> TET12Tone {
-    TET12Tone {
+pub fn first(octave: i32) -> TET12ScaledTone {
+    TET12ScaledTone {
         index: 0,
         octave,
         offset: 0,
     }
 }
 
-pub fn second(octave: i32) -> TET12Tone {
-    TET12Tone {
+pub fn second(octave: i32) -> TET12ScaledTone {
+    TET12ScaledTone {
         index: 1,
         octave,
         offset: 0,
     }
 }
 
-pub fn third(octave: i32) -> TET12Tone {
-    TET12Tone {
+pub fn third(octave: i32) -> TET12ScaledTone {
+    TET12ScaledTone {
         index: 2,
         octave,
         offset: 0,
     }
 }
 
-pub fn fourth(octave: i32) -> TET12Tone {
-    TET12Tone {
+pub fn fourth(octave: i32) -> TET12ScaledTone {
+    TET12ScaledTone {
         index: 3,
         octave,
         offset: 0,
     }
 }
 
-pub fn fifth(octave: i32) -> TET12Tone {
-    TET12Tone {
+pub fn fifth(octave: i32) -> TET12ScaledTone {
+    TET12ScaledTone {
         index: 4,
         octave,
         offset: 0,
     }
 }
 
-pub fn sixth(octave: i32) -> TET12Tone {
-    TET12Tone {
+pub fn sixth(octave: i32) -> TET12ScaledTone {
+    TET12ScaledTone {
         index: 5,
         octave,
         offset: 0,
     }
 }
 
-pub fn seventh(octave: i32) -> TET12Tone {
-    TET12Tone {
+pub fn seventh(octave: i32) -> TET12ScaledTone {
+    TET12ScaledTone {
         index: 6,
         octave,
         offset: 0,
