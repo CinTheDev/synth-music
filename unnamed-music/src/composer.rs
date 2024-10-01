@@ -1,11 +1,13 @@
+pub mod note;
 pub mod track;
 pub mod music_key;
 
 use track::Track;
-use track::note::{Note, ScaledValue};
+use note::{Note, ScaledValue};
 use music_key::MusicKey;
-use super::export_info::*;
-use super::instrument::Instrument;
+
+use crate::file_export::export_info::*;
+use crate::instrument::Instrument;
 
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
 // generated from it.
