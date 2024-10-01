@@ -9,7 +9,7 @@ use super::instrument::Instrument;
 
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
 // generated from it.
-pub struct Composition<T: ScaledValue<T>, U: Instrument<U>> {
+pub struct Composition<T: ScaledValue, U: Instrument<U>> {
     pub sections: Vec<Section<T, U>>,
 }
 
@@ -21,12 +21,12 @@ pub struct SectionInfo {
 }
 
 #[derive(Clone)]
-pub struct Section<T: ScaledValue<T>, U: Instrument<U>> {
+pub struct Section<T: ScaledValue, U: Instrument<U>> {
     pub info: SectionInfo,
     pub tracks: Vec<Track<T, U>>,
 }
 
-impl<T: ScaledValue<T>, U: Instrument<U>> Composition<T, U> {
+impl<T: ScaledValue, U: Instrument<U>> Composition<T, U> {
     pub fn to_export_piece<V>(self) -> ExportMusicPiece<V, U> {
         let mut result = ExportMusicPiece::new();
 
