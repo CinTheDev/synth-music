@@ -11,7 +11,11 @@ use crate::instrument::Instrument;
 
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
 // generated from it.
-pub struct Composition<T: ScaledValue, U: Instrument> {
+pub struct Composition<T, U>
+where 
+    T: ScaledValue,
+    U: Instrument<ConcreteValue = T::ConcreteValue>,
+{
     pub sections: Vec<Section<T, U>>,
 }
 
@@ -23,13 +27,21 @@ pub struct SectionInfo {
 }
 
 #[derive(Clone)]
-pub struct Section<T: ScaledValue, U: Instrument> {
+pub struct Section<T, U>
+where 
+    T: ScaledValue,
+    U: Instrument<ConcreteValue = T::ConcreteValue>,
+{
     pub info: SectionInfo,
     pub tracks: Vec<Track<T, U>>,
 }
 
-impl<T: ScaledValue, U: Instrument> Composition<T, U> {
-    pub fn to_export_piece(self) -> ExportMusicPiece<T::ConcreteValue, U> {
+impl<T, U> Composition<T, U>
+where 
+    T: ScaledValue,
+    U: Instrument<ConcreteValue = T::ConcreteValue>,
+{
+    pub fn to_export_piece(self) -> ExportMusicPiece<U> {
         let mut result = ExportMusicPiece::new();
 
         for section in self.sections {
@@ -40,7 +52,7 @@ impl<T: ScaledValue, U: Instrument> Composition<T, U> {
         return result;
     }
 
-    fn generate_export_section(section: Section<T, U>) -> ExportSection<T::ConcreteValue, U> {
+    fn generate_export_section(section: Section<T, U>) -> ExportSection<U> {
         let mut export_section = ExportSection::new();
 
         for track in section.tracks {
@@ -51,7 +63,7 @@ impl<T: ScaledValue, U: Instrument> Composition<T, U> {
         return export_section;
     }
 
-    fn generate_export_track(track: Track<T, U>, section_info: SectionInfo) -> ExportTrack<T::ConcreteValue, U> {
+    fn generate_export_track(track: Track<T, U>, section_info: SectionInfo) -> ExportTrack<U> {
         let (notes, instrument) = track.into_parts();
 
         let mut export_track = ExportTrack::new(instrument);
@@ -64,7 +76,7 @@ impl<T: ScaledValue, U: Instrument> Composition<T, U> {
         return export_track;
     }
 
-    fn generate_tone(note: Note<T>, section_info: SectionInfo) -> Tone<T::ConcreteValue> {
+    fn generate_tone(note: Note<T>, section_info: SectionInfo) -> Tone<U::ConcreteValue> {
         let mut concrete_values = Vec::new();
 
         for scaled_value in &note.values {
