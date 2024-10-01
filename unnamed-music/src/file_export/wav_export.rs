@@ -1,5 +1,6 @@
 use super::{FileExport, MusicBuffer};
-use crate::melody::instrument::Instrument;
+use crate::instrument::Instrument;
+
 use std::fs::File;
 use std::io::{BufWriter, Write};
 use std::path::PathBuf;
