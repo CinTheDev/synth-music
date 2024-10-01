@@ -1,5 +1,5 @@
 pub mod scaled_value;
-use scaled_value::TET12ScaledValue;
+//use scaled_value::TET12ScaledValue;
 
 #[derive(Clone, Copy)]
 pub enum Length {

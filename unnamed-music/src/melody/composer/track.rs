@@ -1,4 +1,6 @@
 pub mod note;
+
+/*
 use note::Note;
 use note::scaled_value::TET12ScaledValue;
 use crate::melody::instrument::Instrument;
@@ -97,3 +99,4 @@ macro_rules! sequential_notes {
         )*
     };
 }
+*/
