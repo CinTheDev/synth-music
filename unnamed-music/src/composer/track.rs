@@ -1,8 +1,6 @@
-pub mod note;
-
-use note::{Note, ScaledValue};
+use super::note::{Note, ScaledValue, Length};
 //use note::scaled_value::TET12ScaledValue;
-use crate::melody::instrument::Instrument;
+use crate::instrument::Instrument;
 
 #[derive(Clone)]
 pub struct Track<T: ScaledValue, U: Instrument> {
@@ -27,7 +25,7 @@ impl<T: ScaledValue, U: Instrument> Track<T, U> {
 
     pub fn note(
         &mut self,
-        length: note::Length,
+        length: Length,
         value: T,
     ) -> &mut Note<T> {
         self.notes.push(Note {
@@ -45,7 +43,7 @@ impl<T: ScaledValue, U: Instrument> Track<T, U> {
 
     pub fn notes(
         &mut self,
-        length: note::Length,
+        length: Length,
         values: Vec<T>,
     ) -> &mut Note<T> {
         self.notes.push(Note {
@@ -61,7 +59,7 @@ impl<T: ScaledValue, U: Instrument> Track<T, U> {
         return &mut self.notes[last_index];
     }
 
-    pub fn pause(&mut self, length: note::Length) {
+    pub fn pause(&mut self, length: Length) {
         self.notes.push(Note {
             values: vec![],
             length,
