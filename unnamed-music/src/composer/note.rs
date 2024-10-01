@@ -1,7 +1,8 @@
 //pub mod scaled_value;
 //use scaled_value::TET12ScaledValue;
 
-use crate::melody::composer::music_key::MusicKey;
+//use crate::melody::composer::music_key::MusicKey;
+use super::music_key::MusicKey;
 
 pub trait ScaledValue {
     type ConcreteValue;
