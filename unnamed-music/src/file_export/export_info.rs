@@ -3,18 +3,18 @@ use crate::instrument::Instrument;
 
 // Holds all info of a piece relevant for exporting; consists of several
 // export tracks
-pub struct ExportMusicPiece<T, U: Instrument> {
-    pub sections: Vec<ExportSection<T, U>>,
+pub struct ExportMusicPiece<T: Instrument> {
+    pub sections: Vec<ExportSection<T>>,
 }
 
-pub struct ExportSection<T, U: Instrument> {
-    pub tracks: Vec<ExportTrack<T, U>>,
+pub struct ExportSection<T: Instrument> {
+    pub tracks: Vec<ExportTrack<T>>,
 }
 
 // Contains raw tones
-pub struct ExportTrack<T, U: Instrument> {
-    pub tones: Vec<Tone<T>>,
-    pub instrument: U,
+pub struct ExportTrack<T: Instrument> {
+    pub tones: Vec<Tone<T::ConcreteValue>>,
+    pub instrument: T,
 }
 
 // Represents a raw tone - just a frequency, duration, and intensity
@@ -26,7 +26,7 @@ pub struct Tone<T> {
     pub intensity: f32,
 }
 
-impl<T, U: Instrument> ExportMusicPiece<T, U> {
+impl<T: Instrument> ExportMusicPiece<T> {
     pub fn new() -> Self {
         Self {
             sections: Vec::new(),
@@ -34,7 +34,7 @@ impl<T, U: Instrument> ExportMusicPiece<T, U> {
     }
 }
 
-impl<T, U: Instrument> ExportSection<T, U> {
+impl<T: Instrument> ExportSection<T> {
     pub fn new() -> Self {
         Self {
             tracks: Vec::new(),
@@ -42,8 +42,8 @@ impl<T, U: Instrument> ExportSection<T, U> {
     }
 }
 
-impl<T, U: Instrument> ExportTrack<T, U> {
-    pub fn new(instrument: U) -> Self {
+impl<T: Instrument> ExportTrack<T> {
+    pub fn new(instrument: T) -> Self {
         Self {
             tones: Vec::new(),
             instrument,
