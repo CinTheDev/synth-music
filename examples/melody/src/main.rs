@@ -1,4 +1,4 @@
-use unnamed_music::melody::prelude::*;
+use unnamed_music::prelude::*;
 
 mod instruments;
 mod tracks;
@@ -7,8 +7,8 @@ fn main() {
     println!("Melody Example");
 
     let key = MusicKey {
-        base: MusicKeyBase::A,
-        key_type: MusicKeyType::Minor,
+        tonic: KeyTonic::A,
+        key_type: KeyType::Minor,
     };
 
     let info = SectionInfo {
@@ -97,7 +97,7 @@ fn main() {
     export(export_piece);
 }
 
-fn export(export_piece: ExportMusicPiece) {
+fn export<T: Instrument>(export_piece: export_info::ExportMusicPiece<T>) {
     use unnamed_music::file_export::*;
     use wav_export::WavExport;
     use std::path::PathBuf;
