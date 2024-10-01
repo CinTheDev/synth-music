@@ -22,19 +22,19 @@ fn main() {
     let instrument_softbass = Instruments::new_softbass(1.0);
     let instrument_hardbass = Instruments::new_hardbass(10);
 
-    let melody_begin = tracks::melody_begin(Box::new(instrument_softbass));
-    let chords_begin = tracks::chords_begin(Box::new(instrument_softbass));
-    let bass_begin = tracks::bass_begin(Box::new(instrument_hardbass));
+    let melody_begin = tracks::melody_begin(instrument_softbass);
+    let chords_begin = tracks::chords_begin(instrument_softbass);
+    let bass_begin = tracks::bass_begin(instrument_hardbass);
 
-    let melody_repeated_first = tracks::melody_repeated(Box::new(instrument_softbass), true);
-    let melody_repeated_second = tracks::melody_repeated(Box::new(instrument_softbass), false);
-    let chords_repeated = tracks::chords_repeated(Box::new(instrument_softbass));
-    let bass_repeated = tracks::bass_repeated(Box::new(instrument_hardbass));
+    let melody_repeated_first = tracks::melody_repeated(instrument_softbass, true);
+    let melody_repeated_second = tracks::melody_repeated(instrument_softbass, false);
+    let chords_repeated = tracks::chords_repeated(instrument_softbass);
+    let bass_repeated = tracks::bass_repeated(instrument_hardbass);
 
-    let melody_b_section_first = tracks::melody_b_section(Box::new(instrument_softbass), true);
-    let melody_b_section_second = tracks::melody_b_section(Box::new(instrument_softbass), false);
-    let chords_b_section = tracks::chords_b_section(Box::new(instrument_softbass));
-    let bass_b_section = tracks::bass_b_section(Box::new(instrument_hardbass));
+    let melody_b_section_first = tracks::melody_b_section(instrument_softbass, true);
+    let melody_b_section_second = tracks::melody_b_section(instrument_softbass, false);
+    let chords_b_section = tracks::chords_b_section(instrument_softbass);
+    let bass_b_section = tracks::bass_b_section(instrument_hardbass);
 
     let section_begin = Section {
         info,
