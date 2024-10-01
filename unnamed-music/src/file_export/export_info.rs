@@ -1,5 +1,5 @@
 use std::time::Duration;
-use super::instrument::Instrument;
+use crate::instrument::Instrument;
 
 // Holds all info of a piece relevant for exporting; consists of several
 // export tracks
