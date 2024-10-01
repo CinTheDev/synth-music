@@ -1,6 +1,6 @@
 pub mod note;
 use note::Note;
-use note::scaled_value::ScaledValue;
+use note::scaled_value::TET12ScaledValue;
 use crate::melody::instrument::Instrument;
 
 #[derive(Clone)]
@@ -27,7 +27,7 @@ impl<T: Instrument> Track<T> {
     pub fn note(
         &mut self,
         length: note::Length,
-        value: ScaledValue,
+        value: TET12ScaledValue,
     ) -> &mut Note {
         self.notes.push(Note {
             values: vec![value],
@@ -45,7 +45,7 @@ impl<T: Instrument> Track<T> {
     pub fn notes(
         &mut self,
         length: note::Length,
-        values: Vec<ScaledValue>,
+        values: Vec<TET12ScaledValue>,
     ) -> &mut Note {
         self.notes.push(Note {
             values,

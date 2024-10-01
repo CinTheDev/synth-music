@@ -66,7 +66,7 @@ impl<T: Instrument> Composition<T> {
         let mut concrete_values = Vec::new();
 
         for scaled_value in &note.values {
-            let concrete_value = ConcreteValue(scaled_value.get_concrete_value(section_info.key));
+            let concrete_value = TET12ConcreteValue(scaled_value.get_concrete_value(section_info.key));
             concrete_values.push(concrete_value);
         }
 

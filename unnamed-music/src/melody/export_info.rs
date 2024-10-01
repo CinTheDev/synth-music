@@ -19,7 +19,7 @@ pub struct ExportTrack<T: Instrument> {
 
 // Represents a raw tone - just a frequency, duration, and intensity
 pub struct Tone {
-    pub concrete_values: Vec<ConcreteValue>,
+    pub concrete_values: Vec<TET12ConcreteValue>,
     pub play_duration: Duration,
     pub tone_duration: Duration,
 
@@ -27,7 +27,7 @@ pub struct Tone {
 }
 
 #[derive(Clone, Copy)]
-pub struct ConcreteValue(pub i32);
+pub struct TET12ConcreteValue(pub i32);
 
 impl<T: Instrument> ExportMusicPiece<T> {
     pub fn new() -> Self {
@@ -54,7 +54,7 @@ impl<T: Instrument> ExportTrack<T> {
     }
 }
 
-impl ConcreteValue {
+impl TET12ConcreteValue {
     pub fn to_frequency(self) -> f32 {
         Self::frequency_from_a4_distance(self.0)
     }

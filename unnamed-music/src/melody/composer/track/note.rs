@@ -1,5 +1,5 @@
 pub mod scaled_value;
-use scaled_value::ScaledValue;
+use scaled_value::TET12ScaledValue;
 
 #[derive(Clone, Copy)]
 pub enum Length {
@@ -13,7 +13,7 @@ pub enum Length {
 // Abstract note
 #[derive(Clone)]
 pub struct Note {
-    pub values: Vec<ScaledValue>,
+    pub values: Vec<TET12ScaledValue>,
     pub length: Length,
     pub play_fraction: f32,
     pub intensity: f32,

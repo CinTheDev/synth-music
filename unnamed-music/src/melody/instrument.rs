@@ -2,11 +2,11 @@ pub mod predefined;
 
 use std::time::Duration;
 
-use crate::melody::export_info::ConcreteValue;
+use crate::melody::export_info::TET12ConcreteValue;
 
 #[derive(Clone, Copy)]
 pub struct ToneInfo {
-    pub tone: ConcreteValue,
+    pub tone: TET12ConcreteValue,
     pub time: Duration,
     pub intensity: f32,
 }

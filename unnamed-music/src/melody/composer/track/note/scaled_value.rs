@@ -1,13 +1,13 @@
 use crate::melody::composer::music_key::{MusicKey, KeyTonic, KeyType};
 
 #[derive(Clone, Copy)]
-pub struct ScaledValue {
+pub struct TET12ScaledValue {
     index: u8,
     octave: i32,
     offset: i32,
 }
 
-impl ScaledValue {
+impl TET12ScaledValue {
     pub fn sharp(mut self) -> Self {
         self.offset += 1;
         self
@@ -94,56 +94,56 @@ impl ScaledValue {
     }
 }
 
-pub fn first(octave: i32) -> ScaledValue {
-    ScaledValue {
+pub fn first(octave: i32) -> TET12ScaledValue {
+    TET12ScaledValue {
         index: 0,
         octave,
         offset: 0,
     }
 }
 
-pub fn second(octave: i32) -> ScaledValue {
-    ScaledValue {
+pub fn second(octave: i32) -> TET12ScaledValue {
+    TET12ScaledValue {
         index: 1,
         octave,
         offset: 0,
     }
 }
 
-pub fn third(octave: i32) -> ScaledValue {
-    ScaledValue {
+pub fn third(octave: i32) -> TET12ScaledValue {
+    TET12ScaledValue {
         index: 2,
         octave,
         offset: 0,
     }
 }
 
-pub fn fourth(octave: i32) -> ScaledValue {
-    ScaledValue {
+pub fn fourth(octave: i32) -> TET12ScaledValue {
+    TET12ScaledValue {
         index: 3,
         octave,
         offset: 0,
     }
 }
 
-pub fn fifth(octave: i32) -> ScaledValue {
-    ScaledValue {
+pub fn fifth(octave: i32) -> TET12ScaledValue {
+    TET12ScaledValue {
         index: 4,
         octave,
         offset: 0,
     }
 }
 
-pub fn sixth(octave: i32) -> ScaledValue {
-    ScaledValue {
+pub fn sixth(octave: i32) -> TET12ScaledValue {
+    TET12ScaledValue {
         index: 5,
         octave,
         offset: 0,
     }
 }
 
-pub fn seventh(octave: i32) -> ScaledValue {
-    ScaledValue {
+pub fn seventh(octave: i32) -> TET12ScaledValue {
+    TET12ScaledValue {
         index: 6,
         octave,
         offset: 0,
