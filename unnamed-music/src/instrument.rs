@@ -10,7 +10,7 @@ pub struct ToneInfo<T> {
 }
 
 pub trait Instrument: Clone {
-    type ConcreteValue;
+    type ConcreteValue: Clone + Copy;
 
-    fn generate_sound(&self, info: ToneInfo<&Self::ConcreteValue>) -> f32;
+    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32;
 }

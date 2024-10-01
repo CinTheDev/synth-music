@@ -83,7 +83,7 @@ impl<T: Instrument> MusicBuffer<T> {
 
             for value in &tone.concrete_values {
                 let info = ToneInfo {
-                    tone: value,
+                    tone: *value,
                     time,
                     intensity: tone.intensity,
                 };
