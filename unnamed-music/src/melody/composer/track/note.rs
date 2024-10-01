@@ -1,8 +1,10 @@
 pub mod scaled_value;
 //use scaled_value::TET12ScaledValue;
 
-pub trait ScaledValue<T> {
-    fn to_concrete_value(&self) -> T;
+pub trait ScaledValue {
+    type ConcreteValue;
+
+    fn to_concrete_value(&self) -> Self::ConcreteValue;
 }
 
 #[derive(Clone, Copy)]
@@ -16,7 +18,7 @@ pub enum Length {
 
 // Abstract note
 #[derive(Clone)]
-pub struct Note<T: ScaledValue<T>> {
+pub struct Note<T: ScaledValue> {
     pub values: Vec<T>,
     pub length: Length,
     pub play_fraction: f32,
@@ -26,7 +28,7 @@ pub struct Note<T: ScaledValue<T>> {
     pub triole: bool,
 }
 
-impl<T: ScaledValue<T>> Note<T> {
+impl<T: ScaledValue> Note<T> {
     pub fn staccato(&mut self) -> &mut Self {
         self.play_fraction = 0.2;
         self
