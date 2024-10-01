@@ -24,35 +24,6 @@ represented individually.
 
 Implement it and restructure if needed.
 
-## Music Key & Notes rework (CURRENTLY ACTIVE)
-
-Right now notes, tones, and music keys have been implemented as closly to
-traditional music theory as possible. The problem is that traditional music
-theory is kinda inconsistent with definitions sometimes, and the code looks
-really messy.
-
-Try to make the implementations for getting the note frequencies more efficient
-and readable, ideally using as few magic numbers and long match lists as
-possible. Also try to relocate the code to a better place than `composer.rs`.
-
-### What's left to do for now
-
-- Cleanup; change location of code and submodule structure if applicable
-
-### Sharps and flats inside intervals
-
-I've noticed that it's impossible to represent and interval with one note being
-sharpened or flattened. The current way of applying these things affects all
-notes in the interval, it's impossible to target a single note.
-
-This is quite unfortunate, a "common" thing in music that is impossible
-because of that is for example the chord V in harmonic minor scales. With the
-regular (natural) minor scale this chord would be minor, but in harmonic minor
-this is almost always manually changed to be major. The only way to do this is
-to sharpen the "middle" note of the chord.
-
-Rethink the note system that such things can be represented.
-
 ## Chunked rendering
 
 Currently the exporter renders the whole music piece into one buffer which then
