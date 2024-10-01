@@ -1,13 +1,16 @@
-pub use super::composer;
+// Composer imports
+pub use crate::composer;
 pub use composer::{Composition, Section, SectionInfo};
-pub use composer::music_key::{MusicKey, KeyTonic, KeyType};
+pub use composer::note::{Note, ScaledValue};
 pub use composer::track::Track;
-pub use composer::track::note;
-
+pub use composer::music_key::{MusicKey, KeyTonic, KeyType};
 pub use crate::{notes, sequential_notes};
 
-pub use super::instrument;
-pub use super::instrument::{Instrument, ToneInfo};
-pub use super::instrument::predefined;
+// Instrument imports
+pub use crate::instrument;
+pub use instrument::{Instrument, ToneInfo};
+//pub use instrument::predefined;
 
-pub use super::export_info::ExportMusicPiece;
+// File-export imports
+pub use crate::file_export;
+pub use file_export::{FileExport, MusicBuffer};
