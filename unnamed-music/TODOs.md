@@ -4,6 +4,13 @@ All TODOs of this project are written here when needed; after completion the
 relevant points will be removed again. Though, through versioning (git) it's
 possible to still read finished (and therefore deleted) points.
 
+## Come up with a name finally
+
+This library is still nameless for some reason, just come up with a name finally
+please. Also don't forget to rename directories and the GitHub repository.
+
+After this we can start workign towards publishing.
+
 ## Missing features for composing
 
 There are some missing features that are crucial for composing music.
