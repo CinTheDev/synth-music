@@ -1,9 +1,8 @@
 pub mod export_info;
 pub mod wav_export;
 
-use crate::melody;
-use melody::export_info::*;
-use melody::instrument::{Instrument, ToneInfo};
+use export_info::*;
+use crate::instrument::{Instrument, ToneInfo};
 
 use std::time::Duration;
 
