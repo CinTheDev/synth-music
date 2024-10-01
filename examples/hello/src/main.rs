@@ -1,39 +1,129 @@
-use std::str::FromStr;
+mod instruments;
+use instruments::Instruments;
 
-use unnamed_music::{self, file_export::FileExport};
+use unnamed_music::prelude::*;
 
 fn main() {
     println!("Hello example");
+
+    example_1();
+    example_2();
+}
+
+fn example_1() {
+    let key = MusicKey {
+        tonic: KeyTonic::C,
+        key_type: KeyType::Major,
+    };
+
+    let info = SectionInfo {
+        bpm: 120.0,
+        key,
+        time_signature: (4, 4),
+    };
+
+    let instrument = Instruments::new_harmonic_wave(10);
+
+    let track = {
+        use note::Length::*;
+        use tet12::*;
+        let mut track = Track::new(instrument);
+
+        track.note(Quarter, first(4));
+        track.note(Quarter, second(4));
+        track.note(Quarter, third(4));
+        track.note(Quarter, fourth(4));
+        track.note(Quarter, fifth(4));
+        track.note(Quarter, sixth(4));
+        track.note(Quarter, seventh(4));
+        track.note(Quarter, first(5));
+
+        track
+    };
+
+    let section = Section {
+        info,
+        tracks: vec![track],
+    };
+
+    let composition = Composition {
+        sections: vec![section],
+    };
+
+    export(composition.to_export_piece(), "first_example.wav");
+}
+
+fn example_2() {
+    let key = MusicKey {
+        tonic: KeyTonic::A,
+        key_type: KeyType::Minor,
+    };
+
+    let info = SectionInfo {
+        bpm: 120.0,
+        key,
+        time_signature: (4, 4),
+    };
+
+    let instrument = Instruments::Predefined(
+        instrument::predefined::PredefinedInstrument::SineGenerator
+    );
+
+    let track = {
+        use note::Length::*;
+        use tet12::*;
+        let mut track = Track::new(instrument);
+
+        sequential_notes!(track, Quarter,
+            first(3),
+            second(3),
+            third(3),
+            fourth(3),
+            fifth(3),
+            sixth(3),
+            seventh(3).sharp(),
+            first(4)
+        );
+
+        notes!(track, Quarter, first(3));
+        notes!(track, Quarter, first(3), second(3));
+        notes!(track, Quarter, first(3), third(3));
+        notes!(track, Quarter, first(3), fourth(3));
+        notes!(track, Quarter, first(3), fifth(3));
+        notes!(track, Quarter, first(3), sixth(3));
+        notes!(track, Quarter, first(3), seventh(3));
+        notes!(track, Quarter, first(3), first(4));
+
+        track
+    };
+
+    let section = Section {
+        info,
+        tracks: vec![track],
+    };
+
+    let composition = Composition {
+        sections: vec![section],
+    };
+
+    export(composition.to_export_piece(), "second_example.wav");
+}
+
+fn export<T: Instrument>(export_piece: export_info::ExportMusicPiece<T>, name: &str) {
+    use std::path::PathBuf;
 
     if std::fs::read_dir("export").is_err() {
         std::fs::create_dir("export").unwrap();
     }
 
-    let mut buffer = vec![0_i16; 44100];
-    
-    let sample_rate = 44100;
-    let frequency = 440.0;
-    let amplitude = 0xFFFF as f32 * 0.1;
+    let music_buffer = MusicBuffer::new(export_piece);
+    let path = PathBuf::from("export").join(name);
 
-    for i in 0..buffer.len() {
-        let time = i as f32 / sample_rate as f32;
-        let value = (time * 2.0 * std::f32::consts::PI * frequency).sin() * amplitude;
-
-        buffer[i] = value.round() as i16;
-    }
-
-    let wav_export = unnamed_music::file_export::wav_export::WavExport{
-        path: std::path::PathBuf::from_str("export/test.wav").unwrap(),
-        sample_rate,
-        bits_per_sample: 16,
+    let exporter = WavExport {
+        path,
+        sample_rate: 44100,
+        ..Default::default()
     };
 
-    let byte_buffer: &[u8] = bytemuck::cast_slice(&buffer);
-    let vec_buffer = byte_buffer.to_vec();
-
-    let music_buffer = unnamed_music::file_export::MusicBuffer::new(
-        vec_buffer
-    );
-
-    wav_export.export(music_buffer).unwrap();
+    exporter.export(music_buffer).unwrap();
 }

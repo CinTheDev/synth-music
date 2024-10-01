@@ -1,13 +1,9 @@
+use super::music_key::MusicKey;
 
-#[derive(Clone, Copy, Debug)]
-pub enum Tone {
-    First,
-    Second,
-    Third,
-    Fourth,
-    Fith,
-    Sixth,
-    Seventh,
+pub trait ScaledValue {
+    type ConcreteValue;
+
+    fn to_concrete_value(&self, key: MusicKey) -> Self::ConcreteValue;
 }
 
 #[derive(Clone, Copy)]
@@ -19,20 +15,19 @@ pub enum Length {
     Sixteenth,
 }
 
+// Abstract note
 #[derive(Clone)]
-pub struct Note {
-    pub values: Vec<(Tone, i32)>,
+pub struct Note<T: ScaledValue> {
+    pub values: Vec<T>,
     pub length: Length,
     pub play_fraction: f32,
     pub intensity: f32,
-
-    pub semitones_offset: i32,
 
     pub dotted: bool,
     pub triole: bool,
 }
 
-impl Note {
+impl<T: ScaledValue> Note<T> {
     pub fn staccato(&mut self) -> &mut Self {
         self.play_fraction = 0.2;
         self
@@ -45,16 +40,6 @@ impl Note {
 
     pub fn triole(&mut self) -> &mut Self {
         self.triole = true;
-        self
-    }
-
-    pub fn sharp(&mut self) -> &mut Self {
-        self.semitones_offset += 1;
-        self
-    }
-
-    pub fn flat(&mut self) -> &mut Self {
-        self.semitones_offset -= 1;
         self
     }
 

@@ -1,17 +1,16 @@
-pub mod note;
-use note::Note;
-use crate::melody::instrument::Instrument;
+use super::note::{Note, ScaledValue, Length};
+use crate::instrument::Instrument;
 
 #[derive(Clone)]
-pub struct Track {
-    notes: Vec<Note>,
-    instrument: Box<dyn Instrument>,
+pub struct Track<T: ScaledValue, U: Instrument> {
+    notes: Vec<Note<T>>,
+    instrument: U,
 
     current_intensity: f32,
 }
 
-impl Track {
-    pub fn new(instrument: Box<dyn Instrument>) -> Self {
+impl<T: ScaledValue, U: Instrument> Track<T, U> {
+    pub fn new(instrument: U) -> Self {
         Self {
             notes: Vec::new(),
             instrument,
@@ -19,22 +18,20 @@ impl Track {
         }
     }
 
-    pub fn into_parts(self) -> (Vec<Note>, Box<dyn Instrument>) {
+    pub fn into_parts(self) -> (Vec<Note<T>>, U) {
         (self.notes, self.instrument)
     }
 
     pub fn note(
         &mut self,
-        length: note::Length,
-        tone: note::Tone,
-        octave: i32,
-    ) -> &mut Note {
+        length: Length,
+        value: T,
+    ) -> &mut Note<T> {
         self.notes.push(Note {
-            values: vec![(tone, octave)],
+            values: vec![value],
             length,
             play_fraction: 1.0,
             intensity: self.current_intensity,
-            semitones_offset: 0,
             dotted: false,
             triole: false,
         });
@@ -45,15 +42,14 @@ impl Track {
 
     pub fn notes(
         &mut self,
-        length: note::Length,
-        values: Vec<(note::Tone, i32)>,
-    ) -> &mut Note {
+        length: Length,
+        values: Vec<T>,
+    ) -> &mut Note<T> {
         self.notes.push(Note {
             values,
             length,
             play_fraction: 1.0,
             intensity: self.current_intensity,
-            semitones_offset: 0,
             dotted: false,
             triole: false,
         });
@@ -62,13 +58,12 @@ impl Track {
         return &mut self.notes[last_index];
     }
 
-    pub fn pause(&mut self, length: note::Length) {
+    pub fn pause(&mut self, length: Length) {
         self.notes.push(Note {
             values: vec![],
             length,
             play_fraction: 1.0,
             intensity: self.current_intensity,
-            semitones_offset: 0,
             dotted: false,
             triole: false,
         });
@@ -96,7 +91,7 @@ macro_rules! notes {
 macro_rules! sequential_notes {
     ( $track:expr, $len:expr, $( $args:expr ),+ ) => {
         $(
-            $track.note($len, $args.0, $args.1);
+            $track.note($len, $args);
         )*
     };
 }

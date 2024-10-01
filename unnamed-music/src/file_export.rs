@@ -1,21 +1,24 @@
+pub mod export_info;
 pub mod wav_export;
+
+use export_info::*;
+use crate::instrument::{Instrument, ToneInfo};
 
 use std::time::Duration;
 
-use crate::melody;
-use melody::export_info::*;
-use melody::instrument::{Instrument, ToneInfo};
+const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
+const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
 
-pub trait FileExport {
-    fn export(&self, buffer: MusicBuffer) -> std::io::Result<()>;
+pub trait FileExport<T: Instrument> {
+    fn export(&self, buffer: MusicBuffer<T>) -> std::io::Result<()>;
 }
 
-pub struct MusicBuffer {
-    piece: ExportMusicPiece,
+pub struct MusicBuffer<T: Instrument> {
+    piece: ExportMusicPiece<T>,
 }
 
-impl MusicBuffer {
-    pub fn new(piece: ExportMusicPiece) -> Self {
+impl<T: Instrument> MusicBuffer<T> {
+    pub fn new(piece: ExportMusicPiece<T>) -> Self {
         Self {
             piece,
         }
@@ -32,7 +35,7 @@ impl MusicBuffer {
         return buffer;
     }
 
-    fn generate_section(section: &ExportSection, sample_rate: u32) -> Vec<f32> {
+    fn generate_section(section: &ExportSection<T>, sample_rate: u32) -> Vec<f32> {
         let mut buffer = Vec::new();
 
         for track in &section.tracks {
@@ -43,7 +46,7 @@ impl MusicBuffer {
         return buffer;
     }
 
-    fn generate_track(track: &ExportTrack, sample_rate: u32) -> Vec<f32> {
+    fn generate_track(track: &ExportTrack<T>, sample_rate: u32) -> Vec<f32> {
         let mut buffer = Vec::new();
 
         for tone in &track.tones {
@@ -58,7 +61,7 @@ impl MusicBuffer {
         return buffer;
     }
 
-    fn generate_tone(tone: &Tone, sample_rate: u32, instrument: &Box<dyn Instrument>) -> Vec<f32> {
+    fn generate_tone(tone: &Tone<T::ConcreteValue>, sample_rate: u32, instrument: &T) -> Vec<f32> {
         let mut buffer = Vec::new();
 
         let samples =
@@ -78,12 +81,13 @@ impl MusicBuffer {
 
             let mut sample_value = 0.0;
 
-            for frequency in &tone.frequencies {
+            for value in &tone.concrete_values {
                 let info = ToneInfo {
-                    frequency: *frequency as f64,
+                    tone: *value,
                     time,
+                    intensity: tone.intensity,
                 };
-                sample_value += instrument.generate_sound(info) * tone.intensity;
+                sample_value += instrument.generate_sound(info);
             }
             sample_value *= Self::get_fade_amplitude(&tone, time);
 
@@ -95,20 +99,20 @@ impl MusicBuffer {
         return buffer;
     }
 
-    fn get_fade_amplitude(tone: &Tone, time: Duration) -> f32 {
-        if tone.fade_in > tone.tone_duration || tone.fade_out > tone.tone_duration {
+    fn get_fade_amplitude(tone: &Tone<T::ConcreteValue>, time: Duration) -> f32 {
+        if DEFAULT_FADE_IN > tone.tone_duration || DEFAULT_FADE_OUT > tone.tone_duration {
             return 1.0;
         }
 
         // Apply fade-in
-        if time < tone.fade_in {
-            let t = time.as_secs_f32() / tone.fade_in.as_secs_f32();
+        if time < DEFAULT_FADE_IN {
+            let t = time.as_secs_f32() / DEFAULT_FADE_IN.as_secs_f32();
             return Self::fade_in_smooth(t);
         }
         // Apply fade-out
-        else if time > tone.tone_duration - tone.fade_out {
-            let t_time = time - (tone.tone_duration - tone.fade_out);
-            let t = t_time.as_secs_f32() / tone.fade_out.as_secs_f32();
+        else if time > tone.tone_duration - DEFAULT_FADE_OUT {
+            let t_time = time - (tone.tone_duration - DEFAULT_FADE_OUT);
+            let t = t_time.as_secs_f32() / DEFAULT_FADE_OUT.as_secs_f32();
             return Self::fade_out_smooth(t);
         }
         // Not amplitude change
