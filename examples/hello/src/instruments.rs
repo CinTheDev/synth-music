@@ -1,6 +1,6 @@
-use unnamed_music::melody::prelude::*;
-use unnamed_music::melody::instrument::predefined::PredefinedInstrument;
-use predefined::TET12ConcreteTone;
+use unnamed_music::prelude::*;
+use predefined::PredefinedInstrument;
+use tet12::TET12ConcreteTone;
 
 #[derive(Clone)]
 pub struct HarmonicWave {

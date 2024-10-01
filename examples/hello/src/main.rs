@@ -1,7 +1,7 @@
-use unnamed_music::melody::prelude::*;
 mod instruments;
-
 use instruments::Instruments;
+
+use unnamed_music::prelude::*;
 
 fn main() {
     println!("Hello example");
@@ -26,7 +26,7 @@ fn example_1() {
 
     let track = {
         use note::Length::*;
-        use predefined::{first, second, third, fourth, fifth, sixth, seventh};
+        use tet12::*;
         let mut track = Track::new(instrument);
 
         track.note(Quarter, first(4));
@@ -71,7 +71,7 @@ fn example_2() {
 
     let track = {
         use note::Length::*;
-        use predefined::{first, second, third, fourth, fifth, sixth, seventh};
+        use tet12::*;
         let mut track = Track::new(instrument);
 
         sequential_notes!(track, Quarter,
@@ -109,9 +109,7 @@ fn example_2() {
     export(composition.to_export_piece(), "second_example.wav");
 }
 
-fn export<T: Instrument>(export_piece: ExportMusicPiece<T::ConcreteValue, T>, name: &str) {
-    use unnamed_music::file_export::*;
-    use wav_export::WavExport;
+fn export<T: Instrument>(export_piece: export_info::ExportMusicPiece<T::ConcreteValue, T>, name: &str) {
     use std::path::PathBuf;
 
     if std::fs::read_dir("export").is_err() {
