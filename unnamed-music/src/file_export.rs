@@ -1,3 +1,4 @@
+pub mod export_info;
 pub mod wav_export;
 
 use crate::melody;
