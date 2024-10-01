@@ -11,6 +11,8 @@ pub struct ToneInfo<T> {
     pub intensity: f32,
 }
 
-pub trait Instrument<T> {
-    fn generate_sound(&self, info: ToneInfo<T>) -> f32;
+pub trait Instrument {
+    type ConcreteValue;
+
+    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32;
 }
