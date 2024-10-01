@@ -26,9 +26,6 @@ pub struct Tone<T> {
     pub intensity: f32,
 }
 
-//#[derive(Clone, Copy)]
-//pub struct TET12ConcreteValue(pub i32);
-
 impl<T, U: Instrument> ExportMusicPiece<T, U> {
     pub fn new() -> Self {
         Self {
@@ -53,15 +50,3 @@ impl<T, U: Instrument> ExportTrack<T, U> {
         }
     }
 }
-
-/*
-impl TET12ConcreteValue {
-    pub fn to_frequency(self) -> f32 {
-        Self::frequency_from_a4_distance(self.0)
-    }
-
-    fn frequency_from_a4_distance(semitones: i32) -> f32 {
-        2_f32.powf(semitones as f32 / 12.0) * 440.0
-    }
-}
-*/

@@ -70,8 +70,6 @@ impl<T: ScaledValue, U: Instrument> Composition<T, U> {
         for scaled_value in &note.values {
             let concrete_value = scaled_value.to_concrete_value(section_info.key);
             concrete_values.push(concrete_value);
-            //let concrete_value = TET12ConcreteValue(scaled_value.get_concrete_value(section_info.key));
-            //concrete_values.push(concrete_value);
         }
 
         let play_duration = note.get_duration(section_info.bpm);

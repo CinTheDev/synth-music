@@ -1,5 +1,4 @@
 use super::note::{Note, ScaledValue, Length};
-//use note::scaled_value::TET12ScaledValue;
 use crate::instrument::Instrument;
 
 #[derive(Clone)]
