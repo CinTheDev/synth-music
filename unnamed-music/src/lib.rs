@@ -1,5 +1,7 @@
+pub mod composer;
+pub mod instrument;
 pub mod file_export;
-pub mod melody;
+pub mod prelude;
 
 #[cfg(test)]
 mod tests {
