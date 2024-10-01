@@ -3,12 +3,12 @@ use tet12::TET12ConcreteTone;
 use std::time::Duration;
 
 #[derive(Clone, Copy)]
-struct SoftBass {
+pub struct SoftBass {
     pub decay_speed: f32,
 }
     
 #[derive(Clone, Copy)]
-struct HardBass {
+pub struct HardBass {
     pub harmonics: u32,
 }
 
@@ -20,7 +20,7 @@ pub enum Instruments {
 
 impl SoftBass {
     pub fn generate(&self, info: ToneInfo<TET12ConcreteTone>) -> f32 {
-        Self::triangle_wave(info)
+        Self::triangle_wave(info) * self.decay_function(info)
     }
 
     fn triangle_wave(info: ToneInfo<TET12ConcreteTone>) -> f32 {
