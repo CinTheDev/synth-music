@@ -9,7 +9,7 @@ use super::instrument::Instrument;
 
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
 // generated from it.
-pub struct Composition<T: ScaledValue, U: Instrument<U>> {
+pub struct Composition<T: ScaledValue, U: Instrument> {
     pub sections: Vec<Section<T, U>>,
 }
 
@@ -21,13 +21,13 @@ pub struct SectionInfo {
 }
 
 #[derive(Clone)]
-pub struct Section<T: ScaledValue, U: Instrument<U>> {
+pub struct Section<T: ScaledValue, U: Instrument> {
     pub info: SectionInfo,
     pub tracks: Vec<Track<T, U>>,
 }
 
-impl<T: ScaledValue, U: Instrument<U>> Composition<T, U> {
-    pub fn to_export_piece<V>(self) -> ExportMusicPiece<V, U> {
+impl<T: ScaledValue, U: Instrument> Composition<T, U> {
+    pub fn to_export_piece(self) -> ExportMusicPiece<T::ConcreteValue, U> {
         let mut result = ExportMusicPiece::new();
 
         for section in self.sections {
@@ -38,7 +38,7 @@ impl<T: ScaledValue, U: Instrument<U>> Composition<T, U> {
         return result;
     }
 
-    fn generate_export_section<V>(section: Section<T, U>) -> ExportSection<V, U> {
+    fn generate_export_section(section: Section<T, U>) -> ExportSection<T::ConcreteValue, U> {
         let mut export_section = ExportSection::new();
 
         for track in section.tracks {
@@ -49,7 +49,7 @@ impl<T: ScaledValue, U: Instrument<U>> Composition<T, U> {
         return export_section;
     }
 
-    fn generate_export_track<V>(track: Track<T, U>, section_info: SectionInfo) -> ExportTrack<V, U> {
+    fn generate_export_track(track: Track<T, U>, section_info: SectionInfo) -> ExportTrack<T::ConcreteValue, U> {
         let (notes, instrument) = track.into_parts();
 
         let mut export_track = ExportTrack::new(instrument);
@@ -62,7 +62,7 @@ impl<T: ScaledValue, U: Instrument<U>> Composition<T, U> {
         return export_track;
     }
 
-    fn generate_tone<V>(note: Note<T>, section_info: SectionInfo) -> Tone<V> {
+    fn generate_tone(note: Note<T>, section_info: SectionInfo) -> Tone<T::ConcreteValue> {
         let mut concrete_values = Vec::new();
 
         for scaled_value in &note.values {

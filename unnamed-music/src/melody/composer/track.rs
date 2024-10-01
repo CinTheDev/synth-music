@@ -5,14 +5,14 @@ use note::{Note, ScaledValue};
 use crate::melody::instrument::Instrument;
 
 #[derive(Clone)]
-pub struct Track<T: ScaledValue, U: Instrument<U>> {
+pub struct Track<T: ScaledValue, U: Instrument> {
     notes: Vec<Note<T>>,
     instrument: U,
 
     current_intensity: f32,
 }
 
-impl<T: ScaledValue, U: Instrument<U>> Track<T, U> {
+impl<T: ScaledValue, U: Instrument> Track<T, U> {
     pub fn new(instrument: U) -> Self {
         Self {
             notes: Vec::new(),

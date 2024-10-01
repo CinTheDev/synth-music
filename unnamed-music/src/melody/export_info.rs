@@ -3,16 +3,16 @@ use super::instrument::Instrument;
 
 // Holds all info of a piece relevant for exporting; consists of several
 // export tracks
-pub struct ExportMusicPiece<T, U: Instrument<U>> {
+pub struct ExportMusicPiece<T, U: Instrument> {
     pub sections: Vec<ExportSection<T, U>>,
 }
 
-pub struct ExportSection<T, U: Instrument<U>> {
+pub struct ExportSection<T, U: Instrument> {
     pub tracks: Vec<ExportTrack<T, U>>,
 }
 
 // Contains raw tones
-pub struct ExportTrack<T, U: Instrument<U>> {
+pub struct ExportTrack<T, U: Instrument> {
     pub tones: Vec<Tone<T>>,
     pub instrument: U,
 }
@@ -29,7 +29,7 @@ pub struct Tone<T> {
 //#[derive(Clone, Copy)]
 //pub struct TET12ConcreteValue(pub i32);
 
-impl<T, U: Instrument<U>> ExportMusicPiece<T, U> {
+impl<T, U: Instrument> ExportMusicPiece<T, U> {
     pub fn new() -> Self {
         Self {
             sections: Vec::new(),
@@ -37,7 +37,7 @@ impl<T, U: Instrument<U>> ExportMusicPiece<T, U> {
     }
 }
 
-impl<T, U: Instrument<U>> ExportSection<T, U> {
+impl<T, U: Instrument> ExportSection<T, U> {
     pub fn new() -> Self {
         Self {
             tracks: Vec::new(),
@@ -45,7 +45,7 @@ impl<T, U: Instrument<U>> ExportSection<T, U> {
     }
 }
 
-impl<T, U: Instrument<U>> ExportTrack<T, U> {
+impl<T, U: Instrument> ExportTrack<T, U> {
     pub fn new(instrument: U) -> Self {
         Self {
             tones: Vec::new(),
