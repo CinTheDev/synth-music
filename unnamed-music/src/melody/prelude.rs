@@ -8,5 +8,6 @@ pub use crate::{notes, sequential_notes};
 
 pub use super::instrument;
 pub use super::instrument::{Instrument, ToneInfo};
+pub use super::instrument::predefined;
 
 pub use super::export_info::ExportMusicPiece;
