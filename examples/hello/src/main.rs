@@ -25,8 +25,8 @@ fn example_1() {
     let instrument = Instruments::new_harmonic_wave(10);
 
     let track = {
-        use note::scaled_value::*;
         use note::Length::*;
+        use predefined::{first, second, third, fourth, fifth, sixth, seventh};
         let mut track = Track::new(instrument);
 
         track.note(Quarter, first(4));
@@ -70,8 +70,8 @@ fn example_2() {
     );
 
     let track = {
-        use note::scaled_value::*;
         use note::Length::*;
+        use predefined::{first, second, third, fourth, fifth, sixth, seventh};
         let mut track = Track::new(instrument);
 
         sequential_notes!(track, Quarter,
@@ -109,7 +109,7 @@ fn example_2() {
     export(composition.to_export_piece(), "second_example.wav");
 }
 
-fn export<T: Instrument>(export_piece: ExportMusicPiece<T>, name: &str) {
+fn export<T: Instrument>(export_piece: ExportMusicPiece<T::ConcreteValue, T>, name: &str) {
     use unnamed_music::file_export::*;
     use wav_export::WavExport;
     use std::path::PathBuf;

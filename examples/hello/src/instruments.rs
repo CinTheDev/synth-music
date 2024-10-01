@@ -1,10 +1,13 @@
 use unnamed_music::melody::prelude::*;
 use unnamed_music::melody::instrument::predefined::PredefinedInstrument;
+use predefined::TET12ConcreteTone;
 
+#[derive(Clone)]
 pub struct HarmonicWave {
     count: u32,
 }
 
+#[derive(Clone)]
 pub enum Instruments {
     Predefined(PredefinedInstrument),
     HarmonicWave(HarmonicWave),
@@ -17,11 +20,11 @@ impl Instruments {
         })
     }
 
-    fn predefined(instrument: &PredefinedInstrument, info: ToneInfo) -> f32 {
+    fn predefined(instrument: &PredefinedInstrument, info: ToneInfo<&TET12ConcreteTone>) -> f32 {
         instrument.generate_sound(info)
     }
 
-    fn harmonic_wave(attributes: &HarmonicWave, info: ToneInfo) -> f32 {
+    fn harmonic_wave(attributes: &HarmonicWave, info: ToneInfo<&TET12ConcreteTone>) -> f32 {
         let base_frequency = info.tone.to_frequency();
         let seconds = info.time.as_secs_f64();
 
@@ -47,7 +50,9 @@ impl Instruments {
 }
 
 impl Instrument for Instruments {
-    fn generate_sound(&self, info: ToneInfo) -> f32 {
+    type ConcreteValue = TET12ConcreteTone;
+
+    fn generate_sound(&self, info: ToneInfo<&Self::ConcreteValue>) -> f32 {
         match self {
             Self::Predefined(instrument) => Self::predefined(instrument, info),
             Self::HarmonicWave(attributes) => Self::harmonic_wave(attributes, info),
