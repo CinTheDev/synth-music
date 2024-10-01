@@ -1,3 +1,4 @@
+/*
 use super::Instrument;
 use super::ToneInfo;
 
@@ -32,3 +33,4 @@ impl Instrument for PredefinedInstrument {
         }
     }
 }
+*/
