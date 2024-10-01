@@ -58,3 +58,12 @@ Bigger projects (even the ones from the examples) take a few seconds to export.
 It would be nice to have a loading bar that shows how much of the piece has
 been rendered out already. It's probably related with the chunked rendering
 stuff above.
+
+## Thorough documentation
+
+It seems like the code structure is somewhat converging to a final state, so
+documenting the code is a good idea. The README.md also belongs to this. It's
+better to do this early while still familiar with the code.
+
+Also make sure to include some examples inline with documentation, research
+online what best practises for this are.
