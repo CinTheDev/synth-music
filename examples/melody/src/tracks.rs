@@ -1,10 +1,10 @@
 use unnamed_music::prelude::*;
 use tet12::*;
+use note::Length::*;
 
 // BEGIN PART
 
 pub fn melody_begin<T: Instrument>(instrument: T) -> Track<TET12ScaledTone, T> {
-    use note::Length::*;
     let mut track = Track::new(instrument);
 
     track.note(Quarter, fifth(3));
@@ -49,7 +49,6 @@ pub fn chords_begin<T: Instrument>(instrument: T) -> Track<TET12ScaledTone, T> {
 }
 
 pub fn bass_begin<T: Instrument>(instrument: T) -> Track<TET12ScaledTone, T> {
-    use note::Length::*;
     let mut track = Track::new(instrument);
 
     track.set_intensity(0.15);
@@ -68,7 +67,6 @@ pub fn bass_begin<T: Instrument>(instrument: T) -> Track<TET12ScaledTone, T> {
 // REPEATED PART
 
 pub fn melody_repeated<T: Instrument>(instrument: T, repeat: bool) -> Track<TET12ScaledTone, T> {
-    use note::Length::*;
     let mut track = Track::new(instrument);
 
     track.note(Quarter, sixth(3)).dotted();
@@ -118,7 +116,6 @@ pub fn chords_repeated<T: Instrument>(instrument: T) -> Track<TET12ScaledTone, T
 }
 
 pub fn bass_repeated<T: Instrument>(instrument: T) -> Track<TET12ScaledTone, T> {
-    use note::Length::*;
     let mut track = Track::new(instrument);
 
     track.set_intensity(0.15);
@@ -141,7 +138,6 @@ pub fn bass_repeated<T: Instrument>(instrument: T) -> Track<TET12ScaledTone, T> 
 // B SECTION (repeated)
 
 pub fn melody_b_section<T: Instrument>(instrument: T, repeat: bool) -> Track<TET12ScaledTone, T> {
-    use note::Length::*;
     let mut track = Track::new(instrument);
 
     sequential_notes!(
@@ -183,8 +179,6 @@ pub fn chords_b_section<T: Instrument>(instrument: T) -> Track<TET12ScaledTone, 
 }
 
 pub fn bass_b_section<T: Instrument>(instrument: T) -> Track<TET12ScaledTone, T> {
-    use note::Length::*;
-
     let mut track = Track::new(instrument);
     track.set_intensity(0.2);
 
@@ -199,8 +193,6 @@ pub fn bass_b_section<T: Instrument>(instrument: T) -> Track<TET12ScaledTone, T>
 // Chord functions
 
 fn apply_chord_first<T: Instrument>(track: &mut Track<TET12ScaledTone, T>) {
-    use note::Length::*;
-
     for _ in 0..4 {
         track.note(Eigth, first(2));
         notes!(
@@ -213,8 +205,6 @@ fn apply_chord_first<T: Instrument>(track: &mut Track<TET12ScaledTone, T>) {
 }
 
 fn apply_chord_third<T: Instrument>(track: &mut Track<TET12ScaledTone, T>) {
-    use note::Length::*;
-
     for _ in 0..4 {
         track.note(Eigth, third(2));
         notes!(
@@ -227,8 +217,6 @@ fn apply_chord_third<T: Instrument>(track: &mut Track<TET12ScaledTone, T>) {
 }
 
 fn apply_chord_fourth<T: Instrument>(track: &mut Track<TET12ScaledTone, T>) {
-    use note::Length::*;
-
     for _ in 0..4 {
         track.note(Eigth, fourth(2));
         notes!(
@@ -241,8 +229,6 @@ fn apply_chord_fourth<T: Instrument>(track: &mut Track<TET12ScaledTone, T>) {
 }
 
 fn apply_chord_fifth<T: Instrument>(track: &mut Track<TET12ScaledTone, T>) {
-    use note::Length::*;
-
     for _ in 0..4 {
         track.note(Eigth, fifth(1));
         notes!(
