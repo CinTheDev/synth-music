@@ -1,6 +1,5 @@
 pub mod wav_export;
 
-/*
 use crate::melody;
 use melody::export_info::*;
 use melody::instrument::{Instrument, ToneInfo};
@@ -15,11 +14,11 @@ pub trait FileExport<T: Instrument> {
 }
 
 pub struct MusicBuffer<T: Instrument> {
-    piece: ExportMusicPiece<T>,
+    piece: ExportMusicPiece<T::ConcreteValue, T>,
 }
 
 impl<T: Instrument> MusicBuffer<T> {
-    pub fn new(piece: ExportMusicPiece<T>) -> Self {
+    pub fn new(piece: ExportMusicPiece<T::ConcreteValue, T>) -> Self {
         Self {
             piece,
         }
@@ -36,7 +35,7 @@ impl<T: Instrument> MusicBuffer<T> {
         return buffer;
     }
 
-    fn generate_section(section: &ExportSection<T>, sample_rate: u32) -> Vec<f32> {
+    fn generate_section(section: &ExportSection<T::ConcreteValue, T>, sample_rate: u32) -> Vec<f32> {
         let mut buffer = Vec::new();
 
         for track in &section.tracks {
@@ -47,7 +46,7 @@ impl<T: Instrument> MusicBuffer<T> {
         return buffer;
     }
 
-    fn generate_track(track: &ExportTrack<T>, sample_rate: u32) -> Vec<f32> {
+    fn generate_track(track: &ExportTrack<T::ConcreteValue, T>, sample_rate: u32) -> Vec<f32> {
         let mut buffer = Vec::new();
 
         for tone in &track.tones {
@@ -62,7 +61,7 @@ impl<T: Instrument> MusicBuffer<T> {
         return buffer;
     }
 
-    fn generate_tone(tone: &Tone, sample_rate: u32, instrument: &T) -> Vec<f32> {
+    fn generate_tone(tone: &Tone<T::ConcreteValue>, sample_rate: u32, instrument: &T) -> Vec<f32> {
         let mut buffer = Vec::new();
 
         let samples =
@@ -84,7 +83,7 @@ impl<T: Instrument> MusicBuffer<T> {
 
             for value in &tone.concrete_values {
                 let info = ToneInfo {
-                    tone: *value,
+                    tone: value,
                     time,
                     intensity: tone.intensity,
                 };
@@ -100,7 +99,7 @@ impl<T: Instrument> MusicBuffer<T> {
         return buffer;
     }
 
-    fn get_fade_amplitude(tone: &Tone, time: Duration) -> f32 {
+    fn get_fade_amplitude(tone: &Tone<T::ConcreteValue>, time: Duration) -> f32 {
         if DEFAULT_FADE_IN > tone.tone_duration || DEFAULT_FADE_OUT > tone.tone_duration {
             return 1.0;
         }
@@ -142,4 +141,3 @@ impl<T: Instrument> MusicBuffer<T> {
         return larger_buffer;
     }
 }
-*/
