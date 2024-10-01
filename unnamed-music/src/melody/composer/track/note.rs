@@ -1,6 +1,10 @@
 pub mod scaled_value;
 //use scaled_value::TET12ScaledValue;
 
+pub trait ScaledValue<T> {
+    fn to_concrete_value(&self) -> T;
+}
+
 #[derive(Clone, Copy)]
 pub enum Length {
     Whole,
@@ -12,8 +16,8 @@ pub enum Length {
 
 // Abstract note
 #[derive(Clone)]
-pub struct Note {
-    pub values: Vec<TET12ScaledValue>,
+pub struct Note<T: ScaledValue<T>> {
+    pub values: Vec<T>,
     pub length: Length,
     pub play_fraction: f32,
     pub intensity: f32,
@@ -22,7 +26,7 @@ pub struct Note {
     pub triole: bool,
 }
 
-impl Note {
+impl<T: ScaledValue<T>> Note<T> {
     pub fn staccato(&mut self) -> &mut Self {
         self.play_fraction = 0.2;
         self
