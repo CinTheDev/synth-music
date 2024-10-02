@@ -5,21 +5,6 @@ use crate::instruments::drumset::DrumsetAction;
 
 // BEGIN PART
 
-pub fn debug_drumset<T>(instrument: T) -> Track<DrumsetAction, T>
-where 
-    T: Instrument<ConcreteValue = DrumsetAction>
-{
-    use DrumsetAction::*;
-    let mut track = Track::new(instrument);
-
-    track.note(Quarter, Bass);
-    track.note(Quarter, Bass);
-    track.note(Quarter, Snare);
-    track.note(Quarter, HiHat);
-
-    return track;
-}
-
 pub fn melody_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> Track<TET12ScaledTone, T> {
     let mut track = Track::new(instrument);
 
@@ -254,4 +239,23 @@ fn apply_chord_fifth<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &m
             second(2)
         );
     }
+}
+
+// DRUMSET
+
+pub fn drumset_4<T>(instrument: T, measures: usize) -> Track<DrumsetAction, T>
+where 
+    T: Instrument<ConcreteValue = DrumsetAction>
+{
+    use DrumsetAction::*;
+    let mut track = Track::new(instrument);
+    track.set_intensity(0.3);
+
+    for _ in 0..measures {
+        sequential_notes!(track, Quarter,
+            Bass, Bass, Bass, Bass
+        );
+    }
+
+    return track;
 }
