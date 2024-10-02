@@ -2,15 +2,9 @@ pub mod note;
 pub mod track;
 pub mod music_key;
 
-use track::Track;
-use note::{Note, ScaledValue};
-use music_key::MusicKey;
-
-use crate::file_export::export_info::*;
-use crate::instrument::Instrument;
-
 // A helper struct to compose a piece. At the end, an ExportMusicPiece can be
 // generated from it.
+/*
 pub struct Composition<T, U>
 where 
     T: ScaledValue,
@@ -95,3 +89,4 @@ where
         }
     }
 }
+*/
