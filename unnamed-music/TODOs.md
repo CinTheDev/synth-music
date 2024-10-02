@@ -31,15 +31,6 @@ represented individually.
 
 Implement it and restructure if needed.
 
-## Add Drumset to melody example
-
-Time to make use of everything being generic: Add a Drumset to the "melody"
-example which plays tetris.
-
-- Implement simplified "note" system with drum actions
-- Implement drumset itself (probably with white noise)
-- Write simple track for drumset
-
 ## Chunked rendering
 
 Currently the exporter renders the whole music piece into one buffer which then
