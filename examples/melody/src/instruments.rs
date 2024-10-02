@@ -17,7 +17,7 @@ pub struct HardBass {
 
 #[derive(Clone, Copy)]
 pub struct Drumset {
-
+    pub resolution: u32,
 }
 
 impl SoftBass {
@@ -73,9 +73,33 @@ impl HardBass {
 }
 
 impl Drumset {
-    pub fn new() -> Self {
+    fn random() -> f32 {
+        use rand::Rng;
+
+        let mut rng = rand::thread_rng();
+        rng.gen_range(-1.0..1.0)
+    }
+
+    fn frequency_range(action: DrumsetAction) -> (f32, f32) {
+        match action {
+            DrumsetAction::Bass => (0.0, 100.0),
+            DrumsetAction::Snare => (100.0, 200.0),
+            DrumsetAction::HiHat => (1000.0, 2000.0),
+        }
+    }
+
+    fn generate(&self, info: ToneInfo<DrumsetAction>) -> f32 {
+        if info.time > Duration::from_millis(100) {
+            return 0.0;
+        }
+
+        let value = Self::random();
+        return value * info.intensity;
+    }
+
+    pub fn new(resolution: u32) -> Self {
         Self {
-            
+            resolution,
         }
     }
 }
@@ -100,6 +124,6 @@ impl Instrument for Drumset {
     type ConcreteValue = DrumsetAction;
 
     fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
-        todo!();
+        self.generate(info)
     }
 }

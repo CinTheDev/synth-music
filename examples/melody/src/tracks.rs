@@ -12,12 +12,10 @@ where
     use DrumsetAction::*;
     let mut track = Track::new(instrument);
 
-    sequential_notes!(track, Quarter,
-        Bass,
-        Bass,
-        Snare,
-        HiHat
-    );
+    track.note(Quarter, Bass);
+    track.note(Quarter, Bass);
+    track.note(Quarter, Snare);
+    track.note(Quarter, HiHat);
 
     return track;
 }
