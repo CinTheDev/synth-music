@@ -1,6 +1,7 @@
 use std::time::Duration;
 use crate::instrument::Instrument;
 
+/*
 // Holds all info of a piece relevant for exporting; consists of several
 // export tracks
 pub struct ExportMusicPiece<T: Instrument> {
@@ -10,6 +11,7 @@ pub struct ExportMusicPiece<T: Instrument> {
 pub struct ExportSection<T: Instrument> {
     pub tracks: Vec<ExportTrack<T>>,
 }
+*/
 
 // Contains raw tones
 pub struct ExportTrack<T: Instrument> {
@@ -26,6 +28,7 @@ pub struct Tone<T> {
     pub intensity: f32,
 }
 
+/*
 impl<T: Instrument> ExportMusicPiece<T> {
     pub fn new() -> Self {
         Self {
@@ -41,6 +44,7 @@ impl<T: Instrument> ExportSection<T> {
         }
     }
 }
+*/
 
 impl<T: Instrument> ExportTrack<T> {
     pub fn new(instrument: T) -> Self {
