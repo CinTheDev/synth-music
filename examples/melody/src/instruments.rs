@@ -2,6 +2,8 @@ use unnamed_music::prelude::*;
 use tet12::TET12ConcreteTone;
 use std::time::Duration;
 
+pub mod drumset;
+
 #[derive(Clone, Copy)]
 pub struct SoftBass {
     pub decay_speed: f32,
