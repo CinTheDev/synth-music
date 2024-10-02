@@ -1,5 +1,4 @@
-use super::{FileExport, MusicBuffer};
-use crate::instrument::Instrument;
+use super::FileExport;
 
 use std::fs::File;
 use std::io::{BufWriter, Write};
@@ -53,18 +52,18 @@ impl WavExport {
     }
 }
 
-impl<T: Instrument> FileExport<T> for WavExport {
-    fn export(&self, buffer: MusicBuffer<T>) -> std::io::Result<()> {
+impl FileExport for WavExport {
+    fn export(&self, buffer: Vec<f32>) -> std::io::Result<()> {
         let f = File::create(&self.path)?;
         let mut writer = BufWriter::new(f);
 
         // TODO: Generate chunks
-        let samples = buffer.generate_whole_buffer(self.sample_rate);
+        //let samples = buffer.generate_whole_buffer(self.sample_rate);
 
-        self.write_header(&mut writer, samples.len() * 2)?;
+        self.write_header(&mut writer, buffer.len() * 2)?;
         let amplitude = 0xFFFF as f32 * 0.1;
 
-        for sample in samples {
+        for sample in buffer {
             let val = (sample * amplitude).round() as i16;
             writer.write(bytemuck::bytes_of(&val))?;
         }

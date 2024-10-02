@@ -2,6 +2,9 @@ use unnamed_music::prelude::*;
 use tet12::TET12ConcreteTone;
 use std::time::Duration;
 
+pub mod drumset;
+use drumset::DrumsetAction;
+
 #[derive(Clone, Copy)]
 pub struct SoftBass {
     pub decay_speed: f32,
@@ -13,12 +16,17 @@ pub struct HardBass {
 }
 
 #[derive(Clone, Copy)]
-pub enum Instruments {
-    SoftBass(SoftBass),
-    HardBass(HardBass),
+pub struct Drumset {
+
 }
 
 impl SoftBass {
+    pub fn new(decay_speed: f32) -> Self {
+        Self {
+            decay_speed,
+        }
+    }
+
     pub fn generate(&self, info: ToneInfo<TET12ConcreteTone>) -> f32 {
         Self::triangle_wave(info) * self.decay_function(info) * info.intensity
     }
@@ -36,6 +44,12 @@ impl SoftBass {
 }
 
 impl HardBass {
+    pub fn new(harmonics: u32) -> Self {
+        Self {
+            harmonics,
+        }
+    }
+
     pub fn generate(&self, info: ToneInfo<TET12ConcreteTone>) -> f32 {
         let mut amplitude = 0.0;
 
@@ -58,27 +72,59 @@ impl HardBass {
     }
 }
 
-impl Instrument for Instruments {
-    type ConcreteValue = TET12ConcreteTone;
+// TODO: Improve this (make the DrumsetAction actually matter)
+impl Drumset {
+    fn random() -> f32 {
+        use rand::Rng;
 
-    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
-        match self {
-            Self::SoftBass(attr) => attr.generate(info),
-            Self::HardBass(attr) => attr.generate(info),
+        let mut rng = rand::thread_rng();
+        rng.gen_range(-1.0..1.0)
+    }
+
+    fn frequency_range(action: DrumsetAction) -> (f32, f32) {
+        match action {
+            DrumsetAction::Bass => (0.0, 100.0),
+            DrumsetAction::Snare => (100.0, 200.0),
+            DrumsetAction::HiHat => (1000.0, 2000.0),
+        }
+    }
+
+    fn generate(&self, info: ToneInfo<DrumsetAction>) -> f32 {
+        if info.time > Duration::from_millis(100) {
+            return 0.0;
+        }
+
+        let value = Self::random();
+        return value * info.intensity;
+    }
+
+    pub fn new() -> Self {
+        Self {
+
         }
     }
 }
 
-impl Instruments {
-    pub fn new_softbass(decay_speed: f32) -> Self {
-        Self::SoftBass(SoftBass {
-            decay_speed,
-        })
-    }
+impl Instrument for SoftBass {
+    type ConcreteValue = TET12ConcreteTone;
 
-    pub fn new_hardbass(harmonics: u32) -> Self {
-        Self::HardBass(HardBass {
-            harmonics,
-        })
+    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
+        self.generate(info)
+    }
+}
+
+impl Instrument for HardBass {
+    type ConcreteValue = TET12ConcreteTone;
+
+    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
+        self.generate(info)
+    }
+}
+
+impl Instrument for Drumset {
+    type ConcreteValue = DrumsetAction;
+
+    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
+        self.generate(info)
     }
 }

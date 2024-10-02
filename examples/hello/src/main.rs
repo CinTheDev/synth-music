@@ -1,129 +1,98 @@
-mod instruments;
-use instruments::Instruments;
-
 use unnamed_music::prelude::*;
 
 fn main() {
     println!("Hello example");
 
     example_1();
-    example_2();
 }
 
 fn example_1() {
-    let key = MusicKey {
-        tonic: KeyTonic::C,
-        key_type: KeyType::Major,
-    };
+    use tet12::*;
+    use note::Length::*;
 
-    let info = SectionInfo {
-        bpm: 120.0,
-        key,
-        time_signature: (4, 4),
-    };
+    let mut track1 = Track::new(SineGenerator);
+    let mut track2 = Track::new(SineGenerator);
 
-    let instrument = Instruments::new_harmonic_wave(10);
-
-    let track = {
-        use note::Length::*;
-        use tet12::*;
-        let mut track = Track::new(instrument);
-
-        track.note(Quarter, first(4));
-        track.note(Quarter, second(4));
-        track.note(Quarter, third(4));
-        track.note(Quarter, fourth(4));
-        track.note(Quarter, fifth(4));
-        track.note(Quarter, sixth(4));
-        track.note(Quarter, seventh(4));
-        track.note(Quarter, first(5));
-
-        track
-    };
-
-    let section = Section {
-        info,
-        tracks: vec![track],
-    };
-
-    let composition = Composition {
-        sections: vec![section],
-    };
-
-    export(composition.to_export_piece(), "first_example.wav");
-}
-
-fn example_2() {
-    let key = MusicKey {
-        tonic: KeyTonic::A,
-        key_type: KeyType::Minor,
-    };
-
-    let info = SectionInfo {
-        bpm: 120.0,
-        key,
-        time_signature: (4, 4),
-    };
-
-    let instrument = Instruments::Predefined(
-        instrument::predefined::PredefinedInstrument::SineGenerator
+    unnamed_music::sequential_notes!(track1, Quarter,
+        first(3),
+        second(3),
+        third(3),
+        fourth(3),
+        fifth(3),
+        sixth(3),
+        seventh(3),
+        first(4)
     );
 
-    let track = {
-        use note::Length::*;
-        use tet12::*;
-        let mut track = Track::new(instrument);
+    sequential_notes!(track2, Quarter,
+        fifth(3),
+        sixth(3),
+        seventh(3),
+        first(4),
+        second(4),
+        third(4),
+        fourth(4),
+        fifth(4)
+    );
 
-        sequential_notes!(track, Quarter,
-            first(3),
-            second(3),
-            third(3),
-            fourth(3),
-            fifth(3),
-            sixth(3),
-            seventh(3).sharp(),
-            first(4)
-        );
-
-        notes!(track, Quarter, first(3));
-        notes!(track, Quarter, first(3), second(3));
-        notes!(track, Quarter, first(3), third(3));
-        notes!(track, Quarter, first(3), fourth(3));
-        notes!(track, Quarter, first(3), fifth(3));
-        notes!(track, Quarter, first(3), sixth(3));
-        notes!(track, Quarter, first(3), seventh(3));
-        notes!(track, Quarter, first(3), first(4));
-
-        track
+    let section_info = SectionInfo {
+        bpm: 120.0,
+        key: MusicKey {
+            tonic: KeyTonic::C,
+            key_type: KeyType::Major,
+        },
+        time_signature: (4, 4),
     };
 
-    let section = Section {
-        info,
-        tracks: vec![track],
-    };
+    let section = unnamed_music::section!(section_info, 44100,
+        track1,
+        track2
+    );
 
-    let composition = Composition {
-        sections: vec![section],
-    };
-
-    export(composition.to_export_piece(), "second_example.wav");
+    //export_track(track1.convert_to_export_track(section_info), "first_example.wav");
+    export_buffer(section, "first_example.wav");
 }
 
-fn export<T: Instrument>(export_piece: export_info::ExportMusicPiece<T>, name: &str) {
+use export_info::ExportTrack;
+fn export_track<T: Instrument>(track: ExportTrack<T>, name: &str) {
+    let buffer = file_export::render(&track, 44100);
+    export_buffer(buffer, name);
+}
+
+fn export_buffer(buffer: Vec<f32>, name: &str) {
     use std::path::PathBuf;
 
     if std::fs::read_dir("export").is_err() {
         std::fs::create_dir("export").unwrap();
     }
 
-    let music_buffer = MusicBuffer::new(export_piece);
-    let path = PathBuf::from("export").join(name);
-
-    let exporter = WavExport {
-        path,
-        sample_rate: 44100,
+    let wav_export = WavExport {
+        path: PathBuf::from("export").join(name),
         ..Default::default()
     };
 
-    exporter.export(music_buffer).unwrap();
+    wav_export.export(buffer).unwrap();
+}
+
+// Instruments
+
+use std::time::Duration;
+
+#[derive(Clone, Copy)]
+struct SineGenerator;
+
+impl SineGenerator {
+    pub fn generate(frequency: f64, time: Duration) -> f32 {
+        use std::f64::consts::PI;
+        (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
+    }
+}
+
+impl Instrument for SineGenerator {
+    type ConcreteValue = tet12::TET12ConcreteTone;
+
+    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
+        let frequency = info.tone.to_frequency() as f64;
+        Self::generate(frequency, info.time)
+    }
 }

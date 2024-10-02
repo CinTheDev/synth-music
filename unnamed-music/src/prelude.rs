@@ -1,14 +1,13 @@
 // Composer imports
 pub use crate::composer;
-pub use composer::{Composition, Section, SectionInfo};
+pub use composer::{Track, SectionInfo};
 
 pub use composer::note;
 pub use composer::note::{Note, ScaledValue};
 
-pub use composer::track::Track;
 pub use composer::music_key::{MusicKey, KeyTonic, KeyType};
 
-pub use crate::{notes, sequential_notes};
+pub use crate::{notes, sequential_notes, section};
 
 // Instrument imports
 pub use crate::instrument;
@@ -21,6 +20,5 @@ pub use crate::file_export;
 pub use file_export::{
     FileExport,
     wav_export::WavExport,
-    MusicBuffer,
     export_info
 };
