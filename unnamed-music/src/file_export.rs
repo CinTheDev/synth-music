@@ -1,4 +1,5 @@
 pub mod export_info;
+pub mod wav_export;
 
 use std::time::Duration;
 
@@ -7,6 +8,10 @@ use crate::instrument::{Instrument, ToneInfo};
 
 const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
 const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
+
+pub trait FileExport {
+    fn export(&self, buffer: Vec<f32>) -> std::io::Result<()>;
+}
 
 pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> Vec<f32> {
     let mut buffer = Vec::new();
