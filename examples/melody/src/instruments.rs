@@ -17,7 +17,7 @@ pub struct HardBass {
 
 #[derive(Clone, Copy)]
 pub struct Drumset {
-    pub resolution: u32,
+
 }
 
 impl SoftBass {
@@ -97,9 +97,9 @@ impl Drumset {
         return value * info.intensity;
     }
 
-    pub fn new(resolution: u32) -> Self {
+    pub fn new() -> Self {
         Self {
-            resolution,
+
         }
     }
 }
