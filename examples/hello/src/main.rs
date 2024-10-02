@@ -10,9 +10,10 @@ fn example_1() {
     use tet12::*;
     use note::Length::*;
 
-    let mut track = Track::new(SineGenerator);
+    let mut track1 = Track::new(SineGenerator);
+    let mut track2 = Track::new(SineGenerator);
 
-    unnamed_music::sequential_notes!(track, Quarter,
+    unnamed_music::sequential_notes!(track1, Quarter,
         first(3),
         second(3),
         third(3),
@@ -21,6 +22,17 @@ fn example_1() {
         sixth(3),
         seventh(3),
         first(4)
+    );
+
+    sequential_notes!(track2, Quarter,
+        fifth(3),
+        sixth(3),
+        seventh(3),
+        first(4),
+        second(4),
+        third(4),
+        fourth(4),
+        fifth(4)
     );
 
     let section_info = SectionInfo {
@@ -32,14 +44,23 @@ fn example_1() {
         time_signature: (4, 4),
     };
 
-    export_track(track.convert_to_export_track(section_info), "first_example.wav");
+    let section = unnamed_music::section!(section_info, 44100,
+        track1,
+        track2
+    );
+
+    //export_track(track1.convert_to_export_track(section_info), "first_example.wav");
+    export_buffer(section, "first_example.wav");
 }
 
 use export_info::ExportTrack;
 fn export_track<T: Instrument>(track: ExportTrack<T>, name: &str) {
-    use std::path::PathBuf;
-
     let buffer = file_export::render(&track, 44100);
+    export_buffer(buffer, name);
+}
+
+fn export_buffer(buffer: Vec<f32>, name: &str) {
+    use std::path::PathBuf;
 
     if std::fs::read_dir("export").is_err() {
         std::fs::create_dir("export").unwrap();

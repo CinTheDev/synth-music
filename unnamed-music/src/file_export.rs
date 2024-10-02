@@ -111,16 +111,19 @@ pub fn mix_buffers(a: Vec<f32>, b: Vec<f32>) -> Vec<f32> {
     return larger_buffer;
 }
 
+#[macro_export]
 macro_rules! section {
     ( $section_info:expr, $sample_rate:expr, $( $track:expr ),+ ) => {
-        let mut buffer = Vec::new();
+        {
+            let mut buffer = Vec::new();
 
-        $(
-            let export_track = $track.convert_to_export_track($section_info);
-            let export_buffer = file_export::render(export_track, $sample_rate);
-            buffer = file_export::mix_buffers(buffer, export_buffer);
-        )*
+            $(
+                let export_track = $track.convert_to_export_track($section_info);
+                let export_buffer = file_export::render(&export_track, $sample_rate);
+                buffer = file_export::mix_buffers(buffer, export_buffer);
+            )*
 
-        buffer
+            buffer
+        }
     };
 }
