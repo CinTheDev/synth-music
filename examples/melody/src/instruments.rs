@@ -14,6 +14,11 @@ pub struct HardBass {
     pub harmonics: u32,
 }
 
+#[derive(Clone, Copy)]
+pub struct Drumset {
+
+}
+
 impl SoftBass {
     pub fn new(decay_speed: f32) -> Self {
         Self {
@@ -66,6 +71,10 @@ impl HardBass {
     }
 }
 
+impl Drumset {
+
+}
+
 impl Instrument for SoftBass {
     type ConcreteValue = TET12ConcreteTone;
 
@@ -79,5 +88,13 @@ impl Instrument for HardBass {
 
     fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
         self.generate(info)
+    }
+}
+
+impl Instrument for Drumset {
+    type ConcreteValue = todo!();
+
+    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
+        todo!();
     }
 }
