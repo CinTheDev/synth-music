@@ -19,6 +19,7 @@ fn main() {
 
     let instrument_softbass = instruments::SoftBass::new(1.0);
     let instrument_hardbass = instruments::HardBass::new(10);
+    let instrument_drumset = instruments::Drumset::new();
 
     let melody_begin = tracks::melody_begin(instrument_softbass);
     let chords_begin = tracks::chords_begin(instrument_softbass);
@@ -33,6 +34,10 @@ fn main() {
     let melody_b_section_second = tracks::melody_b_section(instrument_softbass, false);
     let chords_b_section = tracks::chords_b_section(instrument_softbass);
     let bass_b_section = tracks::bass_b_section(instrument_hardbass);
+
+    let debug_drums = tracks::debug_drumset(instrument_drumset);
+
+    let mut section_debug_drums = section!(info, 44100, debug_drums);
 
     let mut section_begin = section!(info, 44100,
         melody_begin,
@@ -65,6 +70,7 @@ fn main() {
     );
 
     let mut composition: Vec<f32> = Vec::new();
+    composition.append(&mut section_debug_drums);
     composition.append(&mut section_begin.clone());
     composition.append(&mut section_repeated_first.clone());
     composition.append(&mut section_repeated_second.clone());

@@ -73,7 +73,11 @@ impl HardBass {
 }
 
 impl Drumset {
-
+    pub fn new() -> Self {
+        Self {
+            
+        }
+    }
 }
 
 impl Instrument for SoftBass {

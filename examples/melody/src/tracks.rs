@@ -1,8 +1,26 @@
 use unnamed_music::prelude::*;
 use tet12::*;
 use note::Length::*;
+use crate::instruments::drumset::DrumsetAction;
 
 // BEGIN PART
+
+pub fn debug_drumset<T>(instrument: T) -> Track<DrumsetAction, T>
+where 
+    T: Instrument<ConcreteValue = DrumsetAction>
+{
+    use DrumsetAction::*;
+    let mut track = Track::new(instrument);
+
+    sequential_notes!(track, Quarter,
+        Bass,
+        Bass,
+        Snare,
+        HiHat
+    );
+
+    return track;
+}
 
 pub fn melody_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> Track<TET12ScaledTone, T> {
     let mut track = Track::new(instrument);
