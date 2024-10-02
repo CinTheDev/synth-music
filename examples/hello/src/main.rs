@@ -1,3 +1,5 @@
+use unnamed_music::prelude::*;
+
 fn main() {
     println!("Hello example");
 
@@ -5,11 +7,8 @@ fn main() {
 }
 
 fn example_1() {
-    use unnamed_music::composer::Track;
-    use unnamed_music::instrument::predefined::tet12::*;
-    use unnamed_music::composer::note::Length::*;
-    use unnamed_music::composer::SectionInfo;
-    use unnamed_music::composer::music_key::*;
+    use tet12::*;
+    use note::Length::*;
 
     let mut track = Track::new(SineGenerator);
 
@@ -33,13 +32,25 @@ fn example_1() {
         time_signature: (4, 4),
     };
 
-    track.convert_to_export_track(section_info);
+    let export_track = track.convert_to_export_track(section_info);
+
+    let buffer = file_export::render(&export_track, 44100);
+
+    use std::path::PathBuf;
+
+    if std::fs::read_dir("export").is_err() {
+        std::fs::create_dir("export").unwrap();
+    }
+
+    let wav_export = WavExport {
+        path: PathBuf::from("export/first_example.wav"),
+        ..Default::default()
+    };
+
+    wav_export.export(buffer).unwrap();
 }
 
 // Instruments
-
-use unnamed_music::instrument::{Instrument, ToneInfo};
-use unnamed_music::instrument::predefined::tet12;
 
 use std::time::Duration;
 
