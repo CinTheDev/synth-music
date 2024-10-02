@@ -12,13 +12,13 @@ pub struct HardBass {
     pub harmonics: u32,
 }
 
-#[derive(Clone, Copy)]
-pub enum Instruments {
-    SoftBass(SoftBass),
-    HardBass(HardBass),
-}
-
 impl SoftBass {
+    pub fn new(decay_speed: f32) -> Self {
+        Self {
+            decay_speed,
+        }
+    }
+
     pub fn generate(&self, info: ToneInfo<TET12ConcreteTone>) -> f32 {
         Self::triangle_wave(info) * self.decay_function(info) * info.intensity
     }
@@ -36,6 +36,12 @@ impl SoftBass {
 }
 
 impl HardBass {
+    pub fn new(harmonics: u32) -> Self {
+        Self {
+            harmonics,
+        }
+    }
+
     pub fn generate(&self, info: ToneInfo<TET12ConcreteTone>) -> f32 {
         let mut amplitude = 0.0;
 
@@ -58,27 +64,18 @@ impl HardBass {
     }
 }
 
-impl Instrument for Instruments {
+impl Instrument for SoftBass {
     type ConcreteValue = TET12ConcreteTone;
 
     fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
-        match self {
-            Self::SoftBass(attr) => attr.generate(info),
-            Self::HardBass(attr) => attr.generate(info),
-        }
+        self.generate(info)
     }
 }
 
-impl Instruments {
-    pub fn new_softbass(decay_speed: f32) -> Self {
-        Self::SoftBass(SoftBass {
-            decay_speed,
-        })
-    }
+impl Instrument for HardBass {
+    type ConcreteValue = TET12ConcreteTone;
 
-    pub fn new_hardbass(harmonics: u32) -> Self {
-        Self::HardBass(HardBass {
-            harmonics,
-        })
+    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
+        self.generate(info)
     }
 }
