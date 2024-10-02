@@ -31,7 +31,7 @@ represented individually.
 
 Implement it and restructure if needed.
 
-## Chunked rendering
+## Chunked rendering (improve export system in general)
 
 Currently the exporter renders the whole music piece into one buffer which then
 is written to the disk. The memory consumption might not be that big of a deal
