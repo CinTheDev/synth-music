@@ -7,7 +7,7 @@ pub use composer::note::{Note, ScaledValue};
 
 pub use composer::music_key::{MusicKey, KeyTonic, KeyType};
 
-pub use crate::{notes, sequential_notes};
+pub use crate::{notes, sequential_notes, section};
 
 // Instrument imports
 pub use crate::instrument;
