@@ -32,18 +32,21 @@ fn example_1() {
         time_signature: (4, 4),
     };
 
-    let export_track = track.convert_to_export_track(section_info);
+    export_track(track.convert_to_export_track(section_info), "first_example.wav");
+}
 
-    let buffer = file_export::render(&export_track, 44100);
-
+use export_info::ExportTrack;
+fn export_track<T: Instrument>(track: ExportTrack<T>, name: &str) {
     use std::path::PathBuf;
+
+    let buffer = file_export::render(&track, 44100);
 
     if std::fs::read_dir("export").is_err() {
         std::fs::create_dir("export").unwrap();
     }
 
     let wav_export = WavExport {
-        path: PathBuf::from("export/first_example.wav"),
+        path: PathBuf::from("export").join(name),
         ..Default::default()
     };
 
