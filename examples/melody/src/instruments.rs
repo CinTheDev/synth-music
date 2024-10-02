@@ -3,6 +3,7 @@ use tet12::TET12ConcreteTone;
 use std::time::Duration;
 
 pub mod drumset;
+use drumset::DrumsetAction;
 
 #[derive(Clone, Copy)]
 pub struct SoftBass {
@@ -92,7 +93,7 @@ impl Instrument for HardBass {
 }
 
 impl Instrument for Drumset {
-    type ConcreteValue = todo!();
+    type ConcreteValue = DrumsetAction;
 
     fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
         todo!();
