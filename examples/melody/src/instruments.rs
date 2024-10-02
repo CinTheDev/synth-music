@@ -72,6 +72,7 @@ impl HardBass {
     }
 }
 
+// TODO: Improve this (make the DrumsetAction actually matter)
 impl Drumset {
     fn random() -> f32 {
         use rand::Rng;
