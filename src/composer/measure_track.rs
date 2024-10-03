@@ -59,6 +59,8 @@ where
             triole: false,
         });
 
+        active_measure.assert_measure_bounds();
+
         let last_index = active_measure.notes.len() - 1;
         return &mut active_measure.notes[last_index];
     }
@@ -135,5 +137,11 @@ where
             tone_duration,
             intensity: note.intensity,
         }
+    }
+}
+
+impl<T: ScaledValue> Measure<T> {
+    fn assert_measure_bounds(&self) {
+        todo!();
     }
 }
