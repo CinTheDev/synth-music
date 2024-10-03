@@ -162,6 +162,7 @@ impl<T: ScaledValue> Measure<T> {
             current_measure_length += Self::note_length_smallest(note);
         }
 
+        // TODO: Have panic message show line number in user space
         assert!(current_measure_length <= max_measure_length, "Measure overflow");
     }
 

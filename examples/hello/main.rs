@@ -10,9 +10,10 @@ fn example_1() {
     use tet12::*;
     use note::Length::*;
 
-    let mut track1 = UnboundTrack::new(SineGenerator);
-    let mut track2 = UnboundTrack::new(SineGenerator);
+    let mut track1 = MeasureTrack::new(SineGenerator, (4, 4));
+    let mut track2 = MeasureTrack::new(SineGenerator, (2, 4));
 
+    track1.measure();
     sequential_notes!(track1, Quarter,
         first(3),
         second(3),
