@@ -86,6 +86,10 @@ where
             notes: Vec::new(),
         });
 
+        self.get_active_measure()
+    }
+
+    fn get_active_measure(&mut self) -> &mut Measure<T> {
         let last_index = self.measures.len() - 1;
         return &mut self.measures[last_index];
     }
