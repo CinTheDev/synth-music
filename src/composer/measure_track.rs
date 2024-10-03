@@ -37,8 +37,6 @@ where
             triole: false,
         });
 
-        active_measure.assert_measure_bounds();
-
         let last_index = active_measure.notes.len() - 1;
         return &mut active_measure.notes[last_index];
     }
@@ -86,13 +84,20 @@ where
         }
     }
 
-    pub fn measure(&mut self) -> &mut Measure<T> {
+    pub fn measure(&mut self) -> Result<&mut Measure<T>, ()> {
         self.measures.push(Measure {
             time_signature: self.time_signature,
             notes: Vec::new(),
         });
 
-        self.get_active_measure()
+        let active_measure = self.get_active_measure();
+
+        if let Ok(_) = active_measure.assert_measure_bounds() {
+            return Ok(active_measure);
+        }
+        else {
+            return Err(());
+        }
     }
 
     fn get_active_measure(&mut self) -> &mut Measure<T> {
@@ -121,7 +126,7 @@ where
 }
 
 impl<T: ScaledValue> Measure<T> {
-    fn assert_measure_bounds(&self) {
+    fn assert_measure_bounds(&self) -> Result<(), ()> {
         let max_measure_length = match self.time_signature.1 {
             1 => 16,
             2 => 8,
@@ -138,8 +143,15 @@ impl<T: ScaledValue> Measure<T> {
             current_measure_length += Self::note_length_smallest(note);
         }
 
+        if current_measure_length <= max_measure_length {
+            return Ok(());
+        }
+        else {
+            return Err(());
+        }
+
         // TODO: Have panic message show line number in user space
-        assert!(current_measure_length <= max_measure_length, "Measure overflow");
+        //assert!(current_measure_length <= max_measure_length, "Measure overflow");
     }
 
     fn note_length_smallest(note: &Note<T>) -> u32 {
