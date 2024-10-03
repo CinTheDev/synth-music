@@ -34,10 +34,6 @@ where
         }
     }
 
-    pub fn into_parts(self) -> (Vec<Note<T>>, U) {
-        (self.notes, self.instrument)
-    }
-
     pub fn note(
         &mut self,
         length: Length,
