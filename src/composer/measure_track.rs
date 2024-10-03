@@ -142,7 +142,7 @@ impl<T: ScaledValue> Measure<T> {
     }
 
     fn assert_measure_bounds(&self) -> bool {
-        let max_measure_length = match self.time_signature.1 {
+        let enforced_measure_length = match self.time_signature.1 {
             1 => 16,
             2 => 8,
             4 => 4,
@@ -158,7 +158,7 @@ impl<T: ScaledValue> Measure<T> {
             current_measure_length += Self::note_length_smallest(note);
         }
 
-        return current_measure_length <= max_measure_length;
+        return current_measure_length == enforced_measure_length;
     }
 
     fn note_length_smallest(note: &Note<T>) -> u32 {
