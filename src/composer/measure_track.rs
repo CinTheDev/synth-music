@@ -184,4 +184,9 @@ impl<T: ScaledValue> Measure<T> {
 
         return length;
     }
+
+    pub fn override_time_signature(&mut self, time_signature: (u8, u8)) -> &mut Self {
+        self.time_signature = time_signature;
+        self
+    }
 }
