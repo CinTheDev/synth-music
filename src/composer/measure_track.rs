@@ -76,7 +76,19 @@ where
     }
 
     fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U> {
-        todo!();
+        let mut tones = Vec::new();
+
+        for measure in self.measures {
+            for note in measure.notes {
+                let tone = Self::generate_tone(note, section_info);
+                tones.push(tone);
+            }
+        }
+
+        ExportTrack {
+            tones,
+            instrument: self.instrument,
+        }
     }
 }
 
@@ -104,5 +116,24 @@ where
     fn get_active_measure(&mut self) -> &mut Measure<T> {
         let last_index = self.measures.len() - 1;
         return &mut self.measures[last_index];
+    }
+
+    fn generate_tone(note: Note<T>, section_info: SectionInfo) -> Tone<U::ConcreteValue> {
+        let mut concrete_values = Vec::new();
+
+        for scaled_value in &note.values {
+            let concrete_value = scaled_value.to_concrete_value(section_info.key);
+            concrete_values.push(concrete_value);
+        }
+
+        let play_duration = note.get_duration(section_info.bpm);
+        let tone_duration = play_duration.mul_f32(note.play_fraction);
+
+        Tone {
+            concrete_values,
+            play_duration,
+            tone_duration,
+            intensity: note.intensity,
+        }
     }
 }
