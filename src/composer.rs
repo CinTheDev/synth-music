@@ -13,6 +13,20 @@ pub struct SectionInfo {
     pub time_signature: (u8, u8),
 }
 
+pub trait MusicTrack<T, U>
+where 
+    T: ScaledValue,
+    U: Instrument<ConcreteValue = T::ConcreteValue>,
+{
+    fn pause(&mut self, length: Length) -> &mut Note<T>;
+    fn note(&mut self, length: Length, value: T) -> &mut Note<T>;
+    fn notes(&mut self, length: Length, values: Vec<T>) -> &mut Note<T>;
+
+    fn set_intensity(&mut self, intensity: f32);
+
+    fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U>;
+}
+
 #[derive(Clone)]
 pub struct Track<T: ScaledValue, U: Instrument> {
     notes: Vec<Note<T>>,
