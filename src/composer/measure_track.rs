@@ -48,19 +48,31 @@ where
     U: Instrument,
 {
     fn notes(&mut self, length: Length, values: Vec<T>) -> &mut Note<T> {
-        todo!();
+        let intensity = self.current_intensity;
+        let active_measure = self.get_active_measure();
+        active_measure.notes.push(Note {
+            values,
+            length,
+            play_fraction: 1.0,
+            intensity,
+            dotted: false,
+            triole: false,
+        });
+
+        let last_index = active_measure.notes.len() - 1;
+        return &mut active_measure.notes[last_index];
     }
 
     fn note(&mut self, length: Length, value: T) -> &mut Note<T> {
-        todo!();
+        self.notes(length, vec![value])
     }
 
     fn pause(&mut self, length: Length) -> &mut Note<T> {
-        todo!();
+        self.notes(length, vec![])
     }
 
     fn set_intensity(&mut self, intensity: f32) {
-        todo!();
+        self.current_intensity = intensity;
     }
 
     fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U> {
