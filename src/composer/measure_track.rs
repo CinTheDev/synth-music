@@ -93,17 +93,16 @@ where
     pub fn measure(&mut self) -> Result<&mut Measure<T>, ()> {
         let active_measure_valid = self.get_active_measure().assert_measure_bounds();
 
-        match active_measure_valid {
-            Err(_) => return Err(()),
-            Ok(_) => {
-                let new_measure = Measure::new(self.time_signature);
-                let valid_measure = self.active_measure.replace(new_measure).unwrap();
-
-                self.measures.push(valid_measure);
-                let last_index = self.measures.len() - 1;
-                return Ok(&mut self.measures[last_index]);
-            }
+        if !active_measure_valid {
+            return Err(());
         }
+
+        let new_measure = Measure::new(self.time_signature);
+        let valid_measure = self.active_measure.replace(new_measure).unwrap();
+
+        self.measures.push(valid_measure);
+        let last_index = self.measures.len() - 1;
+        return Ok(&mut self.measures[last_index]);
     }
 
     fn get_active_measure(&mut self) -> &mut Measure<T> {
@@ -142,7 +141,7 @@ impl<T: ScaledValue> Measure<T> {
         self.notes.is_empty()
     }
 
-    fn assert_measure_bounds(&self) -> Result<(), ()> {
+    fn assert_measure_bounds(&self) -> bool {
         let max_measure_length = match self.time_signature.1 {
             1 => 16,
             2 => 8,
@@ -159,15 +158,7 @@ impl<T: ScaledValue> Measure<T> {
             current_measure_length += Self::note_length_smallest(note);
         }
 
-        if current_measure_length <= max_measure_length {
-            return Ok(());
-        }
-        else {
-            return Err(());
-        }
-
-        // TODO: Have panic message show line number in user space
-        //assert!(current_measure_length <= max_measure_length, "Measure overflow");
+        return current_measure_length <= max_measure_length;
     }
 
     fn note_length_smallest(note: &Note<T>) -> u32 {
