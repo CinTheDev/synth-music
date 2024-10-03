@@ -24,6 +24,23 @@ represented individually.
 
 Implement it and restructure if needed.
 
+## Improve time signatures & note lengths
+
+The implementation of time signatures is kind of arbitrary right now, they're
+just represented as two unsigned integers.
+
+First step is to wrap this into a struct with more checking and functions so
+it makes sense in the context of music theory.
+
+And since time signatures are closely related to note lengths, the note lengths
+should be reworked as well. Right now they're just an enum, with external flags
+that control whether these are dotted or trioles. (This is suboptimal.)
+
+Note on trioles: They are kind of special actually, and I've been ignoring these
+for a bit already because they're handled incorrectly in code. The new
+implementation should take regard to trioles (in a correct way of course). If we
+feel like it, we can extend these to n-toles like pentoles, septoles, etc.
+
 ## Improve rendering/export system
 
 ### Have instruments return a whole tone buffer
