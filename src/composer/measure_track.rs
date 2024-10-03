@@ -146,6 +146,42 @@ where
 
 impl<T: ScaledValue> Measure<T> {
     fn assert_measure_bounds(&self) {
-        todo!();
+        let max_measure_length = match self.time_signature.1 {
+            1 => 16,
+            2 => 8,
+            4 => 4,
+            8 => 2,
+            16 => 1,
+
+            _ => panic!("Invalid or unsupported time signature"),
+        } * self.time_signature.0 as u32;
+
+        let mut current_measure_length = 0;
+
+        for note in &self.notes {
+            current_measure_length += Self::note_length_smallest(note);
+        }
+
+        assert!(current_measure_length <= max_measure_length, "Measure overflow");
+    }
+
+    fn note_length_smallest(note: &Note<T>) -> u32 {
+        // Smallest length right now is sixteenth
+
+        let mut length = match note.length {
+            Length::Whole => 16,
+            Length::Half => 8,
+            Length::Quarter => 4,
+            Length::Eigth => 2,
+            Length::Sixteenth => 1,
+        };
+
+        if note.dotted {
+            length = length * 2 - length / 2;
+        }
+
+        // TODO: Triole
+
+        return length;
     }
 }
