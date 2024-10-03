@@ -33,12 +33,14 @@ where
     U: Instrument,
 {
     measures: Vec<Measure<T>>,
+    time_signature: (u8, u8),
     instrument: U,
 
     current_intensity: f32,
 }
 
 pub struct Measure<T: ScaledValue> {
+    time_signature: (u8, u8),
     notes: Vec<Note<T>>,
 }
 
@@ -99,9 +101,10 @@ where
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
     U: Instrument,
 {
-    pub fn new(instrument: U) -> Self {
+    pub fn new(instrument: U, time_signature: (u8, u8)) -> Self {
         Self {
             measures: Vec::new(),
+            time_signature,
             instrument,
             current_intensity: 1.0,
         }
@@ -109,6 +112,7 @@ where
 
     pub fn measure(&mut self) -> &mut Measure<T> {
         self.measures.push(Measure {
+            time_signature: self.time_signature,
             notes: Vec::new(),
         });
 
