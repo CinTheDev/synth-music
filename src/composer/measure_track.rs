@@ -32,13 +32,13 @@ where
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
     U: Instrument,
 {
-    measures: Vec<Measue<T>>,
+    measures: Vec<Measure<T>>,
     instrument: U,
 
     current_intensity: f32,
 }
 
-pub struct Measue<T: ScaledValue> {
+pub struct Measure<T: ScaledValue> {
     notes: Vec<Note<T>>,
 }
 
@@ -79,5 +79,14 @@ where
             instrument,
             current_intensity: 1.0,
         }
+    }
+
+    pub fn measure(&mut self) -> &mut Measure<T> {
+        self.measures.push(Measure {
+            notes: Vec::new(),
+        });
+
+        let last_index = self.measures.len() - 1;
+        return &mut self.measures[last_index];
     }
 }
