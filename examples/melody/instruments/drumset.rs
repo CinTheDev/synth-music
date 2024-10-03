@@ -1,4 +1,4 @@
-use unnamed_music::prelude::*;
+use synth_music::prelude::*;
 
 #[derive(Clone, Copy)]
 pub enum DrumsetAction {
