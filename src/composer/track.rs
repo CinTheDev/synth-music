@@ -1,5 +1,5 @@
 use super::note::{Note, ScaledValue, Length};
-use super::SectionInfo;
+use super::{SectionInfo, MusicTrack};
 use crate::instrument::Instrument;
 use crate::file_export::export_info::{ExportTrack, Tone};
 
@@ -11,42 +11,20 @@ pub struct Track<T: ScaledValue, U: Instrument> {
     current_intensity: f32,
 }
 
-impl<T, U> Track<T, U>
+impl<T, U> MusicTrack<T, U> for Track<T, U>
 where 
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
     U: Instrument,
 {
-    pub fn new(instrument: U) -> Self {
-        Self {
-            notes: Vec::new(),
-            instrument,
-            current_intensity: 1.0,
-        }
+    fn pause(&mut self, length: Length) -> &mut Note<T> {
+        self.notes(length, vec![])
     }
 
-    pub fn note(
-        &mut self,
-        length: Length,
-        value: T,
-    ) -> &mut Note<T> {
-        self.notes.push(Note {
-            values: vec![value],
-            length,
-            play_fraction: 1.0,
-            intensity: self.current_intensity,
-            dotted: false,
-            triole: false,
-        });
-
-        let last_index = self.notes.len() - 1;
-        return &mut self.notes[last_index];
+    fn note(&mut self, length: Length, value: T) -> &mut Note<T> {
+        self.notes(length, vec![value])
     }
 
-    pub fn notes(
-        &mut self,
-        length: Length,
-        values: Vec<T>,
-    ) -> &mut Note<T> {
+    fn notes(&mut self, length: Length, values: Vec<T>) -> &mut Note<T> {
         self.notes.push(Note {
             values,
             length,
@@ -60,22 +38,11 @@ where
         return &mut self.notes[last_index];
     }
 
-    pub fn pause(&mut self, length: Length) {
-        self.notes.push(Note {
-            values: vec![],
-            length,
-            play_fraction: 1.0,
-            intensity: self.current_intensity,
-            dotted: false,
-            triole: false,
-        });
-    }
-
-    pub fn set_intensity(&mut self, intensity: f32) {
+    fn set_intensity(&mut self, intensity: f32) {
         self.current_intensity = intensity;
     }
 
-    pub fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U> {
+    fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U> {
         let mut tones = Vec::new();
 
         for note in self.notes {
@@ -86,6 +53,20 @@ where
         ExportTrack {
             tones,
             instrument: self.instrument,
+        }
+    }
+}
+
+impl<T, U> Track<T, U>
+where 
+    T: ScaledValue<ConcreteValue = U::ConcreteValue>,
+    U: Instrument,
+{
+    pub fn new(instrument: U) -> Self {
+        Self {
+            notes: Vec::new(),
+            instrument,
+            current_intensity: 1.0,
         }
     }
 
