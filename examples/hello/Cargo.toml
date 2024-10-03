@@ -1,8 +1,0 @@
-[package]
-name = "hello"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-bytemuck = "1.18.0"
-unnamed-music = { path = "../../unnamed-music" }
