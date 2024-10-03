@@ -41,3 +41,29 @@ where
 pub struct Measue<T: ScaledValue> {
     notes: Vec<Note<T>>,
 }
+
+impl<T, U> MusicTrack<T, U> for MeasureTrack<T, U>
+where
+    T: ScaledValue<ConcreteValue = U::ConcreteValue>,
+    U: Instrument,
+{
+    fn notes(&mut self, length: Length, values: Vec<T>) -> &mut Note<T> {
+        todo!();
+    }
+
+    fn note(&mut self, length: Length, value: T) -> &mut Note<T> {
+        todo!();
+    }
+
+    fn pause(&mut self, length: Length) -> &mut Note<T> {
+        todo!();
+    }
+
+    fn set_intensity(&mut self, intensity: f32) {
+        todo!();
+    }
+
+    fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U> {
+        todo!();
+    }
+}
