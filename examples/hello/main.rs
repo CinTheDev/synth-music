@@ -28,7 +28,6 @@ fn example_1() {
     );
     track1.measure().unwrap();
 
-    track2.measure().unwrap();
     sequential_notes!(track2, Quarter,
         fifth(3),
         sixth(3)
