@@ -1,6 +1,6 @@
 // Composer imports
 pub use crate::composer;
-pub use composer::SectionInfo;
+pub use composer::{SectionInfo, MusicTrack};
 
 pub use composer::track::Track;
 
