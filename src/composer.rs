@@ -1,6 +1,6 @@
 pub mod note;
 pub mod music_key;
-pub mod track;
+pub mod unbound_track;
 
 use note::{Note, Length, ScaledValue};
 use music_key::MusicKey;

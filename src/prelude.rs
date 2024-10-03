@@ -2,7 +2,7 @@
 pub use crate::composer;
 pub use composer::{SectionInfo, MusicTrack};
 
-pub use composer::track::UnboundTrack;
+pub use composer::unbound_track::UnboundTrack;
 
 pub use composer::note;
 pub use composer::note::{Note, ScaledValue};
