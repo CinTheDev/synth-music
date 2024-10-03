@@ -8,14 +8,6 @@ possible to still read finished (and therefore deleted) points.
 
 There are some missing features that are crucial for composing music.
 
-### Seperation of measures
-
-Measures are kind of invisible/non-existant in code right now. This isn't the
-end of the world, the code works perfectly fine without it. Though when it comes
-to workflow, it's a bit unusual to have no measures.
-
-Think about a workflow feature to visibly seperate notes out into measures.
-
 ### Crescendo and decrescendo
 
 A (de)crescendo represents a transition of the intensity. Since a (de)crescendo
@@ -23,6 +15,23 @@ should be able to change the intensity while a note plays, it needs to be
 represented individually.
 
 Implement it and restructure if needed.
+
+## Improve time signatures & note lengths
+
+The implementation of time signatures is kind of arbitrary right now, they're
+just represented as two unsigned integers.
+
+First step is to wrap this into a struct with more checking and functions so
+it makes sense in the context of music theory.
+
+And since time signatures are closely related to note lengths, the note lengths
+should be reworked as well. Right now they're just an enum, with external flags
+that control whether these are dotted or trioles. (This is suboptimal.)
+
+Note on trioles: They are kind of special actually, and I've been ignoring these
+for a bit already because they're handled incorrectly in code. The new
+implementation should take regard to trioles (in a correct way of course). If we
+feel like it, we can extend these to n-toles like pentoles, septoles, etc.
 
 ## Improve rendering/export system
 

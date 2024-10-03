@@ -5,8 +5,8 @@ use crate::instruments::drumset::DrumsetAction;
 
 // BEGIN PART
 
-pub fn melody_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> Track<TET12ScaledTone, T> {
-    let mut track = Track::new(instrument);
+pub fn melody_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> UnboundTrack<TET12ScaledTone, T> {
+    let mut track = UnboundTrack::new(instrument);
 
     track.note(Quarter, fifth(3));
     track.note(Eigth, second(3));
@@ -36,8 +36,8 @@ pub fn melody_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument
     return track;
 }
 
-pub fn chords_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> Track<TET12ScaledTone, T> {
-    let mut track = Track::new(instrument);
+pub fn chords_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> UnboundTrack<TET12ScaledTone, T> {
+    let mut track = UnboundTrack::new(instrument);
 
     track.set_intensity(0.2);
 
@@ -49,8 +49,8 @@ pub fn chords_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument
     return track;
 }
 
-pub fn bass_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> Track<TET12ScaledTone, T> {
-    let mut track = Track::new(instrument);
+pub fn bass_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> UnboundTrack<TET12ScaledTone, T> {
+    let mut track = UnboundTrack::new(instrument);
 
     track.set_intensity(0.15);
 
@@ -67,8 +67,8 @@ pub fn bass_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: 
 
 // REPEATED PART
 
-pub fn melody_repeated<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T, repeat: bool) -> Track<TET12ScaledTone, T> {
-    let mut track = Track::new(instrument);
+pub fn melody_repeated<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T, repeat: bool) -> UnboundTrack<TET12ScaledTone, T> {
+    let mut track = UnboundTrack::new(instrument);
 
     track.note(Quarter, sixth(3)).dotted();
     track.note(Eigth, seventh(3));
@@ -103,8 +103,8 @@ pub fn melody_repeated<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrum
     return track;
 }
 
-pub fn chords_repeated<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> Track<TET12ScaledTone, T> {
-    let mut track = Track::new(instrument);
+pub fn chords_repeated<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> UnboundTrack<TET12ScaledTone, T> {
+    let mut track = UnboundTrack::new(instrument);
 
     track.set_intensity(0.2);
 
@@ -116,8 +116,8 @@ pub fn chords_repeated<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrum
     return track;
 }
 
-pub fn bass_repeated<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> Track<TET12ScaledTone, T> {
-    let mut track = Track::new(instrument);
+pub fn bass_repeated<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> UnboundTrack<TET12ScaledTone, T> {
+    let mut track = UnboundTrack::new(instrument);
 
     track.set_intensity(0.15);
 
@@ -138,8 +138,8 @@ pub fn bass_repeated<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrumen
 
 // B SECTION (repeated)
 
-pub fn melody_b_section<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T, repeat: bool) -> Track<TET12ScaledTone, T> {
-    let mut track = Track::new(instrument);
+pub fn melody_b_section<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T, repeat: bool) -> UnboundTrack<TET12ScaledTone, T> {
+    let mut track = UnboundTrack::new(instrument);
 
     sequential_notes!(
         track, Half,
@@ -167,8 +167,8 @@ pub fn melody_b_section<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instru
     return track;
 }
 
-pub fn chords_b_section<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> Track<TET12ScaledTone, T> {
-    let mut track = Track::new(instrument);
+pub fn chords_b_section<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> UnboundTrack<TET12ScaledTone, T> {
+    let mut track = UnboundTrack::new(instrument);
     track.set_intensity(0.4);
 
     for _ in 0..2 {
@@ -179,8 +179,8 @@ pub fn chords_b_section<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instru
     return track;
 }
 
-pub fn bass_b_section<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> Track<TET12ScaledTone, T> {
-    let mut track = Track::new(instrument);
+pub fn bass_b_section<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> UnboundTrack<TET12ScaledTone, T> {
+    let mut track = UnboundTrack::new(instrument);
     track.set_intensity(0.2);
 
     for _ in 0..2 {
@@ -193,7 +193,7 @@ pub fn bass_b_section<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrume
 
 // Chord functions
 
-fn apply_chord_first<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &mut Track<TET12ScaledTone, T>) {
+fn apply_chord_first<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &mut UnboundTrack<TET12ScaledTone, T>) {
     for _ in 0..4 {
         track.note(Eigth, first(2));
         notes!(
@@ -205,7 +205,7 @@ fn apply_chord_first<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &m
     }
 }
 
-fn apply_chord_third<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &mut Track<TET12ScaledTone, T>) {
+fn apply_chord_third<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &mut UnboundTrack<TET12ScaledTone, T>) {
     for _ in 0..4 {
         track.note(Eigth, third(2));
         notes!(
@@ -217,7 +217,7 @@ fn apply_chord_third<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &m
     }
 }
 
-fn apply_chord_fourth<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &mut Track<TET12ScaledTone, T>) {
+fn apply_chord_fourth<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &mut UnboundTrack<TET12ScaledTone, T>) {
     for _ in 0..4 {
         track.note(Eigth, fourth(2));
         notes!(
@@ -229,7 +229,7 @@ fn apply_chord_fourth<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &
     }
 }
 
-fn apply_chord_fifth<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &mut Track<TET12ScaledTone, T>) {
+fn apply_chord_fifth<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &mut UnboundTrack<TET12ScaledTone, T>) {
     for _ in 0..4 {
         track.note(Eigth, fifth(1));
         notes!(
@@ -243,12 +243,12 @@ fn apply_chord_fifth<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &m
 
 // DRUMSET
 
-pub fn drumset_4<T>(instrument: T, measures: usize) -> Track<DrumsetAction, T>
+pub fn drumset_4<T>(instrument: T, measures: usize) -> UnboundTrack<DrumsetAction, T>
 where 
     T: Instrument<ConcreteValue = DrumsetAction>
 {
     use DrumsetAction::*;
-    let mut track = Track::new(instrument);
+    let mut track = UnboundTrack::new(instrument);
     track.set_intensity(0.3);
 
     for _ in 0..measures {
