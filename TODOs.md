@@ -8,14 +8,6 @@ possible to still read finished (and therefore deleted) points.
 
 There are some missing features that are crucial for composing music.
 
-### Seperation of measures
-
-Measures are kind of invisible/non-existant in code right now. This isn't the
-end of the world, the code works perfectly fine without it. Though when it comes
-to workflow, it's a bit unusual to have no measures.
-
-Think about a workflow feature to visibly seperate notes out into measures.
-
 ### Crescendo and decrescendo
 
 A (de)crescendo represents a transition of the intensity. Since a (de)crescendo
