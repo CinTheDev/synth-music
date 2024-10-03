@@ -8,6 +8,7 @@ where
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
     U: Instrument,
 {
+    active_measure: Option<Measure<T>>,
     measures: Vec<Measure<T>>,
     time_signature: (u8, u8),
     instrument: U,
@@ -77,6 +78,7 @@ where
 {
     pub fn new(instrument: U, time_signature: (u8, u8)) -> Self {
         Self {
+            active_measure: Some(Measure::new(time_signature)),
             measures: Vec::new(),
             time_signature,
             instrument,
@@ -85,24 +87,23 @@ where
     }
 
     pub fn measure(&mut self) -> Result<&mut Measure<T>, ()> {
-        self.measures.push(Measure {
-            time_signature: self.time_signature,
-            notes: Vec::new(),
-        });
+        let active_measure_valid = self.get_active_measure().assert_measure_bounds();
 
-        let active_measure = self.get_active_measure();
+        match active_measure_valid {
+            Err(_) => return Err(()),
+            Ok(_) => {
+                let new_measure = Measure::new(self.time_signature);
+                let valid_measure = self.active_measure.replace(new_measure).unwrap();
 
-        if let Ok(_) = active_measure.assert_measure_bounds() {
-            return Ok(active_measure);
-        }
-        else {
-            return Err(());
+                self.measures.push(valid_measure);
+                let last_index = self.measures.len() - 1;
+                return Ok(&mut self.measures[last_index]);
+            }
         }
     }
 
     fn get_active_measure(&mut self) -> &mut Measure<T> {
-        let last_index = self.measures.len() - 1;
-        return &mut self.measures[last_index];
+        self.active_measure.as_mut().unwrap()
     }
 
     fn generate_tone(note: Note<T>, section_info: SectionInfo) -> Tone<U::ConcreteValue> {
@@ -126,6 +127,13 @@ where
 }
 
 impl<T: ScaledValue> Measure<T> {
+    fn new(time_signature: (u8, u8)) -> Self {
+        Self {
+            time_signature,
+            notes: Vec::new(),
+        }
+    }
+
     fn assert_measure_bounds(&self) -> Result<(), ()> {
         let max_measure_length = match self.time_signature.1 {
             1 => 16,
