@@ -13,42 +13,42 @@ fn example_1() {
     let mut track1 = MeasureTrack::new(SineGenerator, (4, 4));
     let mut track2 = MeasureTrack::new(SineGenerator, (2, 4));
 
-    track1.measure();
     sequential_notes!(track1, Quarter,
         first(3),
         second(3),
         third(3),
         fourth(3)
     );
-    track1.measure();
+    track1.measure().unwrap();
     sequential_notes!(track1, Quarter,
         fifth(3),
         sixth(3),
         seventh(3),
         first(4)
     );
+    track1.measure().unwrap();
 
-    track2.measure();
+    track2.measure().unwrap();
     sequential_notes!(track2, Quarter,
         fifth(3),
         sixth(3)
     );
-    track2.measure();
+    track2.measure().unwrap();
     sequential_notes!(track2, Quarter,
         seventh(3),
         first(4)
     );
-    track2.measure();
+    track2.measure().unwrap();
     sequential_notes!(track2, Quarter,
         second(4),
         third(4)
     );
-    track2.measure();
+    track2.measure().unwrap();
     sequential_notes!(track2, Quarter,
         fourth(4),
         fifth(4)
     );
-    track2.measure();
+    track2.measure().unwrap();
 
     let section_info = SectionInfo {
         bpm: 120.0,
