@@ -62,3 +62,9 @@ better to do this early while still familiar with the code.
 
 Also make sure to include some examples inline with documentation, research
 online what best practises for this are.
+
+### More and better examples
+
+All examples right now only serve testing purposes and aren't that great for
+showing the library's features. Write a bunch more examples with more isolated
+ideas and more comments so these can be used to learn this library.
