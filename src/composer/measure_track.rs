@@ -67,3 +67,17 @@ where
         todo!();
     }
 }
+
+impl<T, U> MeasureTrack<T, U>
+where 
+    T: ScaledValue<ConcreteValue = U::ConcreteValue>,
+    U: Instrument,
+{
+    pub fn new(instrument: U) -> Self {
+        Self {
+            measures: Vec::new(),
+            instrument,
+            current_intensity: 1.0,
+        }
+    }
+}
