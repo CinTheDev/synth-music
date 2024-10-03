@@ -1,4 +1,4 @@
-use unnamed_music::prelude::*;
+use synth_music::prelude::*;
 use tet12::TET12ConcreteTone;
 use std::time::Duration;
 

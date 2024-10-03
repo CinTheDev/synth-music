@@ -1,4 +1,4 @@
-use unnamed_music::prelude::*;
+use synth_music::prelude::*;
 
 fn main() {
     println!("Hello example");
@@ -13,7 +13,7 @@ fn example_1() {
     let mut track1 = Track::new(SineGenerator);
     let mut track2 = Track::new(SineGenerator);
 
-    unnamed_music::sequential_notes!(track1, Quarter,
+    sequential_notes!(track1, Quarter,
         first(3),
         second(3),
         third(3),
@@ -44,7 +44,7 @@ fn example_1() {
         time_signature: (4, 4),
     };
 
-    let section = unnamed_music::section!(section_info, 44100,
+    let section = section!(section_info, 44100,
         track1,
         track2
     );

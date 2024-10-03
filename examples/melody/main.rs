@@ -1,4 +1,4 @@
-use unnamed_music::prelude::*;
+use synth_music::prelude::*;
 
 mod instruments;
 mod tracks;
