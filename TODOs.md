@@ -4,6 +4,11 @@ All TODOs of this project are written here when needed; after completion the
 relevant points will be removed again. Though, through versioning (git) it's
 possible to still read finished (and therefore deleted) points.
 
+**NOTE**: This document shall now only contain points that are included in the
+first release version (0.1.0), the document shall be deleted once the code is
+ready for release (when all points are completed). Other ideas for future
+versions shall be written in another document.
+
 ## Missing features for composing
 
 There are some missing features that are crucial for composing music.
