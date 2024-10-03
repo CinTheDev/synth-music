@@ -54,8 +54,12 @@ where
         self.current_intensity = intensity;
     }
 
-    fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U> {
+    fn convert_to_export_track(mut self, section_info: SectionInfo) -> ExportTrack<U> {
         let mut tones = Vec::new();
+
+        if ! &self.get_active_measure().is_empty() {
+            eprintln!("WARNING: Unvalidated measure, you probably forgot to call track.measure() at the end.");
+        }
 
         for measure in self.measures {
             for note in measure.notes {
@@ -132,6 +136,10 @@ impl<T: ScaledValue> Measure<T> {
             time_signature,
             notes: Vec::new(),
         }
+    }
+
+    fn is_empty(&self) -> bool {
+        self.notes.is_empty()
     }
 
     fn assert_measure_bounds(&self) -> Result<(), ()> {
