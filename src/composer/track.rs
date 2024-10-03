@@ -4,14 +4,14 @@ use crate::instrument::Instrument;
 use crate::file_export::export_info::{ExportTrack, Tone};
 
 #[derive(Clone)]
-pub struct Track<T: ScaledValue, U: Instrument> {
+pub struct UnboundTrack<T: ScaledValue, U: Instrument> {
     notes: Vec<Note<T>>,
     instrument: U,
 
     current_intensity: f32,
 }
 
-impl<T, U> MusicTrack<T, U> for Track<T, U>
+impl<T, U> MusicTrack<T, U> for UnboundTrack<T, U>
 where 
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
     U: Instrument,
@@ -57,7 +57,7 @@ where
     }
 }
 
-impl<T, U> Track<T, U>
+impl<T, U> UnboundTrack<T, U>
 where 
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
     U: Instrument,
