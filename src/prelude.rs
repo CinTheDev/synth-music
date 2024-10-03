@@ -1,6 +1,8 @@
 // Composer imports
 pub use crate::composer;
-pub use composer::{Track, SectionInfo};
+pub use composer::SectionInfo;
+
+pub use composer::track::Track;
 
 pub use composer::note;
 pub use composer::note::{Note, ScaledValue};
