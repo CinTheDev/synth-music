@@ -11,6 +11,14 @@ please. Also don't forget to rename directories and the GitHub repository.
 
 After this we can start workign towards publishing.
 
+### Ideas for name
+
+- `track-music`
+- `music-composer`
+- `synth-composer`
+- `synth-tracks`
+- `synth-music`
+
 ## Missing features for composing
 
 There are some missing features that are crucial for composing music.
