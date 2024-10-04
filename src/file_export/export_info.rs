@@ -1,4 +1,5 @@
 use std::time::Duration;
+use std::ops::Range;
 use crate::instrument::Instrument;
 
 // Contains raw tones
@@ -13,7 +14,7 @@ pub struct Tone<T> {
     pub play_duration: Duration,
     pub tone_duration: Duration,
 
-    pub intensity: f32,
+    pub intensity: Range<f32>,
 }
 
 impl<T: Instrument> ExportTrack<T> {
