@@ -66,7 +66,10 @@ where
     }
 
     fn end_dynamic_change(&mut self, intensity: f32) {
-        self.next_note_dynamic_flag = Some(DynamicsFlag::EndChange);
+        let active_note = self.get_active_measure().notes.last_mut().unwrap();
+
+        active_note.dynamics_flag = DynamicsFlag::EndChange;
+        active_note.intensity = intensity;
         self.current_intensity = intensity;
     }
 
