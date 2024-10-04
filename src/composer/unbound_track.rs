@@ -11,6 +11,7 @@ pub struct UnboundTrack<T: ScaledValue, U: Instrument> {
     instrument: U,
 
     current_intensity: f32,
+    current_play_fraction: f32,
 }
 
 impl<T, U> MusicTrack<T, U> for UnboundTrack<T, U>
@@ -31,6 +32,7 @@ where
             values,
             length,
             intensity: self.current_intensity,
+            play_fraction: self.current_play_fraction,
             ..Default::default()
         });
 
@@ -40,6 +42,10 @@ where
 
     fn set_intensity(&mut self, intensity: f32) {
         self.current_intensity = intensity;
+    }
+
+    fn set_play_fraction(&mut self, play_fraction: f32) {
+        self.current_play_fraction = play_fraction;
     }
 
     fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U> {
@@ -64,6 +70,7 @@ where
             notes: Vec::new(),
             instrument,
             current_intensity: 1.0,
+            current_play_fraction: 1.0,
         }
     }
 

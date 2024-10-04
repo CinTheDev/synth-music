@@ -25,6 +25,7 @@ where
     fn notes(&mut self, length: Length, values: Vec<T>) -> &mut Note<T>;
 
     fn set_intensity(&mut self, intensity: f32);
+    fn set_play_fraction(&mut self, play_fraction: f32);
 
     fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U>;
 }

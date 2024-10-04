@@ -14,6 +14,7 @@ where
     instrument: U,
 
     current_intensity: f32,
+    current_play_fraction: f32,
 }
 
 pub struct Measure<T: ScaledValue> {
@@ -28,11 +29,13 @@ where
 {
     fn notes(&mut self, length: Length, values: Vec<T>) -> &mut Note<T> {
         let intensity = self.current_intensity;
+        let play_fraction = self.current_play_fraction;
         let active_measure = self.get_active_measure();
         active_measure.notes.push(Note {
             values,
             length,
             intensity,
+            play_fraction,
             ..Default::default()
         });
 
@@ -50,6 +53,10 @@ where
 
     fn set_intensity(&mut self, intensity: f32) {
         self.current_intensity = intensity;
+    }
+
+    fn set_play_fraction(&mut self, play_fraction: f32) {
+        self.current_play_fraction = play_fraction;
     }
 
     fn convert_to_export_track(mut self, section_info: SectionInfo) -> ExportTrack<U> {
@@ -85,6 +92,7 @@ where
             time_signature,
             instrument,
             current_intensity: 1.0,
+            current_play_fraction: 1.0,
         }
     }
 
