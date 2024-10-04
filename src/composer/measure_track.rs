@@ -122,7 +122,7 @@ where
             concrete_values,
             play_duration,
             tone_duration,
-            intensity: note.intensity,
+            intensity: note.intensity..note.intensity,
         }
     }
 }
