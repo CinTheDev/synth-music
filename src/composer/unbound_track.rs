@@ -84,7 +84,7 @@ where
         let mut i = 0;
 
         while let Some(notes_range) = Self::find_next_dynamics_change(&self.notes, i) {
-            i = notes_range.end;
+            i = notes_range.end + 1;
             Self::calculate_dynamics_over_notes(tones, notes_range);
         }
     }
@@ -106,7 +106,7 @@ where
                 if let Some(index_dynamics_start) = index_dynamics_start {
                     return Some(index_dynamics_start..i);
                 }
-                
+
                 panic!("EndChange without preceding StartChange.");
             }
         }
