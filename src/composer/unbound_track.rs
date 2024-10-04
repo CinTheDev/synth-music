@@ -28,10 +28,8 @@ where
         self.notes.push(Note {
             values,
             length,
-            play_fraction: 1.0,
             intensity: self.current_intensity,
-            dotted: false,
-            triole: false,
+            ..Default::default()
         });
 
         let last_index = self.notes.len() - 1;
