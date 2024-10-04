@@ -60,18 +60,7 @@ where
     }
 
     fn convert_to_export_track(mut self, section_info: SectionInfo) -> ExportTrack<U> {
-        let mut tones = Vec::new();
-
-        if ! &self.get_active_measure().is_empty() {
-            eprintln!("WARNING: Unvalidated measure, you probably forgot to call track.measure() at the end.");
-        }
-
-        for measure in self.measures {
-            for note in measure.notes {
-                let tone = Self::generate_tone(note, section_info);
-                tones.push(tone);
-            }
-        }
+        let mut tones = self.conversion_first_pass(section_info);
 
         ExportTrack {
             tones,
@@ -115,7 +104,26 @@ where
         self.active_measure.as_mut().unwrap()
     }
 
-    fn generate_tone(note: Note<T>, section_info: SectionInfo) -> Tone<U::ConcreteValue> {
+    fn conversion_first_pass(&self, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
+        let mut tones = Vec::new();
+
+        let active_measure = self.active_measure.as_ref().unwrap();
+
+        if ! active_measure.is_empty() {
+            eprintln!("WARNING: Unvalidated measure, you probably forgot to call track.measure() at the end.");
+        }
+
+        for measure in &self.measures {
+            for note in &measure.notes {
+                let tone = Self::generate_tone(&note, section_info);
+                tones.push(tone);
+            }
+        }
+
+        return tones;
+    }
+
+    fn generate_tone(note: &Note<T>, section_info: SectionInfo) -> Tone<U::ConcreteValue> {
         let mut concrete_values = Vec::new();
 
         for scaled_value in &note.values {
