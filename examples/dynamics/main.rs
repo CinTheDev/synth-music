@@ -51,6 +51,8 @@ where
     use tet12::*;
     let mut track = UnboundTrack::new(instrument);
 
+    track.set_play_fraction(0.9);
+
     // Held notes
 
     track.set_intensity(0.3);
