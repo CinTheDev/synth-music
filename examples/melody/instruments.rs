@@ -27,19 +27,18 @@ impl SoftBass {
         }
     }
 
-    pub fn generate(&self, info: ToneInfo<TET12ConcreteTone>) -> f32 {
-        Self::triangle_wave(info) * self.decay_function(info) * info.intensity
+    pub fn generate(&self, frequency: f64, time: Duration) -> f32 {
+        Self::triangle_wave(frequency, time) * self.decay_function(time)
     }
 
-    fn triangle_wave(info: ToneInfo<TET12ConcreteTone>) -> f32 {
+    fn triangle_wave(frequency: f64, time: Duration) -> f32 {
         use std::f64::consts::PI;
-        let frequency = info.tone.to_frequency() as f64;
-        let x = info.time.as_secs_f64() * frequency * 2.0 * PI;
+        let x = time.as_secs_f64() * frequency * 2.0 * PI;
         x.sin().asin() as f32
     }
 
-    fn decay_function(&self, info: ToneInfo<TET12ConcreteTone>) -> f32 {
-        0.5_f32.powf(info.time.as_secs_f32() * self.decay_speed)
+    fn decay_function(&self, time: Duration) -> f32 {
+        0.5_f32.powf(time.as_secs_f32() * self.decay_speed)
     }
 }
 
@@ -50,14 +49,14 @@ impl HardBass {
         }
     }
 
-    pub fn generate(&self, info: ToneInfo<TET12ConcreteTone>) -> f32 {
+    pub fn generate(&self, frequency: f64, time: Duration) -> f32 {
         let mut amplitude = 0.0;
 
         for n in 0..self.harmonics {
-            amplitude += Self::harmonic(n, &info);
+            amplitude += Self::harmonic(n, frequency, time);
         }
 
-        return amplitude * info.intensity;
+        return amplitude;
     }
 
     fn sine_wave(time: Duration, frequency: f64) -> f32 {
@@ -65,10 +64,9 @@ impl HardBass {
         (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
     }
 
-    fn harmonic(n: u32, info: &ToneInfo<TET12ConcreteTone>) -> f32 {
+    fn harmonic(n: u32, frequency: f64, time: Duration) -> f32 {
         let factor = (2 * n + 1) as f32;
-        let frequency = info.tone.to_frequency() as f64;
-        Self::sine_wave(info.time, frequency * factor as f64) / factor
+        Self::sine_wave(time, frequency * factor as f64) / factor
     }
 }
 
@@ -89,13 +87,13 @@ impl Drumset {
         }
     }
 
-    fn generate(&self, info: ToneInfo<DrumsetAction>) -> f32 {
-        if info.time > Duration::from_millis(100) {
+    fn generate(&self, time: Duration) -> f32 {
+        if time > Duration::from_millis(100) {
             return 0.0;
         }
 
         let value = Self::random();
-        return value * info.intensity;
+        return value;
     }
 
     pub fn new() -> Self {
@@ -108,23 +106,37 @@ impl Drumset {
 impl Instrument for SoftBass {
     type ConcreteValue = TET12ConcreteTone;
 
-    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
-        self.generate(info)
+    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
+        let mut result = 0.0;
+
+        for tone in &info.concrete_values {
+            let frequency = tone.to_frequency() as f64;
+            result += self.generate(frequency, time);
+        }
+
+        return result * info.intensity.start;
     }
 }
 
 impl Instrument for HardBass {
     type ConcreteValue = TET12ConcreteTone;
 
-    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
-        self.generate(info)
+    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
+        let mut result = 0.0;
+
+        for tone in &info.concrete_values {
+            let frequency = tone.to_frequency() as f64;
+            result += self.generate(frequency, time);
+        }
+
+        return result * info.intensity.start;
     }
 }
 
 impl Instrument for Drumset {
     type ConcreteValue = DrumsetAction;
 
-    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
-        self.generate(info)
+    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
+        self.generate(time) * info.intensity.start
     }
 }
