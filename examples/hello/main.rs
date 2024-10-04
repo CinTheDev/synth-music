@@ -105,8 +105,15 @@ impl SineGenerator {
 impl Instrument for SineGenerator {
     type ConcreteValue = tet12::TET12ConcreteTone;
 
-    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
-        let frequency = info.tone.to_frequency() as f64;
-        Self::generate(frequency, info.time)
+    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
+        let mut result = 0.0;
+
+        for tone in &info.concrete_values {
+            let frequency = tone.to_frequency() as f64;
+            result += Self::generate(frequency, time);
+            
+        }
+
+        return result * info.intensity.start;
     }
 }
