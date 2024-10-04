@@ -16,10 +16,10 @@ pub enum Length {
 }
 
 #[derive(Clone, Copy)]
-pub enum DynamicsState {
-    Constant,
-    Increasing, // Crescendo
-    Decreasing, // Decrescendo
+pub enum DynamicsFlag {
+    None,
+    StartChange,
+    EndChange,
 }
 
 // Abstract note
@@ -30,7 +30,7 @@ pub struct Note<T: ScaledValue> {
     pub play_fraction: f32,
 
     pub intensity: f32,
-    pub dynamics_state: DynamicsState,
+    pub dynamics_flag: DynamicsFlag,
 
     pub dotted: bool,
     pub triole: bool,
@@ -44,7 +44,7 @@ impl<T: ScaledValue> Default for Note<T> {
             play_fraction: 1.0,
 
             intensity: 1.0,
-            dynamics_state: DynamicsState::Constant,
+            dynamics_flag: DynamicsFlag::None,
 
             dotted: false,
             triole: false
@@ -68,8 +68,8 @@ impl<T: ScaledValue> Note<T> {
         self
     }
 
-    pub fn dynamics(&mut self, state: DynamicsState) -> &mut Self {
-        self.dynamics_state = state;
+    pub fn dynamics(&mut self, flag: DynamicsFlag) -> &mut Self {
+        self.dynamics_flag = flag;
         self
     }
 
