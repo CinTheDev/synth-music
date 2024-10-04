@@ -18,6 +18,7 @@ pub use instrument::Instrument;
 pub use instrument::predefined;
 pub use predefined::tet12;
 
+
 // File-export imports
 pub use crate::file_export;
 pub use file_export::{
@@ -25,3 +26,5 @@ pub use file_export::{
     wav_export::WavExport,
     export_info
 };
+
+pub use export_info::Tone;
