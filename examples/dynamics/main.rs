@@ -57,36 +57,32 @@ where
 
     track.set_intensity(0.3);
 
-    track.note(Whole, first(4)).dynamics(DynamicsFlag::StartChange);
+    track.note(Whole, first(4)).start_dynamic_change();
     track.measure().unwrap();
-    track.set_intensity(1.0);
-    track.note(Whole, first(4)).dynamics(DynamicsFlag::EndChange);
+    track.note(Whole, first(4)).end_dynamic_change(1.0);
     track.measure().unwrap();
     
-    track.note(Whole, first(4)).dynamics(DynamicsFlag::StartChange);
+    track.note(Whole, first(4)).start_dynamic_change();
     track.measure().unwrap();
-    track.set_intensity(0.3);
-    track.note(Whole, first(4)).dynamics(DynamicsFlag::EndChange);
+    track.note(Whole, first(4)).end_dynamic_change(0.3);
     track.measure().unwrap();
 
     track.pause(Whole);
     track.measure().unwrap();
     // Short notes
 
-    track.note(Quarter, first(4)).dynamics(DynamicsFlag::StartChange);
+    track.note(Quarter, first(4)).start_dynamic_change();
     for _ in 0..2 {
         track.note(Quarter, first(4));
     }
-    track.set_intensity(1.0);
-    track.note(Quarter, first(4)).dynamics(DynamicsFlag::EndChange);
+    track.note(Quarter, first(4)).end_dynamic_change(1.0);
     track.measure().unwrap();
 
-    track.note(Quarter, first(4)).dynamics(DynamicsFlag::StartChange);
+    track.note(Quarter, first(4)).start_dynamic_change();
     for _ in 0..2 {
         track.note(Quarter, first(4));
     }
-    track.set_intensity(0.3);
-    track.note(Quarter, first(4)).dynamics(DynamicsFlag::EndChange);
+    track.note(Quarter, first(4)).end_dynamic_change(0.3);
     track.measure().unwrap();
 
     track.pause(Whole);
