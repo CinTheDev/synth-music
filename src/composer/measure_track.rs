@@ -59,12 +59,13 @@ where
         self.current_play_fraction = play_fraction;
     }
 
-    fn convert_to_export_track(mut self, section_info: SectionInfo) -> ExportTrack<U> {
-        let mut tones = self.conversion_first_pass(section_info);
+    fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U> {
+        let (instrument, notes) = self.arrange();
+        let mut tones = Self::conversion_first_pass(&notes, section_info);
 
         ExportTrack {
             tones,
-            instrument: self.instrument,
+            instrument,
         }
     }
 }
@@ -104,8 +105,8 @@ where
         self.active_measure.as_mut().unwrap()
     }
 
-    fn conversion_first_pass(&self, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
-        let mut tones = Vec::new();
+    fn arrange(self) -> (U, Vec<Note<T>>) {
+        let mut notes = Vec::new();
 
         let active_measure = self.active_measure.as_ref().unwrap();
 
@@ -113,14 +114,38 @@ where
             eprintln!("WARNING: Unvalidated measure, you probably forgot to call track.measure() at the end.");
         }
 
-        for measure in &self.measures {
-            for note in &measure.notes {
-                let tone = Self::generate_tone(&note, section_info);
-                tones.push(tone);
+        for measure in self.measures {
+            for note in measure.notes {
+                notes.push(note)
             }
         }
 
+        return (self.instrument, notes);
+    }
+
+    fn conversion_first_pass(notes: &Vec<Note<T>>, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
+        let mut tones = Vec::new();
+
+        for note in notes {
+            let tone = Self::generate_tone(&note, section_info);
+            tones.push(tone);
+        }
+
         return tones;
+    }
+
+    // WARNING: Assumes that notes align with tones
+    // Fix if this doesn't apply anymore
+    fn conversion_pass_dynamics(
+        &self,
+        notes: &Vec<Note<T>>,
+        tones: &mut Vec<Tone<U::ConcreteValue>>
+    ) {
+        let mut i = 0;
+
+        while let Some(notes_range) = Self::find_next_dynamics_change(&notes, i) {
+            todo!();
+        }
     }
 
     fn generate_tone(note: &Note<T>, section_info: SectionInfo) -> Tone<U::ConcreteValue> {
