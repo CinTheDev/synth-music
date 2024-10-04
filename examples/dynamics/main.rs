@@ -47,7 +47,6 @@ where
     T: Instrument<ConcreteValue = tet12::TET12ConcreteTone>
 {
     use note::Length::*;
-    use note::DynamicsFlag;
     use tet12::*;
     let mut track = MeasureTrack::new(instrument, (4, 4));
 
@@ -57,32 +56,40 @@ where
 
     track.set_intensity(0.3);
 
-    track.note(Whole, first(4)).start_dynamic_change();
+    track.start_dynamic_change();
+    track.note(Whole, first(4));
     track.measure().unwrap();
-    track.note(Whole, first(4)).end_dynamic_change(1.0);
+    track.end_dynamic_change(1.0);
+    track.note(Whole, first(4));
     track.measure().unwrap();
     
-    track.note(Whole, first(4)).start_dynamic_change();
+    track.start_dynamic_change();
+    track.note(Whole, first(4));
     track.measure().unwrap();
-    track.note(Whole, first(4)).end_dynamic_change(0.3);
+    track.end_dynamic_change(0.3);
+    track.note(Whole, first(4));
     track.measure().unwrap();
 
     track.pause(Whole);
     track.measure().unwrap();
     // Short notes
 
-    track.note(Quarter, first(4)).start_dynamic_change();
+    track.start_dynamic_change();
+    track.note(Quarter, first(4));
     for _ in 0..2 {
         track.note(Quarter, first(4));
     }
-    track.note(Quarter, first(4)).end_dynamic_change(1.0);
+    track.end_dynamic_change(1.0);
+    track.note(Quarter, first(4));
     track.measure().unwrap();
 
-    track.note(Quarter, first(4)).start_dynamic_change();
+    track.start_dynamic_change();
+    track.note(Quarter, first(4));
     for _ in 0..2 {
         track.note(Quarter, first(4));
     }
-    track.note(Quarter, first(4)).end_dynamic_change(0.3);
+    track.end_dynamic_change(0.3);
+    track.note(Quarter, first(4));
     track.measure().unwrap();
 
     track.pause(Whole);
