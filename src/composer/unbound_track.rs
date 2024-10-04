@@ -91,7 +91,8 @@ where
         let mut i = 0;
 
         while let Some(notes_range) = Self::find_next_dynamics_change(&self.notes, i) {
-            i = notes_range.end + 1;
+            i = notes_range.end;
+            println!("Range: {}..{}", notes_range.start, notes_range.end);
             Self::calculate_dynamics_over_notes(tones, notes_range);
         }
     }
@@ -111,7 +112,7 @@ where
             }
             if note.dynamics_flag == DynamicsFlag::EndChange {
                 if let Some(index_dynamics_start) = index_dynamics_start {
-                    return Some(index_dynamics_start..i);
+                    return Some(index_dynamics_start..(i + 1));
                 }
 
                 panic!("EndChange without preceding StartChange.");
@@ -127,7 +128,7 @@ where
 
     fn calculate_dynamics_over_notes(tones: &mut Vec<Tone<U::ConcreteValue>>, range: Range<usize>) {
         let start_intensity = tones[range.start].intensity.start;
-        let end_intensity = tones[range.end].intensity.start;
+        let end_intensity = tones[range.end - 1].intensity.start;
 
         let mut time_delta = Duration::ZERO;
 
