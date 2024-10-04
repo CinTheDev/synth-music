@@ -42,11 +42,11 @@ impl Instrument for LinearSine {
 
         for tone in &info.concrete_values {
             let frequency = tone.to_frequency() as f64;
-            let wave = Self::wave(frequency, info.tone_duration.as_secs_f64());
+            let wave = Self::wave(frequency, time.as_secs_f64());
             result += wave;
         }
 
-        return result; // TODO: Amplitude
+        return result * Self::current_intensity(time.as_secs_f32(), info.tone_duration.as_secs_f32());
     }
 }
 
@@ -58,10 +58,10 @@ impl Instrument for PunchySine {
 
         for tone in &info.concrete_values {
             let frequency = tone.to_frequency() as f64;
-            let wave = Self::wave(frequency, info.tone_duration.as_secs_f64());
+            let wave = Self::wave(frequency, time.as_secs_f64());
             result += wave;
         }
 
-        return result;
+        return result * Self::decay(time.as_secs_f32()) * info.intensity.start;
     }
 }
