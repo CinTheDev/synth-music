@@ -29,6 +29,8 @@ more intuitive.
 Right now, we can set a flag for dynamics changes on a note, and have to
 manually adjust intensity beforehand every time.
 
+##### Variant 1 (functions on notes)
+
 First of all, it would be better to make these into functions that take no
 argument (e.g. `.start_intensity_change()` instead
 `.dynamcis(DynamicFlags::StartChange)`).
@@ -36,6 +38,10 @@ argument (e.g. `.start_intensity_change()` instead
 Second (ollowing from above), make the function that marks the end of a change
 forcibly take the intensity as an argument. (e.g.
 `.end_intensity_change([intensity])`).
+
+##### Variant 2 (functions on tracks)
+
+The same as Variant 1 but the functions are implemented for Tracks.
 
 ## Improve time signatures & note lengths
 
