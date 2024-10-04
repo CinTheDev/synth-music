@@ -24,6 +24,9 @@ where
     fn note(&mut self, length: Length, value: T) -> &mut Note<T>;
     fn notes(&mut self, length: Length, values: Vec<T>) -> &mut Note<T>;
 
+    fn start_dynamic_change(&mut self);
+    fn end_dynamic_change(&mut self, intensity: f32);
+
     fn set_intensity(&mut self, intensity: f32);
     fn set_play_fraction(&mut self, play_fraction: f32);
 

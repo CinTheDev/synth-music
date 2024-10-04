@@ -1,4 +1,4 @@
-use super::note::{Note, ScaledValue, Length};
+use super::note::{Note, ScaledValue, Length, DynamicsFlag};
 use super::{SectionInfo, MusicTrack};
 use crate::instrument::Instrument;
 use crate::file_export::export_info::{ExportTrack, Tone};
@@ -17,6 +17,8 @@ where
 
     current_intensity: f32,
     current_play_fraction: f32,
+
+    next_note_dynamic_flag: Option<DynamicsFlag>,
 }
 
 pub struct Measure<T: ScaledValue> {
@@ -32,12 +34,18 @@ where
     fn notes(&mut self, length: Length, values: Vec<T>) -> &mut Note<T> {
         let intensity = self.current_intensity;
         let play_fraction = self.current_play_fraction;
+
+        let dynamics_flag = self.next_note_dynamic_flag.take().unwrap_or(DynamicsFlag::None);
+
         let active_measure = self.get_active_measure();
+
+
         active_measure.notes.push(Note {
             values,
             length,
             intensity,
             play_fraction,
+            dynamics_flag,
             ..Default::default()
         });
 
@@ -51,6 +59,15 @@ where
 
     fn pause(&mut self, length: Length) -> &mut Note<T> {
         self.notes(length, vec![])
+    }
+
+    fn start_dynamic_change(&mut self) {
+        self.next_note_dynamic_flag = Some(DynamicsFlag::StartChange);
+    }
+
+    fn end_dynamic_change(&mut self, intensity: f32) {
+        self.next_note_dynamic_flag = Some(DynamicsFlag::EndChange);
+        self.current_intensity = intensity;
     }
 
     fn set_intensity(&mut self, intensity: f32) {
@@ -86,6 +103,7 @@ where
             instrument,
             current_intensity: 1.0,
             current_play_fraction: 1.0,
+            next_note_dynamic_flag: None,
         }
     }
 

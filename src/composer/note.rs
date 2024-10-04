@@ -68,16 +68,16 @@ impl<T: ScaledValue> Note<T> {
         self
     }
 
-    pub fn start_dynamic_change(&mut self) -> &mut Self {
-        self.dynamics_flag = DynamicsFlag::StartChange;
-        self
-    }
+    //pub fn start_dynamic_change(&mut self) -> &mut Self {
+    //    self.dynamics_flag = DynamicsFlag::StartChange;
+    //    self
+    //}
 
-    pub fn end_dynamic_change(&mut self, intensity: f32) -> &mut Self {
-        self.dynamics_flag = DynamicsFlag::EndChange;
-        self.intensity = intensity;
-        self
-    }
+    //pub fn end_dynamic_change(&mut self, intensity: f32) -> &mut Self {
+    //    self.dynamics_flag = DynamicsFlag::EndChange;
+    //    self.intensity = intensity;
+    //    self
+    //}
 
     pub fn get_duration(&self, bpm: f32) -> std::time::Duration {
         let quarters_per_second = bpm / 60.0;
