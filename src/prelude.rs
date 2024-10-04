@@ -14,7 +14,7 @@ pub use crate::{notes, sequential_notes, section};
 
 // Instrument imports
 pub use crate::instrument;
-pub use instrument::{Instrument, ToneInfo};
+pub use instrument::Instrument;
 pub use instrument::predefined;
 pub use predefined::tet12;
 

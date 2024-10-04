@@ -2,7 +2,9 @@ pub mod tet12;
 use tet12::TET12ConcreteTone;
 
 use super::Instrument;
-use super::ToneInfo;
+use super::Tone;
+
+/*
 
 #[derive(Clone, Copy)]
 pub enum PredefinedInstrument {
@@ -11,7 +13,7 @@ pub enum PredefinedInstrument {
 }
 
 impl PredefinedInstrument {
-    pub fn sine_generator(info: ToneInfo<TET12ConcreteTone>) -> f32 {
+    pub fn sine_generator(info: Tone<TET12ConcreteTone>) -> f32 {
         use std::f64::consts::PI;
         
         let frequency = info.tone.to_frequency() as f64;
@@ -19,7 +21,7 @@ impl PredefinedInstrument {
         return x.sin() as f32 * info.intensity;
     }
 
-    pub fn triangle_generator(info: ToneInfo<TET12ConcreteTone>) -> f32 {
+    pub fn triangle_generator(info: Tone<TET12ConcreteTone>) -> f32 {
         use std::f64::consts::PI;
 
         let frequency = info.tone.to_frequency() as f64;
@@ -31,10 +33,11 @@ impl PredefinedInstrument {
 impl Instrument for PredefinedInstrument {
     type ConcreteValue = TET12ConcreteTone;
 
-    fn generate_sound(&self, info: ToneInfo<Self::ConcreteValue>) -> f32 {
+    fn generate_sound(&self, info: Tone<Self::ConcreteValue>) -> f32 {
         match self {
             Self::SineGenerator => Self::sine_generator(info),
             Self::TriangleGenerator => Self::triangle_generator(info),
         }
     }
 }
+*/

@@ -5,5 +5,5 @@ use crate::file_export::export_info::Tone;
 pub trait Instrument: Clone {
     type ConcreteValue: Clone + Copy;
 
-    fn generate_sound(&self, info: Tone<Self::ConcreteValue>) -> f32;
+    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>) -> f32;
 }
