@@ -105,8 +105,9 @@ impl LinearSine {
         (secs * frequency * 2.0 * PI).sin() as f32
     }
 
-    fn current_intensity(current_secs: f32, total_secs: f32) -> f32 {
-        return current_secs / total_secs;
+    fn current_intensity(current_secs: f32, total_secs: f32, intensity: &std::ops::Range<f32>) -> f32 {
+        let t =  current_secs / total_secs;
+        return (intensity.start) + (intensity.end - intensity.start) * t;
     }
 }
 
@@ -133,7 +134,7 @@ impl Instrument for LinearSine {
             result += wave;
         }
 
-        return result * Self::current_intensity(time.as_secs_f32(), info.tone_duration.as_secs_f32());
+        return result * Self::current_intensity(time.as_secs_f32(), info.tone_duration.as_secs_f32(), &info.intensity);
     }
 }
 

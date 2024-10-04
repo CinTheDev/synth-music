@@ -92,7 +92,6 @@ where
 
         while let Some(notes_range) = Self::find_next_dynamics_change(&self.notes, i) {
             i = notes_range.end;
-            println!("Range: {}..{}", notes_range.start, notes_range.end);
             Self::calculate_dynamics_over_notes(tones, notes_range);
         }
     }
