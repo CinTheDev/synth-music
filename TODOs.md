@@ -9,40 +9,6 @@ first release version (0.1.0), the document shall be deleted once the code is
 ready for release (when all points are completed). Other ideas for future
 versions shall be written in another document.
 
-## Missing features for composing
-
-There are some missing features that are crucial for composing music.
-
-### Crescendo and decrescendo
-
-A (de)crescendo represents a transition of the intensity. Since a (de)crescendo
-should be able to change the intensity while a note plays, it needs to be
-represented individually.
-
-Implement it and restructure if needed.
-
-#### Subtask: Improve Syntax
-
-Before we mark this as done, we should probably try to make the syntax a little
-more intuitive.
-
-Right now, we can set a flag for dynamics changes on a note, and have to
-manually adjust intensity beforehand every time.
-
-##### Variant 1 (functions on notes)
-
-First of all, it would be better to make these into functions that take no
-argument (e.g. `.start_intensity_change()` instead
-`.dynamcis(DynamicFlags::StartChange)`).
-
-Second (ollowing from above), make the function that marks the end of a change
-forcibly take the intensity as an argument. (e.g.
-`.end_intensity_change([intensity])`).
-
-##### Variant 2 (functions on tracks)
-
-The same as Variant 1 but the functions are implemented for Tracks.
-
 ## Improve time signatures & note lengths
 
 The implementation of time signatures is kind of arbitrary right now, they're
