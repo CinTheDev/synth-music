@@ -21,3 +21,13 @@ to go into one note.
 
 Problem 2: There's a chance of repeating the same calculation if we need the
 same info for multiple different things.
+
+### Potential fixes
+
+Problem 2 is probably easy to fix (at least with syntax). If we make sure to
+cleanly sort the calculation into dedicated functions, we won't have to repeat
+implementation. Though, we would still be repeating calculations in that case,
+but we don't aim for extreme performance, so it's OK for now.
+
+Prolem 1 is a bit harder to think about and to find a solution for, even with
+other potential approaches.
