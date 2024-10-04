@@ -15,13 +15,22 @@ pub enum Length {
     Sixteenth,
 }
 
+#[derive(Clone, Copy)]
+pub enum DynamicsState {
+    Constant,
+    Increasing, // Crescendo
+    Decreasing, // Decrescendo
+}
+
 // Abstract note
 #[derive(Clone)]
 pub struct Note<T: ScaledValue> {
     pub values: Vec<T>,
     pub length: Length,
     pub play_fraction: f32,
+
     pub intensity: f32,
+    pub dynamics_state: DynamicsState,
 
     pub dotted: bool,
     pub triole: bool,
