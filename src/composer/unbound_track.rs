@@ -12,6 +12,8 @@ pub struct UnboundTrack<T: ScaledValue, U: Instrument> {
 
     current_intensity: f32,
     current_play_fraction: f32,
+
+    next_note_dynamic_flag: Option<DynamicsFlag>,
 }
 
 impl<T, U> MusicTrack<T, U> for UnboundTrack<T, U>
@@ -28,16 +30,31 @@ where
     }
 
     fn notes(&mut self, length: Length, values: Vec<T>) -> &mut Note<T> {
+        let intensity = self.current_intensity;
+        let play_fraction = self.current_play_fraction;
+
+        let dynamics_flag = self.next_note_dynamic_flag.take().unwrap_or(DynamicsFlag::None);
+
         self.notes.push(Note {
             values,
             length,
-            intensity: self.current_intensity,
-            play_fraction: self.current_play_fraction,
+            intensity,
+            play_fraction,
+            dynamics_flag,
             ..Default::default()
         });
 
         let last_index = self.notes.len() - 1;
         return &mut self.notes[last_index];
+    }
+
+    fn start_dynamic_change(&mut self) {
+        self.next_note_dynamic_flag = Some(DynamicsFlag::StartChange);
+    }
+
+    fn end_dynamic_change(&mut self, intensity: f32) {
+        self.next_note_dynamic_flag = Some(DynamicsFlag::EndChange);
+        self.current_intensity = intensity;
     }
 
     fn set_intensity(&mut self, intensity: f32) {
@@ -71,6 +88,7 @@ where
             instrument,
             current_intensity: 1.0,
             current_play_fraction: 1.0,
+            next_note_dynamic_flag: None,
         }
     }
 
