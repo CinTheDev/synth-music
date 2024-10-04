@@ -15,7 +15,7 @@ pub enum Length {
     Sixteenth,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum DynamicsFlag {
     None,
     StartChange,
