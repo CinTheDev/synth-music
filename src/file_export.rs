@@ -47,7 +47,7 @@ fn render_tone<T: Instrument>(tone: &Tone<T::ConcreteValue>, sample_rate: u32, i
         );
 
         let sample_value =
-            instrument.generate_sound(tone)
+            instrument.generate_sound(tone, time)
             * get_fade_amplitude(tone.tone_duration, time);
 
         buffer.push(sample_value);

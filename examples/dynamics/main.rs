@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use synth_music::prelude::*;
 
 fn main() {
@@ -35,7 +37,7 @@ impl PunchySine {
 impl Instrument for LinearSine {
     type ConcreteValue = tet12::TET12ConcreteTone;
 
-    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>) -> f32 {
+    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
         let mut result = 0.0;
 
         for tone in &info.concrete_values {
@@ -51,7 +53,7 @@ impl Instrument for LinearSine {
 impl Instrument for PunchySine {
     type ConcreteValue = tet12::TET12ConcreteTone;
 
-    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>) -> f32 {
+    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
         let mut result = 0.0;
 
         for tone in &info.concrete_values {
