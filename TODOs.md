@@ -9,18 +9,6 @@ first release version (0.1.0), the document shall be deleted once the code is
 ready for release (when all points are completed). Other ideas for future
 versions shall be written in another document.
 
-## Missing features for composing
-
-There are some missing features that are crucial for composing music.
-
-### Crescendo and decrescendo
-
-A (de)crescendo represents a transition of the intensity. Since a (de)crescendo
-should be able to change the intensity while a note plays, it needs to be
-represented individually.
-
-Implement it and restructure if needed.
-
 ## Improve time signatures & note lengths
 
 The implementation of time signatures is kind of arbitrary right now, they're

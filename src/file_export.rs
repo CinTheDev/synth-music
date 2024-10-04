@@ -4,7 +4,7 @@ pub mod wav_export;
 use std::time::Duration;
 
 use export_info::*;
-use crate::instrument::{Instrument, ToneInfo};
+use crate::instrument::Instrument;
 
 const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
 const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
@@ -46,18 +46,9 @@ fn render_tone<T: Instrument>(tone: &Tone<T::ConcreteValue>, sample_rate: u32, i
             i as f64 / samples as f64 * tone.play_duration.as_secs_f64()
         );
 
-        let mut sample_value = 0.0;
-
-        for value in &tone.concrete_values {
-            let info = ToneInfo {
-                tone: *value,
-                time,
-                intensity: tone.intensity,
-            };
-            sample_value = instrument.generate_sound(info);
-        }
-
-        sample_value *= get_fade_amplitude(tone.tone_duration, time);
+        let sample_value =
+            instrument.generate_sound(tone, time)
+            * get_fade_amplitude(tone.tone_duration, time);
 
         buffer.push(sample_value);
     }

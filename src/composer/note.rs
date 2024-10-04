@@ -15,16 +15,41 @@ pub enum Length {
     Sixteenth,
 }
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum DynamicsFlag {
+    None,
+    StartChange,
+    EndChange,
+}
+
 // Abstract note
 #[derive(Clone)]
 pub struct Note<T: ScaledValue> {
     pub values: Vec<T>,
     pub length: Length,
     pub play_fraction: f32,
+
     pub intensity: f32,
+    pub dynamics_flag: DynamicsFlag,
 
     pub dotted: bool,
     pub triole: bool,
+}
+
+impl<T: ScaledValue> Default for Note<T> {
+    fn default() -> Self {
+        Self {
+            values: Vec::new(),
+            length: Length::Quarter,
+            play_fraction: 1.0,
+
+            intensity: 1.0,
+            dynamics_flag: DynamicsFlag::None,
+
+            dotted: false,
+            triole: false
+        }
+    }
 }
 
 impl<T: ScaledValue> Note<T> {
