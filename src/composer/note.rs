@@ -36,6 +36,22 @@ pub struct Note<T: ScaledValue> {
     pub triole: bool,
 }
 
+impl<T: ScaledValue> Default for Note<T> {
+    fn default() -> Self {
+        Self {
+            values: Vec::new(),
+            length: Length::Quarter,
+            play_fraction: 1.0,
+
+            intensity: 1.0,
+            dynamics_state: DynamicsState::Constant,
+
+            dotted: false,
+            triole: false
+        }
+    }
+}
+
 impl<T: ScaledValue> Note<T> {
     pub fn staccato(&mut self) -> &mut Self {
         self.play_fraction = 0.2;
