@@ -68,6 +68,11 @@ impl<T: ScaledValue> Note<T> {
         self
     }
 
+    pub fn dynamics(&mut self, state: DynamicsState) -> &mut Self {
+        self.dynamics_state = state;
+        self
+    }
+
     pub fn get_duration(&self, bpm: f32) -> std::time::Duration {
         let quarters_per_second = bpm / 60.0;
         let multiplier = self.length.get_time_length();
