@@ -30,7 +30,7 @@ fn main() {
     // Export
     use std::path::PathBuf;
 
-    if std::fs::remove_dir("export").is_err() {
+    if std::fs::read_dir("export").is_err() {
         std::fs::create_dir("export").unwrap();
     }
 
