@@ -21,6 +21,22 @@ represented individually.
 
 Implement it and restructure if needed.
 
+#### Subtask: Improve Syntax
+
+Before we mark this as done, we should probably try to make the syntax a little
+more intuitive.
+
+Right now, we can set a flag for dynamics changes on a note, and have to
+manually adjust intensity beforehand every time.
+
+First of all, it would be better to make these into functions that take no
+argument (e.g. `.start_intensity_change()` instead
+`.dynamcis(DynamicFlags::StartChange)`).
+
+Second (ollowing from above), make the function that marks the end of a change
+forcibly take the intensity as an argument. (e.g.
+`.end_intensity_change([intensity])`).
+
 ## Improve time signatures & note lengths
 
 The implementation of time signatures is kind of arbitrary right now, they're
