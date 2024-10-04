@@ -106,9 +106,8 @@ where
                 if let Some(index_dynamics_start) = index_dynamics_start {
                     return Some(index_dynamics_start..i);
                 }
-                else {
-                    panic!("EndChange without preceding StartChange.");
-                }
+                
+                panic!("EndChange without preceding StartChange.");
             }
         }
 
