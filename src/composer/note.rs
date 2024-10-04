@@ -68,8 +68,14 @@ impl<T: ScaledValue> Note<T> {
         self
     }
 
-    pub fn dynamics(&mut self, flag: DynamicsFlag) -> &mut Self {
-        self.dynamics_flag = flag;
+    pub fn start_dynamic_change(&mut self) -> &mut Self {
+        self.dynamics_flag = DynamicsFlag::StartChange;
+        self
+    }
+
+    pub fn end_dynamic_change(&mut self, intensity: f32) -> &mut Self {
+        self.dynamics_flag = DynamicsFlag::EndChange;
+        self.intensity = intensity;
         self
     }
 
