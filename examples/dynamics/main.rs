@@ -58,16 +58,10 @@ where
     track.set_intensity(0.3);
 
     track.note(Whole, first(4)).dynamics(DynamicsFlag::StartChange);
-    track.note(Whole, first(4));
-    track.note(Whole, first(4));
     track.set_intensity(1.0);
-    track.note(Whole, first(1)).dynamics(DynamicsFlag::EndChange);
-    
+    track.note(Whole, first(4)).dynamics(DynamicsFlag::EndChange);
     
     track.note(Whole, first(4)).dynamics(DynamicsFlag::StartChange);
-    track.note(Whole, first(4));
-    track.note(Whole, first(4));
-
     track.set_intensity(0.3);
     track.note(Whole, first(4)).dynamics(DynamicsFlag::EndChange);
 
@@ -75,18 +69,16 @@ where
     // Short notes
 
     track.note(Quarter, first(4)).dynamics(DynamicsFlag::StartChange);
-
-    for _ in 0..3 * 4-2 {
+    for _ in 0..2 {
         track.note(Quarter, first(4));
     }
     track.set_intensity(1.0);
     track.note(Quarter, first(4)).dynamics(DynamicsFlag::EndChange);
 
     track.note(Quarter, first(4)).dynamics(DynamicsFlag::StartChange);
-    for _ in 0..3 * 4-2 {
+    for _ in 0..2 {
         track.note(Quarter, first(4));
     }
-
     track.set_intensity(0.3);
     track.note(Quarter, first(4)).dynamics(DynamicsFlag::EndChange);
     
