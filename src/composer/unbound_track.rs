@@ -41,12 +41,7 @@ where
     }
 
     fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U> {
-        let mut tones = Vec::new();
-
-        for note in self.notes {
-            let tone = Self::generate_tone(note, section_info);
-            tones.push(tone);
-        }
+        let mut tones = self.conversion_first_pass(section_info);
 
         ExportTrack {
             tones,
@@ -68,7 +63,18 @@ where
         }
     }
 
-    fn generate_tone(note: Note<T>, section_info: SectionInfo) -> Tone<U::ConcreteValue> {
+    fn conversion_first_pass(&self, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
+        let mut tones = Vec::new();
+
+        for note in &self.notes {
+            let tone = Self::generate_tone(note, section_info);
+            tones.push(tone);
+        }
+
+        return tones;
+    }
+
+    fn generate_tone(note: &Note<T>, section_info: SectionInfo) -> Tone<U::ConcreteValue> {
         let mut concrete_values = Vec::new();
 
         for scaled_value in &note.values {
