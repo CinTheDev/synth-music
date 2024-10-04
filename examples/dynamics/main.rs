@@ -42,14 +42,14 @@ fn main() {
     exporter.export(composition).unwrap();
 }
 
-fn example_track<T>(instrument: T) -> UnboundTrack<tet12::TET12ScaledTone, T>
+fn example_track<T>(instrument: T) -> MeasureTrack<tet12::TET12ScaledTone, T>
 where 
     T: Instrument<ConcreteValue = tet12::TET12ConcreteTone>
 {
     use note::Length::*;
     use note::DynamicsFlag;
     use tet12::*;
-    let mut track = UnboundTrack::new(instrument);
+    let mut track = MeasureTrack::new(instrument, (4, 4));
 
     track.set_play_fraction(0.9);
 
@@ -58,14 +58,19 @@ where
     track.set_intensity(0.3);
 
     track.note(Whole, first(4)).dynamics(DynamicsFlag::StartChange);
+    track.measure().unwrap();
     track.set_intensity(1.0);
     track.note(Whole, first(4)).dynamics(DynamicsFlag::EndChange);
+    track.measure().unwrap();
     
     track.note(Whole, first(4)).dynamics(DynamicsFlag::StartChange);
+    track.measure().unwrap();
     track.set_intensity(0.3);
     track.note(Whole, first(4)).dynamics(DynamicsFlag::EndChange);
+    track.measure().unwrap();
 
     track.pause(Whole);
+    track.measure().unwrap();
     // Short notes
 
     track.note(Quarter, first(4)).dynamics(DynamicsFlag::StartChange);
@@ -74,6 +79,7 @@ where
     }
     track.set_intensity(1.0);
     track.note(Quarter, first(4)).dynamics(DynamicsFlag::EndChange);
+    track.measure().unwrap();
 
     track.note(Quarter, first(4)).dynamics(DynamicsFlag::StartChange);
     for _ in 0..2 {
@@ -81,6 +87,10 @@ where
     }
     track.set_intensity(0.3);
     track.note(Quarter, first(4)).dynamics(DynamicsFlag::EndChange);
+    track.measure().unwrap();
+
+    track.pause(Whole);
+    track.measure().unwrap();
     
     return track;
 }
