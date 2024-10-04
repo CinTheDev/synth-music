@@ -2,6 +2,8 @@ use super::note::{Note, ScaledValue, Length};
 use super::{SectionInfo, MusicTrack};
 use crate::instrument::Instrument;
 use crate::file_export::export_info::{ExportTrack, Tone};
+use std::time::Duration;
+use std::ops::Range;
 
 pub struct MeasureTrack<T, U>
 where 
@@ -62,6 +64,7 @@ where
     fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U> {
         let (instrument, notes) = self.arrange();
         let mut tones = Self::conversion_first_pass(&notes, section_info);
+        Self::conversion_pass_dynamics(&notes, &mut tones);
 
         ExportTrack {
             tones,
@@ -137,15 +140,78 @@ where
     // WARNING: Assumes that notes align with tones
     // Fix if this doesn't apply anymore
     fn conversion_pass_dynamics(
-        &self,
         notes: &Vec<Note<T>>,
         tones: &mut Vec<Tone<U::ConcreteValue>>
     ) {
         let mut i = 0;
 
         while let Some(notes_range) = Self::find_next_dynamics_change(&notes, i) {
-            todo!();
+            i = notes_range.end;
+            Self::calculate_dynamics_over_notes(tones, notes_range);
         }
+    }
+
+    fn find_next_dynamics_change(notes: &Vec<Note<T>>, start_index: usize) -> Option<Range<usize>> {
+        use super::note::DynamicsFlag;
+
+        let mut index_dynamics_start = None;
+
+        for i in start_index..notes.len() {
+            let note = &notes[i];
+
+            if note.dynamics_flag == DynamicsFlag::StartChange {
+                if index_dynamics_start.is_some() {
+                    panic!("Doubled StartChange.");
+                }
+                
+                index_dynamics_start = Some(i);
+            }
+            if note.dynamics_flag == DynamicsFlag::EndChange {
+                if let Some(index_dynamics_start) = index_dynamics_start {
+                    return Some(index_dynamics_start..(i + 1));
+                }
+
+                panic!("EndChange without preceding StartChange.");
+            }
+        }
+
+        if index_dynamics_start.is_some() {
+            panic!("StartChange without closing EndChange.");
+        }
+
+        return None;
+    }
+
+    fn calculate_dynamics_over_notes(tones: &mut Vec<Tone<U::ConcreteValue>>, range: Range<usize>) {
+        let start_intensity = tones[range.start].intensity.start;
+        let end_intensity = tones[range.end - 1].intensity.start;
+
+        let mut time_delta = Duration::ZERO;
+
+        for tone in &tones[range.clone()] {
+            time_delta += tone.play_duration;
+        }
+
+        // We'll assume linear intensity increase
+        // TODO: Make interpolation function custom
+
+        let time_delta = time_delta; // Make immutable
+        let mut current_time = Duration::ZERO;
+
+        for tone in &mut tones[range] {
+            let t = current_time.as_secs_f32() / time_delta.as_secs_f32();
+            let intensity_at_start = Self::interpolate_intensity(start_intensity, end_intensity, t);
+            
+            current_time += tone.play_duration;
+            let t = current_time.as_secs_f32() / time_delta.as_secs_f32();
+            let intensity_at_end = Self::interpolate_intensity(start_intensity, end_intensity, t);
+
+            tone.intensity = intensity_at_start..intensity_at_end;
+        }
+    }
+
+    fn interpolate_intensity(a: f32, b: f32, t: f32) -> f32 {
+        a + (b - a) * t
     }
 
     fn generate_tone(note: &Note<T>, section_info: SectionInfo) -> Tone<U::ConcreteValue> {
