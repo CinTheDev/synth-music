@@ -14,23 +14,26 @@ pub trait FileExport {
 }
 
 pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> SoundBuffer {
+    use indicatif::ProgressBar;
+
     let mut buffer = SoundBuffer::new(Vec::new(), sample_rate, 0);
 
-    let total_tones = track.tones.len();
+    let progress = ProgressBar::new(track.tones.len() as u64)
+        .with_style(crate::default_progress_style())
+        .with_message("Track");
 
-    println!("Started rendering track");
-
-    for i in 0..total_tones {
-        let progress = i as f32 / total_tones as f32 * 100.0;
-        println!("Tone ({}/{}) | {}%", i + 1, total_tones, progress);
+    for tone in &track.tones {
+        progress.inc(1);
 
         let tone_buffer = render_tone(
-            &track.tones[i],
+            tone,
             sample_rate,
             &track.instrument,
         );
         buffer.append(tone_buffer);
     }
+
+    progress.finish_and_clear();
 
     return buffer;
 }
