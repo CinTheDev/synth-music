@@ -35,57 +35,57 @@ fn main() {
     let chords_b_section = tracks::chords_b_section(instrument_softbass);
     let bass_b_section = tracks::bass_b_section(instrument_hardbass);
 
-    let mut section_begin = section!(info, 44100,
+    let section_begin = section!(info, 44100,
         melody_begin,
         chords_begin,
         bass_begin,
         tracks::drumset_4(instrument_drumset, 4)
     );
 
-    let mut section_repeated_first = section!(info, 44100,
+    let section_repeated_first = section!(info, 44100,
         melody_repeated_first,
         chords_repeated.clone(),
         bass_repeated.clone(),
         tracks::drumset_4(instrument_drumset, 4)
     );
 
-    let mut section_repeated_second = section!(info, 44100,
+    let section_repeated_second = section!(info, 44100,
         melody_repeated_second,
         chords_repeated.clone(),
         bass_repeated.clone(),
         tracks::drumset_4(instrument_drumset, 4)
     );
 
-    let mut b_section_first = section!(info, 44100,
+    let b_section_first = section!(info, 44100,
         melody_b_section_first,
         chords_b_section.clone(),
         bass_b_section.clone(),
         tracks::drumset_4(instrument_drumset, 4)
     );
 
-    let mut b_section_second = section!(info, 44100,
+    let b_section_second = section!(info, 44100,
         melody_b_section_second,
         chords_b_section.clone(),
         bass_b_section.clone(),
         tracks::drumset_4(instrument_drumset, 4)
     );
 
-    let mut composition: Vec<f32> = Vec::new();
-    composition.append(&mut section_begin.clone());
-    composition.append(&mut section_repeated_first.clone());
-    composition.append(&mut section_repeated_second.clone());
+    let mut composition = SoundBuffer::new(Vec::new(), 44100, 0);
+    composition.append(section_begin.clone());
+    composition.append(section_repeated_first.clone());
+    composition.append(section_repeated_second.clone());
 
-    composition.append(&mut b_section_first);
-    composition.append(&mut b_section_second);
+    composition.append(b_section_first);
+    composition.append(b_section_second);
 
-    composition.append(&mut section_begin);
-    composition.append(&mut section_repeated_first);
-    composition.append(&mut section_repeated_second);
+    composition.append(section_begin);
+    composition.append(section_repeated_first);
+    composition.append(section_repeated_second);
 
     export_buffer(composition);
 }
 
-fn export_buffer(buffer: Vec<f32>) {
+fn export_buffer(buffer: SoundBuffer) {
     use std::path::PathBuf;
 
     if std::fs::read_dir("export").is_err() {
@@ -94,7 +94,6 @@ fn export_buffer(buffer: Vec<f32>) {
 
     let exporter = WavExport {
         path: PathBuf::from("export/tetris.wav"),
-        sample_rate: 44100,
         ..Default::default()
     };
     exporter.export(buffer).unwrap();

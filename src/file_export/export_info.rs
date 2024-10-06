@@ -17,6 +17,7 @@ pub struct Tone<T> {
     pub intensity: Range<f32>,
 }
 
+#[derive(Clone)]
 pub struct SoundBuffer {
     pub samples: Vec<f32>,
     sample_rate: u32,
