@@ -4,7 +4,7 @@ pub mod wav_export;
 use std::time::Duration;
 
 use export_info::*;
-use crate::instrument::Instrument;
+use crate::instrument::{Instrument, InstrumentBuffer, BufferInfo};
 
 const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
 const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
@@ -30,22 +30,27 @@ pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> SoundB
 
 fn render_tone<T: Instrument>(tone: &Tone<T::ConcreteValue>, sample_rate: u32, instrument: &T) -> SoundBuffer {
     let samples =
-    (tone.play_duration.as_secs_f32() * sample_rate as f32)
-    .floor() as usize;
+        (tone.play_duration.as_secs_f32() * sample_rate as f32)
+        .floor() as usize;
 
     let played_samples =
-    (tone.tone_duration.as_secs_f32() * sample_rate as f32)
-    .floor() as usize;
+        (tone.tone_duration.as_secs_f32() * sample_rate as f32)
+        .floor() as usize;
 
     let silent_samples = samples - played_samples;
 
-    let mut buffer = SoundBuffer::new(sample_rate);
-    buffer.preallocate(played_samples);
+    let buffer_info = BufferInfo {
+        sample_rate,
+        tone_samples: played_samples,
+    };
 
-    instrument.generate_sound(&mut buffer, tone);
+    //let mut buffer = SoundBuffer::new(sample_rate);
+    //buffer.preallocate(played_samples);
 
-    apply_fade_amplitude(&mut buffer, tone.tone_duration);
-    buffer.extend(silent_samples);
+    let instrument_buffer = instrument.render_buffer(buffer_info, tone);
+
+    //apply_fade_amplitude(&mut buffer, tone.tone_duration);
+    //buffer.extend(silent_samples);
 
     return buffer;
 }

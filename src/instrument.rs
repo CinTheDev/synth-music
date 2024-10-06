@@ -1,16 +1,14 @@
 pub mod predefined;
 
-use std::time::Duration;
-
 use crate::file_export::export_info::Tone;
 
 pub struct InstrumentBuffer {
-    samples: Vec<f32>,
+    pub samples: Vec<f32>,
 }
 
 pub struct BufferInfo {
-    sample_rate: u32,
-    tone_duration: Duration,
+    pub sample_rate: u32,
+    pub tone_samples: usize,
 }
 
 pub trait Instrument: Clone {

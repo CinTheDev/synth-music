@@ -20,6 +20,7 @@ pub struct Tone<T> {
 pub struct SoundBuffer {
     pub samples: Vec<f32>,
     sample_rate: u32,
+    active_samples: u32,
 }
 
 impl<T: Instrument> ExportTrack<T> {
@@ -31,6 +32,7 @@ impl<T: Instrument> ExportTrack<T> {
     }
 }
 
+/*
 impl SoundBuffer {
     pub fn new(sample_rate: u32) -> Self {
         Self {
@@ -81,3 +83,4 @@ impl SoundBuffer {
         self.sample_rate
     }
 }
+*/
