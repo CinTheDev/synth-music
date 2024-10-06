@@ -48,6 +48,17 @@ impl SoundBuffer {
         self.samples.append(&mut other.samples);
     }
 
+    pub fn preallocate(&mut self, sample_count: usize) {
+        self.samples = Vec::with_capacity(sample_count);
+        self.extend(sample_count);
+    }
+
+    pub fn extend(&mut self, sample_count: usize) {
+        for _ in 0..sample_count {
+            self.samples.push(0.0);
+        }
+    }
+
     pub fn mix(self, other: Self) -> Self {
         assert_eq!(self.sample_rate, other.sample_rate);
 

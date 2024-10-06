@@ -29,21 +29,24 @@ pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> SoundB
 }
 
 fn render_tone<T: Instrument>(tone: &Tone<T::ConcreteValue>, sample_rate: u32, instrument: &T) -> SoundBuffer {
-    let mut buffer = SoundBuffer::new(sample_rate);
-
-    instrument.generate_sound(&mut buffer, tone);
-
-    /*
     let samples =
-        (tone.play_duration.as_secs_f32() * sample_rate as f32)
-        .floor() as u32;
+    (tone.play_duration.as_secs_f32() * sample_rate as f32)
+    .floor() as usize;
 
     let played_samples =
-        (tone.tone_duration.as_secs_f32() * sample_rate as f32)
-        .floor() as u32;
+    (tone.tone_duration.as_secs_f32() * sample_rate as f32)
+    .floor() as usize;
 
     let silent_samples = samples - played_samples;
 
+    let mut buffer = SoundBuffer::new(sample_rate);
+    buffer.preallocate(played_samples);
+
+    instrument.generate_sound(&mut buffer, tone);
+
+    buffer.extend(silent_samples);
+
+    /*
     for i in 0..played_samples {
         let time = Duration::from_secs_f64(
             i as f64 / samples as f64 * tone.play_duration.as_secs_f64()
