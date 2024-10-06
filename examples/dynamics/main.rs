@@ -7,7 +7,7 @@ fn main() {
 
     let linear_sine = LinearSine;
     let punchy_sine = PunchySine {
-        cutoff_time: Duration::from_secs_f32(5.0),
+        cutoff_time: Duration::from_secs_f32(3.0),
     };
 
     let track_linear_sine = example_track(linear_sine);
@@ -154,7 +154,7 @@ impl PunchySine {
     }
 
     fn decay(secs: f32) -> f32 {
-        0.5_f32.powf(secs * 3.0)
+        0.5_f32.powf(secs * 2.0)
     }
 
     fn total_samples(&self, sample_rate: u32) -> usize {

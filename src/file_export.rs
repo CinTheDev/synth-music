@@ -50,46 +50,31 @@ fn render_tone<T: Instrument>(tone: &Tone<T::ConcreteValue>, sample_rate: u32, i
         samples,
     );
 
-    apply_fade_amplitude(&mut sound_buffer, tone.tone_duration);
+    apply_fade_amplitude(&mut sound_buffer);
     sound_buffer.extend_to_active_samples();
 
     return sound_buffer;
 }
 
-fn apply_fade_amplitude(buffer: &mut SoundBuffer, tone_duration: Duration) {
-    for i in 0..buffer.samples.len() {
-        let time = buffer.time_from_index(i);
-        buffer.samples[i] *= get_fade_amplitude(tone_duration, time);
+fn apply_fade_amplitude(buffer: &mut SoundBuffer) {
+    let fade_in_samples = (buffer.sample_rate() as f64 * DEFAULT_FADE_IN.as_secs_f64()).ceil() as usize;
+    let fade_out_samples = (buffer.sample_rate() as f64 * DEFAULT_FADE_OUT.as_secs_f64()).ceil() as usize;
+
+    for i in 0..fade_in_samples {
+        let t = i as f32 / fade_in_samples as f32;
+        let index = i;
+        buffer.samples[index] *= smooth(t);
+    }
+
+    for i in 0..fade_out_samples {
+        let t = i as f32 / fade_in_samples as f32;
+        let index = buffer.samples.len() - i - 1;
+        buffer.samples[index] *= smooth(t);
     }
 }
 
-fn get_fade_amplitude(tone_duration: Duration, time: Duration) -> f32 {
-    if DEFAULT_FADE_IN > tone_duration || DEFAULT_FADE_OUT > tone_duration {
-        return 1.0;
-    }
-
-    // Apply fade-in
-    if time < DEFAULT_FADE_IN {
-        let t = time.as_secs_f32() / DEFAULT_FADE_IN.as_secs_f32();
-        return fade_in_smooth(t);
-    }
-    // Apply fade-out
-    else if time > tone_duration - DEFAULT_FADE_OUT {
-        let t_time = time - (tone_duration - DEFAULT_FADE_OUT);
-        let t = t_time.as_secs_f32() / DEFAULT_FADE_OUT.as_secs_f32();
-        return fade_out_smooth(t);
-    }
-    // Not amplitude change
-    else {
-        return 1.0;
-    }
-}
-
-fn fade_in_smooth(t: f32) -> f32 {
+fn smooth(t: f32) -> f32 {
     3.0*t*t - 2.0*t*t*t
-}
-fn fade_out_smooth(t: f32) -> f32 {
-    fade_in_smooth(1.0 - t)
 }
 
 #[macro_export]

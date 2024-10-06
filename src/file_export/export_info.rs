@@ -117,13 +117,72 @@ impl SoundBuffer {
 mod tests {
     use super::*;
 
-    // Tests for mix()
-
     fn assert_soundbuffer_equal(a: SoundBuffer, b: SoundBuffer) {
         assert_eq!(a.sample_rate, b.sample_rate);
         assert_eq!(a.active_samples, b.active_samples);
         assert_eq!(a.samples, b.samples);
     }
+
+    // Tests for extend_to_active_samples()
+
+    #[test]
+    fn soundbuffer_extend_none() {
+        let mut soundbuffer = SoundBuffer::new(
+            vec![0.1, 0.2, 0.3],
+            44100,
+            2,
+        );
+
+        soundbuffer.extend_to_active_samples();
+
+        let expected = SoundBuffer::new(
+            vec![0.1, 0.2, 0.3],
+            44100,
+            2,
+        );
+
+        assert_soundbuffer_equal(soundbuffer, expected);
+    }
+
+    #[test]
+    fn soundbuffer_extend_none_equal() {
+        let mut soundbuffer = SoundBuffer::new(
+            vec![0.1, 0.2, 0.3],
+            44100,
+            3,
+        );
+
+        soundbuffer.extend_to_active_samples();
+
+        let expected = SoundBuffer::new(
+            vec![0.1, 0.2, 0.3],
+            44100,
+            3,
+        );
+
+        assert_soundbuffer_equal(soundbuffer, expected);
+    }
+
+    #[test]
+    fn soundbuffer_extend_active() {
+        let mut soundbuffer = SoundBuffer::new(
+            vec![0.1, 0.2, 0.3],
+            44100,
+            5,
+        );
+
+        soundbuffer.extend_to_active_samples();
+
+        let expected = SoundBuffer::new(
+            vec![0.1, 0.2, 0.3, 0.0, 0.0],
+            44100,
+            5,
+        );
+
+        assert_soundbuffer_equal(soundbuffer, expected);
+    }
+
+    // Tests for mix()
     
     #[test]
     fn soundbuffer_mix_simple() {
@@ -242,7 +301,7 @@ mod tests {
     }
 
     // Tests for append()
-    
+
     #[test]
     fn soundbuffer_append_simple() {
         let mut first_buffer = SoundBuffer::new(
