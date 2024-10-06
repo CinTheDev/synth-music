@@ -89,6 +89,8 @@ impl SoundBuffer {
         for value in remaining_buffer {
             self.samples.push(*value);
         }
+
+        self.active_samples += other.active_samples;
     }
 
     pub fn extend_to_active_samples(&mut self) {
