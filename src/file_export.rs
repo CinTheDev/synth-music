@@ -128,3 +128,32 @@ macro_rules! section {
         }
     };
 }
+
+#[macro_export]
+macro_rules! composition {
+    ( $sample_rate:expr, $( $section:expr ),* ) => {
+        {
+            use indicatif::ProgressBar;
+            use synth_music::count;
+
+            let mut buffer = SoundBuffer::new(Vec::new(), $sample_rate, 0);
+
+            let amount_sections = count!($($section)*);
+
+            let progress = ProgressBar::new(amount_tracks as u64)
+                .with_style(synth_music::default_progress_style())
+                .with_message("Composition");
+
+            let progress = unsafe {
+                synth_music::add_progress_bar(progress)
+            };
+
+            $(
+                buffer.append($section);
+            )*
+
+            progress.finish();
+            buffer
+        }
+    };
+}
