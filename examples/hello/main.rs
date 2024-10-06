@@ -73,7 +73,7 @@ fn export_track<T: Instrument>(track: ExportTrack<T>, name: &str) {
     export_buffer(buffer, name);
 }
 
-fn export_buffer(buffer: Vec<f32>, name: &str) {
+fn export_buffer(buffer: SoundBuffer, name: &str) {
     use std::path::PathBuf;
 
     if std::fs::read_dir("export").is_err() {
