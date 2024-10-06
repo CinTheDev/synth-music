@@ -48,3 +48,24 @@ This will probably require some refactoring on the rendering side. Make it
 possible for Instruments to output stereo sound and export it stereo. Also think
 about ways to make the Instrument implementation convenient if only Mono should
 be Output.
+
+### Even more advanced dynamics system
+
+Features for making the dynamics system even more versatile and powerful
+
+#### Custom interpolation curves
+
+Currently, if we slowly invrease the intensity, the change is always linear.
+Make it possible for the user to specify their own interpolation curve.
+
+Either make them choose from an enum, or let them provide their own function,
+or both.
+
+#### Dynamics effects over Track or whole Section
+
+My idea of this is still a little vague, but I think in some other music it
+sometimes feels like the intensity of some instruments "pulse" or similar with
+the rythm.
+
+Investigate online what this is called and how it is usually implemented. If
+it's not very difficult, implement it here as well.
