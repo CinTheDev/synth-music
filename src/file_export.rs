@@ -16,9 +16,16 @@ pub trait FileExport {
 pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> SoundBuffer {
     let mut buffer = SoundBuffer::new(Vec::new(), sample_rate, 0);
 
-    for tone in &track.tones {
+    let total_tones = track.tones.len();
+
+    println!("Started rendering track");
+
+    for i in 0..total_tones {
+        let progress = i as f32 / total_tones as f32 * 100.0;
+        println!("Tone ({}/{}) | {}%", i + 1, total_tones, progress);
+
         let tone_buffer = render_tone(
-            tone,
+            &track.tones[i],
             sample_rate,
             &track.instrument,
         );
