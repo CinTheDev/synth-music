@@ -53,17 +53,14 @@ SoundBuffer for user:
 
 - Be easy to export
 
-### Chunked rendering
+### Multithreading
 
-Currently the exporter renders the whole music piece into one buffer which then
-is written to the disk. The memory consumption might not be that big of a deal
-(@ 44100Hz the buffer would take around 10MB for every minute of music), but
-there are is another reason to make the rendering chunked.
+As long as the architecture allows it, try to include multithreading when
+rendering multiple instruments at once. Since there is no way to hold multiple
+Tracks in the same struct, the only way (I see right now) to abstract this away
+from the user is to use macros, or include it in the already provided macros.
 
-Rendering can take a bit because it's currently single threaded. Chunked
-rendering allows for Multi-Threaded rendering of the file, which will speed up
-the rendering process by quite a bit. Also, the reduced memory consumption is
-also not bad.
+Though, this feature is optional. Do not implement it if things get too messy.
 
 ### Loading bar for exporting
 
