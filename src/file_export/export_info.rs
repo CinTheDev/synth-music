@@ -39,7 +39,7 @@ impl SoundBuffer {
         }
     }
 
-    pub fn get_time_from_index(&self, index: u32) -> Duration {
+    pub fn get_time_from_index(&self, index: usize) -> Duration {
         let secs = index as f64 / self.sample_rate as f64;
         Duration::from_secs_f64(secs)
     }

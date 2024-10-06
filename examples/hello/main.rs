@@ -63,14 +63,7 @@ fn example_1() {
         track2
     );
 
-    //export_track(track1.convert_to_export_track(section_info), "first_example.wav");
     export_buffer(section, "first_example.wav");
-}
-
-use export_info::ExportTrack;
-fn export_track<T: Instrument>(track: ExportTrack<T>, name: &str) {
-    let buffer = file_export::render(&track, 44100);
-    export_buffer(buffer, name);
 }
 
 fn export_buffer(buffer: SoundBuffer, name: &str) {
@@ -96,7 +89,18 @@ use std::time::Duration;
 struct SineGenerator;
 
 impl SineGenerator {
-    pub fn generate(frequency: f64, time: Duration) -> f32 {
+    pub fn generate(info: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
+        let mut result = 0.0;
+
+        for tone in &info.concrete_values {
+            let frequency = tone.to_frequency() as f64;
+            result += Self::generate_frequency(frequency, time);
+        }
+
+        return result * info.intensity.start;
+    }
+
+    pub fn generate_frequency(frequency: f64, time: Duration) -> f32 {
         use std::f64::consts::PI;
         (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
     }
@@ -105,15 +109,10 @@ impl SineGenerator {
 impl Instrument for SineGenerator {
     type ConcreteValue = tet12::TET12ConcreteTone;
 
-    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
-        let mut result = 0.0;
-
-        for tone in &info.concrete_values {
-            let frequency = tone.to_frequency() as f64;
-            result += Self::generate(frequency, time);
-            
+    fn generate_sound(&self, buffer: &mut SoundBuffer, info: &Tone<Self::ConcreteValue>) {
+        for i in 0..buffer.samples.len() {
+            let time = buffer.get_time_from_index(i);
+            buffer.samples[i] = Self::generate(info, time);
         }
-
-        return result * info.intensity.start;
     }
 }
