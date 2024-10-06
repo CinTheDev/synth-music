@@ -20,12 +20,12 @@ fn main() {
         time_signature: (4, 4),
     };
 
-    let mut linear_section = section!(section_info, 44100, track_linear_sine);
-    let mut punchy_section = section!(section_info, 44100, track_punchy_sine);
+    let linear_section = section!(section_info, 44100, track_linear_sine);
+    let punchy_section = section!(section_info, 44100, track_punchy_sine);
 
-    let mut composition = Vec::new();
-    composition.append(&mut linear_section);
-    composition.append(&mut punchy_section);
+    let mut composition = SoundBuffer::new(Vec::new(), 44100, 0);
+    composition.append(linear_section);
+    composition.append(punchy_section);
 
     // Export
     use std::path::PathBuf;
@@ -106,9 +106,24 @@ struct LinearSine;
 struct PunchySine;
 
 impl LinearSine {
-    fn wave(frequency: f64, secs: f64) -> f32 {
+    fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
+        let mut result = 0.0;
+
+        for tone in &tones.concrete_values {
+            let frequency = tone.to_frequency() as f64;
+            result += Self::wave(frequency, time);
+        }
+
+        return result * Self::current_intensity(
+            time.as_secs_f32(),
+            tones.tone_duration.as_secs_f32(),
+            &tones.intensity
+        );
+    }
+
+    fn wave(frequency: f64, time: Duration) -> f32 {
         use std::f64::consts::PI;
-        (secs * frequency * 2.0 * PI).sin() as f32
+        (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
     }
 
     fn current_intensity(current_secs: f32, total_secs: f32, intensity: &std::ops::Range<f32>) -> f32 {
@@ -118,9 +133,20 @@ impl LinearSine {
 }
 
 impl PunchySine {
-    fn wave(frequency: f64, secs: f64) -> f32 {
+    fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
+        let mut result = 0.0;
+
+        for tone in &tones.concrete_values {
+            let frequency = tone.to_frequency() as f64;
+            result += Self::wave(frequency, time);
+        }
+
+        return result * Self::decay(time.as_secs_f32()) * tones.intensity.start;
+    }
+
+    fn wave(frequency: f64, time: Duration) -> f32 {
         use std::f64::consts::PI;
-        (secs * frequency * 2.0 * PI).sin() as f32
+        (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
     }
 
     fn decay(secs: f32) -> f32 {
@@ -131,31 +157,29 @@ impl PunchySine {
 impl Instrument for LinearSine {
     type ConcreteValue = tet12::TET12ConcreteTone;
 
-    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
-        let mut result = 0.0;
+    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+        let mut buffer = Vec::new();
 
-        for tone in &info.concrete_values {
-            let frequency = tone.to_frequency() as f64;
-            let wave = Self::wave(frequency, time.as_secs_f64());
-            result += wave;
+        for i in 0..buffer_info.tone_samples {
+            let time = buffer_info.time_from_index(i);
+            buffer.push(Self::generate(tones, time));
         }
 
-        return result * Self::current_intensity(time.as_secs_f32(), info.tone_duration.as_secs_f32(), &info.intensity);
+        return InstrumentBuffer { samples: buffer }
     }
 }
 
 impl Instrument for PunchySine {
     type ConcreteValue = tet12::TET12ConcreteTone;
 
-    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
-        let mut result = 0.0;
+    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+        let mut buffer = Vec::new();
 
-        for tone in &info.concrete_values {
-            let frequency = tone.to_frequency() as f64;
-            let wave = Self::wave(frequency, time.as_secs_f64());
-            result += wave;
+        for i in 0..buffer_info.tone_samples {
+            let time = buffer_info.time_from_index(i);
+            buffer.push(Self::generate(tones, time));
         }
 
-        return result * Self::decay(time.as_secs_f32()) * info.intensity.start;
+        return InstrumentBuffer { samples: buffer }
     }
 }
