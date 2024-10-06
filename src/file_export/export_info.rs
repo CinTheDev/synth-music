@@ -82,6 +82,8 @@ impl SoundBuffer {
             self.samples[index_self] += other.samples[index_other];
         }
 
+        self.active_samples += other.active_samples;
+
         // If other has been fully mixed in already
         if inactive_samples > other.samples.len() { return }
 
@@ -89,8 +91,6 @@ impl SoundBuffer {
         for value in remaining_buffer {
             self.samples.push(*value);
         }
-
-        self.active_samples += other.active_samples;
     }
 
     pub fn extend_to_active_samples(&mut self) {
