@@ -28,6 +28,31 @@ feel like it, we can extend these to n-toles like pentoles, septoles, etc.
 
 ## Improve rendering/export system
 
+### Provide better API for rendering / handling buffers
+
+The current interface for rendering and handling buffers is a bit chaotic. Look
+at all parts of the rendering process and try to come up with improvements to
+make it more versatile, intuitive, and less sensitive to bugs (caused from bad
+user input).
+
+#### Seperate struct for Instrument SoundBuffer and user buffer
+
+The SoundBuffer provided for instruments to fill and the finished buffer
+returned to the user are the same struct, which limits a bunch of potential
+functionality.
+
+Let's list what both variants of the buffer should do.
+
+SoundBuffer for Instrument:
+
+- Be empty when given to Instrument
+- Provide for how long the instrument should play / how many samples
+- Handle shorter and longer returned buffer correctly
+
+SoundBuffer for user:
+
+- Be easy to export
+
 ### Chunked rendering
 
 Currently the exporter renders the whole music piece into one buffer which then
