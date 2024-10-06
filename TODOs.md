@@ -28,15 +28,6 @@ feel like it, we can extend these to n-toles like pentoles, septoles, etc.
 
 ## Improve rendering/export system
 
-### Provide better API for rendering / handling buffers
-
-The current interface for rendering and handling buffers is a bit chaotic. Look
-at all parts of the rendering process and try to come up with improvements to
-make it more versatile, intuitive, and less sensitive to bugs (caused from bad
-user input).
-
-TODO: Write more on improving API.
-
 ### Multithreading
 
 As long as the architecture allows it, try to include multithreading when
