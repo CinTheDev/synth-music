@@ -129,6 +129,7 @@ macro_rules! section {
     };
 }
 
+// TODO: Make this note take the sample rate as an argument
 #[macro_export]
 macro_rules! composition {
     ( $sample_rate:expr, $( $section:expr ),* ) => {
