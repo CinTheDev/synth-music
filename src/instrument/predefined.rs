@@ -4,6 +4,8 @@ use tet12::TET12ConcreteTone;
 use super::Instrument;
 use super::Tone;
 
+/*
+
 use std::time::Duration;
 
 #[derive(Clone, Copy)]
@@ -56,3 +58,4 @@ impl Instrument for TriangleGenerator {
         return result * info.intensity.start;
     }
 }
+*/
