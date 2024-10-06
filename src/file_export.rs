@@ -4,7 +4,7 @@ pub mod wav_export;
 use std::time::Duration;
 
 use export_info::*;
-use crate::instrument::{Instrument, InstrumentBuffer, BufferInfo};
+use crate::instrument::{Instrument, BufferInfo};
 
 const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
 const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
@@ -96,7 +96,7 @@ fn fade_out_smooth(t: f32) -> f32 {
 macro_rules! section {
     ( $section_info:expr, $sample_rate:expr, $( $track:expr ),+ ) => {
         {
-            let mut buffer = SoundBuffer::new($sample_rate);
+            let mut buffer = SoundBuffer::new(Vec::new(), $sample_rate, 0);
 
             $(
                 let export_track = $track.convert_to_export_track($section_info);
