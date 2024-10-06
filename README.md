@@ -33,3 +33,11 @@ beyond a single measure.
 
 Because these are in no way implemented right now, it only makes sense to tackle
 this redundancy issue if held notes are being implemented in the future.
+
+### Construct Track with MIDI file
+
+If the original way of composing Tracks placing individual notes is undesired,
+it should be possible to read a MIDI file from the disk and automatically
+convert it to notes on a Track.
+
+Check the contents of a MIDI file and see how this could be implemented.
