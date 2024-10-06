@@ -73,6 +73,16 @@ impl SoundBuffer {
         todo!();
     }
 
+    pub fn extend_to_active_samples(&mut self) {
+        if self.active_samples < self.samples.len() { return }
+
+        let remaining_samples = self.active_samples - self.samples.len();
+        
+        for _ in 0..remaining_samples {
+            self.samples.push(0.0);
+        }
+    }
+
     pub fn sample_rate(&self) -> u32 {
         self.sample_rate
     }

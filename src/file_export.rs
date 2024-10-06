@@ -37,22 +37,23 @@ fn render_tone<T: Instrument>(tone: &Tone<T::ConcreteValue>, sample_rate: u32, i
         (tone.tone_duration.as_secs_f32() * sample_rate as f32)
         .floor() as usize;
 
-    let silent_samples = samples - played_samples;
-
     let buffer_info = BufferInfo {
         sample_rate,
         tone_samples: played_samples,
     };
 
-    //let mut buffer = SoundBuffer::new(sample_rate);
-    //buffer.preallocate(played_samples);
-
     let instrument_buffer = instrument.render_buffer(buffer_info, tone);
 
-    //apply_fade_amplitude(&mut buffer, tone.tone_duration);
-    //buffer.extend(silent_samples);
+    let mut sound_buffer = SoundBuffer::new(
+        instrument_buffer.samples,
+        sample_rate,
+        samples,
+    );
 
-    return buffer;
+    apply_fade_amplitude(&mut sound_buffer, tone.tone_duration);
+    sound_buffer.extend_to_active_samples();
+
+    return sound_buffer;
 }
 
 fn apply_fade_amplitude(buffer: &mut SoundBuffer, tone_duration: Duration) {
