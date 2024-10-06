@@ -52,6 +52,7 @@ SoundBuffer for Instrument:
 SoundBuffer for user:
 
 - Be easy to export
+- Check `new-section-principles.md` for details
 
 ### Multithreading
 
