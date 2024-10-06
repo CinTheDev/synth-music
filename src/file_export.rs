@@ -93,31 +93,16 @@ fn fade_out_smooth(t: f32) -> f32 {
     fade_in_smooth(1.0 - t)
 }
 
-/*
-pub fn mix_buffers(a: Vec<f32>, b: Vec<f32>) -> Vec<f32> {
-    let (mut larger_buffer, smaller_buffer) = match a.len() >= b.len() {
-        true => (a, b),
-        false => (b, a),
-    };
-
-    for i in 0..smaller_buffer.len() {
-        larger_buffer[i] += smaller_buffer[i];
-    }
-
-    return larger_buffer;
-}
-*/
-
 #[macro_export]
 macro_rules! section {
     ( $section_info:expr, $sample_rate:expr, $( $track:expr ),+ ) => {
         {
-            let mut buffer = Vec::new();
+            let mut buffer = SoundBuffer::new($sample_rate);
 
             $(
                 let export_track = $track.convert_to_export_track($section_info);
                 let export_buffer = file_export::render(&export_track, $sample_rate);
-                buffer = file_export::mix_buffers(buffer, export_buffer);
+                buffer = buffer.mix(export_buffer);
             )*
 
             buffer
