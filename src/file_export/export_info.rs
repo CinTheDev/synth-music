@@ -111,3 +111,99 @@ impl SoundBuffer {
         self.active_samples
     }
 }
+
+// Test SoundBuffer
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn soundbuffer_append_simple() {
+        let mut first_buffer = SoundBuffer::new(
+            vec![0.1, 0.2, 0.3],
+            44100,
+            3,
+        );
+        let second_buffer = SoundBuffer::new(
+            vec![0.4, 0.2, 0.0],
+            44100,
+            3,
+        );
+
+        first_buffer.append(second_buffer);
+
+        let expected_result = vec![
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.2,
+            0.0
+        ];
+
+        assert_eq!(first_buffer.active_samples, 6);
+
+        for i in 0..first_buffer.samples.len() {
+            assert_eq!(first_buffer.samples[i], expected_result[i]);
+        }
+    }
+
+    #[test]
+    fn soundbuffer_append_partialmix() {
+        let mut first_buffer = SoundBuffer::new(
+            vec![0.1, 0.2, 0.3],
+            44100,
+            1,
+        );
+        let second_buffer = SoundBuffer::new(
+            vec![0.4, 0.2, 0.0],
+            44100,
+            3,
+        );
+
+        first_buffer.append(second_buffer);
+
+        let expected_result = vec![
+            0.1,
+            0.2 + 0.4,
+            0.3 + 0.2,
+            0.0
+        ];
+
+        assert_eq!(first_buffer.active_samples, 4);
+
+        for i in 0..first_buffer.samples.len() {
+            assert_eq!(first_buffer.samples[i], expected_result[i]);
+        }
+    }
+
+    #[test]
+    fn soundbuffer_append_fullmix() {
+        let mut first_buffer = SoundBuffer::new(
+            vec![0.1, 0.2, 0.3, 0.4, 0.5],
+            44100,
+            1,
+        );
+        let second_buffer = SoundBuffer::new(
+            vec![0.4, 0.2, 0.0],
+            44100,
+            3,
+        );
+
+        first_buffer.append(second_buffer);
+
+        let expected_result = vec![
+            0.1,
+            0.2 + 0.4,
+            0.3 + 0.2,
+            0.4 + 0.0,
+            0.5,
+        ];
+
+        assert_eq!(first_buffer.active_samples, 4);
+
+        for i in 0..first_buffer.samples.len() {
+            assert_eq!(first_buffer.samples[i], expected_result[i]);
+        }
+    }
+}
