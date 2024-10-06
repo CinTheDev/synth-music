@@ -20,7 +20,7 @@ pub struct Tone<T> {
 pub struct SoundBuffer {
     pub samples: Vec<f32>,
     sample_rate: u32,
-    active_samples: u32,
+    active_samples: usize,
 }
 
 impl<T: Instrument> ExportTrack<T> {
@@ -32,55 +32,52 @@ impl<T: Instrument> ExportTrack<T> {
     }
 }
 
-/*
 impl SoundBuffer {
-    pub fn new(sample_rate: u32) -> Self {
+    pub fn new(samples: Vec<f32>, sample_rate: u32, active_samples: usize) -> Self {
         Self {
-            samples: Vec::new(),
+            samples,
             sample_rate,
+            active_samples,
         }
     }
 
-    pub fn get_time_from_index(&self, index: usize) -> Duration {
-        let secs = index as f64 / self.sample_rate as f64;
-        Duration::from_secs_f64(secs)
-    }
-
-    pub fn append(&mut self, other: &mut SoundBuffer) {
-        self.samples.append(&mut other.samples);
-    }
-
-    pub fn preallocate(&mut self, sample_count: usize) {
-        self.samples = Vec::with_capacity(sample_count);
-        self.extend(sample_count);
-    }
-
-    pub fn extend(&mut self, sample_count: usize) {
-        for _ in 0..sample_count {
-            self.samples.push(0.0);
-        }
+    pub fn time_from_index(&self, index: usize) -> Duration {
+        Duration::from_secs_f64(
+            index as f64 / self.sample_rate as f64
+        )
     }
 
     pub fn mix(self, other: Self) -> Self {
         assert_eq!(self.sample_rate, other.sample_rate);
 
-        let (mut larger_buffer, smaller_buffer) = match self.samples.len() >= other.samples.len() {
-            true => (self.samples, other.samples),
-            false => (other.samples, self.samples),
-        };
+        let (mut larger_buffer, smaller_buffer) =
+            match self.samples.len() >= other.samples.len() {
+                true => (self.samples, other.samples),
+                false => (other.samples, self.samples),
+            };
 
         for i in 0..smaller_buffer.len() {
             larger_buffer[i] += smaller_buffer[i];
         }
 
-        return Self {
+        let active_samples = usize::max(self.active_samples, other.active_samples);
+
+        Self {
             samples: larger_buffer,
             sample_rate: self.sample_rate,
+            active_samples,
         }
+    }
+
+    pub fn append(self, other: Self) -> Self {
+        todo!();
     }
 
     pub fn sample_rate(&self) -> u32 {
         self.sample_rate
     }
+
+    pub fn active_samples(&self) -> usize {
+        self.active_samples
+    }
 }
-*/
