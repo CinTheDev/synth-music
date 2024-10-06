@@ -47,4 +47,8 @@ impl SoundBuffer {
     pub fn append(&mut self, other: &mut SoundBuffer) {
         self.samples.append(&mut other.samples);
     }
+
+    pub fn sample_rate(&self) -> u32 {
+        self.sample_rate
+    }
 }
