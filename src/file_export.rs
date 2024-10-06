@@ -140,7 +140,7 @@ macro_rules! composition {
 
             let amount_sections = count!($($section)*);
 
-            let progress = ProgressBar::new(amount_tracks as u64)
+            let progress = ProgressBar::new(amount_sections as u64)
                 .with_style(synth_music::default_progress_style())
                 .with_message("Composition");
 
@@ -149,7 +149,8 @@ macro_rules! composition {
             };
 
             $(
-                buffer.append($section);
+                progress.inc(1);
+                buffer.append($section.clone());
             )*
 
             progress.finish();

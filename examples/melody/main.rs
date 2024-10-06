@@ -70,17 +70,18 @@ fn main() {
         tracks::drumset_4(instrument_drumset, 4)
     );
 
-    let mut composition = SoundBuffer::new(Vec::new(), 44100, 0);
-    composition.append(section_begin.clone());
-    composition.append(section_repeated_first.clone());
-    composition.append(section_repeated_second.clone());
+    let composition = composition!(44100,
+        section_begin,
+        section_repeated_first,
+        section_repeated_second,
 
-    composition.append(b_section_first);
-    composition.append(b_section_second);
+        b_section_first,
+        b_section_second,
 
-    composition.append(section_begin);
-    composition.append(section_repeated_first);
-    composition.append(section_repeated_second);
+        section_begin,
+        section_repeated_first,
+        section_repeated_second
+    );
 
     export_buffer(composition);
 }
