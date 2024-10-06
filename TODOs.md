@@ -46,13 +46,6 @@ from the user is to use macros, or include it in the already provided macros.
 
 Though, this feature is optional. Do not implement it if things get too messy.
 
-### Loading bar for exporting
-
-Bigger projects (even the ones from the examples) take a few seconds to export.
-It would be nice to have a loading bar that shows how much of the piece has
-been rendered out already. It's probably related with the chunked rendering
-stuff above.
-
 ## Thorough documentation
 
 It seems like the code structure is somewhat converging to a final state, so
