@@ -28,15 +28,6 @@ feel like it, we can extend these to n-toles like pentoles, septoles, etc.
 
 ## Improve rendering/export system
 
-### Have instruments return a whole tone buffer
-
-Currently the Instrument trait only provied a way to calculate individual
-samples just given the tone frequency and a time. This is good enough for
-instruments that use predictable sine-waves and such, but it makes other
-methods that operate on the whole buffer impossible.
-
-It should be easy enough for instruments to return the whole buffer.
-
 ### Chunked rendering
 
 Currently the exporter renders the whole music piece into one buffer which then
