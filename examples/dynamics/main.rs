@@ -6,7 +6,9 @@ fn main() {
     println!("Intensity example");
 
     let linear_sine = LinearSine;
-    let punchy_sine = PunchySine;
+    let punchy_sine = PunchySine {
+        cutoff_time: Duration::from_secs_f32(5.0),
+    };
 
     let track_linear_sine = example_track(linear_sine);
     let track_punchy_sine = example_track(punchy_sine);
@@ -103,7 +105,9 @@ where
 struct LinearSine;
 
 #[derive(Clone, Copy)]
-struct PunchySine;
+struct PunchySine {
+    cutoff_time: Duration,
+}
 
 impl LinearSine {
     fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
@@ -152,6 +156,10 @@ impl PunchySine {
     fn decay(secs: f32) -> f32 {
         0.5_f32.powf(secs * 3.0)
     }
+
+    fn total_samples(&self, sample_rate: u32) -> usize {
+        (sample_rate as f64 * self.cutoff_time.as_secs_f64()).ceil() as usize
+    }
 }
 
 impl Instrument for LinearSine {
@@ -175,7 +183,9 @@ impl Instrument for PunchySine {
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let mut buffer = Vec::new();
 
-        for i in 0..buffer_info.tone_samples {
+        let samples = self.total_samples(buffer_info.sample_rate);
+
+        for i in 0..samples {
             let time = buffer_info.time_from_index(i);
             buffer.push(Self::generate(tones, time));
         }
