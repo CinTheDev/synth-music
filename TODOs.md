@@ -35,24 +35,7 @@ at all parts of the rendering process and try to come up with improvements to
 make it more versatile, intuitive, and less sensitive to bugs (caused from bad
 user input).
 
-#### Seperate struct for Instrument SoundBuffer and user buffer
-
-The SoundBuffer provided for instruments to fill and the finished buffer
-returned to the user are the same struct, which limits a bunch of potential
-functionality.
-
-Let's list what both variants of the buffer should do.
-
-SoundBuffer for Instrument:
-
-- Be empty when given to Instrument
-- Provide for how long the instrument should play / how many samples
-- Handle shorter and longer returned buffer correctly
-
-SoundBuffer for user:
-
-- Be easy to export
-- Check `new-section-principles.md` for details
+TODO: Write more on improving API.
 
 ### Multithreading
 
