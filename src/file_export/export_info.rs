@@ -43,4 +43,8 @@ impl SoundBuffer {
         let secs = index as f64 / self.sample_rate as f64;
         Duration::from_secs_f64(secs)
     }
+
+    pub fn append(&mut self, other: &mut SoundBuffer) {
+        self.samples.append(&mut other.samples);
+    }
 }

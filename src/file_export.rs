@@ -13,8 +13,8 @@ pub trait FileExport {
     fn export(&self, buffer: Vec<f32>) -> std::io::Result<()>;
 }
 
-pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> Vec<f32> {
-    let mut buffer = Vec::new();
+pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> SoundBuffer {
+    let mut buffer = SoundBuffer::new(sample_rate);
 
     for tone in &track.tones {
         let mut tone_buffer = render_tone(
@@ -28,8 +28,8 @@ pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> Vec<f3
     return buffer;
 }
 
-fn render_tone<T: Instrument>(tone: &Tone<T::ConcreteValue>, sample_rate: u32, instrument: &T) -> Vec<f32> {
-    let mut buffer = Vec::new();
+fn render_tone<T: Instrument>(tone: &Tone<T::ConcreteValue>, sample_rate: u32, instrument: &T) -> SoundBuffer {
+    let mut buffer = SoundBuffer::new(sample_rate);
 
     instrument.generate_sound(&mut buffer, tone);
 
@@ -106,6 +106,7 @@ pub fn mix_buffers(a: Vec<f32>, b: Vec<f32>) -> Vec<f32> {
     return larger_buffer;
 }
 
+/*
 #[macro_export]
 macro_rules! section {
     ( $section_info:expr, $sample_rate:expr, $( $track:expr ),+ ) => {
@@ -122,3 +123,4 @@ macro_rules! section {
         }
     };
 }
+*/
