@@ -10,7 +10,7 @@ pub use composer::note::{Note, ScaledValue};
 
 pub use composer::music_key::{MusicKey, KeyTonic, KeyType};
 
-//pub use crate::{notes, sequential_notes, section};
+pub use crate::{notes, sequential_notes, section};
 
 // Instrument imports
 pub use crate::instrument;
@@ -27,4 +27,4 @@ pub use file_export::{
     export_info
 };
 
-pub use export_info::Tone;
+pub use export_info::{Tone, SoundBuffer};
