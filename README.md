@@ -41,3 +41,10 @@ it should be possible to read a MIDI file from the disk and automatically
 convert it to notes on a Track.
 
 Check the contents of a MIDI file and see how this could be implemented.
+
+### Support Stereo
+
+This will probably require some refactoring on the rendering side. Make it
+possible for Instruments to output stereo sound and export it stereo. Also think
+about ways to make the Instrument implementation convenient if only Mono should
+be Output.
