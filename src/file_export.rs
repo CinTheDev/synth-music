@@ -22,6 +22,10 @@ pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> SoundB
         .with_style(crate::default_progress_style())
         .with_message("Track");
 
+    let progress = unsafe {
+        crate::add_progress_bar(progress)
+    };
+
     for tone in &track.tones {
         progress.inc(1);
 
@@ -88,17 +92,38 @@ fn smooth(t: f32) -> f32 {
 }
 
 #[macro_export]
+macro_rules! count {
+    () => (0usize);
+    ( $x:tt $($xs:tt)* ) => (1usize + count!($($xs)*));
+}
+
+#[macro_export]
 macro_rules! section {
     ( $section_info:expr, $sample_rate:expr, $( $track:expr ),+ ) => {
         {
+            use indicatif::ProgressBar;
+            use synth_music::count;
+
             let mut buffer = SoundBuffer::new(Vec::new(), $sample_rate, 0);
 
+            let amount_tracks = count!($($track)*);
+
+            let progress = ProgressBar::new(amount_tracks as u64)
+                .with_style(synth_music::default_progress_style())
+                .with_message("Section");
+
+            let progress = unsafe {
+                synth_music::add_progress_bar(progress)
+            };
+
             $(
+                progress.inc(1);
                 let export_track = $track.convert_to_export_track($section_info);
                 let export_buffer = file_export::render(&export_track, $sample_rate);
                 buffer = buffer.mix(export_buffer);
             )*
 
+            progress.finish();
             buffer
         }
     };
