@@ -68,14 +68,14 @@ where
         self.current_play_fraction = play_fraction;
     }
 
-    fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U> {
+    fn convert_to_export_track(&self, section_info: SectionInfo) -> ExportTrack<U> {
         let mut tones = self.conversion_first_pass(section_info);
 
         self.conversion_pass_dynamics(&mut tones);
 
         ExportTrack {
             tones,
-            instrument: self.instrument,
+            instrument: self.instrument.clone(),
         }
     }
 }

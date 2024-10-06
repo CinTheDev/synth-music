@@ -44,29 +44,29 @@ fn main() {
 
     let section_repeated_first = section!(info, 44100,
         melody_repeated_first,
-        chords_repeated.clone(),
-        bass_repeated.clone(),
+        chords_repeated,
+        bass_repeated,
         tracks::drumset_4(instrument_drumset, 4)
     );
 
     let section_repeated_second = section!(info, 44100,
         melody_repeated_second,
-        chords_repeated.clone(),
-        bass_repeated.clone(),
+        chords_repeated,
+        bass_repeated,
         tracks::drumset_4(instrument_drumset, 4)
     );
 
     let b_section_first = section!(info, 44100,
         melody_b_section_first,
-        chords_b_section.clone(),
-        bass_b_section.clone(),
+        chords_b_section,
+        bass_b_section,
         tracks::drumset_4(instrument_drumset, 4)
     );
 
     let b_section_second = section!(info, 44100,
         melody_b_section_second,
-        chords_b_section.clone(),
-        bass_b_section.clone(),
+        chords_b_section,
+        bass_b_section,
         tracks::drumset_4(instrument_drumset, 4)
     );
 

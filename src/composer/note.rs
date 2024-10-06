@@ -1,6 +1,6 @@
 use super::music_key::MusicKey;
 
-pub trait ScaledValue {
+pub trait ScaledValue: Clone {
     type ConcreteValue;
 
     fn to_concrete_value(&self, key: MusicKey) -> Self::ConcreteValue;
