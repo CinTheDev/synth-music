@@ -69,7 +69,7 @@ impl SoundBuffer {
         }
     }
 
-    pub fn append(self, other: Self) -> Self {
+    pub fn append(&mut self, other: Self) {
         todo!();
     }
 

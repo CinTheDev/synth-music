@@ -14,15 +14,15 @@ pub trait FileExport {
 }
 
 pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> SoundBuffer {
-    let mut buffer = SoundBuffer::new(sample_rate);
+    let mut buffer = SoundBuffer::new(Vec::new(), sample_rate, 0);
 
     for tone in &track.tones {
-        let mut tone_buffer = render_tone(
+        let tone_buffer = render_tone(
             tone,
             sample_rate,
             &track.instrument,
         );
-        buffer.append(&mut tone_buffer);
+        buffer.append(tone_buffer);
     }
 
     return buffer;
