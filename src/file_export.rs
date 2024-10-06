@@ -93,6 +93,7 @@ fn fade_out_smooth(t: f32) -> f32 {
     fade_in_smooth(1.0 - t)
 }
 
+/*
 pub fn mix_buffers(a: Vec<f32>, b: Vec<f32>) -> Vec<f32> {
     let (mut larger_buffer, smaller_buffer) = match a.len() >= b.len() {
         true => (a, b),
@@ -105,8 +106,8 @@ pub fn mix_buffers(a: Vec<f32>, b: Vec<f32>) -> Vec<f32> {
 
     return larger_buffer;
 }
+*/
 
-/*
 #[macro_export]
 macro_rules! section {
     ( $section_info:expr, $sample_rate:expr, $( $track:expr ),+ ) => {
@@ -123,4 +124,3 @@ macro_rules! section {
         }
     };
 }
-*/

@@ -48,6 +48,24 @@ impl SoundBuffer {
         self.samples.append(&mut other.samples);
     }
 
+    pub fn mix(self, other: Self) -> Self {
+        assert_eq!(self.sample_rate, other.sample_rate);
+
+        let (mut larger_buffer, smaller_buffer) = match self.samples.len() >= other.samples.len() {
+            true => (self.samples, other.samples),
+            false => (other.samples, self.samples),
+        };
+
+        for i in 0..smaller_buffer.len() {
+            larger_buffer[i] += smaller_buffer[i];
+        }
+
+        return Self {
+            samples: larger_buffer,
+            sample_rate: self.sample_rate,
+        }
+    }
+
     pub fn sample_rate(&self) -> u32 {
         self.sample_rate
     }
