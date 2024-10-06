@@ -1,5 +1,6 @@
 pub mod tet12;
 
+/*
 use tet12::TET12ConcreteTone;
 use super::Instrument;
 use super::Tone;
@@ -71,3 +72,4 @@ impl Instrument for TriangleGenerator {
         }
     }
 }
+*/
