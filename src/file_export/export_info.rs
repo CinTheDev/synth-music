@@ -17,11 +17,30 @@ pub struct Tone<T> {
     pub intensity: Range<f32>,
 }
 
+pub struct SoundBuffer {
+    pub samples: Vec<f32>,
+    sample_rate: u32,
+}
+
 impl<T: Instrument> ExportTrack<T> {
     pub fn new(instrument: T) -> Self {
         Self {
             tones: Vec::new(),
             instrument,
         }
+    }
+}
+
+impl SoundBuffer {
+    pub fn new(sample_rate: u32) -> Self {
+        Self {
+            samples: Vec::new(),
+            sample_rate,
+        }
+    }
+
+    pub fn get_time_from_index(&self, index: u32) -> Duration {
+        let secs = index as f64 / self.sample_rate as f64;
+        Duration::from_secs_f64(secs)
     }
 }
