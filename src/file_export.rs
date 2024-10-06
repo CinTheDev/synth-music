@@ -31,6 +31,9 @@ pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> Vec<f3
 fn render_tone<T: Instrument>(tone: &Tone<T::ConcreteValue>, sample_rate: u32, instrument: &T) -> Vec<f32> {
     let mut buffer = Vec::new();
 
+    instrument.generate_sound(&mut buffer, tone);
+
+    /*
     let samples =
         (tone.play_duration.as_secs_f32() * sample_rate as f32)
         .floor() as u32;
@@ -52,10 +55,11 @@ fn render_tone<T: Instrument>(tone: &Tone<T::ConcreteValue>, sample_rate: u32, i
 
         buffer.push(sample_value);
     }
-
+    
     for _ in 0..silent_samples {
         buffer.push(0.0);
     }
+    */
 
     return buffer;
 }
