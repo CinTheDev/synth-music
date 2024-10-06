@@ -70,7 +70,25 @@ impl SoundBuffer {
     }
 
     pub fn append(&mut self, other: Self) {
-        todo!();
+        let inactive_samples = self.samples.len() - self.active_samples;
+
+        let mix_samples = usize::min(inactive_samples, other.samples.len());
+
+        // Mix end of self and start of other
+        for i in 0..mix_samples {
+            let index_self = i + self.active_samples;
+            let index_other = i;
+
+            self.samples[index_self] += other.samples[index_other];
+        }
+
+        // If other has been fully mixed in already
+        if inactive_samples > other.samples.len() { return }
+
+        let remaining_buffer = &other.samples[inactive_samples..];
+        for value in remaining_buffer {
+            self.samples.push(*value);
+        }
     }
 
     pub fn extend_to_active_samples(&mut self) {
