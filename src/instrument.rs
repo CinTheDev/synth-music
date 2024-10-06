@@ -16,5 +16,5 @@ pub struct BufferInfo {
 pub trait Instrument: Clone {
     type ConcreteValue: Clone + Copy;
 
-    fn generate_sound(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer;
+    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer;
 }
