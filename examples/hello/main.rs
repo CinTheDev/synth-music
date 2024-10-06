@@ -89,15 +89,15 @@ use std::time::Duration;
 struct SineGenerator;
 
 impl SineGenerator {
-    pub fn generate(info: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
+    pub fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
         let mut result = 0.0;
 
-        for tone in &info.concrete_values {
+        for tone in &tones.concrete_values {
             let frequency = tone.to_frequency() as f64;
             result += Self::generate_frequency(frequency, time);
         }
 
-        return result * info.intensity.start;
+        return result * tones.intensity.start;
     }
 
     pub fn generate_frequency(frequency: f64, time: Duration) -> f32 {
@@ -109,10 +109,14 @@ impl SineGenerator {
 impl Instrument for SineGenerator {
     type ConcreteValue = tet12::TET12ConcreteTone;
 
-    fn generate_sound(&self, buffer: &mut SoundBuffer, info: &Tone<Self::ConcreteValue>) {
-        for i in 0..buffer.samples.len() {
-            let time = buffer.get_time_from_index(i);
-            buffer.samples[i] = Self::generate(info, time);
+    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+        let mut buffer = Vec::new();
+
+        for i in 0..buffer_info.tone_samples {
+            let time = buffer_info.time_from_index(i);
+            buffer.push(Self::generate(tones, time));
         }
+
+        return InstrumentBuffer { samples: buffer }
     }
 }
