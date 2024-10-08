@@ -8,13 +8,13 @@ use super::InstrumentBuffer;
 use std::time::Duration;
 
 #[derive(Clone, Copy)]
-struct SineGenerator;
+pub struct SineGenerator;
 
 #[derive(Clone, Copy)]
-struct TriangleGenerator;
+pub struct TriangleGenerator;
 
 #[derive(Clone, Copy)]
-struct SquareGenerator;
+pub struct SquareGenerator;
 
 impl SineGenerator {
     pub fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {

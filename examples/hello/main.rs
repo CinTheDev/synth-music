@@ -4,6 +4,7 @@ fn main() {
     println!("Hello example");
 
     example_1();
+    example_2();
 }
 
 fn example_1() {
@@ -69,6 +70,35 @@ fn example_1() {
     );
 
     export_buffer(section, "first_example.wav");
+}
+
+fn example_2() {
+    use tet12::*;
+    use note::Length::*;
+
+    let instrument = predefined::SineGenerator;
+
+    let mut track = UnboundTrack::new(instrument);
+
+    track.note(Whole, third(1));
+
+    let settings = CompositionSettings {
+        sample_rate: 44100,
+    };
+
+    let section_info = SectionInfo {
+        bpm: 120.0,
+        key: MusicKey {
+            tonic: KeyTonic::C,
+            key_type: KeyType::Major,
+        },
+
+        settings: &settings,
+    };
+
+    let section = section!(section_info, track);
+
+    export_buffer(section, "sound_test.wav");
 }
 
 fn export_buffer(buffer: SoundBuffer, name: &str) {
