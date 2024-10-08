@@ -65,7 +65,7 @@ impl FileExport for WavExport {
         let mut writer = BufWriter::new(f);
 
         self.write_header(&mut writer, buffer.settings(), buffer.samples.len() * 2)?;
-        let amplitude = 0xFFFF as f32 * 0.1;
+        let amplitude = 0xFFFF as f32 * 0.25;
 
         for sample in buffer.samples {
             let val = (sample * amplitude).round() as i16;
