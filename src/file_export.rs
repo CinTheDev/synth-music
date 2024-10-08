@@ -139,7 +139,7 @@ macro_rules! section {
 macro_rules! composition {
     ( $first_section:expr, $( $section:expr ),* $(,)? ) => {
         {
-            let mut buffer = $first_section;
+            let mut buffer = $first_section.clone();
 
             $(
                 buffer.append($section.clone());

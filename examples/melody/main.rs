@@ -11,10 +11,16 @@ fn main() {
         key_type: KeyType::Minor,
     };
 
+    let settings = CompositionSettings {
+        sample_rate: 44100,
+    };
+
     let info = SectionInfo {
         bpm: 120.0,
         key,
         time_signature: (4, 4),
+
+        settings: &settings,
     };
 
     let instrument_softbass = instruments::SoftBass::new(1.0);
@@ -35,35 +41,35 @@ fn main() {
     let chords_b_section = tracks::chords_b_section(instrument_softbass);
     let bass_b_section = tracks::bass_b_section(instrument_hardbass);
 
-    let section_begin = section!(info, 44100,
+    let section_begin = section!(info,
         melody_begin,
         chords_begin,
         bass_begin,
         tracks::drumset_4(instrument_drumset, 4)
     );
 
-    let section_repeated_first = section!(info, 44100,
+    let section_repeated_first = section!(info,
         melody_repeated_first,
         chords_repeated,
         bass_repeated,
         tracks::drumset_4(instrument_drumset, 4)
     );
 
-    let section_repeated_second = section!(info, 44100,
+    let section_repeated_second = section!(info,
         melody_repeated_second,
         chords_repeated,
         bass_repeated,
         tracks::drumset_4(instrument_drumset, 4)
     );
 
-    let b_section_first = section!(info, 44100,
+    let b_section_first = section!(info,
         melody_b_section_first,
         chords_b_section,
         bass_b_section,
         tracks::drumset_4(instrument_drumset, 4)
     );
 
-    let b_section_second = section!(info, 44100,
+    let b_section_second = section!(info,
         melody_b_section_second,
         chords_b_section,
         bass_b_section,
