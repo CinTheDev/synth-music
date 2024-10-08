@@ -28,16 +28,6 @@ feel like it, we can extend these to n-toles like pentoles, septoles, etc.
 
 ## Improve rendering/export system
 
-### Better handling of technical values
-
-The main culprit here is that especially the sample rate is required basically
-everywhere in the rendering process, and the user has to pass it into pretty
-much every function. If we add more features later, it will become really
-inconvinient.
-
-Think of a way to efficiently handle such settings, while still keeping them
-seperate from exporter settings (E.g. WavExporter).
-
 ### Multithreading
 
 As long as the architecture allows it, try to include multithreading when
