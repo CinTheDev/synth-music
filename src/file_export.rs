@@ -136,15 +136,13 @@ macro_rules! section {
 // TODO: Make this not take the sample rate as an argument
 #[macro_export]
 macro_rules! composition {
-    ( $settings:expr, $( $section:expr ),* $(,)? ) => {
+    ( $first_section:expr, $( $section:expr ),* $(,)? ) => {
         {
-            let mut buffer = SoundBuffer::new(Vec::new(), 0, $settings);
-
             $(
-                buffer.append($section.clone());
+                $first_section.append($section.clone());
             )*
 
-            buffer
+            $first_section
         }
     };
 }
