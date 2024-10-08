@@ -118,8 +118,8 @@ impl SoundBuffer {
         }
     }
 
-    pub fn sample_rate(&self) -> u32 {
-        self.settings.sample_rate
+    pub fn settings(&self) -> CompositionSettings {
+        self.settings
     }
 
     pub fn active_samples(&self) -> usize {

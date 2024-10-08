@@ -1,4 +1,4 @@
-use super::FileExport;
+use super::{CompositionSettings, FileExport};
 
 use std::fs::File;
 use std::io::{BufWriter, Write};
@@ -7,7 +7,6 @@ use std::str::FromStr;
 
 pub struct WavExport {
     pub path: PathBuf,
-    //pub sample_rate: u32,
     pub bits_per_sample: u16,
 }
 
@@ -15,7 +14,7 @@ impl WavExport {
     fn write_header(
         &self,
         writer: &mut BufWriter<File>,
-        buffer_sample_rate: u32,
+        settings: CompositionSettings,
         buffer_size: usize,
     ) -> std::io::Result<()> {
         use bytemuck::bytes_of;
@@ -24,6 +23,8 @@ impl WavExport {
         const WAVE: [u8; 4] = [b'W', b'A', b'V', b'E'];
         const FMT0: [u8; 4] = [b'f', b'm', b't', b' '];
         const DATA: [u8; 4] = [b'd', b'a', b't', b'a'];
+
+        let sample_rate = settings.sample_rate;
 
         let data_size: u32 = buffer_size.try_into().unwrap();
         let file_size = data_size + 44 - 8;
@@ -34,7 +35,7 @@ impl WavExport {
         let num_channels: u16 = 1;
 
         let sample_rate_calculation: u32 =
-            buffer_sample_rate * self.bits_per_sample as u32 * num_channels as u32 / 8;
+            sample_rate * self.bits_per_sample as u32 * num_channels as u32 / 8;
         
         let bits_sample_calculation: u16 =
             self.bits_per_sample * num_channels / 8;
@@ -46,7 +47,7 @@ impl WavExport {
         writer.write(bytes_of(&format_data_length))?;
         writer.write(bytes_of(&format_type))?;
         writer.write(bytes_of(&num_channels))?;
-        writer.write(bytes_of(&buffer_sample_rate))?;
+        writer.write(bytes_of(&sample_rate))?;
         writer.write(bytes_of(&sample_rate_calculation))?;
         writer.write(bytes_of(&bits_sample_calculation))?;
         writer.write(bytes_of(&self.bits_per_sample))?;
@@ -65,7 +66,7 @@ impl FileExport for WavExport {
         // TODO: Generate chunks
         //let samples = buffer.generate_whole_buffer(self.sample_rate);
 
-        self.write_header(&mut writer, buffer.sample_rate(), buffer.samples.len() * 2)?;
+        self.write_header(&mut writer, buffer.settings(), buffer.samples.len() * 2)?;
         let amplitude = 0xFFFF as f32 * 0.1;
 
         for sample in buffer.samples {
@@ -81,7 +82,6 @@ impl Default for WavExport {
     fn default() -> Self {
         Self {
             path: PathBuf::from_str("unnamed.wav").unwrap(),
-            //sample_rate: 44100,
             bits_per_sample: 16,
         }
     }

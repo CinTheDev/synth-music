@@ -75,8 +75,10 @@ fn render_tone<T: Instrument>(
 }
 
 fn apply_fade_amplitude(buffer: &mut SoundBuffer) {
-    let fade_in_samples = (buffer.sample_rate() as f64 * DEFAULT_FADE_IN.as_secs_f64()).ceil() as usize;
-    let fade_out_samples = (buffer.sample_rate() as f64 * DEFAULT_FADE_OUT.as_secs_f64()).ceil() as usize;
+    let sample_rate = buffer.settings().sample_rate as f64;
+
+    let fade_in_samples = (sample_rate * DEFAULT_FADE_IN.as_secs_f64()).ceil() as usize;
+    let fade_out_samples = (sample_rate * DEFAULT_FADE_OUT.as_secs_f64()).ceil() as usize;
 
     for i in 0..fade_in_samples {
         let t = i as f32 / fade_in_samples as f32;
