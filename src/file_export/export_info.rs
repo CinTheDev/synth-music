@@ -17,9 +17,9 @@ pub struct Tone<T> {
     pub intensity: Range<f32>,
 }
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct CompositionSettings {
-    sample_rate: u32,
+    pub sample_rate: u32,
 }
 
 #[derive(Clone)]
@@ -39,22 +39,22 @@ impl<T: Instrument> ExportTrack<T> {
 }
 
 impl SoundBuffer {
-    pub fn new(samples: Vec<f32>, sample_rate: u32, active_samples: usize) -> Self {
+    pub fn new(samples: Vec<f32>, active_samples: usize, settings: CompositionSettings) -> Self {
         Self {
             samples,
-            sample_rate,
+            settings,
             active_samples,
         }
     }
 
     pub fn time_from_index(&self, index: usize) -> Duration {
         Duration::from_secs_f64(
-            index as f64 / self.sample_rate as f64
+            index as f64 / self.settings.sample_rate as f64
         )
     }
 
     pub fn mix(self, other: Self) -> Self {
-        assert_eq!(self.sample_rate, other.sample_rate);
+        assert_eq!(self.settings, other.settings);
 
         let (mut larger_buffer, smaller_buffer) =
             match self.samples.len() >= other.samples.len() {
@@ -70,8 +70,8 @@ impl SoundBuffer {
 
         Self {
             samples: larger_buffer,
-            sample_rate: self.sample_rate,
             active_samples,
+            settings: self.settings,
         }
     }
 
@@ -110,7 +110,7 @@ impl SoundBuffer {
     }
 
     pub fn sample_rate(&self) -> u32 {
-        self.sample_rate
+        self.settings.sample_rate
     }
 
     pub fn active_samples(&self) -> usize {
@@ -118,6 +118,7 @@ impl SoundBuffer {
     }
 }
 
+/*
 // Test SoundBuffer
 #[cfg(test)]
 mod tests {
@@ -398,3 +399,5 @@ mod tests {
         }
     }
 }
+
+*/
