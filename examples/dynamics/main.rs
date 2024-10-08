@@ -23,7 +23,6 @@ fn main() {
             tonic: KeyTonic::C,
             key_type: KeyType::Major,
         },
-        time_signature: (4, 4),
 
         settings: &settings,
     };

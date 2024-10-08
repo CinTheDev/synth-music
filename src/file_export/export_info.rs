@@ -27,7 +27,6 @@ pub struct CompositionSettings {
 pub struct SectionInfo<'a> {
     pub bpm: f32,
     pub key: MusicKey,
-    pub time_signature: (u8, u8),
 
     pub settings: &'a CompositionSettings,
 }

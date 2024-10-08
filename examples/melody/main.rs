@@ -18,7 +18,6 @@ fn main() {
     let info = SectionInfo {
         bpm: 120.0,
         key,
-        time_signature: (4, 4),
 
         settings: &settings,
     };
