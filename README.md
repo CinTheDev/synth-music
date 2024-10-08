@@ -69,3 +69,18 @@ the rythm.
 
 Investigate online what this is called and how it is usually implemented. If
 it's not very difficult, implement it here as well.
+
+### Better multithreading
+
+Right now multithreading only works per-section. The sections themselves are
+rendered sequentially. Because of this, multithreading is only really beneficial
+if the sections are quite long, or if there are a lot of tracks playing at once.
+
+Since there's no way to store Sections in a struct as of right now, it's pretty
+difficult to write extensive features for them. If Sections can actually be
+bundled together somehow at some point, then it would be feasible to implement
+this composition-wide multithreading.
+
+Also while we're at this - if we manage to get outside of macro territory we
+might as well clean up the code by moving multithreading into dedicated
+functions or even submodules.
