@@ -103,7 +103,7 @@ macro_rules! count {
 
 #[macro_export]
 macro_rules! section {
-    ( $section_info:expr, $settings:expr, $( $track:expr ),+ ) => {
+    ( $section_info:expr, $settings:expr, $( $track:expr ),+ $(,)? ) => {
         {
             use indicatif::ProgressBar;
             use synth_music::count;
@@ -136,7 +136,7 @@ macro_rules! section {
 // TODO: Make this not take the sample rate as an argument
 #[macro_export]
 macro_rules! composition {
-    ( $settings:expr, $( $section:expr ),* ) => {
+    ( $settings:expr, $( $section:expr ),* $(,)? ) => {
         {
             let mut buffer = SoundBuffer::new(Vec::new(), 0, $settings);
 

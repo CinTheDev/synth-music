@@ -64,7 +64,7 @@ fn example_1() {
 
     let section = section!(section_info, settings,
         track1,
-        track2
+        track2,
     );
 
     export_buffer(section, "first_example.wav");
