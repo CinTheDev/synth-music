@@ -127,25 +127,43 @@ macro_rules! section {
             use synth_music::count;
 
             let settings = $section_info.settings.to_owned();
-
-            let mut buffer = SoundBuffer::new(Vec::new(), 0, settings);
-
+            
+            // Progress bar
             let amount_tracks = count!($($track)*);
-
+            
             let progress = ProgressBar::new(amount_tracks as u64)
                 .with_style(synth_music::default_progress_style())
                 .with_message("Section");
-
+            
             let progress = unsafe {
                 synth_music::add_progress_bar(progress)
             };
-
+            
+            // Multithreading
+            use std::sync::mpsc;
+            use std::thread;
+            
+            let (tx, rx) = mpsc::channel();
+            
             $(
-                progress.inc(1);
+                let tx_thread = tx.clone();
                 let export_track = $track.convert_to_export_track($section_info);
-                let export_buffer = file_export::render(&export_track, settings);
-                buffer = buffer.mix(export_buffer);
+                
+                thread::spawn(move || {
+                    // Rendering single tracks
+                    let export_buffer = file_export::render(&export_track, settings);
+                    tx_thread.send(export_buffer).unwrap();
+                });
             )*
+            
+            drop(tx);
+            let mut buffer = SoundBuffer::new(Vec::new(), 0, settings);
+
+            // Mixing all tracks together
+            while let Ok(export_buffer) = rx.recv() {
+                progress.inc(1);
+                buffer = buffer.mix(export_buffer);
+            }
 
             progress.finish();
             buffer
