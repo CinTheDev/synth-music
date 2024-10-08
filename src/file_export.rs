@@ -103,12 +103,14 @@ macro_rules! count {
 
 #[macro_export]
 macro_rules! section {
-    ( $section_info:expr, $settings:expr, $( $track:expr ),+ $(,)? ) => {
+    ( $section_info:expr, $( $track:expr ),+ $(,)? ) => {
         {
             use indicatif::ProgressBar;
             use synth_music::count;
 
-            let mut buffer = SoundBuffer::new(Vec::new(), 0, $settings);
+            let settings = $section_info.settings.to_owned();
+
+            let mut buffer = SoundBuffer::new(Vec::new(), 0, settings);
 
             let amount_tracks = count!($($track)*);
 
@@ -123,7 +125,7 @@ macro_rules! section {
             $(
                 progress.inc(1);
                 let export_track = $track.convert_to_export_track($section_info);
-                let export_buffer = file_export::render(&export_track, $settings);
+                let export_buffer = file_export::render(&export_track, settings);
                 buffer = buffer.mix(export_buffer);
             )*
 
