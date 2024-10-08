@@ -26,36 +26,6 @@ for a bit already because they're handled incorrectly in code. The new
 implementation should take regard to trioles (in a correct way of course). If we
 feel like it, we can extend these to n-toles like pentoles, septoles, etc.
 
-## Improve rendering/export system
-
-### Have instruments return a whole tone buffer
-
-Currently the Instrument trait only provied a way to calculate individual
-samples just given the tone frequency and a time. This is good enough for
-instruments that use predictable sine-waves and such, but it makes other
-methods that operate on the whole buffer impossible.
-
-It should be easy enough for instruments to return the whole buffer.
-
-### Chunked rendering
-
-Currently the exporter renders the whole music piece into one buffer which then
-is written to the disk. The memory consumption might not be that big of a deal
-(@ 44100Hz the buffer would take around 10MB for every minute of music), but
-there are is another reason to make the rendering chunked.
-
-Rendering can take a bit because it's currently single threaded. Chunked
-rendering allows for Multi-Threaded rendering of the file, which will speed up
-the rendering process by quite a bit. Also, the reduced memory consumption is
-also not bad.
-
-### Loading bar for exporting
-
-Bigger projects (even the ones from the examples) take a few seconds to export.
-It would be nice to have a loading bar that shows how much of the piece has
-been rendered out already. It's probably related with the chunked rendering
-stuff above.
-
 ## Thorough documentation
 
 It seems like the code structure is somewhat converging to a final state, so
@@ -70,3 +40,7 @@ online what best practises for this are.
 All examples right now only serve testing purposes and aren't that great for
 showing the library's features. Write a bunch more examples with more isolated
 ideas and more comments so these can be used to learn this library.
+
+### Unit tests
+
+It would be good to at least implement the easy unit tests.

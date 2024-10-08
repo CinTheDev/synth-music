@@ -27,8 +27,19 @@ impl SoftBass {
         }
     }
 
-    pub fn generate(&self, frequency: f64, time: Duration) -> f32 {
-        Self::triangle_wave(frequency, time) * self.decay_function(time)
+    fn generate(&self, tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
+        let mut result = 0.0;
+
+        for tone in &tones.concrete_values {
+            let frequency = tone.to_frequency() as f64;
+            result += Self::generate_frequency(frequency, time);
+        }
+
+        return result * self.decay_function(time);
+    }
+
+    fn generate_frequency(frequency: f64, time: Duration) -> f32 {
+        Self::triangle_wave(frequency, time)
     }
 
     fn triangle_wave(frequency: f64, time: Duration) -> f32 {
@@ -49,7 +60,18 @@ impl HardBass {
         }
     }
 
-    pub fn generate(&self, frequency: f64, time: Duration) -> f32 {
+    fn generate(&self, tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
+        let mut result = 0.0;
+
+        for tone in &tones.concrete_values {
+            let frequency = tone.to_frequency() as f64;
+            result += self.generate_frequency(frequency, time);
+        }
+
+        return result * tones.intensity.start;
+    }
+
+    fn generate_frequency(&self, frequency: f64, time: Duration) -> f32 {
         let mut amplitude = 0.0;
 
         for n in 0..self.harmonics {
@@ -106,37 +128,45 @@ impl Drumset {
 impl Instrument for SoftBass {
     type ConcreteValue = TET12ConcreteTone;
 
-    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
-        let mut result = 0.0;
+    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+        let mut buffer = Vec::new();
 
-        for tone in &info.concrete_values {
-            let frequency = tone.to_frequency() as f64;
-            result += self.generate(frequency, time);
+        for i in 0..buffer_info.tone_samples {
+            let time = buffer_info.time_from_index(i);
+            buffer.push(self.generate(tones, time));
         }
 
-        return result * info.intensity.start;
+        InstrumentBuffer { samples: buffer }
     }
 }
 
 impl Instrument for HardBass {
     type ConcreteValue = TET12ConcreteTone;
 
-    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
-        let mut result = 0.0;
+    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+        let mut buffer = Vec::new();
 
-        for tone in &info.concrete_values {
-            let frequency = tone.to_frequency() as f64;
-            result += self.generate(frequency, time);
+        for i in 0..buffer_info.tone_samples {
+            let time = buffer_info.time_from_index(i);
+            buffer.push(self.generate(tones, time));
         }
 
-        return result * info.intensity.start;
+        InstrumentBuffer { samples: buffer }
     }
 }
 
 impl Instrument for Drumset {
     type ConcreteValue = DrumsetAction;
 
-    fn generate_sound(&self, info: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
-        self.generate(time) * info.intensity.start
+    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+        let mut buffer = Vec::new();
+
+        for i in 0..buffer_info.tone_samples {
+            let time = buffer_info.time_from_index(i);
+            let value = self.generate(time) * tones.intensity.start;
+            buffer.push(value);
+        }
+
+        InstrumentBuffer { samples: buffer }
     }
 }

@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 bytemuck = "1.18.0"
+indicatif = "0.17.8"
 
 [dev-dependencies]
 rand = "0.8.5"

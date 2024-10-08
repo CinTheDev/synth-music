@@ -81,14 +81,14 @@ where
         self.current_play_fraction = play_fraction;
     }
 
-    fn convert_to_export_track(self, section_info: SectionInfo) -> ExportTrack<U> {
-        let (instrument, notes) = self.arrange();
+    fn convert_to_export_track(&self, section_info: SectionInfo) -> ExportTrack<U> {
+        let notes = self.arrange_notes();
         let mut tones = Self::conversion_first_pass(&notes, section_info);
         Self::conversion_pass_dynamics(&notes, &mut tones);
 
         ExportTrack {
             tones,
-            instrument,
+            instrument: self.instrument.clone(),
         }
     }
 }
@@ -129,7 +129,7 @@ where
         self.active_measure.as_mut().unwrap()
     }
 
-    fn arrange(self) -> (U, Vec<Note<T>>) {
+    fn arrange_notes(&self) -> Vec<Note<T>> {
         let mut notes = Vec::new();
 
         let active_measure = self.active_measure.as_ref().unwrap();
@@ -138,13 +138,13 @@ where
             eprintln!("WARNING: Unvalidated measure, you probably forgot to call track.measure() at the end.");
         }
 
-        for measure in self.measures {
-            for note in measure.notes {
-                notes.push(note)
+        for measure in &self.measures {
+            for note in &measure.notes {
+                notes.push((*note).clone());
             }
         }
 
-        return (self.instrument, notes);
+        return notes;
     }
 
     fn conversion_first_pass(notes: &Vec<Note<T>>, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
