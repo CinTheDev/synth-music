@@ -1,6 +1,7 @@
 use std::time::Duration;
 use std::ops::Range;
 use crate::instrument::Instrument;
+use crate::composer::music_key::MusicKey;
 
 // Contains raw tones
 pub struct ExportTrack<T: Instrument> {
@@ -20,6 +21,13 @@ pub struct Tone<T> {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct CompositionSettings {
     pub sample_rate: u32,
+}
+
+#[derive(Clone, Copy)]
+pub struct SectionInfo {
+    pub bpm: f32,
+    pub key: MusicKey,
+    pub time_signature: (u8, u8),
 }
 
 #[derive(Clone)]
