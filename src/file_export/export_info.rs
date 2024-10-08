@@ -17,11 +17,16 @@ pub struct Tone<T> {
     pub intensity: Range<f32>,
 }
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub struct CompositionSettings {
+    sample_rate: u32,
+}
+
 #[derive(Clone)]
 pub struct SoundBuffer {
     pub samples: Vec<f32>,
-    sample_rate: u32,
     active_samples: usize,
+    settings: CompositionSettings,
 }
 
 impl<T: Instrument> ExportTrack<T> {
