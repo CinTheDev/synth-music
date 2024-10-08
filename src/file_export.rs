@@ -13,10 +13,10 @@ pub trait FileExport {
     fn export(&self, buffer: SoundBuffer) -> std::io::Result<()>;
 }
 
-pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> SoundBuffer {
+pub fn render<T: Instrument>(track: &ExportTrack<T>, settings: CompositionSettings) -> SoundBuffer {
     use indicatif::ProgressBar;
 
-    let mut buffer = SoundBuffer::new(Vec::new(), sample_rate, 0);
+    let mut buffer = SoundBuffer::new(Vec::new(), 0, settings);
 
     let progress = ProgressBar::new(track.tones.len() as u64)
         .with_style(crate::default_progress_style())
@@ -31,7 +31,7 @@ pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> SoundB
 
         let tone_buffer = render_tone(
             tone,
-            sample_rate,
+            settings,
             &track.instrument,
         );
         buffer.append(tone_buffer);
@@ -42,17 +42,21 @@ pub fn render<T: Instrument>(track: &ExportTrack<T>, sample_rate: u32) -> SoundB
     return buffer;
 }
 
-fn render_tone<T: Instrument>(tone: &Tone<T::ConcreteValue>, sample_rate: u32, instrument: &T) -> SoundBuffer {
+fn render_tone<T: Instrument>(
+    tone: &Tone<T::ConcreteValue>,
+    settings: CompositionSettings,
+    instrument: &T
+) -> SoundBuffer {
     let samples =
-        (tone.play_duration.as_secs_f32() * sample_rate as f32)
+        (tone.play_duration.as_secs_f32() * settings.sample_rate as f32)
         .floor() as usize;
 
     let played_samples =
-        (tone.tone_duration.as_secs_f32() * sample_rate as f32)
+        (tone.tone_duration.as_secs_f32() * settings.sample_rate as f32)
         .floor() as usize;
 
     let buffer_info = BufferInfo {
-        sample_rate,
+        sample_rate: settings.sample_rate,
         tone_samples: played_samples,
     };
 
@@ -60,8 +64,8 @@ fn render_tone<T: Instrument>(tone: &Tone<T::ConcreteValue>, sample_rate: u32, i
 
     let mut sound_buffer = SoundBuffer::new(
         instrument_buffer.samples,
-        sample_rate,
         samples,
+        settings,
     );
 
     apply_fade_amplitude(&mut sound_buffer);
@@ -99,12 +103,12 @@ macro_rules! count {
 
 #[macro_export]
 macro_rules! section {
-    ( $section_info:expr, $sample_rate:expr, $( $track:expr ),+ ) => {
+    ( $section_info:expr, $settings:expr, $( $track:expr ),+ ) => {
         {
             use indicatif::ProgressBar;
             use synth_music::count;
 
-            let mut buffer = SoundBuffer::new(Vec::new(), $sample_rate, 0);
+            let mut buffer = SoundBuffer::new(Vec::new(), 0, $settings);
 
             let amount_tracks = count!($($track)*);
 
@@ -119,7 +123,7 @@ macro_rules! section {
             $(
                 progress.inc(1);
                 let export_track = $track.convert_to_export_track($section_info);
-                let export_buffer = file_export::render(&export_track, $sample_rate);
+                let export_buffer = file_export::render(&export_track, $settings);
                 buffer = buffer.mix(export_buffer);
             )*
 
@@ -132,9 +136,9 @@ macro_rules! section {
 // TODO: Make this not take the sample rate as an argument
 #[macro_export]
 macro_rules! composition {
-    ( $sample_rate:expr, $( $section:expr ),* ) => {
+    ( $settings:expr, $( $section:expr ),* ) => {
         {
-            let mut buffer = SoundBuffer::new(Vec::new(), $sample_rate, 0);
+            let mut buffer = SoundBuffer::new(Vec::new(), 0, $settings);
 
             $(
                 buffer.append($section.clone());
