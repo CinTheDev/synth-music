@@ -133,7 +133,6 @@ macro_rules! section {
     };
 }
 
-// TODO: Make this not take the sample rate as an argument
 #[macro_export]
 macro_rules! composition {
     ( $first_section:expr, $( $section:expr ),* $(,)? ) => {
