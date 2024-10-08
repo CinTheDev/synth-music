@@ -38,9 +38,9 @@ pub fn render<T: Instrument>(track: &ExportTrack<T>, settings: CompositionSettin
     }
 
     progress.finish_and_clear();
-
+    
     if contains_loud_samples(&buffer) {
-        eprintln!("WARNING: A Track contains very loud samples. Play back at your own risk.");
+        progress.println("WARNING: Track contains very loud samples. Play back at your own risk.");
     }
 
     return buffer;
@@ -103,7 +103,9 @@ fn smooth(t: f32) -> f32 {
 
 fn contains_loud_samples(buffer: &SoundBuffer) -> bool {
     for sample in &buffer.samples {
-        if *sample > 1.0 {
+        let value = (*sample).abs();
+
+        if value > 1.0 {
             return true;
         }
     }
