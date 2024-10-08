@@ -13,6 +13,10 @@ fn main() {
     let track_linear_sine = example_track(linear_sine);
     let track_punchy_sine = example_track(punchy_sine);
 
+    let settings = CompositionSettings {
+        sample_rate: 44100,
+    };
+
     let section_info = SectionInfo {
         bpm: 120.0,
         key: MusicKey {
@@ -20,14 +24,17 @@ fn main() {
             key_type: KeyType::Major,
         },
         time_signature: (4, 4),
+
+        settings: &settings,
     };
 
-    let linear_section = section!(section_info, 44100, track_linear_sine);
-    let punchy_section = section!(section_info, 44100, track_punchy_sine);
+    let linear_section = section!(section_info, track_linear_sine);
+    let punchy_section = section!(section_info, track_punchy_sine);
 
-    let mut composition = SoundBuffer::new(Vec::new(), 44100, 0);
-    composition.append(linear_section);
-    composition.append(punchy_section);
+    let composition = composition!(
+        linear_section,
+        punchy_section,
+    );
 
     // Export
     use std::path::PathBuf;
