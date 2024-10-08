@@ -49,6 +49,10 @@ fn example_1() {
     );
     track2.measure().unwrap();
 
+    let settings = CompositionSettings {
+        sample_rate: 44100,
+    };
+
     let section_info = SectionInfo {
         bpm: 120.0,
         key: MusicKey {
@@ -58,7 +62,7 @@ fn example_1() {
         time_signature: (4, 4),
     };
 
-    let section = section!(section_info, 44100,
+    let section = section!(section_info, settings,
         track1,
         track2
     );

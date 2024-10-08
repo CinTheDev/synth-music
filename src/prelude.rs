@@ -27,4 +27,4 @@ pub use file_export::{
     export_info
 };
 
-pub use export_info::{Tone, SoundBuffer};
+pub use export_info::{Tone, SoundBuffer, CompositionSettings};
