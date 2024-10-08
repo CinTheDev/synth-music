@@ -60,9 +60,11 @@ fn example_1() {
             key_type: KeyType::Major,
         },
         time_signature: (4, 4),
+
+        settings: &settings,
     };
 
-    let section = section!(section_info, settings,
+    let section = section!(section_info,
         track1,
         track2,
     );
