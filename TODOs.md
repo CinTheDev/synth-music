@@ -26,17 +26,6 @@ for a bit already because they're handled incorrectly in code. The new
 implementation should take regard to trioles (in a correct way of course). If we
 feel like it, we can extend these to n-toles like pentoles, septoles, etc.
 
-## Improve rendering/export system
-
-### Multithreading
-
-As long as the architecture allows it, try to include multithreading when
-rendering multiple instruments at once. Since there is no way to hold multiple
-Tracks in the same struct, the only way (I see right now) to abstract this away
-from the user is to use macros, or include it in the already provided macros.
-
-Though, this feature is optional. Do not implement it if things get too messy.
-
 ## Thorough documentation
 
 It seems like the code structure is somewhat converging to a final state, so
