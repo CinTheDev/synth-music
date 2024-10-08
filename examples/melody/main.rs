@@ -70,7 +70,7 @@ fn main() {
         tracks::drumset_4(instrument_drumset, 4)
     );
 
-    let composition = composition!(44100,
+    let composition = composition!(
         section_begin,
         section_repeated_first,
         section_repeated_second,
