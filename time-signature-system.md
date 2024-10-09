@@ -258,3 +258,28 @@ and so on.
 When precisely counting lengths, there shall be n placed notes with the same
 n-tole length to simplify to a subdividable value. When converting to duration,
 floating point representation is sufficient.
+
+## Time signatures
+
+The time signature is a struct containing the following info:
+
+### Measure length
+
+The measure length is a note length signifying how long the measure should be.
+This results from calculating the "fraction" of the typical notation, e.g. a
+4/4 signature will simplify to 1, a 2/4 to 0.5, 3/4 to 0.75, etc...
+
+We don't store the nominator or denominator, just the result.
+
+### Beats
+
+The beats are the positions inside the measure where notes are emphasized.
+Let's define a single beat to be represented by a note length, and by an
+"emphasis level". All beats are stored sequentially (e.g. in a Vector) and are
+required to add together to the measure length.
+
+The emphasis level will be a positive floating point value. If the value is
+equal to 1, the beat will be "normal". A value greater than 1 will emphasize
+the beat with the specified level, while a value smaller than 1 will weaken
+the beat. As far as I know, "weakening" a beat does not exist in music
+theory, but let's include it consistency.
