@@ -85,6 +85,12 @@ this is 5/4. It can be divided into a trippled and a doubled group, or the
 doubled first and then the trippled. But we can't know from the time signature
 alone.
 
+### Converting it into Rust
+
+Well, all this music theory and we must somehow implement it for this library.
+Let's go step by step from the ground up and try to be as general as possible
+to include as many different configurations as possible.
+
 ## Thorough documentation
 
 It seems like the code structure is somewhat converging to a final state, so
