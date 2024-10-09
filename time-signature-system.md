@@ -135,6 +135,11 @@ So if we store it as (count, subdivision), a quarter note would be (0, 2).
 An eigth will be (0, 3). A dotted quarter note is represented by (2, 3) (three
 eights merged together).
 
+Note from the future: This is extremely similar to the floating point format
+described below, it uses the same ideas even. Basically, with this approach I
+basically reinvented floating point numbers with less functionality and less
+optimization.
+
 Pros:
 
 - Crazily deep subdivision possible (up until ~ 1 / (1.7 \* 10^38) if quarter is 1/4)
@@ -167,6 +172,21 @@ is full. The typical way to handle this is to define a tolerance, and in case of
 comparison the values just need to be within the tolerance to be considered
 equal. But I don't really like this so much either.
 
+In the integer representation, we could still represent trioles if we accept
+imprecision. A quarter-triole would be (2/3)*(1/4) = 0.16667 for floats, with
+the first method we'd need 42.67 or 43 256th notes, and loose about 0.33 of a
+256th of precision. The second approach could go for 170.67 1024th notes, which
+much more precise (though the implementation would need to choose the most
+optimal set of values above other redundant equivalents).
+
+The flost would be able to store 0.166666656, which would loose about
+0.000000011. The second approach above would store 0.166992188 and lose about
+0.166992188. The second approach is similar to a float with 8-bit mantissa and
+8-bit exponent. The float is larger (32 bits) and is therefore more precise.
+
+Floats can actually also perfectly represent subdivisions of two (0.5, 0.25,
+...), so this is the "official" version of the second idea.
+
 Pros:
 
 - Very easy to implement, to handle, and is intuitive
@@ -175,3 +195,42 @@ Pros:
 Cons:
 
 - Floating point imprecision ruins the mathematical precision and determinism
+
+#### The triole problem
+
+None of the ideas above seem to really satisfy trioles or n-toles fully. The
+integer approaches satisfy everything except trioles. The float approach could
+work but is imprecise.
+
+In music theory, trioles are also kind of a special case. Triole notes cannot
+appear individually, they must always be in a bundle of three notes. The note
+length of these is always the same. A quarter triole consists of three
+"quarters", whose length is so that all three together sum up to a half note.
+Essentially, a quarter triole divides a half note into 3 different notes.
+
+n-toles will work the same way, just that the note length one level above the
+denoted lengths will be divided into n notes.
+
+It would be fancy if my implementation could handle individual "triole notes",
+but I could also try to implement it similarly to maintain the perfect
+subdivision. But this might be difficult considering my architecture.
+
+An n-tole will contain n-notes all with the same length, and the total length
+would be one subdivision above the note's lengths. The issue is that all notes
+are stored in a vector, and we can't just put our n-tole wrapper inbetween
+there. It also makes no sense to store this info inside the notes.
+
+It seems like we're approaching our old implementation with the trioles. In the
+old code, there's just a simple flag telling us if the note is part of a triole.
+There's no checking if those "triole notes" are part of a bundle, or if they're
+just individual, allowing indivual triole notes (which is fancy). I just didn't
+implement the actual calculations for those.
+
+The issue with individual triole notes is that they cannot be added together
+to regular notes without losing precision for length. We always need 3 triole
+notes (or n n-tole notes) to simplify the length into a subdividable length.
+It actually makes no sense to place e.g. just 2 triole notes in a measure
+because it will never perfectly fit without a third triole note.
+
+So let's define that n-tole notes must always have n occurences in the same
+measure to be valid. If it isn't like that, the program shall return an error.
