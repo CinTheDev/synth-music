@@ -62,13 +62,11 @@ this is 5/4. It can be divided into a trippled and a doubled group, or the
 doubled first and then the trippled. But we can't know from the time signature
 alone.
 
-## Converting it into Rust
-
 Well, all this music theory and we must somehow implement it for this library.
 Let's go step by step from the ground up and try to be as general as possible
 to include as many different configurations as possible.
 
-### Note lengths
+## Note lengths
 
 Let's start with basic note lengths. Right now they're represented as a simple
 enum with some related flags in the Note struct itself. This alone is kind of
@@ -94,7 +92,7 @@ But past 32th notes it's very unlikely that we need more subdivision. So this
 representation is valid and should be compared to others. Let's write different
 ideas for the representations.
 
-#### Idea 1: Defining a highest level of subdivision
+### Idea 1: Defining a highest level of subdivision
 
 By defining a highest subdivision (like 256th), we can represent lengths as a
 single integer. The value 1 would just be a 256th. The value would then
@@ -115,7 +113,7 @@ Cons:
 - Fair amount of unnecessary values (nobody needs a 103/256th note)
 - Trioles not representable
 
-#### Idea 2: Two integers for subdivision level and count
+### Idea 2: Two integers for subdivision level and count
 
 If we store the subdivision level itself, we don't need to define a lower limit.
 The count will be just how many notes of this subdivision we need. It's
@@ -150,7 +148,7 @@ Cons:
 - Wide range of redundant and unnecessary values
 - Still no trioles
 
-#### Idea 3: Using floats
+### Idea 3: Using floats
 
 Floats can represent many decimal values, which makes handling the subdivisions
 extremely easy. We can also directly perfom math operations without much
@@ -196,7 +194,7 @@ Cons:
 
 - Floating point imprecision ruins the mathematical precision and determinism
 
-#### The triole problem
+### The triole problem
 
 None of the ideas above seem to really satisfy trioles or n-toles fully. The
 integer approaches satisfy everything except trioles. The float approach could
@@ -235,7 +233,7 @@ because it will never perfectly fit without a third triole note.
 So let's define that n-tole notes must always have n occurences in the same
 measure to be valid. If it isn't like that, the program shall return an error.
 
-#### Final design
+### Final design
 
 Let's arrive at the final design of how note lengths should be represented.
 I'll go simple and choose the first idea because it is the easiest to work with.
