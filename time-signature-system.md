@@ -283,3 +283,73 @@ equal to 1, the beat will be "normal". A value greater than 1 will emphasize
 the beat with the specified level, while a value smaller than 1 will weaken
 the beat. As far as I know, "weakening" a beat does not exist in music
 theory, but let's include it consistency.
+
+### Examples for time signatures
+
+Below are some examples of how the music time signatures are represented as
+in-code time signatures. I've always set the strong emphasis to be 1.1 and
+weak emphasis to be 1.01, but that's neither required nor some standard I'm
+abiding, I arbitrarily chose those values.
+
+#### 4/4 time
+
+Measure length: 4/4 = 1.0
+
+Beats:
+
+- Quarter; 1.1   // Strong emphasis
+- Quarter; 1.0   // No emphasis
+- Quarter; 1.01  // Weak emphasis
+- Quarter; 1.0   // No emphasis
+
+#### 2/4 time
+
+Measure length: 2/4 = 0.5
+
+Beats:
+
+- Quarter; 1.1   // Strong emphasis
+- Quarter; 1.0   // No emphasis
+
+#### 3/4 time
+
+Measure length: 3/4 = 0.75
+
+Beats:
+
+- Quarter; 1.1   // Strong emphasis
+- Quarter; 1.0   // No emphasis
+- Quarter; 1.0   // No emphasis
+
+#### 6/8 time
+
+Measure length: 6/8 = 3/4 = 0.75
+
+Beats:
+
+- Eigth; 1.1   // Strong emphasis
+- Eigth; 1.0   // No emphasis
+- Eigth; 1.0   // No emphasis
+- Eigth; 1.01  // Weak emphasis
+- Eigth; 1.0   // No emphasis
+- Eigth; 1.0   // No emphasis
+
+#### 5/4 time
+
+Measure length: 5/4 = 1.25
+
+Beats:
+
+- Quarter; 1.1
+- Quarter; 1.0
+- Quarter; 1.1
+- Quarter; 1.0
+- Quarter; 1.0
+
+OR
+
+- Quarter; 1.1
+- Quarter; 1.0
+- Quarter; 1.0
+- Quarter; 1.1
+- Quarter; 1.0
