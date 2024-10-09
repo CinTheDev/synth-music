@@ -234,3 +234,29 @@ because it will never perfectly fit without a third triole note.
 
 So let's define that n-tole notes must always have n occurences in the same
 measure to be valid. If it isn't like that, the program shall return an error.
+
+#### Final design
+
+Let's arrive at the final design of how note lengths should be represented.
+I'll go simple and choose the first idea because it is the easiest to work with.
+
+The smallest subdivsision shall be a 2^16th, which is a 65536th. This is
+overkill but it ensures we will basically never run out of subdivisions. The
+length field itself should be at least a u32, but larger fields can be used if
+desired.
+
+A whole note length would then be represented as 2^16 or 65536. A half is 2^15
+and a quarter 2^14. We can also dot the notes many times, because the value is
+divisible by 2 a lot of times.
+
+Operations like addition or subtractions are trivial since this is a simple
+number fields, and I won't elaborate on those further (except for n-tole cases).
+
+The length shall also contain an n-tole field. The formula n = (2x + 1) shall
+apply where x is the value of the field. A value of x = 0 will represent no
+n-tole or just a simple note length, x = 1 is a triole (n = 3), x = 2 a pentole,
+and so on.
+
+When precisely counting lengths, there shall be n placed notes with the same
+n-tole length to simplify to a subdividable value. When converting to duration,
+floating point representation is sufficient.
