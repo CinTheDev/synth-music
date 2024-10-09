@@ -34,6 +34,16 @@ beyond a single measure.
 Because these are in no way implemented right now, it only makes sense to tackle
 this redundancy issue if held notes are being implemented in the future.
 
+### Feature held notes (for MeasuredTrack)
+
+A thing you can do in music theory is to "combine" two consecutive notes with
+the same height so that they sound like one. The special thing is that these
+connected notes can go beyond measures, which would be impossible with
+MeasuredTrack right now.
+
+I feel like it would be pretty hard to do the same for sections, so just aim
+for the MeasuredTrack version first.
+
 ### Construct Track with MIDI file
 
 If the original way of composing Tracks placing individual notes is undesired,
