@@ -289,7 +289,9 @@ impl<T: ScaledValue> Measure<T> {
 
     fn note_length_smallest(note: &Note<T>) -> u32 {
         // Smallest length right now is sixteenth
+        todo!();
 
+        /*
         let mut length = match note.length {
             Length::Whole => 16,
             Length::Half => 8,
@@ -305,6 +307,7 @@ impl<T: ScaledValue> Measure<T> {
         // TODO: Triole
 
         return length;
+        */
     }
 
     pub fn override_time_signature(&mut self, time_signature: (u8, u8)) -> &mut Self {

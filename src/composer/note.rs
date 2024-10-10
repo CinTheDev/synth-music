@@ -45,7 +45,7 @@ impl<T: ScaledValue> Default for Note<T> {
     fn default() -> Self {
         Self {
             values: Vec::new(),
-            length: Length::Quarter,
+            length: length::QUARTER,
             play_fraction: 1.0,
 
             intensity: 1.0,
@@ -91,6 +91,8 @@ impl<T: ScaledValue> Note<T> {
 
 impl Length {
     fn get_time_length(self) -> f32 {
+        todo!();
+        /*
         let factor = match self {
             Length::Whole => 0,
             Length::Half => 1,
@@ -100,5 +102,6 @@ impl Length {
         };
 
         return 1.0 / 2_f32.powi(factor);
+        */
     }
 }
