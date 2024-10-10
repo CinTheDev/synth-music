@@ -19,4 +19,38 @@ impl Length {
             ntole_index: 0,
         }
     }
+
+    pub const fn dot(mut self) -> Self {
+        self.ticks += self.ticks / 2;        
+        self
+    }
+
+    pub const fn multi_dot(mut self, dots: usize) -> Self {
+        let mut i = 0;
+        let mut dot_value = self.ticks;
+
+        while i < dots {
+            dot_value /= 2;
+            self.ticks += dot_value;
+
+            i += 1;
+        }
+
+        self
+    }
+
+    pub const fn triole(self) -> Self {
+        self.ntole(3)
+    }
+
+    pub const fn ntole(mut self, n: usize) -> Self {
+        if n % 2 == 0 {
+            panic!("Invalid n-tole");
+        }
+
+        let x = ((n - 1) / 2) as u8;
+
+        self.ntole_index = x;
+        self
+    }
 }
