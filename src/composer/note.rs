@@ -9,17 +9,6 @@ pub trait ScaledValue: Clone {
     fn to_concrete_value(&self, key: MusicKey) -> Self::ConcreteValue;
 }
 
-/*
-#[derive(Clone, Copy)]
-pub enum Length {
-    Whole,
-    Half,
-    Quarter,
-    Eigth,
-    Sixteenth,
-}
-*/
-
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum DynamicsFlag {
     None,
@@ -36,9 +25,6 @@ pub struct Note<T: ScaledValue> {
 
     pub intensity: f32,
     pub dynamics_flag: DynamicsFlag,
-
-    pub dotted: bool,
-    pub triole: bool,
 }
 
 impl<T: ScaledValue> Default for Note<T> {
@@ -50,9 +36,6 @@ impl<T: ScaledValue> Default for Note<T> {
 
             intensity: 1.0,
             dynamics_flag: DynamicsFlag::None,
-
-            dotted: false,
-            triole: false
         }
     }
 }
@@ -60,16 +43,6 @@ impl<T: ScaledValue> Default for Note<T> {
 impl<T: ScaledValue> Note<T> {
     pub fn staccato(&mut self) -> &mut Self {
         self.play_fraction = 0.2;
-        self
-    }
-
-    pub fn dotted(&mut self) -> &mut Self {
-        self.dotted = true;
-        self
-    }
-
-    pub fn triole(&mut self) -> &mut Self {
-        self.triole = true;
         self
     }
 
