@@ -64,8 +64,15 @@ impl Length {
     }
 
     pub fn to_float(&self) -> f32 {
-        // TODO: Triole
-        self.ticks as f32 / TICKS_WHOLE as f32
+        let base_length = self.ticks as f32 / TICKS_WHOLE as f32;
+
+        let ntole_multiplier = if self.ntole_index == 0 {
+            1.0
+        } else {
+            2.0 / Self::ntole_parts_from_index(self.ntole_index) as f32
+        };
+
+        return base_length * ntole_multiplier;
     }
 
     pub fn count_lengths(lengths: &Vec<Self>) -> Result<Self, &str> {
