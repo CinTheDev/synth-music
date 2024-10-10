@@ -5,6 +5,8 @@ pub const QUARTER:   Length = Length::from_subdivisions(2);
 pub const EIGTH:     Length = Length::from_subdivisions(3);
 pub const SIXTEENTH: Length = Length::from_subdivisions(4);
 
+pub const ZERO: Length = Length::from_ticks(0);
+
 const TICKS_WHOLE: u32 = 2_u32.pow(16);
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -63,6 +65,57 @@ impl Length {
 
     pub fn to_float(&self) -> f32 {
         self.ticks as f32 / TICKS_WHOLE as f32
+    }
+
+    pub fn count_lengths(lengths: &Vec<Self>) -> Result<Self, &str> {
+        let mut total_length = ZERO;
+
+        let mut ntole_count: Vec<(Self, u16)> = Vec::new();
+
+        for length in lengths {
+            if length.ntole_index == 0 {
+                total_length.ticks += length.ticks;
+            }
+            else {
+                total_length.ticks += Self::count_ntole(&mut ntole_count, *length);
+            }
+        }
+
+        if ! ntole_count.is_empty() {
+            return Err("Not all ntoles have simplified");
+        }
+
+        Ok(total_length)
+    }
+
+    fn ntole_parts_from_index(ntole_index: u8) -> u16 {
+        ntole_index as u16 * 2 + 1
+    }
+
+    fn count_ntole(ntole_count: &mut Vec<(Self, u16)>, length: Self) -> u32 {
+        // Search if ntole index exists in vector
+        for i in 0..ntole_count.len() {
+            if ntole_count[i].0 != length {
+                continue;
+            }
+
+            // It does exist
+
+            ntole_count[i].1 -= 1;
+
+            if ntole_count[i].1 > 0 {
+                return 0;
+            }
+
+            // ntole simplifies to note
+            ntole_count.remove(i);
+            return length.ticks * 2;
+        }
+
+        let expected_ntole_parts = Self::ntole_parts_from_index(length.ntole_index);
+        ntole_count.push((length, expected_ntole_parts - 1));
+
+        return 0;
     }
 }
 
