@@ -2,6 +2,7 @@ pub mod note;
 pub mod music_key;
 pub mod unbound_track;
 pub mod measure_track;
+pub mod time_signature;
 
 use note::{Note, Length, ScaledValue};
 use crate::instrument::Instrument;
