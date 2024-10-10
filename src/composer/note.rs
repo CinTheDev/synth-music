@@ -1,5 +1,7 @@
 use super::music_key::MusicKey;
 
+pub mod length;
+
 pub trait ScaledValue: Clone {
     type ConcreteValue;
 
