@@ -1,5 +1,6 @@
 use super::note::{Note, ScaledValue, Length, DynamicsFlag};
 use super::{SectionInfo, MusicTrack};
+use super::TimeSignature;
 use crate::instrument::Instrument;
 use crate::file_export::export_info::{ExportTrack, Tone};
 use std::time::Duration;
@@ -12,7 +13,7 @@ where
 {
     active_measure: Option<Measure<T>>,
     measures: Vec<Measure<T>>,
-    time_signature: (u8, u8),
+    time_signature: TimeSignature,
     instrument: U,
 
     current_intensity: f32,
@@ -22,7 +23,7 @@ where
 }
 
 pub struct Measure<T: ScaledValue> {
-    time_signature: (u8, u8),
+    time_signature: TimeSignature,
     notes: Vec<Note<T>>,
 }
 
@@ -98,9 +99,9 @@ where
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
     U: Instrument,
 {
-    pub fn new(instrument: U, time_signature: (u8, u8)) -> Self {
+    pub fn new(instrument: U, time_signature: TimeSignature) -> Self {
         Self {
-            active_measure: Some(Measure::new(time_signature)),
+            active_measure: Some(Measure::new(time_signature.clone())),
             measures: Vec::new(),
             time_signature,
             instrument,
@@ -117,7 +118,7 @@ where
             return Err(());
         }
 
-        let new_measure = Measure::new(self.time_signature);
+        let new_measure = Measure::new(self.time_signature.clone());
         let valid_measure = self.active_measure.replace(new_measure).unwrap();
 
         self.measures.push(valid_measure);
@@ -256,7 +257,7 @@ where
 }
 
 impl<T: ScaledValue> Measure<T> {
-    fn new(time_signature: (u8, u8)) -> Self {
+    fn new(time_signature: TimeSignature) -> Self {
         Self {
             time_signature,
             notes: Vec::new(),
@@ -268,6 +269,9 @@ impl<T: ScaledValue> Measure<T> {
     }
 
     fn assert_measure_bounds(&self) -> bool {
+        todo!();
+
+        /*
         let enforced_measure_length = match self.time_signature.1 {
             1 => 16,
             2 => 8,
@@ -285,6 +289,7 @@ impl<T: ScaledValue> Measure<T> {
         }
 
         return current_measure_length == enforced_measure_length;
+        */
     }
 
     fn note_length_smallest(note: &Note<T>) -> u32 {
@@ -310,7 +315,7 @@ impl<T: ScaledValue> Measure<T> {
         */
     }
 
-    pub fn override_time_signature(&mut self, time_signature: (u8, u8)) -> &mut Self {
+    pub fn override_time_signature(&mut self, time_signature: TimeSignature) -> &mut Self {
         self.time_signature = time_signature;
         self
     }

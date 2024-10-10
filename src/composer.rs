@@ -8,6 +8,8 @@ use note::{Note, Length, ScaledValue};
 use crate::instrument::Instrument;
 use crate::file_export::export_info::{ExportTrack, SectionInfo};
 
+pub use time_signature::TimeSignature;
+
 pub trait MusicTrack<T, U>
 where 
     T: ScaledValue,
