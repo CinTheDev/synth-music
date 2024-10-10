@@ -53,4 +53,8 @@ impl Length {
         self.ntole_index = x;
         self
     }
+
+    pub fn to_float(&self) -> f32 {
+        self.ticks as f32 / 256.0
+    }
 }
