@@ -64,6 +64,7 @@ impl Length {
     }
 
     pub fn to_float(&self) -> f32 {
+        // TODO: Triole
         self.ticks as f32 / TICKS_WHOLE as f32
     }
 
