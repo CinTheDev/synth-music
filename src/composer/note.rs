@@ -1,6 +1,7 @@
 use super::music_key::MusicKey;
 
 pub mod length;
+pub use length::Length;
 
 pub trait ScaledValue: Clone {
     type ConcreteValue;
@@ -8,6 +9,7 @@ pub trait ScaledValue: Clone {
     fn to_concrete_value(&self, key: MusicKey) -> Self::ConcreteValue;
 }
 
+/*
 #[derive(Clone, Copy)]
 pub enum Length {
     Whole,
@@ -16,6 +18,7 @@ pub enum Length {
     Eigth,
     Sixteenth,
 }
+*/
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum DynamicsFlag {
