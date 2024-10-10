@@ -1,5 +1,13 @@
 use super::note::Length;
 
+pub const FOUR_FOUR: TimeSignature = TimeSignature::new(4, 4);
+pub const THREE_FOUR: TimeSignature = TimeSignature::new(3, 4);
+pub const TWO_FOUR: TimeSignature = TimeSignature::new(2, 4);
+
+pub const SIX_EIGHT: TimeSignature = TimeSignature::new(6, 8);
+pub const NINE_EIGHT: TimeSignature = TimeSignature::new(9, 8);
+pub const TWELVE_EIGHT: TimeSignature = TimeSignature::new(12, 8);
+
 #[derive(Clone)]
 pub struct TimeSignature {
     pub measure_length: Length,
