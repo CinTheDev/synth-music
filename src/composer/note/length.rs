@@ -65,3 +65,68 @@ impl Length {
         self.ticks as f32 / TICKS_WHOLE as f32
     }
 }
+
+impl std::ops::Add for Length {
+    type Output = Length;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        if self.ntole_index != rhs.ntole_index {
+            panic!("Adding two different ntoles is not supported.");
+        }
+
+        Self {
+            ticks: self.ticks + rhs.ticks,
+            ntole_index: self.ntole_index,
+        }
+    }
+}
+impl std::ops::AddAssign for Length {
+    fn add_assign(&mut self, rhs: Self) {
+        if self.ntole_index != rhs.ntole_index {
+            panic!("Adding two different ntoles is not supported.");
+        }
+
+        self.ticks += rhs.ticks;
+    }
+}
+
+impl std::ops::Sub for Length {
+    type Output = Length;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        if self.ntole_index != rhs.ntole_index {
+            panic!("Subtracting two different ntoles is not supported.");
+        }
+
+        Self {
+            ticks: self.ticks - rhs.ticks,
+            ntole_index: self.ntole_index,
+        }
+    }
+}
+
+impl std::ops::SubAssign for Length {
+    fn sub_assign(&mut self, rhs: Self) {
+        if self.ntole_index != rhs.ntole_index {
+            panic!("Subtracting two different ntoles is not supported.");
+        }
+
+        self.ticks -= rhs.ticks;
+    }
+}
+
+impl std::ops::Mul<u32> for Length {
+    type Output = Length;
+
+    fn mul(self, rhs: u32) -> Self::Output {
+        Self {
+            ticks: self.ticks * rhs,
+            ntole_index: self.ntole_index,
+        }
+    }
+}
+impl std::ops::MulAssign<u32> for Length {
+    fn mul_assign(&mut self, rhs: u32) {
+        self.ticks *= rhs;
+    }
+}
