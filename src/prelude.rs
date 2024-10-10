@@ -10,6 +10,7 @@ pub use composer::note::{Note, ScaledValue};
 
 pub use composer::music_key::{MusicKey, KeyTonic, KeyType};
 
+pub use composer::time_signature;
 pub use composer::TimeSignature;
 
 pub use crate::{notes, sequential_notes, section, composition};

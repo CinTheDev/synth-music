@@ -9,19 +9,19 @@ fn main() {
 
 fn example_1() {
     use tet12::*;
-    use note::Length::*;
+    use note::length::*;
 
-    let mut track1 = MeasureTrack::new(SineGenerator, (4, 4));
-    let mut track2 = MeasureTrack::new(SineGenerator, (2, 4));
+    let mut track1 = MeasureTrack::new(SineGenerator, time_signature::FOUR_FOUR);
+    let mut track2 = MeasureTrack::new(SineGenerator, time_signature::TWO_FOUR);
 
-    sequential_notes!(track1, Quarter,
+    sequential_notes!(track1, QUARTER,
         first(3),
         second(3),
         third(3),
         fourth(3)
     );
     track1.measure().unwrap();
-    sequential_notes!(track1, Quarter,
+    sequential_notes!(track1, QUARTER,
         fifth(3),
         sixth(3),
         seventh(3),
@@ -29,22 +29,22 @@ fn example_1() {
     );
     track1.measure().unwrap();
 
-    sequential_notes!(track2, Quarter,
+    sequential_notes!(track2, QUARTER,
         fifth(3),
         sixth(3)
     );
     track2.measure().unwrap();
-    sequential_notes!(track2, Quarter,
+    sequential_notes!(track2, QUARTER,
         seventh(3),
         first(4)
     );
     track2.measure().unwrap();
-    sequential_notes!(track2, Quarter,
+    sequential_notes!(track2, QUARTER,
         second(4),
         third(4)
     );
     track2.measure().unwrap();
-    sequential_notes!(track2, Quarter,
+    sequential_notes!(track2, QUARTER,
         fourth(4),
         fifth(4)
     );
@@ -74,13 +74,13 @@ fn example_1() {
 
 fn example_2() {
     use tet12::*;
-    use note::Length::*;
+    use note::length::*;
 
     let instrument = predefined::SineGenerator;
 
     let mut track = UnboundTrack::new(instrument);
 
-    track.note(Whole, third(1));
+    track.note(WHOLE, third(1));
 
     let settings = CompositionSettings {
         sample_rate: 44100,
