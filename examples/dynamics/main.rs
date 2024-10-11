@@ -56,7 +56,10 @@ where
 {
     use note::length::*;
     use tet12::*;
-    let mut track = MeasureTrack::new(instrument, time_signature::FOUR_FOUR);
+
+    let time_signature = TimeSignature::new(4, 4);
+
+    let mut track = MeasureTrack::new(instrument, time_signature);
 
     track.set_play_fraction(0.9);
 
