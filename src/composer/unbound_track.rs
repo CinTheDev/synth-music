@@ -194,6 +194,7 @@ where
             play_duration,
             tone_duration,
             intensity: note.intensity..note.intensity,
+            beat_emphasis: Some(1.0),
         }
     }
 }
