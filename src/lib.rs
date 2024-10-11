@@ -183,7 +183,7 @@ use synth_music::prelude::*;
 use tet12::*;
 use note::length::*;
 
-let mut track = UnboundTrack::new(instrument);
+let mut track = UnboundTrack::new(predefined::SineGenerator);
 
 // Set the intensity for new notes to be 70% of maximum volume
 track.set_intensity(0.7);
@@ -475,6 +475,7 @@ use synth_music::prelude::*;
 use tet12::*;
 use note::length::*;
 
+let instrument = predefined::SineGenerator;
 // 4/4 Time
 let time_signature = TimeSignature::new(4, 4);
 
@@ -505,6 +506,8 @@ Now an example that is wrong:
 use synth_music::prelude::*;
 use tet12::*;
 use note::length::*;
+
+let instrument = predefined::SineGenerator;
 let time_signature = TimeSignature::new(4, 4);
 
 let mut track = MeasureTrack::new(instrument, time_signature);
@@ -559,7 +562,7 @@ use synth_music::prelude::*;
 use tet12::*;
 use note::length::*;
 
-let mut track = UnboundTrack::new(instrument);
+let mut track = UnboundTrack::new(predefined::SineGenerator);
 track.set_intensity(0.7);
 
 // There is no limit to placing notes
