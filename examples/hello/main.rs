@@ -11,8 +11,20 @@ fn example_1() {
     use tet12::*;
     use note::length::*;
 
-    let mut track1 = MeasureTrack::new(SineGenerator, time_signature::FOUR_FOUR);
-    let mut track2 = MeasureTrack::new(SineGenerator, time_signature::TWO_FOUR);
+    let four_four =
+        TimeSignature::new(4, 4)
+        .set_beat(0, 2.0)
+        .set_beat(2, 1.5);
+
+    let two_four =
+        TimeSignature::new(2, 4)
+        .set_beat(0, 2.0);
+
+    let mut track1 = MeasureTrack::new(SineGenerator, four_four);
+    let mut track2 = MeasureTrack::new(SineGenerator, two_four);
+
+    track1.set_intensity(0.5);
+    track2.set_intensity(0.5);
 
     sequential_notes!(track1, QUARTER,
         first(3),
@@ -132,7 +144,7 @@ impl SineGenerator {
             result += Self::generate_frequency(frequency, time);
         }
 
-        return result * tones.intensity.start;
+        return result * tones.intensity.start * tones.beat_emphasis.unwrap_or(0.5);
     }
 
     pub fn generate_frequency(frequency: f64, time: Duration) -> f32 {
