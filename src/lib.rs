@@ -427,7 +427,44 @@ fn export(buffer: SoundBuffer, name: &str) {
 
 ## UnboundTrack vs. MeasureTrack
 
-[TODO]
+As of now there are two implementations for MusicTrack to place notes on a
+track.
+
+Before anything, it's recommended to use **MeasureTrack** for regular use,
+because it enforces more rules from music theory. Most examples use UnboundTrack
+for more compact code and concentration on the presented point.
+
+### MeasureTrack
+
+MeasureTrack is used for placing notes *and* measure bounds. A measure must
+always be filled with the right amount of notes and breaks to be "saturated".
+Trying to work with unsaturated threads will likely result in a panic.
+
+This enforcing of measure bounds serves to prevent mistakes where the measure
+bounds are violated and the track becomes desynchronized with the rest.
+
+MeasureTrack also provides access to the time signature features. More on this
+is [TODO: reference location]
+
+[TODO: Example]
+
+### UnboundTrack
+
+UnboundTrack is like MeasureTrack without Measures. One can arbitrarily place
+notes, the "position" of the notes is not enforced to be anywhere. The user can
+also resort to this implementation if the manual placing of Measures is too
+tedious.
+
+This implementation is best used for small scale tests and not complicated
+melodies. It's easy to accidentally break the regularity of the music, and there
+are no measure boundaries that serve as orientation points for the user.
+
+[TODO: Example]
+
+### Custom implementation
+
+The user can also provide their own implementation for Tracks. More on this
+[TODO: reference location]
 
 */
 
