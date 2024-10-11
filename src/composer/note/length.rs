@@ -17,6 +17,9 @@ pub struct Length {
 }
 
 impl Length {
+    pub const INVALID: Self = Self::from_ticks(u32::MAX);
+    pub const ZERO: Self = Self::from_ticks(0);
+
     pub const fn from_ticks(ticks: u32) -> Self {
         Self {
             ticks,

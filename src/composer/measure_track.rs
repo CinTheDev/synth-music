@@ -140,11 +140,15 @@ where
         }
 
         for measure in &self.measures {
-            let mut position_in_measure = Length::from_ticks(0);
+            let mut note_lengths = Vec::new();
 
             for note in &measure.notes {
+                let position_in_measure =
+                    Length::count_lengths(&note_lengths)
+                    .unwrap_or(Length::INVALID);
+
                 notes.push(((*note).clone(), position_in_measure));
-                position_in_measure += note.length;
+                note_lengths.push(note.length);
             }
         }
 
