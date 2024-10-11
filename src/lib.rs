@@ -167,6 +167,18 @@ It's possible to work on mutable references of Tracks instead of returning a new
 one. There are probably even more ways to do other things, so get creative with
 what you got.
 
+## Dynamics
+
+[TODO]
+
+## Implementing instruments
+
+[TODO]
+
+## UnboundTrack vs. MeasureTrack
+
+[TODO]
+
 */
 
 pub mod composer;
