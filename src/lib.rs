@@ -222,6 +222,118 @@ louder or becoming quieter.
 
 ## Implementing instruments
 
+Instruments represent the entire sound synthesis part of this crate. Here, most
+implementation is left to the user, the crate will only provide useful info for
+generating the sound, but the actual sound synthesis is the responsibility of
+the user. There is an exposed trait `Instrument` that needs to be implemented.
+
+Before going to an example, a brief explanation on what the Trait expects
+from the user:
+
+- The Trait provides info regarding the output buffer and the input tones.
+- The output buffer should generally have `buffer_info.tone_samples` entries.
+- A `tone` actually can represent multiple tones at once (like in a chord), every value needs to be handled.
+- There are provided functions for calculating a time from the sample index
+- The whole output buffer represents a whole note / multiple stacked notes.
+- Dynamics are handled by the user
+
+The buffer works with f32 samples, where 1.0 or -1.0 are the maximum amplitude,
+which should generally not be exceeded. The output buffer can be shorter or
+longer than expected, it will then automatically get extended or mixed with the
+following tones.
+
+Now, on to the example:
+
+```rust
+use synth_music::prelude::*;
+use tet12::TET12ConcreteTone;
+
+struct ExampleInstrument {
+    count: u32,
+}
+
+impl ExampleInstrument {
+    pub fn new(count: u32) -> Self {
+        Self {
+            count,
+        }
+    }
+
+    // Generate the tones given a point in time
+    fn generate_tones(&self, tones: &Tone<TET12ConcreteTone>, time: Duration) -> f32 {
+        let mut sample_amplitude = 0.0;
+
+        for tone in &tones.concrete_values {
+            let frequency = tone.to_frequency() as f64;
+            sample_amplitude += self.generate_frequency(frequency, time);
+        }
+
+        return sample_amplitude * tones.intensity.start;
+    }
+
+    // Generate a single tone given a point in time and frequency
+    // The tone contains multiple harmonics
+    fn generate_frequency(&self, frequency: f64, time: Duration) -> f32 {
+        let mut sample_amplitude = 0.0;
+
+        for n in 0..self.count {
+            let factor = (2 * n + 1) as f32;
+            sample_amplitude += self.wave(frequency * factor, time);
+        }
+
+        return sample_amplitude;
+    }
+
+    // Wave function (sine)
+    fn wave(frequency: f64, time: Duration) -> f32 {
+        use std::f64::consts::PI;
+        (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
+    }
+}
+
+impl Instrument for ExampleInstrument {
+    // Specify that this instrument operates on 12-TET notes
+    type ConcreteValue = TET12ConcreteTone;
+
+    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+        let mut buffer = Vec::new();
+
+        // We will push the required amount of samples to completely fill the length of the tone
+        for i in 0..buffer_info.tone_samples {
+            let time = buffer_info.time_from_index(i);
+            buffer.push(self.generate(tones, time));
+        }
+
+        InstrumentBuffer { samples: buffer }
+    }
+}
+```
+
+This is a simple instrument that has a variable amount of harmonics in it's base
+sine-wave tone. These harmonics don't get quieter with higher frequencies, so
+the sound is harsh and loud, especially with many harmonics.
+
+The instrument struct implements all of the sound generation, while the code
+directly within the trait implementation only manages the buffer, and calls
+the sound generation functions. Though, you can implement this however you want
+or need to. Stuff like post-processing the tone should also be possible within
+the trait implementation.
+
+This example does not implement features like making the tone quieter with time
+(similar to a piano), and adjusting the intensity throughout the tone.
+
+The reason why the user needs to implement that is because if we have an
+instrument like a piano during a crescendo, one long note wouldn't get louder,
+while several short notes would get progressively louder. An instrument like
+a trumpet can have constant loudness over a note, or even dynamically change
+the intensity throughout a note. Neither of these things are implemented in
+this example.
+
+For examples that do implement these things, check the examples folder of this
+crate.
+
+## Exporting
+
 [TODO]
 
 ## UnboundTrack vs. MeasureTrack
