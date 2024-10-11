@@ -446,7 +446,94 @@ bounds are violated and the track becomes desynchronized with the rest.
 MeasureTrack also provides access to the time signature features. More on this
 is [TODO: reference location]
 
-[TODO: Example]
+```rust
+use synth_music::prelude::*;
+
+fn track_measured<T>(instrument: T) -> MeasureTrack<TET12ConcreteTone, T>
+where
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    use tet12::*;
+    use note::length::*;
+
+    // 4/4 Time
+    let time_signature = TimeSignature::new(4, 4);
+
+    let mut track = MeasureTrack::new(instrument, time_signature);
+    track.set_intensity(0.7);
+
+    // After four Quarters the measure must end
+    sequential_notes!(track1, QUARTER,
+        first(3),
+        second(3),
+        third(3),
+        fourth(3)
+    );
+    track1.measure().unwrap();
+    sequential_notes!(track1, QUARTER,
+        fifth(3),
+        sixth(3),
+        seventh(3),
+        first(4)
+    );
+    // The last measure must also be "placed" with this call.
+    track1.measure().unwrap();
+
+    return track;
+}
+```
+
+Now an example that is wrong:
+
+```rust
+use synth_music::prelude::*;
+
+fn track_measured<T>(instrument: T) -> MeasureTrack<TET12ConcreteTone, T>
+where
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    use tet12::*;
+    use note::length::*;
+    let time_signature = TimeSignature::new(4, 4);
+
+    let mut track = MeasureTrack::new(instrument, time_signature);
+    track.set_intensity(0.7);
+
+    sequential_notes!(track1, QUARTER,
+        first(3),
+        second(3),
+        third(3),
+        fourth(3)
+    );
+    track.measure().unwrap();
+    sequential_notes!(track1, QUARTER,
+        fifth(3),
+        sixth(3),
+        seventh(3),
+        // missing a note; there should be a break here
+    );
+    track.measure().unwrap(); // panics here
+
+    sequential_notes!(track1, QUARTER,
+        fifth(3),
+        sixth(3),
+        seventh(3),
+        first(4),
+        second(4), // one note too much, the measure should've ended earlier
+    );
+    track.measure().unwrap(); // panics here
+
+    sequential_notes!(track1, QUARTER,
+        fifth(3),
+        sixth(3),
+        seventh(3),
+        first(4),
+    );
+    // not calling track.measure() will not place these notes in the track.
+
+    return track;
+}
+```
 
 ### UnboundTrack
 
