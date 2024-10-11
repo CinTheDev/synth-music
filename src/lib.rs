@@ -334,7 +334,96 @@ crate.
 
 ## Exporting
 
-[TODO]
+Exporting is the last step of making music. In this stage all the instrument
+implementations will actually be called and the tracks will be rendered and
+mixed into sections, which will then be combined into the final composition and
+written to a file.
+
+There are two types of information that will be important to define here. There
+are the **settings** which apply for the whole composition, and **SectionInfo**,
+which apply only to one section. The settings include technical values like
+sample rate, and SectionInfo is info that can change during a composition, like
+the speed in BPM or the music key.
+
+Unfortunately, due to the Tracks being highly generic Traits, it's currently not
+possible to store several tracks together (e.g. in a Vec) without forcing their
+types to be the absolute same. To combat this, sections are actually just
+represented by a macro call and directly rendered into a Buffer. Another macro
+call can then piece these buffers together into a composition.
+
+```rust
+use synth_music::prelude::*;
+
+fn render() {
+
+    // Define settings
+    let settings = CompositionSettings {
+        sample_rate: 44100,
+    };
+
+    // Info for beginning. Info always contains a reference to the settings.
+    let info_begin = SectionInfo {
+        bpm: 120.0,
+        key: MusicKey {
+            tonic: KeyTonic::A,
+            key_type: KeyType::Minor,
+        },
+
+        settings: &settings,
+    };
+
+    let info_end = SectionInfo {
+        bpm: 140.0,
+        key: MusicKey {
+            tonic: KeyTonic::Asharp,
+            key_type: KeyType::Minor,
+        },
+
+        settings: &settings,
+    };
+
+    // Any instruments work, different ones can be used for different tracks
+    let instrument = // [an instrument]
+
+    let track_begin_melody = track_begin_melody(instrument);
+    let track_begin_bass = track_begin_bass(instrument);
+
+    let track_end_melody = track_end_melody(instrument);
+    let track_end_bass = track_end_bass(instrument);
+
+    // Render the first section with the specified tracks and info.
+    // The result will already be a rendered buffer
+    let section_begin = section!(info_begin,
+        track_begin_melody,
+        track_begin_bass,
+    );
+
+    let section_end = section!(info_end,
+        track_end_melody,
+        track_end_bass,
+    );
+
+    // The rendered sections are put together to create the whole music piece.
+    let composition = composition!(
+        section_begin,
+        section_end,
+    );
+
+    export(composition, "my_beautiful_piece.wav");
+}
+
+fn export(buffer: SoundBuffer, name: &str) {
+    use std::path::PathBuf;
+
+    // Create struct with relevant info about exporting
+    // This will create a file on the file system.
+    let exporter = WavExport {
+        path: PathBuf::from(name),
+        ..Default::default()
+    };
+    exporter.export(buffer).unwrap();
+}
+```
 
 ## UnboundTrack vs. MeasureTrack
 
