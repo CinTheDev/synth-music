@@ -1,6 +1,7 @@
 /*!
 A framework-like crate to compose and synthetisize music. It's possible to work
-without external tools just using this crate.
+without external tools just using this crate. There are provided tools for
+composing music, synthetisizing sounds, and exporting the results into a file.
 
 # General principles
 
