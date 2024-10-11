@@ -21,7 +21,7 @@ impl TimeSignature {
             panic!("The denominator can only be a power of two.");
         }
 
-        let subdivision = Self::what_power_of_two(denominator) - 1;
+        let subdivision = Self::what_power_of_two(denominator);
         let measure_length =
             Length::from_subdivisions(subdivision as u32)
             .const_mul(nominator as u32);
