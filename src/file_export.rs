@@ -5,6 +5,7 @@ use std::time::Duration;
 
 use export_info::*;
 use crate::instrument::{Instrument, BufferInfo};
+use crate::progress_bars;
 
 const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
 const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
@@ -19,11 +20,11 @@ pub fn render<T: Instrument>(track: &ExportTrack<T>, settings: CompositionSettin
     let mut buffer = SoundBuffer::new(Vec::new(), 0, settings);
 
     let progress = ProgressBar::new(track.tones.len() as u64)
-        .with_style(crate::default_progress_style())
+        .with_style(progress_bars::default_progress_style())
         .with_message("Track");
 
     let progress = unsafe {
-        crate::add_progress_bar(progress)
+        progress_bars::add_progress_bar(progress)
     };
 
     for tone in &track.tones {
@@ -125,6 +126,7 @@ macro_rules! section {
         {
             use indicatif::ProgressBar;
             use synth_music::count;
+            use synth_music::progress_bars;
 
             let settings = $section_info.settings.to_owned();
             
@@ -132,11 +134,11 @@ macro_rules! section {
             let amount_tracks = count!($($track)*);
             
             let progress = ProgressBar::new(amount_tracks as u64)
-                .with_style(synth_music::default_progress_style())
+                .with_style(progress_bars::default_progress_style())
                 .with_message("Section");
             
             let progress = unsafe {
-                synth_music::add_progress_bar(progress)
+                progress_bars::add_progress_bar(progress)
             };
             
             // Multithreading
