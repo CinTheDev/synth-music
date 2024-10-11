@@ -169,7 +169,55 @@ what you got.
 
 ## Dynamics
 
-[TODO]
+Dynamics in music refer to the loudness or intensity at which should be played.
+These dynamics can change dynamically (no pun intended) throughout the song.
+
+```rust
+use synth_music::prelude::*;
+
+fn example_dynamics<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
+where
+    T: Instrument<ConcreteValue = TET12ConcreteValue>
+{
+    use tet12::*;
+    use note::length::*;
+
+    let mut track = UnboundTrack::new(instrument);
+
+    // Set the intensity for new notes to be 70% of maximum volume
+    track.set_intensity(0.7);
+
+    track.note(HALF, first(3)); // Intensity = 0.7
+    track.note(HALF, first(3)); // Intensity = 0.7
+
+    track.set_intensity(0.2);
+
+    track.note(HALF, first(3)); // Intensity = 0.2
+
+
+    // Track will start changing intensity arriving at value specified later
+    track.start_dynamic_change();
+    track.note(QUARTER, third(3));
+    track.note(QUARTER, fourth(3));
+    track.note(QUARTER, fifth(3));
+    track.note(QUARTER, first(3));
+    // Marks the end of the dynamic change, the passed value is the target intensity.
+    // This target intensity is now the actual intensity of the track.
+    track.end_dynamic_change(0.6);
+
+    return track;    
+}
+```
+
+Calling `track.set_intensity(x)` will change the intensity of the notes placed
+afterwards. This is equivalent to a dynamics marker in traditional music
+notation (e.g. "f" for "forte" or "loud"; "p" for "piano" or "quiet").
+
+The "dynamic change" will smoothly transition the intensity from the currently
+set intensity of the track to the value specified at "end_dynamic_change". In
+traditional music this is called "crescendo" for becoming louder or
+"decrescendo" for becoming quieter. This crate does not differentiate becoming
+louder or becoming quieter.
 
 ## Implementing instruments
 
