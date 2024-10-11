@@ -350,7 +350,7 @@ types to be the absolute same. To combat this, sections are actually just
 represented by a macro call and directly rendered into a Buffer. Another macro
 call can then piece these buffers together into a composition.
 
-```rust
+```no_run
 use synth_music::prelude::*;
 
 // Define settings
