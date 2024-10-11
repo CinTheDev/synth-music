@@ -130,7 +130,7 @@ where
         self.active_measure.as_mut().unwrap()
     }
 
-    fn arrange_notes(&self) -> Vec<Note<T>> {
+    fn arrange_notes(&self) -> Vec<(Note<T>, Length)> {
         let mut notes = Vec::new();
 
         let active_measure = self.active_measure.as_ref().unwrap();
@@ -140,15 +140,18 @@ where
         }
 
         for measure in &self.measures {
+            let mut position_in_measure = Length::from_ticks(0);
+
             for note in &measure.notes {
-                notes.push((*note).clone());
+                notes.push(((*note).clone(), position_in_measure));
+                position_in_measure += note.length;
             }
         }
 
         return notes;
     }
 
-    fn conversion_first_pass(notes: &Vec<Note<T>>, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
+    fn conversion_first_pass(notes: &Vec<(Note<T>, Length)>, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
         let mut tones = Vec::new();
 
         for note in notes {
@@ -162,7 +165,7 @@ where
     // WARNING: Assumes that notes align with tones
     // Fix if this doesn't apply anymore
     fn conversion_pass_dynamics(
-        notes: &Vec<Note<T>>,
+        notes: &Vec<(Note<T>, Length)>,
         tones: &mut Vec<Tone<U::ConcreteValue>>
     ) {
         let mut i = 0;
@@ -173,13 +176,13 @@ where
         }
     }
 
-    fn find_next_dynamics_change(notes: &Vec<Note<T>>, start_index: usize) -> Option<Range<usize>> {
+    fn find_next_dynamics_change(notes: &Vec<(Note<T>, Length)>, start_index: usize) -> Option<Range<usize>> {
         use super::note::DynamicsFlag;
 
         let mut index_dynamics_start = None;
 
         for i in start_index..notes.len() {
-            let note = &notes[i];
+            let (note, _) = &notes[i];
 
             if note.dynamics_flag == DynamicsFlag::StartChange {
                 if index_dynamics_start.is_some() {
@@ -236,8 +239,10 @@ where
         a + (b - a) * t
     }
 
-    fn generate_tone(note: &Note<T>, section_info: SectionInfo) -> Tone<U::ConcreteValue> {
+    fn generate_tone(note: &(Note<T>, Length), section_info: SectionInfo) -> Tone<U::ConcreteValue> {
         let mut concrete_values = Vec::new();
+
+        let (note, position_in_measure) = note;
 
         for scaled_value in &note.values {
             let concrete_value = scaled_value.to_concrete_value(section_info.key);
