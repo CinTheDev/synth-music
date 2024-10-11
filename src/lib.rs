@@ -47,6 +47,70 @@ There are a few provided implementations for placing notes on a Track. If these
 do not satisfy the needs of the user, they can implement a custom version of
 the Track.
 
+## Usage
+
+### Placing notes on a track
+
+It's best to always put this in a dedicated function, as we will make use of
+`use` in local scope. This way tracks can also be used across different
+instruments.
+
+```rust
+use synth_music::prelude::*;
+
+fn track_example<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
+where
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    use tet12::*;        // Note values
+    use note::length::*; // Note lengths
+
+    let mut track = UnboundTrack::new(instrument);
+    track.set_intensity(0.7);
+
+    // Placing notes regularly
+    track.note(QUARTER, first(4));
+    track.note(HALF, second(4));
+    track.note(QUARTER.dot(), third(3)); // .dot() on length will extend it by half
+    track.note(QUARTER, fifth(3).sharp()); // .sharp() on height will increment by one semitone
+
+    // Placing notes quickly via macro
+    sequential_notes!(track, EIGTH,
+        first(4),
+        seventh(3).sharp(),
+        sixth(3),
+        fifth(3),
+        fourth(3),
+        third(3),
+        second(3),
+        first(3)
+    );
+
+    // Placing multiple notes on top of each other
+    // this is a chord
+    notes!(track, HALF
+        first(3),
+        third(3),
+        fifth(3)
+    );
+
+    // Simple logic can also be applied
+    for i in 1..5 {
+        track.note(QUARTER, first(i));
+    }
+
+    return track;
+}
+```
+
+As you can see, there are several ways to place notes. The most versatile way
+is to place them individually, but it leads to a lot of repetitions, because
+"track.note(" has to be called for every note.
+
+The macros provide a way to eliminate a lot of unnecessary repetition and save
+a lot of time for writing music. It's also possible to use logic or even
+branching, which is unique to this style of composing.
+
 */
 
 pub mod composer;
