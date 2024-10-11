@@ -84,7 +84,7 @@ where
 
     fn convert_to_export_track(&self, section_info: SectionInfo) -> ExportTrack<U> {
         let notes = self.arrange_notes();
-        let mut tones = Self::conversion_first_pass(&notes, section_info);
+        let mut tones = self.conversion_first_pass(&notes, section_info);
         Self::conversion_pass_dynamics(&notes, &mut tones);
 
         ExportTrack {
@@ -151,11 +151,11 @@ where
         return notes;
     }
 
-    fn conversion_first_pass(notes: &Vec<(Note<T>, Length)>, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
+    fn conversion_first_pass(&self, notes: &Vec<(Note<T>, Length)>, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
         let mut tones = Vec::new();
 
         for note in notes {
-            let tone = Self::generate_tone(&note, section_info);
+            let tone = self.generate_tone(&note, section_info);
             tones.push(tone);
         }
 
@@ -239,7 +239,7 @@ where
         a + (b - a) * t
     }
 
-    fn generate_tone(note: &(Note<T>, Length), section_info: SectionInfo) -> Tone<U::ConcreteValue> {
+    fn generate_tone(&self, note: &(Note<T>, Length), section_info: SectionInfo) -> Tone<U::ConcreteValue> {
         let mut concrete_values = Vec::new();
 
         let (note, position_in_measure) = note;
@@ -252,12 +252,35 @@ where
         let play_duration = note.get_duration(section_info.bpm);
         let tone_duration = play_duration.mul_f32(note.play_fraction);
 
+        let beat_emphasis = self.get_beat_from_position(*position_in_measure);
+
         Tone {
             concrete_values,
             play_duration,
             tone_duration,
             intensity: note.intensity..note.intensity,
+            beat_emphasis,
         }
+    }
+
+    fn get_beat_from_position(&self, position: Length) -> Option<f32> {
+        let beats = self.time_signature.beats();
+
+        let mut position_in_measure = Length::from_ticks(0);
+
+        for beat in beats {
+            if position == position_in_measure {
+                return Some(*beat);
+            }
+            // Missed the beat
+            if position.to_float() < position_in_measure.to_float() {
+                return None;
+            }
+
+            position_in_measure += self.time_signature.beat_length();
+        }
+
+        return None;
     }
 }
 

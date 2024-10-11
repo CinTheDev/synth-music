@@ -44,6 +44,14 @@ impl TimeSignature {
         return self.measure_length == lengths;
     }
 
+    pub fn beats(&self) -> &Vec<f32> {
+        &self.beat_intensities
+    }
+
+    pub fn beat_length(&self) -> Length {
+        self.beat_length
+    }
+
     fn what_power_of_two(mut value: u8) -> u8 {
         let mut result = 0;
 
