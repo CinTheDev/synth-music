@@ -20,6 +20,7 @@ pub use crate::instrument;
 pub use instrument::{Instrument, InstrumentBuffer, BufferInfo};
 pub use instrument::predefined;
 pub use predefined::tet12;
+pub use tet12::{TET12ScaledTone, TET12ConcreteTone};
 
 
 // File-export imports

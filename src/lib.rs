@@ -89,7 +89,7 @@ where
 
     // Placing multiple notes on top of each other
     // this is a chord
-    notes!(track, HALF
+    notes!(track, HALF,
         first(3),
         third(3),
         fifth(3)
@@ -142,20 +142,21 @@ where
     return track;    
 }
 
-fn apply_chord(track: &mut T)
+fn apply_chord<T, U>(track: &mut T)
 where
-    T: MusicTrack
+    T: MusicTrack<TET12ScaledTone, U>,
+    U: Instrument<ConcreteValue = TET12ConcreteTone>,
 {
     use tet12::*;
     use note::length::*;
 
-    notes!(track, HALF
+    notes!(track, HALF,
         first(3),
         third(3),
         fifth(3)
     );
 
-    notes!(track, HALF
+    notes!(track, HALF,
         third(3),
         fifth(3),
         first(4)
@@ -178,7 +179,7 @@ use synth_music::prelude::*;
 
 fn example_dynamics<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
 where
-    T: Instrument<ConcreteValue = TET12ConcreteValue>
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
     use tet12::*;
     use note::length::*;
@@ -247,7 +248,9 @@ Now, on to the example:
 ```rust
 use synth_music::prelude::*;
 use tet12::TET12ConcreteTone;
+use std::time::Duration;
 
+#[derive(Clone, Copy)]
 struct ExampleInstrument {
     count: u32,
 }
@@ -277,8 +280,8 @@ impl ExampleInstrument {
         let mut sample_amplitude = 0.0;
 
         for n in 0..self.count {
-            let factor = (2 * n + 1) as f32;
-            sample_amplitude += self.wave(frequency * factor, time);
+            let factor = (2 * n + 1) as f64;
+            sample_amplitude += Self::wave(frequency * factor, time);
         }
 
         return sample_amplitude;
@@ -301,7 +304,7 @@ impl Instrument for ExampleInstrument {
         // We will push the required amount of samples to completely fill the length of the tone
         for i in 0..buffer_info.tone_samples {
             let time = buffer_info.time_from_index(i);
-            buffer.push(self.generate(tones, time));
+            buffer.push(self.generate_tones(tones, time));
         }
 
         InstrumentBuffer { samples: buffer }
@@ -383,7 +386,7 @@ fn render() {
     };
 
     // Any instruments work, different ones can be used for different tracks
-    let instrument = // [an instrument]
+    let instrument = predefined::SineGenerator;
 
     let track_begin_melody = track_begin_melody(instrument);
     let track_begin_bass = track_begin_bass(instrument);
@@ -423,6 +426,34 @@ fn export(buffer: SoundBuffer, name: &str) {
     };
     exporter.export(buffer).unwrap();
 }
+#
+# fn track_begin_melody<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
+# where
+#     T: Instrument<ConcreteValue = TET12ConcreteTone>
+# {
+#     return UnboundTrack::new(instrument);    
+# }
+#
+# fn track_begin_bass<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
+# where
+#     T: Instrument<ConcreteValue = TET12ConcreteTone>
+# {
+#     return UnboundTrack::new(instrument);    
+# }
+#
+# fn track_end_melody<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
+# where
+#     T: Instrument<ConcreteValue = TET12ConcreteTone>
+# {
+#     return UnboundTrack::new(instrument);    
+# }
+#
+# fn track_end_bass<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
+# where
+#     T: Instrument<ConcreteValue = TET12ConcreteTone>
+# {
+#     return UnboundTrack::new(instrument);    
+# }
 ```
 
 ## UnboundTrack vs. MeasureTrack
@@ -449,7 +480,7 @@ is [TODO: reference location]
 ```rust
 use synth_music::prelude::*;
 
-fn track_measured<T>(instrument: T) -> MeasureTrack<TET12ConcreteTone, T>
+fn track_measured<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
 where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
@@ -463,21 +494,21 @@ where
     track.set_intensity(0.7);
 
     // After four Quarters the measure must end
-    sequential_notes!(track1, QUARTER,
+    sequential_notes!(track, QUARTER,
         first(3),
         second(3),
         third(3),
         fourth(3)
     );
-    track1.measure().unwrap();
-    sequential_notes!(track1, QUARTER,
+    track.measure().unwrap();
+    sequential_notes!(track, QUARTER,
         fifth(3),
         sixth(3),
         seventh(3),
         first(4)
     );
     // The last measure must also be "placed" with this call.
-    track1.measure().unwrap();
+    track.measure().unwrap();
 
     return track;
 }
@@ -488,7 +519,7 @@ Now an example that is wrong:
 ```rust
 use synth_music::prelude::*;
 
-fn track_measured<T>(instrument: T) -> MeasureTrack<TET12ConcreteTone, T>
+fn track_measured<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
 where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
@@ -499,35 +530,35 @@ where
     let mut track = MeasureTrack::new(instrument, time_signature);
     track.set_intensity(0.7);
 
-    sequential_notes!(track1, QUARTER,
+    sequential_notes!(track, QUARTER,
         first(3),
         second(3),
         third(3),
         fourth(3)
     );
     track.measure().unwrap();
-    sequential_notes!(track1, QUARTER,
+    sequential_notes!(track, QUARTER,
         fifth(3),
         sixth(3),
-        seventh(3),
+        seventh(3)
         // missing a note; there should be a break here
     );
     track.measure().unwrap(); // panics here
 
-    sequential_notes!(track1, QUARTER,
+    sequential_notes!(track, QUARTER,
         fifth(3),
         sixth(3),
         seventh(3),
         first(4),
-        second(4), // one note too much, the measure should've ended earlier
+        second(4) // one note too much, the measure should've ended earlier
     );
     track.measure().unwrap(); // panics here
 
-    sequential_notes!(track1, QUARTER,
+    sequential_notes!(track, QUARTER,
         fifth(3),
         sixth(3),
         seventh(3),
-        first(4),
+        first(4)
     );
     // not calling track.measure() will not place these notes in the track.
 
@@ -547,7 +578,9 @@ melodies. It's easy to accidentally break the regularity of the music, and there
 are no measure boundaries that serve as orientation points for the user.
 
 ```rust
-fn track_unbound<T>(instrument: T) -> UnboundTrack<TET12ConcreteTone, T>
+use synth_music::prelude::*;
+
+fn track_unbound<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
 where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
@@ -571,7 +604,7 @@ where
     sequential_notes!(track, QUARTER.triole(),
         first(4),
         third(4),
-        first(4),
+        first(4)
     );
 
     return track;
