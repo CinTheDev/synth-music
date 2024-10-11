@@ -27,3 +27,12 @@ ideas and more comments so these can be used to learn this library.
 ### Unit tests
 
 It would be good to at least implement the easy unit tests.
+
+### Improve a bit of structure
+
+Only small things should be changed, like introducing constants for important
+or meaningful values.
+
+- Introduce constants for Length and use everywhere
+- Introduce constants for MusicKey and use in examples
+- Make `use` instructions more consistent and efficient
