@@ -35,6 +35,11 @@ impl TimeSignature {
         }
     }
 
+    pub fn set_beat(mut self, index: usize, emphasis: f32) -> Self {
+        self.beat_intensities[index] = emphasis;
+        self
+    }
+
     pub fn is_measure_saturated(&self, lengths: Length) -> bool {
         return self.measure_length == lengths;
     }
