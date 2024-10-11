@@ -47,9 +47,9 @@ There are a few provided implementations for placing notes on a Track. If these
 do not satisfy the needs of the user, they can implement a custom version of
 the Track.
 
-## Usage
+# Usage
 
-### Placing notes on a track
+## Placing notes on a track
 
 It's best to always put this in a dedicated function, as we will make use of
 `use` in local scope. This way tracks can also be used across different
@@ -110,6 +110,62 @@ is to place them individually, but it leads to a lot of repetitions, because
 The macros provide a way to eliminate a lot of unnecessary repetition and save
 a lot of time for writing music. It's also possible to use logic or even
 branching, which is unique to this style of composing.
+
+## Reusing specific segments
+
+We have the ability to place notes using functions. In traditional composition,
+it's only possible to repeat sections of the whole piece. The function approach
+is much more versatile, as it's possible to repeat only specific tracks or even
+parts of tracks. This is especially useful for simple melodies like the bass.
+Below is an example to demonstrate that.
+
+```rust
+use synth_music::prelude::*;
+
+fn complicated_track<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
+where
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    use tet12::*;
+    use note::length::*;
+
+    let mut track = UnboundTrack::new(instrument);
+
+    // Some melody here
+
+    // Reused note segment
+    apply_chord(&mut track);
+
+    // Some melody there
+
+    return track;    
+}
+
+fn apply_chord(track: &mut T)
+where
+    T: MusicTrack
+{
+    use tet12::*;
+    use note::length::*;
+
+    notes!(track, HALF
+        first(3),
+        third(3),
+        fifth(3)
+    );
+
+    notes!(track, HALF
+        third(3),
+        fifth(3),
+        first(4)
+    );
+}
+
+```
+
+It's possible to work on mutable references of Tracks instead of returning a new
+one. There are probably even more ways to do other things, so get creative with
+what you got.
 
 */
 
