@@ -59,6 +59,15 @@ instruments.
 ```rust
 use synth_music::prelude::*;
 
+fn main() {
+
+    let instrument = predefined::SineGenerator;
+
+    // Somewhere in main
+
+    let track = track_example(instrument);
+}
+
 fn track_example<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
 where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
@@ -123,24 +132,19 @@ Below is an example to demonstrate that.
 ```rust
 use synth_music::prelude::*;
 
-fn complicated_track<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
-where
-    T: Instrument<ConcreteValue = TET12ConcreteTone>
-{
-    use tet12::*;
-    use note::length::*;
+use tet12::*;
+use note::length::*;
 
-    let mut track = UnboundTrack::new(instrument);
+let mut track = UnboundTrack::new(predefined::SineGenerator);
 
-    // Some melody here
+// Some melody here
 
-    // Reused note segment
-    apply_chord(&mut track);
+// Reused note segment
+apply_chord(&mut track);
 
-    // Some melody there
+// Some melody there
 
-    return track;    
-}
+// ...
 
 fn apply_chord<T, U>(track: &mut T)
 where
@@ -176,39 +180,31 @@ These dynamics can change dynamically (no pun intended) throughout the song.
 
 ```rust
 use synth_music::prelude::*;
+use tet12::*;
+use note::length::*;
 
-fn example_dynamics<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
-where
-    T: Instrument<ConcreteValue = TET12ConcreteTone>
-{
-    use tet12::*;
-    use note::length::*;
+let mut track = UnboundTrack::new(instrument);
 
-    let mut track = UnboundTrack::new(instrument);
+// Set the intensity for new notes to be 70% of maximum volume
+track.set_intensity(0.7);
 
-    // Set the intensity for new notes to be 70% of maximum volume
-    track.set_intensity(0.7);
+track.note(HALF, first(3)); // Intensity = 0.7
+track.note(HALF, first(3)); // Intensity = 0.7
 
-    track.note(HALF, first(3)); // Intensity = 0.7
-    track.note(HALF, first(3)); // Intensity = 0.7
+track.set_intensity(0.2);
 
-    track.set_intensity(0.2);
-
-    track.note(HALF, first(3)); // Intensity = 0.2
+track.note(HALF, first(3)); // Intensity = 0.2
 
 
-    // Track will start changing intensity arriving at value specified later
-    track.start_dynamic_change();
-    track.note(QUARTER, third(3));
-    track.note(QUARTER, fourth(3));
-    track.note(QUARTER, fifth(3));
-    track.note(QUARTER, first(3));
-    // Marks the end of the dynamic change, the passed value is the target intensity.
-    // This target intensity is now the actual intensity of the track.
-    track.end_dynamic_change(0.6);
-
-    return track;    
-}
+// Track will start changing intensity arriving at value specified later
+track.start_dynamic_change();
+track.note(QUARTER, third(3));
+track.note(QUARTER, fourth(3));
+track.note(QUARTER, fifth(3));
+track.note(QUARTER, first(3));
+// Marks the end of the dynamic change, the passed value is the target intensity.
+// This target intensity is now the actual intensity of the track.
+track.end_dynamic_change(0.6);
 ```
 
 Calling `track.set_intensity(x)` will change the intensity of the notes placed
@@ -357,63 +353,60 @@ call can then piece these buffers together into a composition.
 ```rust
 use synth_music::prelude::*;
 
-fn render() {
+// Define settings
+let settings = CompositionSettings {
+    sample_rate: 44100,
+};
 
-    // Define settings
-    let settings = CompositionSettings {
-        sample_rate: 44100,
-    };
+// Info for beginning. Info always contains a reference to the settings.
+let info_begin = SectionInfo {
+    bpm: 120.0,
+    key: MusicKey {
+        tonic: KeyTonic::A,
+        key_type: KeyType::Minor,
+    },
 
-    // Info for beginning. Info always contains a reference to the settings.
-    let info_begin = SectionInfo {
-        bpm: 120.0,
-        key: MusicKey {
-            tonic: KeyTonic::A,
-            key_type: KeyType::Minor,
-        },
+    settings: &settings,
+};
 
-        settings: &settings,
-    };
+let info_end = SectionInfo {
+    bpm: 140.0,
+    key: MusicKey {
+        tonic: KeyTonic::Asharp,
+        key_type: KeyType::Minor,
+    },
 
-    let info_end = SectionInfo {
-        bpm: 140.0,
-        key: MusicKey {
-            tonic: KeyTonic::Asharp,
-            key_type: KeyType::Minor,
-        },
+    settings: &settings,
+};
 
-        settings: &settings,
-    };
+// Any instruments work, different ones can be used for different tracks
+let instrument = predefined::SineGenerator;
 
-    // Any instruments work, different ones can be used for different tracks
-    let instrument = predefined::SineGenerator;
+let track_begin_melody = track_begin_melody(instrument);
+let track_begin_bass = track_begin_bass(instrument);
 
-    let track_begin_melody = track_begin_melody(instrument);
-    let track_begin_bass = track_begin_bass(instrument);
+let track_end_melody = track_end_melody(instrument);
+let track_end_bass = track_end_bass(instrument);
 
-    let track_end_melody = track_end_melody(instrument);
-    let track_end_bass = track_end_bass(instrument);
+// Render the first section with the specified tracks and info.
+// The result will already be a rendered buffer
+let section_begin = section!(info_begin,
+    track_begin_melody,
+    track_begin_bass,
+);
 
-    // Render the first section with the specified tracks and info.
-    // The result will already be a rendered buffer
-    let section_begin = section!(info_begin,
-        track_begin_melody,
-        track_begin_bass,
-    );
+let section_end = section!(info_end,
+    track_end_melody,
+    track_end_bass,
+);
 
-    let section_end = section!(info_end,
-        track_end_melody,
-        track_end_bass,
-    );
+// The rendered sections are put together to create the whole music piece.
+let composition = composition!(
+    section_begin,
+    section_end,
+);
 
-    // The rendered sections are put together to create the whole music piece.
-    let composition = composition!(
-        section_begin,
-        section_end,
-    );
-
-    export(composition, "my_beautiful_piece.wav");
-}
+export(composition, "my_beautiful_piece.wav");
 
 fn export(buffer: SoundBuffer, name: &str) {
     use std::path::PathBuf;
@@ -479,91 +472,75 @@ is [TODO: reference location]
 
 ```rust
 use synth_music::prelude::*;
+use tet12::*;
+use note::length::*;
 
-fn track_measured<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
-where
-    T: Instrument<ConcreteValue = TET12ConcreteTone>
-{
-    use tet12::*;
-    use note::length::*;
+// 4/4 Time
+let time_signature = TimeSignature::new(4, 4);
 
-    // 4/4 Time
-    let time_signature = TimeSignature::new(4, 4);
+let mut track = MeasureTrack::new(instrument, time_signature);
+track.set_intensity(0.7);
 
-    let mut track = MeasureTrack::new(instrument, time_signature);
-    track.set_intensity(0.7);
-
-    // After four Quarters the measure must end
-    sequential_notes!(track, QUARTER,
-        first(3),
-        second(3),
-        third(3),
-        fourth(3)
-    );
-    track.measure().unwrap();
-    sequential_notes!(track, QUARTER,
-        fifth(3),
-        sixth(3),
-        seventh(3),
-        first(4)
-    );
-    // The last measure must also be "placed" with this call.
-    track.measure().unwrap();
-
-    return track;
-}
+// After four Quarters the measure must end
+sequential_notes!(track, QUARTER,
+    first(3),
+    second(3),
+    third(3),
+    fourth(3)
+);
+track.measure().unwrap();
+sequential_notes!(track, QUARTER,
+    fifth(3),
+    sixth(3),
+    seventh(3),
+    first(4)
+);
+// The last measure must also be "placed" with this call.
+track.measure().unwrap();
 ```
 
 Now an example that is wrong:
 
-```rust
+```should_panic
 use synth_music::prelude::*;
+use tet12::*;
+use note::length::*;
+let time_signature = TimeSignature::new(4, 4);
 
-fn track_measured<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
-where
-    T: Instrument<ConcreteValue = TET12ConcreteTone>
-{
-    use tet12::*;
-    use note::length::*;
-    let time_signature = TimeSignature::new(4, 4);
+let mut track = MeasureTrack::new(instrument, time_signature);
+track.set_intensity(0.7);
 
-    let mut track = MeasureTrack::new(instrument, time_signature);
-    track.set_intensity(0.7);
+sequential_notes!(track, QUARTER,
+    first(3),
+    second(3),
+    third(3),
+    fourth(3)
+);
+track.measure().unwrap();
+sequential_notes!(track, QUARTER,
+    fifth(3),
+    sixth(3),
+    seventh(3)
+    // missing a note; there should be a break here
+);
+track.measure().unwrap(); // panics here
 
-    sequential_notes!(track, QUARTER,
-        first(3),
-        second(3),
-        third(3),
-        fourth(3)
-    );
-    track.measure().unwrap();
-    sequential_notes!(track, QUARTER,
-        fifth(3),
-        sixth(3),
-        seventh(3)
-        // missing a note; there should be a break here
-    );
-    track.measure().unwrap(); // panics here
+sequential_notes!(track, QUARTER,
+    fifth(3),
+    sixth(3),
+    seventh(3),
+    first(4),
+    second(4) // one note too much, the measure should've ended earlier
+);
+track.measure().unwrap(); // panics here
 
-    sequential_notes!(track, QUARTER,
-        fifth(3),
-        sixth(3),
-        seventh(3),
-        first(4),
-        second(4) // one note too much, the measure should've ended earlier
-    );
-    track.measure().unwrap(); // panics here
-
-    sequential_notes!(track, QUARTER,
-        fifth(3),
-        sixth(3),
-        seventh(3),
-        first(4)
-    );
-    // not calling track.measure() will not place these notes in the track.
-
-    return track;
-}
+sequential_notes!(track, QUARTER,
+    fifth(3),
+    sixth(3),
+    seventh(3),
+    first(4)
+);
+// not calling track.measure() will not place these notes in the track.
 ```
 
 ### UnboundTrack
@@ -579,36 +556,28 @@ are no measure boundaries that serve as orientation points for the user.
 
 ```rust
 use synth_music::prelude::*;
+use tet12::*;
+use note::length::*;
 
-fn track_unbound<T>(instrument: T) -> UnboundTrack<TET12ScaledTone, T>
-where
-    T: Instrument<ConcreteValue = TET12ConcreteTone>
-{
-    use tet12::*;
-    use note::length::*;
+let mut track = UnboundTrack::new(instrument);
+track.set_intensity(0.7);
 
-    let mut track = UnboundTrack::new(instrument);
-    track.set_intensity(0.7);
+// There is no limit to placing notes
+sequential_notes!(track, EIGTH.dot(),
+    first(3),
+    second(3),
+    third(3),
+    fourth(3),
+    fifth(3),
+    sixth(3),
+    seventh(3)
+);
 
-    // There is no limit to placing notes
-    sequential_notes!(track, EIGTH.dot(),
-        first(3),
-        second(3),
-        third(3),
-        fourth(3),
-        fifth(3),
-        sixth(3),
-        seventh(3)
-    );
-
-    sequential_notes!(track, QUARTER.triole(),
-        first(4),
-        third(4),
-        first(4)
-    );
-
-    return track;
-}
+sequential_notes!(track, QUARTER.triole(),
+    first(4),
+    third(4),
+    first(4)
+);
 ```
 
 ### Custom implementation
