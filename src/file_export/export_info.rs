@@ -16,6 +16,7 @@ pub struct Tone<T> {
     pub tone_duration: Duration,
 
     pub intensity: Range<f32>,
+    pub beat_emphasis: Option<f32>, // None is offbeat
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

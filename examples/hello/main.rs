@@ -5,23 +5,36 @@ fn main() {
 
     example_1();
     example_2();
+    example_3();
 }
 
 fn example_1() {
     use tet12::*;
-    use note::Length::*;
+    use note::length::*;
 
-    let mut track1 = MeasureTrack::new(SineGenerator, (4, 4));
-    let mut track2 = MeasureTrack::new(SineGenerator, (2, 4));
+    let four_four =
+        TimeSignature::new(4, 4)
+        .set_beat(0, 2.0)
+        .set_beat(2, 1.5);
 
-    sequential_notes!(track1, Quarter,
+    let two_four =
+        TimeSignature::new(2, 4)
+        .set_beat(0, 2.0);
+
+    let mut track1 = MeasureTrack::new(SineGenerator, four_four);
+    let mut track2 = MeasureTrack::new(SineGenerator, two_four);
+
+    track1.set_intensity(0.5);
+    track2.set_intensity(0.5);
+
+    sequential_notes!(track1, QUARTER,
         first(3),
         second(3),
         third(3),
         fourth(3)
     );
     track1.measure().unwrap();
-    sequential_notes!(track1, Quarter,
+    sequential_notes!(track1, QUARTER,
         fifth(3),
         sixth(3),
         seventh(3),
@@ -29,22 +42,22 @@ fn example_1() {
     );
     track1.measure().unwrap();
 
-    sequential_notes!(track2, Quarter,
+    sequential_notes!(track2, QUARTER,
         fifth(3),
         sixth(3)
     );
     track2.measure().unwrap();
-    sequential_notes!(track2, Quarter,
+    sequential_notes!(track2, QUARTER,
         seventh(3),
         first(4)
     );
     track2.measure().unwrap();
-    sequential_notes!(track2, Quarter,
+    sequential_notes!(track2, QUARTER,
         second(4),
         third(4)
     );
     track2.measure().unwrap();
-    sequential_notes!(track2, Quarter,
+    sequential_notes!(track2, QUARTER,
         fourth(4),
         fifth(4)
     );
@@ -74,13 +87,13 @@ fn example_1() {
 
 fn example_2() {
     use tet12::*;
-    use note::Length::*;
+    use note::length::*;
 
     let instrument = predefined::SineGenerator;
 
     let mut track = UnboundTrack::new(instrument);
 
-    track.note(Whole, third(1));
+    track.note(WHOLE, third(1));
 
     let settings = CompositionSettings {
         sample_rate: 44100,
@@ -99,6 +112,70 @@ fn example_2() {
     let section = section!(section_info, track);
 
     export_buffer(section, "sound_test.wav");
+}
+
+fn example_3() {
+    use tet12::*;
+    use note::length::*;
+
+    let instrument = predefined::SineGenerator;
+
+    let four_four = TimeSignature::new(4, 4);
+
+    let mut track = MeasureTrack::new(instrument, four_four);
+    track.set_intensity(0.7);
+
+    sequential_notes!(track, QUARTER,
+        first(3),
+        second(3),
+        third(3),
+        fourth(3)
+    );
+    track.measure().unwrap();
+
+    sequential_notes!(track, QUARTER.triole(),
+        first(3),
+        third(3),
+        second(3),
+
+        third(3),
+        fifth(3),
+        fourth(3)
+    );
+    track.measure().unwrap();
+
+    sequential_notes!(track, QUARTER.ntole(5),
+        first(3),
+        second(3),
+        third(3),
+        fourth(3),
+        fifth(3),
+
+        third(3),
+        fourth(3),
+        fifth(3),
+        fourth(3),
+        third(3)
+    );
+    track.measure().unwrap();
+
+    let settings = CompositionSettings {
+        sample_rate: 44100,
+    };
+
+    let section_info = SectionInfo {
+        bpm: 120.0,
+        key: MusicKey {
+            tonic: KeyTonic::A,
+            key_type: KeyType::Minor,
+        },
+
+        settings: &settings,
+    };
+
+    let section = section!(section_info, track);
+
+    export_buffer(section, "Triole_Test.wav");
 }
 
 fn export_buffer(buffer: SoundBuffer, name: &str) {
@@ -132,7 +209,7 @@ impl SineGenerator {
             result += Self::generate_frequency(frequency, time);
         }
 
-        return result * tones.intensity.start;
+        return result * tones.intensity.start * tones.beat_emphasis.unwrap_or(0.5);
     }
 
     pub fn generate_frequency(frequency: f64, time: Duration) -> f32 {

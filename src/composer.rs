@@ -2,10 +2,13 @@ pub mod note;
 pub mod music_key;
 pub mod unbound_track;
 pub mod measure_track;
+pub mod time_signature;
 
 use note::{Note, Length, ScaledValue};
 use crate::instrument::Instrument;
 use crate::file_export::export_info::{ExportTrack, SectionInfo};
+
+pub use time_signature::TimeSignature;
 
 pub trait MusicTrack<T, U>
 where 

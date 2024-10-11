@@ -1,5 +1,6 @@
 use super::note::{Note, ScaledValue, Length, DynamicsFlag};
 use super::{SectionInfo, MusicTrack};
+use super::TimeSignature;
 use crate::instrument::Instrument;
 use crate::file_export::export_info::{ExportTrack, Tone};
 use std::time::Duration;
@@ -12,7 +13,7 @@ where
 {
     active_measure: Option<Measure<T>>,
     measures: Vec<Measure<T>>,
-    time_signature: (u8, u8),
+    time_signature: TimeSignature,
     instrument: U,
 
     current_intensity: f32,
@@ -22,7 +23,7 @@ where
 }
 
 pub struct Measure<T: ScaledValue> {
-    time_signature: (u8, u8),
+    time_signature: TimeSignature,
     notes: Vec<Note<T>>,
 }
 
@@ -83,7 +84,7 @@ where
 
     fn convert_to_export_track(&self, section_info: SectionInfo) -> ExportTrack<U> {
         let notes = self.arrange_notes();
-        let mut tones = Self::conversion_first_pass(&notes, section_info);
+        let mut tones = self.conversion_first_pass(&notes, section_info);
         Self::conversion_pass_dynamics(&notes, &mut tones);
 
         ExportTrack {
@@ -98,9 +99,9 @@ where
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
     U: Instrument,
 {
-    pub fn new(instrument: U, time_signature: (u8, u8)) -> Self {
+    pub fn new(instrument: U, time_signature: TimeSignature) -> Self {
         Self {
-            active_measure: Some(Measure::new(time_signature)),
+            active_measure: Some(Measure::new(time_signature.clone())),
             measures: Vec::new(),
             time_signature,
             instrument,
@@ -110,14 +111,14 @@ where
         }
     }
 
-    pub fn measure(&mut self) -> Result<&mut Measure<T>, ()> {
+    pub fn measure(&mut self) -> Result<&mut Measure<T>, &str> {
         let active_measure_valid = self.get_active_measure().assert_measure_bounds();
 
         if !active_measure_valid {
-            return Err(());
+            return Err("Invalid measure bounds");
         }
 
-        let new_measure = Measure::new(self.time_signature);
+        let new_measure = Measure::new(self.time_signature.clone());
         let valid_measure = self.active_measure.replace(new_measure).unwrap();
 
         self.measures.push(valid_measure);
@@ -129,7 +130,7 @@ where
         self.active_measure.as_mut().unwrap()
     }
 
-    fn arrange_notes(&self) -> Vec<Note<T>> {
+    fn arrange_notes(&self) -> Vec<(Note<T>, Length)> {
         let mut notes = Vec::new();
 
         let active_measure = self.active_measure.as_ref().unwrap();
@@ -139,19 +140,26 @@ where
         }
 
         for measure in &self.measures {
+            let mut note_lengths = Vec::new();
+
             for note in &measure.notes {
-                notes.push((*note).clone());
+                let position_in_measure =
+                    Length::count_lengths(&note_lengths)
+                    .unwrap_or(Length::INVALID);
+
+                notes.push(((*note).clone(), position_in_measure));
+                note_lengths.push(note.length);
             }
         }
 
         return notes;
     }
 
-    fn conversion_first_pass(notes: &Vec<Note<T>>, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
+    fn conversion_first_pass(&self, notes: &Vec<(Note<T>, Length)>, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
         let mut tones = Vec::new();
 
         for note in notes {
-            let tone = Self::generate_tone(&note, section_info);
+            let tone = self.generate_tone(&note, section_info);
             tones.push(tone);
         }
 
@@ -161,7 +169,7 @@ where
     // WARNING: Assumes that notes align with tones
     // Fix if this doesn't apply anymore
     fn conversion_pass_dynamics(
-        notes: &Vec<Note<T>>,
+        notes: &Vec<(Note<T>, Length)>,
         tones: &mut Vec<Tone<U::ConcreteValue>>
     ) {
         let mut i = 0;
@@ -172,13 +180,13 @@ where
         }
     }
 
-    fn find_next_dynamics_change(notes: &Vec<Note<T>>, start_index: usize) -> Option<Range<usize>> {
+    fn find_next_dynamics_change(notes: &Vec<(Note<T>, Length)>, start_index: usize) -> Option<Range<usize>> {
         use super::note::DynamicsFlag;
 
         let mut index_dynamics_start = None;
 
         for i in start_index..notes.len() {
-            let note = &notes[i];
+            let (note, _) = &notes[i];
 
             if note.dynamics_flag == DynamicsFlag::StartChange {
                 if index_dynamics_start.is_some() {
@@ -235,8 +243,10 @@ where
         a + (b - a) * t
     }
 
-    fn generate_tone(note: &Note<T>, section_info: SectionInfo) -> Tone<U::ConcreteValue> {
+    fn generate_tone(&self, note: &(Note<T>, Length), section_info: SectionInfo) -> Tone<U::ConcreteValue> {
         let mut concrete_values = Vec::new();
+
+        let (note, position_in_measure) = note;
 
         for scaled_value in &note.values {
             let concrete_value = scaled_value.to_concrete_value(section_info.key);
@@ -246,17 +256,40 @@ where
         let play_duration = note.get_duration(section_info.bpm);
         let tone_duration = play_duration.mul_f32(note.play_fraction);
 
+        let beat_emphasis = self.get_beat_from_position(*position_in_measure);
+
         Tone {
             concrete_values,
             play_duration,
             tone_duration,
             intensity: note.intensity..note.intensity,
+            beat_emphasis,
         }
+    }
+
+    fn get_beat_from_position(&self, position: Length) -> Option<f32> {
+        let beats = self.time_signature.beats();
+
+        let mut position_in_measure = Length::from_ticks(0);
+
+        for beat in beats {
+            if position == position_in_measure {
+                return Some(*beat);
+            }
+            // Missed the beat
+            if position.to_float() < position_in_measure.to_float() {
+                return None;
+            }
+
+            position_in_measure += self.time_signature.beat_length();
+        }
+
+        return None;
     }
 }
 
 impl<T: ScaledValue> Measure<T> {
-    fn new(time_signature: (u8, u8)) -> Self {
+    fn new(time_signature: TimeSignature) -> Self {
         Self {
             time_signature,
             notes: Vec::new(),
@@ -268,46 +301,18 @@ impl<T: ScaledValue> Measure<T> {
     }
 
     fn assert_measure_bounds(&self) -> bool {
-        let enforced_measure_length = match self.time_signature.1 {
-            1 => 16,
-            2 => 8,
-            4 => 4,
-            8 => 2,
-            16 => 1,
-
-            _ => panic!("Invalid or unsupported time signature"),
-        } * self.time_signature.0 as u32;
-
-        let mut current_measure_length = 0;
+        let mut all_lengths = Vec::new();
 
         for note in &self.notes {
-            current_measure_length += Self::note_length_smallest(note);
+            all_lengths.push(note.length);
         }
 
-        return current_measure_length == enforced_measure_length;
+        let total_length = Length::count_lengths(&all_lengths).unwrap();
+
+        return self.time_signature.is_measure_saturated(total_length);
     }
 
-    fn note_length_smallest(note: &Note<T>) -> u32 {
-        // Smallest length right now is sixteenth
-
-        let mut length = match note.length {
-            Length::Whole => 16,
-            Length::Half => 8,
-            Length::Quarter => 4,
-            Length::Eigth => 2,
-            Length::Sixteenth => 1,
-        };
-
-        if note.dotted {
-            length = length * 2 - length / 2;
-        }
-
-        // TODO: Triole
-
-        return length;
-    }
-
-    pub fn override_time_signature(&mut self, time_signature: (u8, u8)) -> &mut Self {
+    pub fn override_time_signature(&mut self, time_signature: TimeSignature) -> &mut Self {
         self.time_signature = time_signature;
         self
     }
