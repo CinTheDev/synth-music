@@ -111,11 +111,11 @@ where
         }
     }
 
-    pub fn measure(&mut self) -> Result<&mut Measure<T>, ()> {
+    pub fn measure(&mut self) -> Result<&mut Measure<T>, &str> {
         let active_measure_valid = self.get_active_measure().assert_measure_bounds();
 
         if !active_measure_valid {
-            return Err(());
+            return Err("Invalid measure bounds");
         }
 
         let new_measure = Measure::new(self.time_signature.clone());
