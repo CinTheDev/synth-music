@@ -546,7 +546,37 @@ This implementation is best used for small scale tests and not complicated
 melodies. It's easy to accidentally break the regularity of the music, and there
 are no measure boundaries that serve as orientation points for the user.
 
-[TODO: Example]
+```rust
+fn track_unbound<T>(instrument: T) -> UnboundTrack<TET12ConcreteTone, T>
+where
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    use tet12::*;
+    use note::length::*;
+
+    let mut track = UnboundTrack::new(instrument);
+    track.set_intensity(0.7);
+
+    // There is no limit to placing notes
+    sequential_notes!(track, EIGTH.dot(),
+        first(3),
+        second(3),
+        third(3),
+        fourth(3),
+        fifth(3),
+        sixth(3),
+        seventh(3)
+    );
+
+    sequential_notes!(track, QUARTER.triole(),
+        first(4),
+        third(4),
+        first(4),
+    );
+
+    return track;
+}
+```
 
 ### Custom implementation
 
