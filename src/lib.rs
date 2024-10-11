@@ -48,6 +48,11 @@ There are a few provided implementations for placing notes on a Track. If these
 do not satisfy the needs of the user, they can implement a custom version of
 the Track.
 
+### Custom exporter
+
+There's a provided implementation for WAV files. The user can implement
+exporting to other file formats such as mp3, ogg, etc...
+
 # Usage
 
 ## Placing notes on a track
