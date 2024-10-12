@@ -7,6 +7,14 @@ use crate::file_export::export_info::{ExportTrack, Tone};
 use std::time::Duration;
 use std::ops::Range;
 
+/// An implementation of MusicTrack with additional rules to ensure that
+/// Measures are filled with notes correctly. Use this as the standard Track.
+/// 
+/// With the existance of measures, it's also possible to have a time signature
+/// assigned to the track, which can even automatically emphasize specific beats
+/// (e.g. the first beat).
+/// 
+/// Read the front page of the crate for examples on how to use this.
 pub struct MeasureTrack<T, U>
 where 
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
@@ -23,6 +31,7 @@ where
     next_note_dynamic_flag: Option<DynamicsFlag>,
 }
 
+/// A single measure; managed by `MeasureTrack`
 pub struct Measure<T: ScaledValue> {
     time_signature: TimeSignature,
     notes: Vec<Note<T>>,
@@ -100,6 +109,7 @@ where
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
     U: Instrument,
 {
+    /// Create a new track with the given instrument and time signature
     pub fn new(instrument: U, time_signature: TimeSignature) -> Self {
         Self {
             active_measure: Some(Measure::new(time_signature.clone())),
@@ -112,6 +122,8 @@ where
         }
     }
 
+    /// Place the end of a measure, which will automatically validate the
+    /// completed measure. An error is returned if the measure is invalid.
     pub fn measure(&mut self) -> Result<&mut Measure<T>, &str> {
         let active_measure_valid = self.get_active_measure().assert_measure_bounds();
 
@@ -313,6 +325,7 @@ impl<T: ScaledValue> Measure<T> {
         return self.time_signature.is_measure_saturated(total_length);
     }
 
+    /// Override the time signature for this measure.
     pub fn override_time_signature(&mut self, time_signature: TimeSignature) -> &mut Self {
         self.time_signature = time_signature;
         self
