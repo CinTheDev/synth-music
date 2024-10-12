@@ -285,7 +285,7 @@ where
     fn get_beat_from_position(&self, position: Length) -> Option<f32> {
         let beats = self.time_signature.beats();
 
-        let mut position_in_measure = Length::from_ticks(0);
+        let mut position_in_measure = length::ZERO;
 
         for beat in beats {
             if position == position_in_measure {
