@@ -10,10 +10,15 @@ use crate::progress_bars;
 const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
 const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
 
+/// Represents saving a buffer as a file on the file system.
 pub trait FileExport {
     fn export(&self, buffer: SoundBuffer) -> std::io::Result<()>;
 }
 
+/// Renders an `ExportTrack` into a `SoundBuffer`
+/// 
+/// This function will automatically print a progress bar with the render
+/// progress.
 pub fn render<T: Instrument>(track: &ExportTrack<T>, settings: CompositionSettings) -> SoundBuffer {
     use indicatif::ProgressBar;
 
