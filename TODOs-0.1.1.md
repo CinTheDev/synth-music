@@ -1,4 +1,13 @@
-# TODOs for future versions
+# TODOs for version 0.1.1
+
+A collection of ideas and improvements that won't introduce breaking changes.
+This file will become the active TODO file once development of version 0.1.1
+starts.
+
+After completion of a specific task here the description will be deleted.
+Though, through versioning (git) it's possible to review finished (and therefore
+deleted) tasks. Other ideas for future versions shall be written in another
+document.
 
 ## Get rid of redundancy between MeasureTrack and UnboundTrack
 
@@ -36,15 +45,15 @@ Following features could be implemented as shortcut traits:
 - Instead of filling whole buffer call for every sample
 - Automatic dynamics calculations
 
-## Feature held notes (for MeasuredTrack)
+## Feature held notes (for MeasureTrack)
 
 A thing you can do in music theory is to "combine" two consecutive notes with
 the same height so that they sound like one. The special thing is that these
 connected notes can go beyond measures, which would be impossible with
-MeasuredTrack right now.
+MeasureTrack right now.
 
 I feel like it would be pretty hard to do the same for sections, so just aim
-for the MeasuredTrack version first.
+for the MeasureTrack version first.
 
 ## Construct Track with MIDI file
 
@@ -53,46 +62,3 @@ it should be possible to read a MIDI file from the disk and automatically
 convert it to notes on a Track.
 
 Check the contents of a MIDI file and see how this could be implemented.
-
-## Support Stereo
-
-This will probably require some refactoring on the rendering side. Make it
-possible for Instruments to output stereo sound and export it stereo. Also think
-about ways to make the Instrument implementation convenient if only Mono should
-be Output.
-
-## Even more advanced dynamics system
-
-Features for making the dynamics system even more versatile and powerful
-
-### Custom interpolation curves
-
-Currently, if we slowly invrease the intensity, the change is always linear.
-Make it possible for the user to specify their own interpolation curve.
-
-Either make them choose from an enum, or let them provide their own function,
-or both.
-
-### Dynamics effects over Track or whole Section
-
-My idea of this is still a little vague, but I think in some other music it
-sometimes feels like the intensity of some instruments "pulse" or similar with
-the rythm.
-
-Investigate online what this is called and how it is usually implemented. If
-it's not very difficult, implement it here as well.
-
-## Better multithreading
-
-Right now multithreading only works per-section. The sections themselves are
-rendered sequentially. Because of this, multithreading is only really beneficial
-if the sections are quite long, or if there are a lot of tracks playing at once.
-
-Since there's no way to store Sections in a struct as of right now, it's pretty
-difficult to write extensive features for them. If Sections can actually be
-bundled together somehow at some point, then it would be feasible to implement
-this composition-wide multithreading.
-
-Also while we're at this - if we manage to get outside of macro territory we
-might as well clean up the code by moving multithreading into dedicated
-functions or even submodules.
