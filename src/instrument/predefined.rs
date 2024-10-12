@@ -7,33 +7,40 @@ use super::InstrumentBuffer;
 
 use std::time::Duration;
 
+/// Return a point of a sine wave given a frequency and time
 pub fn sine_wave(frequency: f64, time: Duration) -> f32 {
     use std::f64::consts::PI;
     return (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32;
 }
 
+/// Return a point of a square wave given a frequency and time
 pub fn square_wave(frequency: f64, time: Duration) -> f32 {
     let x = (2.0 * time.as_secs_f64() * frequency + 1.0).floor() as u32;
     return 2.0 * (x % 2) as f32 - 1.0;
 }
 
+/// Return a point of a triangle wave given a frequency and time
 pub fn triangle_wave(frequency: f64, time: Duration) -> f32 {
     use std::f64::consts::PI;
     let x = time.as_secs_f64() * frequency * 2.0 * PI;
     return ((2.0 / PI) * x.sin().asin()) as f32;
 }
 
+/// Return a point of a saw wave given a frequency and time
 pub fn saw_wave(frequency: f64, time: Duration) -> f32 {
     let x = (2.0 * time.as_secs_f64() * frequency + 1.0) as f32;
     return (x % 2.0) - 1.0;
 }
 
+/// An implementor for `Instrument` that uses a raw sine wave.
 #[derive(Clone, Copy)]
 pub struct SineGenerator;
 
+/// An implementor for `Instrument` that uses a triangle sine wave.
 #[derive(Clone, Copy)]
 pub struct TriangleGenerator;
 
+/// An implementor for `Instrument` that uses a raw square wave wave.
 #[derive(Clone, Copy)]
 pub struct SquareGenerator;
 
