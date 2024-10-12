@@ -3,8 +3,16 @@ pub const C_MAJOR: MusicKey = MusicKey {
     tonic: KeyTonic::C,
     key_type: KeyType::Major,
 };
+pub const D_FLAT_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::Dflat,
+    key_type: KeyType::Major,
+};
 pub const D_MAJOR: MusicKey = MusicKey {
     tonic: KeyTonic::D,
+    key_type: KeyType::Major,
+};
+pub const E_FLAT_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::Eflat,
     key_type: KeyType::Major,
 };
 pub const E_MAJOR: MusicKey = MusicKey {
@@ -15,12 +23,28 @@ pub const F_MAJOR: MusicKey = MusicKey {
     tonic: KeyTonic::F,
     key_type: KeyType::Major,
 };
+pub const F_SHARP_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::Fsharp,
+    key_type: KeyType::Major,
+};
+pub const G_FLAT_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::Gflat,
+    key_type: KeyType::Major,
+};
 pub const G_MAJOR: MusicKey = MusicKey {
     tonic: KeyTonic::G,
     key_type: KeyType::Major,
 };
+pub const A_FLAT_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::Aflat,
+    key_type: KeyType::Major,
+};
 pub const A_MAJOR: MusicKey = MusicKey {
     tonic: KeyTonic::A,
+    key_type: KeyType::Major,
+};
+pub const B_FLAT_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::Bflat,
     key_type: KeyType::Major,
 };
 pub const B_MAJOR: MusicKey = MusicKey {
@@ -33,8 +57,16 @@ pub const C_MINOR: MusicKey = MusicKey {
     tonic: KeyTonic::C,
     key_type: KeyType::Minor,
 };
+pub const C_SHARP_MINOR: MusicKey = MusicKey {
+    tonic: KeyTonic::Csharp,
+    key_type: KeyType::Minor,
+};
 pub const D_MINOR: MusicKey = MusicKey {
     tonic: KeyTonic::D,
+    key_type: KeyType::Minor,
+};
+pub const E_FLAT_MINOR: MusicKey = MusicKey {
+    tonic: KeyTonic::Eflat,
     key_type: KeyType::Minor,
 };
 pub const E_MINOR: MusicKey = MusicKey {
@@ -45,12 +77,24 @@ pub const F_MINOR: MusicKey = MusicKey {
     tonic: KeyTonic::F,
     key_type: KeyType::Minor,
 };
+pub const F_SHARP_MINOR: MusicKey = MusicKey {
+    tonic: KeyTonic::Fsharp,
+    key_type: KeyType::Minor,
+};
 pub const G_MINOR: MusicKey = MusicKey {
     tonic: KeyTonic::G,
     key_type: KeyType::Minor,
 };
+pub const G_SHARP_MINOR: MusicKey = MusicKey {
+    tonic: KeyTonic::Gsharp,
+    key_type: KeyType::Minor,
+};
 pub const A_MINOR: MusicKey = MusicKey {
     tonic: KeyTonic::A,
+    key_type: KeyType::Minor,
+};
+pub const B_FLAT_MINOR: MusicKey = MusicKey {
+    tonic: KeyTonic::Bflat,
     key_type: KeyType::Minor,
 };
 pub const B_MINOR: MusicKey = MusicKey {
