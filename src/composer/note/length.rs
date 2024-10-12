@@ -9,6 +9,29 @@ pub const ZERO: Length = Length::from_ticks(0);
 
 const TICKS_WHOLE: u32 = 2_u32.pow(16);
 
+/// Represents a note length. It can take many forms such as dotted notes and
+/// also n-toles.
+/// 
+/// It's best to use the provided constants, it should only rarely be necessary
+/// to use the constructors.
+/// 
+/// ```
+/// # use synth_music::prelude::*;
+/// # use note::length::*;
+/// # use tet12::*;
+/// let dotted_quarter = QUARTER.dot();
+/// let eighth_triole = EIGTH.triole();
+/// 
+/// let mut track = UnboundTrack::new(predefined::SineGenerator);
+/// 
+/// track.note(HALF, first(4));
+/// 
+/// track.pause(SIXTEENTH.triole());
+/// track.pause(SIXTEENTH.triole());
+/// track.pause(SIXTEENTH.triole());
+/// 
+/// track.note(EIGTH.dot(), third(3));
+/// ```
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct Length {
     // Number of 65536th values
@@ -20,6 +43,8 @@ impl Length {
     pub const INVALID: Self = Self::from_ticks(u32::MAX);
     pub const ZERO: Self = Self::from_ticks(0);
 
+    /// Construct a length from internally used "ticks". A "tick" is a 65536th
+    /// note, and therefore the shortest representable note.
     pub const fn from_ticks(ticks: u32) -> Self {
         Self {
             ticks,
@@ -27,16 +52,30 @@ impl Length {
         }
     }
 
+    /// Construct a length by subdividing a Whole note. The provided constants
+    /// already do this.
+    /// 
+    /// A subdivision of `0` is a whole note, `1` is half, `2` is a quarter,
+    /// etc...
     pub const fn from_subdivisions(subdivision: u32) -> Self {
         let ticks = TICKS_WHOLE / 2_u32.pow(subdivision);
         Self::from_ticks(ticks)
     }
 
+    /// Extend the note length by half of its value. Represents a "dot" after
+    /// the note in music theory.
+    /// 
+    /// For multiple dots, `multi_dot()` will have the same behaviour as in
+    /// music theory. Refrain from calling `dot()` multiple times for
+    /// this.
     pub const fn dot(mut self) -> Self {
         self.ticks += self.ticks / 2;        
         self
     }
 
+    /// Place a specified amount of dots on a note. Every dot will extend the
+    /// length by half of the previous extention. E.g. two dots on a whole note
+    /// will extend it by a half and a quarter note.
     pub const fn multi_dot(mut self, dots: usize) -> Self {
         let mut i = 0;
         let mut dot_value = self.ticks;
@@ -51,10 +90,25 @@ impl Length {
         self
     }
 
+    /// Mark the note length as being inside a triole. There should be two other
+    /// notes in the same measure with the same length and triole specifier for
+    /// this to be valid.
+    /// 
+    /// All three note lengths will combine to the double of the base length;
+    /// e.g. three notes in a quarter triole are equivalent to a half note
+    /// length.
     pub const fn triole(self) -> Self {
         self.ntole(3)
     }
 
+    /// Mark the note length as being inside an n-tole. There should be a total
+    /// of n notes in the same measure with the same length and n-tole specifier
+    /// for this to be valid.
+    /// 
+    /// All note lengths will combine to the double of the base length; e.g.
+    /// n notes in a quarter triole are equivalent to a half note length.
+    /// 
+    /// Currently, only odd values for n are accepted (3, 5, 7, etc...)
     pub const fn ntole(mut self, n: usize) -> Self {
         if n % 2 == 0 {
             panic!("Invalid n-tole");
@@ -66,6 +120,8 @@ impl Length {
         self
     }
 
+    /// Convert the note length into a float. This can be imprecise and
+    /// shouldn't be used for comparing note lenghts (with `==` or `!=`).
     pub fn to_float(&self) -> f32 {
         let base_length = self.ticks as f32 / TICKS_WHOLE as f32;
 
@@ -78,6 +134,9 @@ impl Length {
         return base_length * ntole_multiplier;
     }
 
+    /// For precicesly combining multiple note lengths into one.
+    /// 
+    /// Will return an error if there are incomplete n-toles.
     pub fn count_lengths(lengths: &Vec<Self>) -> Result<Self, &str> {
         let mut total_length = ZERO;
 
@@ -99,6 +158,7 @@ impl Length {
         Ok(total_length)
     }
 
+    /// constant multiplication
     pub const fn const_mul(mut self, rhs: u32) -> Self {
         self.ticks *= rhs;
         self
