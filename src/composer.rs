@@ -63,6 +63,7 @@ where
     fn convert_to_export_track(&self, section_info: SectionInfo) -> ExportTrack<U>;
 }
 
+/// Place stacked notes on a track.
 #[macro_export]
 macro_rules! notes {
     ( $track:expr, $len:expr, $( $args:expr ),* ) => {
@@ -76,6 +77,11 @@ macro_rules! notes {
     };
 }
 
+/// Place a lot of notes sequentially on a track. All notes are individual notes
+/// (no stacked notes), and the length will be the same for every note.
+/// 
+/// Please be careful with this when using a `MeasureTrack`, the placed notes
+/// cannot go beyond measure boundaries.
 #[macro_export]
 macro_rules! sequential_notes {
     ( $track:expr, $len:expr, $( $args:expr ),+ ) => {

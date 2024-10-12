@@ -126,6 +126,14 @@ macro_rules! count {
     ( $x:tt $($xs:tt)* ) => (1usize + count!($($xs)*));
 }
 
+/// Render a number of tracks into a buffer with the given section info. This
+/// represents a section, where all tracks play at once.
+/// 
+/// This will print a progress bar showing how many tracks have been rendered
+/// already.
+/// 
+/// Internally, multithreading is used for rendering multiple tracks in
+/// parallel.
 #[macro_export]
 macro_rules! section {
     ( $section_info:expr, $( $track:expr ),+ $(,)? ) => {
@@ -179,6 +187,8 @@ macro_rules! section {
     };
 }
 
+/// Append multiple sections together to form a single buffer for the whole
+/// composition. This final buffer can then be exported into a file.
 #[macro_export]
 macro_rules! composition {
     ( $first_section:expr, $( $section:expr ),* $(,)? ) => {
