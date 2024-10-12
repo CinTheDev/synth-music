@@ -3,7 +3,8 @@ pub mod wav_export;
 
 use std::time::Duration;
 
-use export_info::*;
+#[doc(inline)]
+pub use export_info::*;
 use crate::instrument::{Instrument, BufferInfo};
 use crate::progress_bars;
 
