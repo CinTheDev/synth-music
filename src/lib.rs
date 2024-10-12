@@ -473,7 +473,7 @@ This enforcing of measure bounds serves to prevent mistakes where the measure
 bounds are violated and the track becomes desynchronized with the rest.
 
 MeasureTrack also provides access to the time signature features. More on this
-is [TODO: reference location]
+is [here](`composer::TimeSignature`).
 
 ```rust
 use synth_music::prelude::*;
@@ -590,8 +590,8 @@ sequential_notes!(track, QUARTER.triole(),
 
 ### Custom implementation
 
-The user can also provide their own implementation for Tracks. More on this
-[TODO: reference location]
+The user can also provide their own implementation for Tracks. For more info,
+check [`composer::MusicTrack`].
 
 */
 
