@@ -1,3 +1,63 @@
+// Major keys
+pub const C_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::C,
+    key_type: KeyType::Major,
+};
+pub const D_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::D,
+    key_type: KeyType::Major,
+};
+pub const E_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::E,
+    key_type: KeyType::Major,
+};
+pub const F_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::F,
+    key_type: KeyType::Major,
+};
+pub const G_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::G,
+    key_type: KeyType::Major,
+};
+pub const A_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::A,
+    key_type: KeyType::Major,
+};
+pub const B_MAJOR: MusicKey = MusicKey {
+    tonic: KeyTonic::B,
+    key_type: KeyType::Major,
+};
+
+// Minor keys
+pub const C_MINOR: MusicKey = MusicKey {
+    tonic: KeyTonic::C,
+    key_type: KeyType::Minor,
+};
+pub const D_MINOR: MusicKey = MusicKey {
+    tonic: KeyTonic::D,
+    key_type: KeyType::Minor,
+};
+pub const E_MINOR: MusicKey = MusicKey {
+    tonic: KeyTonic::E,
+    key_type: KeyType::Minor,
+};
+pub const F_MINOR: MusicKey = MusicKey {
+    tonic: KeyTonic::F,
+    key_type: KeyType::Minor,
+};
+pub const G_MINOR: MusicKey = MusicKey {
+    tonic: KeyTonic::G,
+    key_type: KeyType::Minor,
+};
+pub const A_MINOR: MusicKey = MusicKey {
+    tonic: KeyTonic::A,
+    key_type: KeyType::Minor,
+};
+pub const B_MINOR: MusicKey = MusicKey {
+    tonic: KeyTonic::B,
+    key_type: KeyType::Minor,
+};
+
 /// The tonic of a music key
 #[derive(Clone, Copy)]
 pub enum KeyTonic {
