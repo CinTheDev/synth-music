@@ -10,6 +10,41 @@ use crate::file_export::export_info::{ExportTrack, SectionInfo};
 
 pub use time_signature::TimeSignature;
 
+/// A trait for the general behaviour of Tracks that expose functionality for
+/// placing notes. Only implement this as an alternative to MeasureTrack or
+/// UnboundTrack, if these provided implementations don't satisfy your needs.
+/// 
+/// # Implementation details
+/// 
+/// ## pause, note, notes
+/// 
+/// These functions all place `Note` structs in the track. A `Note` represents
+/// either a pause, a single note, or multiple stacked notes. All functions take
+/// a length for the note to occupy. These functions can be called by the user,
+/// and are called by the Track macros like `sequential_notes!` or `notes!`.
+/// They also have to return a mutable reference to the placed note.
+/// 
+/// ## start_dynamic_change, end_dynamic_change
+/// 
+/// Mark the start and end of a dynamics change. The dynamics must interpolate
+/// over the marked region, going from the currently active intensity to the
+/// intensity specified in end_dynamic_change.
+/// 
+/// ## set_intensity, set_play_fraction
+/// 
+/// Set the currently active property (intensity, play_fraction). Only notes
+/// placed after the function call are affected; all notes that are already
+/// placed remain unchanged.
+/// 
+/// 
+/// ## convert_to_export_track
+/// 
+/// Usually called by the render macros / functions. An export track is an
+/// alternative representation of the track that is convenient for rendering.
+/// 
+/// Please refer to the `ExportTrack` documentation for details on the
+/// conversion and structure of it.
+/// 
 pub trait MusicTrack<T, U>
 where 
     T: ScaledValue,
