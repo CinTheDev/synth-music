@@ -1,4 +1,4 @@
-use super::note::Length;
+use super::Length;
 
 /// Represents a time signature from music for a Track.
 /// 

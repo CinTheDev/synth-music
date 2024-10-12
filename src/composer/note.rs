@@ -1,4 +1,4 @@
-use super::music_key::MusicKey;
+use super::MusicKey;
 
 pub mod length;
 #[doc(inline)]

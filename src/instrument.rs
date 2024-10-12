@@ -1,6 +1,6 @@
 pub mod predefined;
 
-use crate::file_export::export_info::Tone;
+use crate::file_export::Tone;
 use std::time::Duration;
 
 /// A simple buffer that is returned by `render_buffer` of `Instrument`.

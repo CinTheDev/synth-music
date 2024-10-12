@@ -1,5 +1,5 @@
-use crate::composer::music_key::{MusicKey, KeyType, KeyTonic};
-use crate::composer::note::ScaledValue;
+use crate::composer::{MusicKey, KeyType, KeyTonic};
+use crate::composer::ScaledValue;
 
 /// An abstract representation of a note value dependent on a `MusicKey`.
 /// Construct these with the functions `first(x)`, `second(x)`, ...

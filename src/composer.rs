@@ -7,7 +7,7 @@ pub mod time_signature;
 use crate::instrument::Instrument;
 
 #[doc(inline)]
-pub use note::{Note, Length, ScaledValue};
+pub use note::{Note, length, Length, ScaledValue};
 #[doc(inline)]
 pub use time_signature::TimeSignature;
 #[doc(inline)]
@@ -17,7 +17,7 @@ pub use unbound_track::UnboundTrack;
 #[doc(inline)]
 pub use measure_track::MeasureTrack;
 #[doc(inline)]
-pub use crate::file_export::export_info::{ExportTrack, SectionInfo};
+pub use crate::file_export::export_info::{ExportTrack, SectionInfo, Tone};
 
 /// A trait for the general behaviour of Tracks that expose functionality for
 /// placing notes. Only implement this as an alternative to MeasureTrack or

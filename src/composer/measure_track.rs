@@ -1,9 +1,11 @@
-use super::note::{Note, ScaledValue, length, DynamicsFlag};
-use length::Length;
-use super::{SectionInfo, MusicTrack};
-use super::TimeSignature;
+use super::{Note, ScaledValue, length, Length};
+use super::note::DynamicsFlag;
+
+use super::{TimeSignature, SectionInfo, MusicTrack};
+use super::{ExportTrack, Tone};
+
 use crate::instrument::Instrument;
-use crate::file_export::export_info::{ExportTrack, Tone};
+
 use std::time::Duration;
 use std::ops::Range;
 

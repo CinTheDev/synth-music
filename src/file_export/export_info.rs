@@ -1,7 +1,7 @@
 use std::time::Duration;
 use std::ops::Range;
 use crate::instrument::Instrument;
-use crate::composer::music_key::MusicKey;
+use crate::composer::MusicKey;
 
 /// The export version of a track. All `MusicTrack` types are able to convert to
 /// this.
