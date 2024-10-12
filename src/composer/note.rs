@@ -1,6 +1,7 @@
 use super::music_key::MusicKey;
 
 pub mod length;
+#[doc(inline)]
 pub use length::Length;
 
 /// Represents an abstract note value that is dependent on the music key. Take
