@@ -158,12 +158,6 @@ impl Length {
         Ok(total_length)
     }
 
-    /// constant multiplication
-    pub const fn const_mul(mut self, rhs: u32) -> Self {
-        self.ticks *= rhs;
-        self
-    }
-
     fn ntole_parts_from_index(ntole_index: u8) -> u16 {
         ntole_index as u16 * 2 + 1
     }
