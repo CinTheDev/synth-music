@@ -5,6 +5,15 @@ use crate::file_export::export_info::{ExportTrack, Tone};
 use std::ops::Range;
 use std::time::Duration;
 
+/// The most basic implementation of `MusicTrack` without additional checks
+/// or constraints.
+/// 
+/// Essentially, this type of Track is just a raw track of notes
+/// without measures, time signature, or anything else. Use this for small scale
+/// tests and very simple melodies, where it would be unnecessary to manually
+/// place measures as with `MeasureTrack`.
+/// 
+/// Use `MeasureTrack` for regular melodies.
 #[derive(Clone)]
 pub struct UnboundTrack<T: ScaledValue, U: Instrument> {
     notes: Vec<Note<T>>,
@@ -85,6 +94,7 @@ where
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
     U: Instrument,
 {
+    /// Create a new empty track with the assigned instrument
     pub fn new(instrument: U) -> Self {
         Self {
             notes: Vec::new(),
