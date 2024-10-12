@@ -1,4 +1,5 @@
-use super::note::{Note, ScaledValue, Length, DynamicsFlag};
+use super::note::{Note, ScaledValue, length, DynamicsFlag};
+use length::Length;
 use super::{SectionInfo, MusicTrack};
 use super::TimeSignature;
 use crate::instrument::Instrument;
@@ -145,7 +146,7 @@ where
             for note in &measure.notes {
                 let position_in_measure =
                     Length::count_lengths(&note_lengths)
-                    .unwrap_or(Length::INVALID);
+                    .unwrap_or(length::INVALID);
 
                 notes.push(((*note).clone(), position_in_measure));
                 note_lengths.push(note.length);

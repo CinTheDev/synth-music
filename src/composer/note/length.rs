@@ -1,3 +1,14 @@
+pub const INVALID:   Length = Length::from_ticks(u32::MAX);
+pub const ZERO:      Length = Length::from_ticks(0);
+
+pub const WHOLE:     Length = Length::from_subdivisions(0);
+pub const HALF:      Length = Length::from_subdivisions(1);
+pub const QUARTER:   Length = Length::from_subdivisions(2);
+pub const EIGTH:     Length = Length::from_subdivisions(3);
+pub const SIXTEENTH: Length = Length::from_subdivisions(4);
+
+const TICKS_WHOLE: u32 = 2_u32.pow(16);
+
 /// Represents a note length. It can take many forms such as dotted notes and
 /// also n-toles.
 /// 
@@ -29,17 +40,6 @@ pub struct Length {
 }
 
 impl Length {
-    pub const INVALID: Self = Self::from_ticks(u32::MAX);
-    pub const ZERO: Self = Self::from_ticks(0);
-
-    pub const WHOLE:     Length = Length::from_subdivisions(0);
-    pub const HALF:      Length = Length::from_subdivisions(1);
-    pub const QUARTER:   Length = Length::from_subdivisions(2);
-    pub const EIGTH:     Length = Length::from_subdivisions(3);
-    pub const SIXTEENTH: Length = Length::from_subdivisions(4);
-
-    const TICKS_WHOLE: u32 = 2_u32.pow(16);
-
     /// Construct a length from internally used "ticks". A "tick" is a 65536th
     /// note, and therefore the shortest representable note.
     pub const fn from_ticks(ticks: u32) -> Self {
@@ -55,7 +55,7 @@ impl Length {
     /// A subdivision of `0` is a whole note, `1` is half, `2` is a quarter,
     /// etc...
     pub const fn from_subdivisions(subdivision: u32) -> Self {
-        let ticks = Self::TICKS_WHOLE / 2_u32.pow(subdivision);
+        let ticks = TICKS_WHOLE / 2_u32.pow(subdivision);
         Self::from_ticks(ticks)
     }
 
@@ -120,7 +120,7 @@ impl Length {
     /// Convert the note length into a float. This can be imprecise and
     /// shouldn't be used for comparing note lenghts (with `==` or `!=`).
     pub fn to_float(&self) -> f32 {
-        let base_length = self.ticks as f32 / Self::TICKS_WHOLE as f32;
+        let base_length = self.ticks as f32 / TICKS_WHOLE as f32;
 
         let ntole_multiplier = if self.ntole_index == 0 {
             1.0
@@ -135,7 +135,7 @@ impl Length {
     /// 
     /// Will return an error if there are incomplete n-toles.
     pub fn count_lengths(lengths: &Vec<Self>) -> Result<Self, &str> {
-        let mut total_length = Self::ZERO;
+        let mut total_length = ZERO;
 
         let mut ntole_count: Vec<(Self, u16)> = Vec::new();
 
