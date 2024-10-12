@@ -40,3 +40,9 @@ or meaningful values.
 - Introduce constants for Length and use everywhere
 - Introduce constants for MusicKey and use in examples
 - Make `use` instructions more consistent and efficient
+
+### Seperate future TODOs
+
+All my ideas for future versions are located in `TODOs-future.md`. These ideas
+should be seperated into `TODOs-1.1.md` if they do not require breaking changes,
+and into `TODOs-2.0md` if they do require breaking changes.
