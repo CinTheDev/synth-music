@@ -1,18 +1,19 @@
 // Composer imports
 pub use crate::composer;
-pub use composer::MusicTrack;
 
 pub use composer::{
-    music_key::*,
+    music_key,
     note::length,
     Note,
     ScaledValue,
 
     TimeSignature,
 
+    MusicTrack,
     UnboundTrack,
     measure_track::*,
 };
+pub use music_key::{MusicKey, KeyTonic, KeyType};
 
 pub use crate::{notes, sequential_notes, section, composition};
 
