@@ -18,10 +18,6 @@ better to do this early while still familiar with the code.
 Also make sure to include some examples inline with documentation, research
 online what best practises for this are.
 
-### README.md
-
-Fill the readme with useful text as described above.
-
 ### More and better examples
 
 All examples right now only serve testing purposes and aren't that great for
@@ -40,9 +36,3 @@ or meaningful values.
 - Introduce constants for Length and use everywhere
 - Introduce constants for MusicKey and use in examples
 - Make `use` instructions more consistent and efficient
-
-### Seperate future TODOs
-
-All my ideas for future versions are located in `TODOs-future.md`. These ideas
-should be seperated into `TODOs-1.1.md` if they do not require breaking changes,
-and into `TODOs-2.0md` if they do require breaking changes.
