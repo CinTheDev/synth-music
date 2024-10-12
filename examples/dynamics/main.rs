@@ -54,7 +54,7 @@ fn example_track<T>(instrument: T) -> MeasureTrack<tet12::TET12ScaledTone, T>
 where 
     T: Instrument<ConcreteValue = tet12::TET12ConcreteTone>
 {
-    use note::length::*;
+    use length::*;
     use tet12::*;
 
     let time_signature = TimeSignature::new(4, 4);

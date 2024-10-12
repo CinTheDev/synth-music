@@ -1,6 +1,6 @@
 use synth_music::prelude::*;
 use tet12::*;
-use note::length::*;
+use length::*;
 use crate::instruments::drumset::DrumsetAction;
 
 // BEGIN PART

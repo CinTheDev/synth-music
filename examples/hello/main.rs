@@ -10,7 +10,7 @@ fn main() {
 
 fn example_1() {
     use tet12::*;
-    use note::length::*;
+    use length::*;
 
     let four_four =
         TimeSignature::new(4, 4)
@@ -87,7 +87,7 @@ fn example_1() {
 
 fn example_2() {
     use tet12::*;
-    use note::length::*;
+    use length::*;
 
     let instrument = predefined::SineGenerator;
 
@@ -116,7 +116,7 @@ fn example_2() {
 
 fn example_3() {
     use tet12::*;
-    use note::length::*;
+    use length::*;
 
     let instrument = predefined::SineGenerator;
 
