@@ -599,6 +599,7 @@ pub mod composer;
 pub mod instrument;
 pub mod file_export;
 pub mod prelude;
+#[doc(hidden)]
 pub mod progress_bars;
 
 #[cfg(test)]

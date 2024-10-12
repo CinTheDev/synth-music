@@ -119,6 +119,7 @@ fn contains_loud_samples(buffer: &SoundBuffer) -> bool {
     return false;
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! count {
     () => (0usize);
