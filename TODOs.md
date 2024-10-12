@@ -18,12 +18,6 @@ better to do this early while still familiar with the code.
 Also make sure to include some examples inline with documentation, research
 online what best practises for this are.
 
-### Improve documentation structure
-
-Now that every important submodule is documented, try to make the documentation
-even better by improving the structure of the explanations, and mark it with
-some attributes to inline where needed, or fill in references to other parts.
-
 ### README.md
 
 Fill the readme with useful text as described above.
