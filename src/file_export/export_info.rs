@@ -3,27 +3,44 @@ use std::ops::Range;
 use crate::instrument::Instrument;
 use crate::composer::music_key::MusicKey;
 
-// Contains raw tones
+/// The export version of a track. All `MusicTrack` types are able to convert to
+/// this.
+/// 
+/// It only contains the assigned instrument and all the tones of the track.
 pub struct ExportTrack<T: Instrument> {
     pub tones: Vec<Tone<T::ConcreteValue>>,
     pub instrument: T,
 }
 
-// Represents a raw tone - just a frequency, duration, and intensity
+/// A raw tone. This is essentailly the export version of a `Note`.
+/// 
+/// The values are conrete values; again, no values are a pause, one value is a
+/// single tone, and multiple values are multiple tones played at once.
+/// 
+/// The length is converted to a duration. The intensity is represented as a
+/// range, where the start intensity is the intensity at the beginning, and the
+/// end intensity is the intensity at the end of the duration.
+/// 
+/// There's also an additional field `beat_emphasis`. If there's a value there,
+/// the note lies on a beat specified in the time signature, and contains the
+/// emphasis level. If there's no value then the note is an offbeat.
 pub struct Tone<T> {
     pub concrete_values: Vec<T>,
     pub play_duration: Duration,
     pub tone_duration: Duration,
 
     pub intensity: Range<f32>,
-    pub beat_emphasis: Option<f32>, // None is offbeat
+    pub beat_emphasis: Option<f32>,
 }
 
+/// A collection of important values that are global for the entire composition.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct CompositionSettings {
     pub sample_rate: u32,
 }
 
+/// A collection of important values that are local to a section. Unlike
+/// `CompositionSettings`, these values can change throughout the composition.
 #[derive(Clone, Copy)]
 pub struct SectionInfo<'a> {
     pub bpm: f32,
@@ -32,6 +49,10 @@ pub struct SectionInfo<'a> {
     pub settings: &'a CompositionSettings,
 }
 
+/// A buffer that holds samples of rendered sections.
+/// 
+/// There is additional info stored used for correctly mixing or appending two
+/// buffers together.
 #[derive(Clone)]
 pub struct SoundBuffer {
     pub samples: Vec<f32>,
@@ -49,6 +70,8 @@ impl<T: Instrument> ExportTrack<T> {
 }
 
 impl SoundBuffer {
+    /// Create a new SoundBuffer with the specified values. This shouldn't be
+    /// used by the user.
     pub fn new(samples: Vec<f32>, active_samples: usize, settings: CompositionSettings) -> Self {
         Self {
             samples,
@@ -57,12 +80,15 @@ impl SoundBuffer {
         }
     }
 
+    /// Calculate the point in time from a specific index using the sample rate
     pub fn time_from_index(&self, index: usize) -> Duration {
         Duration::from_secs_f64(
             index as f64 / self.settings.sample_rate as f64
         )
     }
 
+    /// Add two buffers together. The length of both buffers does not need to be
+    /// the same.
     pub fn mix(self, other: Self) -> Self {
         assert_eq!(self.settings, other.settings);
 
@@ -85,6 +111,10 @@ impl SoundBuffer {
         }
     }
 
+    /// Append the given buffer to the current buffer.
+    /// 
+    /// Depending on the internal state, this function might partially mix both
+    /// buffers (e.g. when one buffer has more samples because of reverb).
     pub fn append(&mut self, other: Self) {
         let inactive_samples = self.samples.len() - self.active_samples;
 
@@ -109,6 +139,8 @@ impl SoundBuffer {
         }
     }
 
+    /// If the buffer is shorter than expected, extend the buffer with silence
+    /// until the expected length is met.
     pub fn extend_to_active_samples(&mut self) {
         if self.active_samples < self.samples.len() { return }
 
@@ -119,10 +151,16 @@ impl SoundBuffer {
         }
     }
 
+    /// Retrieve the internally saved settings
     pub fn settings(&self) -> CompositionSettings {
         self.settings
     }
 
+    /// Retrieve the amount of "active samples".
+    /// 
+    /// These "active samples" describe how long this buffer is expected to be
+    /// / how much time it takes up in the composition. This value is used
+    /// internally, and the user shouldn't need to work with this.
     pub fn active_samples(&self) -> usize {
         self.active_samples
     }
