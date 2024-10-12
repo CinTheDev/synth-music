@@ -5,6 +5,7 @@ use std::io::{BufWriter, Write};
 use std::path::PathBuf;
 use std::str::FromStr;
 
+/// Exports buffers as WAV files.
 pub struct WavExport {
     pub path: PathBuf,
 }
