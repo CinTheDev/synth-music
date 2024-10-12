@@ -10,7 +10,7 @@ fn main() {
 
 fn example_1() {
     use tet12::*;
-    use note::Length;
+    use note::length::*;
 
     let four_four =
         TimeSignature::new(4, 4)
