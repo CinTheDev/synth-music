@@ -14,6 +14,7 @@ use super::note::Length;
 /// measure, and it determines which beats are emphasized.
 /// 
 /// ```
+/// # use synth_music::prelude::TimeSignature;
 /// let four_four =
 ///     TimeSignature::new(4, 4)  // Create a time signature of type 4/4
 ///     .set_beat(0, 1.1)         // Strongly emphasize the first beat
