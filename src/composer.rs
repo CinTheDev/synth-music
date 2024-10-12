@@ -66,7 +66,7 @@ where
 /// Place stacked notes on a track.
 #[macro_export]
 macro_rules! notes {
-    ( $track:expr, $len:expr, $( $args:expr ),* ) => {
+    ( $track:expr, $len:expr, $( $args:expr ),* $(,)? ) => {
         {
             let mut temp_vec = Vec::new();
             $(
@@ -84,7 +84,7 @@ macro_rules! notes {
 /// cannot go beyond measure boundaries.
 #[macro_export]
 macro_rules! sequential_notes {
-    ( $track:expr, $len:expr, $( $args:expr ),+ ) => {
+    ( $track:expr, $len:expr, $( $args:expr ),+ $(,)? ) => {
         $(
             $track.note($len, $args);
         )*
