@@ -250,3 +250,5 @@ impl std::ops::MulAssign<u32> for Length {
         self.ticks *= rhs;
     }
 }
+
+mod tests;
