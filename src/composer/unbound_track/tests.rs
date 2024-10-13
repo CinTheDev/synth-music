@@ -42,6 +42,12 @@ fn conversion_simple() {
         seventh(3),
     );
 
+    sequential_notes!(track, QUARTER.triole(),
+        first(4),
+        third(4),
+        fifth(4),
+    );
+
     let info = SectionInfo {
         bpm: 120.0,
         key: music_key::C_MAJOR,
@@ -105,6 +111,28 @@ fn conversion_simple() {
             ],
             play_duration: Duration::from_secs_f32(time_whole * 1.0),
             tone_duration: Duration::from_secs_f32(time_whole * 1.0),
+            intensity: 1.0..1.0,
+            beat_emphasis: Some(1.0),
+        },
+
+        Tone {
+            concrete_values: vec![TET12ConcreteTone(C4)],
+            play_duration: Duration::from_secs_f32(time_whole * 0.5 / 3.0),
+            tone_duration: Duration::from_secs_f32(time_whole * 0.5 / 3.0),
+            intensity: 1.0..1.0,
+            beat_emphasis: Some(1.0),
+        },
+        Tone {
+            concrete_values: vec![TET12ConcreteTone(E4)],
+            play_duration: Duration::from_secs_f32(time_whole * 0.5 / 3.0),
+            tone_duration: Duration::from_secs_f32(time_whole * 0.5 / 3.0),
+            intensity: 1.0..1.0,
+            beat_emphasis: Some(1.0),
+        },
+        Tone {
+            concrete_values: vec![TET12ConcreteTone(G4)],
+            play_duration: Duration::from_secs_f32(time_whole * 0.5 / 3.0),
+            tone_duration: Duration::from_secs_f32(time_whole * 0.5 / 3.0),
             intensity: 1.0..1.0,
             beat_emphasis: Some(1.0),
         },
