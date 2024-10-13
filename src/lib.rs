@@ -78,7 +78,7 @@ where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
     use tet12::*;        // Note values
-    use note::length::*; // Note lengths
+    use length::*; // Note lengths
 
     let mut track = UnboundTrack::new(instrument);
     track.set_intensity(0.7);
@@ -138,7 +138,7 @@ Below is an example to demonstrate that.
 use synth_music::prelude::*;
 
 use tet12::*;
-use note::length::*;
+use length::*;
 
 let mut track = UnboundTrack::new(predefined::SineGenerator);
 
@@ -157,7 +157,7 @@ where
     U: Instrument<ConcreteValue = TET12ConcreteTone>,
 {
     use tet12::*;
-    use note::length::*;
+    use length::*;
 
     notes!(track, HALF,
         first(3),
@@ -186,7 +186,7 @@ These dynamics can change dynamically (no pun intended) throughout the song.
 ```rust
 use synth_music::prelude::*;
 use tet12::*;
-use note::length::*;
+use length::*;
 
 let mut track = UnboundTrack::new(predefined::SineGenerator);
 
@@ -478,7 +478,7 @@ is [here](`composer::TimeSignature`).
 ```rust
 use synth_music::prelude::*;
 use tet12::*;
-use note::length::*;
+use length::*;
 
 let instrument = predefined::SineGenerator;
 // 4/4 Time
@@ -510,7 +510,7 @@ Now an example that is wrong:
 ```should_panic
 use synth_music::prelude::*;
 use tet12::*;
-use note::length::*;
+use length::*;
 
 let instrument = predefined::SineGenerator;
 let time_signature = TimeSignature::new(4, 4);
@@ -565,7 +565,7 @@ are no measure boundaries that serve as orientation points for the user.
 ```rust
 use synth_music::prelude::*;
 use tet12::*;
-use note::length::*;
+use length::*;
 
 let mut track = UnboundTrack::new(predefined::SineGenerator);
 track.set_intensity(0.7);

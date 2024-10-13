@@ -17,7 +17,7 @@ const TICKS_WHOLE: u32 = 2_u32.pow(16);
 /// 
 /// ```
 /// # use synth_music::prelude::*;
-/// # use note::length::*;
+/// # use length::*;
 /// # use tet12::*;
 /// let dotted_quarter = QUARTER.dot();
 /// let eighth_triole = EIGTH.triole();
