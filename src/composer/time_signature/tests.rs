@@ -48,3 +48,24 @@ fn test_construction() {
         beat_intensities: vec![1.0; 32],
     });
 }
+
+#[test]
+fn test_measure_saturation() {
+    let four_four = TimeSignature::new(4, 4);
+    let two_four = TimeSignature::new(2, 4);
+
+    let six_eight = TimeSignature::new(6, 8);
+    let five_four = TimeSignature::new(5, 4);
+    let thirtytwo_one = TimeSignature::new(32, 1);
+    let one_sixteen = TimeSignature::new(1, 16);
+
+    assert!(four_four.is_measure_saturated(WHOLE));
+    assert!(two_four.is_measure_saturated(HALF));
+    assert!(six_eight.is_measure_saturated(QUARTER * 3));
+    assert!(five_four.is_measure_saturated(WHOLE + QUARTER));
+    assert!(thirtytwo_one.is_measure_saturated(WHOLE * 32));
+    assert!(one_sixteen.is_measure_saturated(SIXTEENTH));
+
+    assert!(! four_four.is_measure_saturated(WHOLE + SIXTEENTH));
+    assert!(! six_eight.is_measure_saturated(QUARTER * 3 - EIGTH));
+}
