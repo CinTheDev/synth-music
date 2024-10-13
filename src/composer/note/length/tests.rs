@@ -39,8 +39,8 @@ fn test_multidot() {
 
     assert_eq!(quarter_dot, QUARTER + EIGTH);
     assert_eq!(quarter_2dot, QUARTER + EIGTH + SIXTEENTH);
-    assert_eq!(whole_3dot, WHOLE + HALF + QUARTER);
-    assert_eq!(whole4_4dot, WHOLE*4 + WHOLE*2 + WHOLE + HALF);
+    assert_eq!(whole_3dot, WHOLE + HALF + QUARTER + EIGTH);
+    assert_eq!(whole4_4dot, WHOLE*4 + WHOLE*2 + WHOLE + HALF + QUARTER);
 }
 
 #[test]
