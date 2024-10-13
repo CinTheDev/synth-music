@@ -141,6 +141,51 @@ fn conversion_simple() {
     assert_eq_tones(&result.tones, &expected_tones);
 }
 
+#[test]
+fn conversion_bpm() {
+    let mut track = UnboundTrack::new(instrument);
+
+    track.note(QUARTER, first(4));
+
+    let info_1 = SectionInfo {
+        bpm: 120.0,
+        key: music_key::C_MAJOR,
+        settings: &SETTINGS,
+    };
+    let info_2 = SectionInfo {
+        bpm: 100.0,
+        key: music_key::C_MAJOR,
+        settings: &SETTINGS,
+    };
+    let info_3 = SectionInfo {
+        bpm: 210.0,
+        key: music_key::C_MAJOR,
+        settings: &SETTINGS,
+    };
+    let info_4 = SectionInfo {
+        bpm: 32.7,
+        key: music_key::C_MAJOR,
+        settings: &SETTINGS,
+    };
+
+    let duration_1 = Duration::from_secs_f32(60.0 / 120.0).as_secs_f32();
+    let duration_2 = Duration::from_secs_f32(60.0 / 100.0).as_secs_f32();
+    let duration_3 = Duration::from_secs_f32(60.0 / 210.0).as_secs_f32();
+    let duration_4 = Duration::from_secs_f32(60.0 / 32.7).as_secs_f32();
+
+    let result_1 = track.convert_to_export_track(info_1).tones[0].play_duration.as_secs_f32();
+    let result_2 = track.convert_to_export_track(info_2).tones[0].play_duration.as_secs_f32();
+    let result_3 = track.convert_to_export_track(info_3).tones[0].play_duration.as_secs_f32();
+    let result_4 = track.convert_to_export_track(info_4).tones[0].play_duration.as_secs_f32();
+
+    let epsilon = 0.001;
+
+    assert_eq_f32(result_1, duration_1, epsilon);
+    assert_eq_f32(result_2, duration_2, epsilon);
+    assert_eq_f32(result_3, duration_3, epsilon);
+    assert_eq_f32(result_4, duration_4, epsilon);
+}
+
 // Utility functions
 
 fn assert_eq_tones<T>(a: &Vec<Tone<T>>, b: &Vec<Tone<T>>)
