@@ -164,19 +164,19 @@ fn test_conversion_d_major() {
 
     let d4 = first(4).to_concrete_value(key);
     let e4 = second(4).to_concrete_value(key);
-    let f4 = third(4).to_concrete_value(key);
+    let f4_sharp = third(4).to_concrete_value(key);
     let g4 = fourth(4).to_concrete_value(key);
     let a4 = fifth(4).to_concrete_value(key);
     let b4 = sixth(4).to_concrete_value(key);
-    let c5 = seventh(4).to_concrete_value(key);
+    let c5_sharp = seventh(4).to_concrete_value(key);
 
-    assert_eq!(d4, TET12ConcreteTone(-7));
-    assert_eq!(e4, TET12ConcreteTone(-5));
-    assert_eq!(f4, TET12ConcreteTone(-4));
-    assert_eq!(g4, TET12ConcreteTone(-2));
-    assert_eq!(a4, TET12ConcreteTone( 0));
-    assert_eq!(b4, TET12ConcreteTone( 2));
-    assert_eq!(c5, TET12ConcreteTone( 3));
+    assert_eq!(d4,       TET12ConcreteTone(-7    ));
+    assert_eq!(e4,       TET12ConcreteTone(-5    ));
+    assert_eq!(f4_sharp, TET12ConcreteTone(-4 + 1));
+    assert_eq!(g4,       TET12ConcreteTone(-2    ));
+    assert_eq!(a4,       TET12ConcreteTone( 0    ));
+    assert_eq!(b4,       TET12ConcreteTone( 2    ));
+    assert_eq!(c5_sharp, TET12ConcreteTone( 3 + 1));
 }
 
 #[test]
@@ -202,7 +202,7 @@ fn test_conversion_f_minor() {
 
 #[test]
 fn test_conversion_a_major() {
-    let key = crate::prelude::music_key::A_MAJOR;
+    let key = crate::prelude::music_key::A_MINOR;
 
     let a4 = first(4).to_concrete_value(key);
     let b4 = second(4).to_concrete_value(key);
