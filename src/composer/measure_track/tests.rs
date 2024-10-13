@@ -21,19 +21,22 @@ const B4: i32 =  2;
 
 #[test]
 fn conversion_simple() {
-    let mut track = UnboundTrack::new(instrument);
+    let four_four = TimeSignature::new(4, 4);
+
+    let mut track = MeasureTrack::new(instrument, four_four);
     track.set_intensity(1.0);
     track.set_play_fraction(1.0);
 
     track.note(QUARTER, first(4));
     track.note(HALF, second(4));
 
-    sequential_notes!(track, EIGTH,
+    sequential_notes!(track, SIXTEENTH,
         third(3),
         fourth(3),
         fifth(3).sharp(),
         sixth(3),
     );
+    track.measure().unwrap();
 
     notes!(track, WHOLE,
         first(3),
@@ -41,12 +44,14 @@ fn conversion_simple() {
         fifth(3),
         seventh(3),
     );
+    track.measure().unwrap();
 
-    sequential_notes!(track, QUARTER.triole(),
+    sequential_notes!(track, HALF.triole(),
         first(4),
         third(4),
         fifth(4),
     );
+    track.measure().unwrap();
 
     let info = SectionInfo {
         bpm: 120.0,
@@ -75,31 +80,31 @@ fn conversion_simple() {
 
         Tone {
             concrete_values: vec![TET12ConcreteTone(E4 - 12)],
-            play_duration: Duration::from_secs_f32(time_whole * 0.125),
-            tone_duration: Duration::from_secs_f32(time_whole * 0.125),
+            play_duration: Duration::from_secs_f32(time_whole * 0.0625),
+            tone_duration: Duration::from_secs_f32(time_whole * 0.0625),
             intensity: 1.0..1.0,
             beat_emphasis: Some(1.0),
         },
         Tone {
             concrete_values: vec![TET12ConcreteTone(F4 - 12)],
-            play_duration: Duration::from_secs_f32(time_whole * 0.125),
-            tone_duration: Duration::from_secs_f32(time_whole * 0.125),
+            play_duration: Duration::from_secs_f32(time_whole * 0.0625),
+            tone_duration: Duration::from_secs_f32(time_whole * 0.0625),
             intensity: 1.0..1.0,
-            beat_emphasis: Some(1.0),
+            beat_emphasis: None,
         },
         Tone {
             concrete_values: vec![TET12ConcreteTone(G4 - 12 + 1)],
-            play_duration: Duration::from_secs_f32(time_whole * 0.125),
-            tone_duration: Duration::from_secs_f32(time_whole * 0.125),
+            play_duration: Duration::from_secs_f32(time_whole * 0.0625),
+            tone_duration: Duration::from_secs_f32(time_whole * 0.0625),
             intensity: 1.0..1.0,
-            beat_emphasis: Some(1.0),
+            beat_emphasis: None,
         },
         Tone {
             concrete_values: vec![TET12ConcreteTone(A4 - 12)],
-            play_duration: Duration::from_secs_f32(time_whole * 0.125),
-            tone_duration: Duration::from_secs_f32(time_whole * 0.125),
+            play_duration: Duration::from_secs_f32(time_whole * 0.0625),
+            tone_duration: Duration::from_secs_f32(time_whole * 0.0625),
             intensity: 1.0..1.0,
-            beat_emphasis: Some(1.0),
+            beat_emphasis: None,
         },
 
         Tone {
@@ -117,24 +122,24 @@ fn conversion_simple() {
 
         Tone {
             concrete_values: vec![TET12ConcreteTone(C4)],
-            play_duration: Duration::from_secs_f32(time_whole * 0.5 / 3.0),
-            tone_duration: Duration::from_secs_f32(time_whole * 0.5 / 3.0),
+            play_duration: Duration::from_secs_f32(time_whole / 3.0),
+            tone_duration: Duration::from_secs_f32(time_whole / 3.0),
             intensity: 1.0..1.0,
             beat_emphasis: Some(1.0),
         },
         Tone {
             concrete_values: vec![TET12ConcreteTone(E4)],
-            play_duration: Duration::from_secs_f32(time_whole * 0.5 / 3.0),
-            tone_duration: Duration::from_secs_f32(time_whole * 0.5 / 3.0),
+            play_duration: Duration::from_secs_f32(time_whole / 3.0),
+            tone_duration: Duration::from_secs_f32(time_whole / 3.0),
             intensity: 1.0..1.0,
-            beat_emphasis: Some(1.0),
+            beat_emphasis: None,
         },
         Tone {
             concrete_values: vec![TET12ConcreteTone(G4)],
-            play_duration: Duration::from_secs_f32(time_whole * 0.5 / 3.0),
-            tone_duration: Duration::from_secs_f32(time_whole * 0.5 / 3.0),
+            play_duration: Duration::from_secs_f32(time_whole / 3.0),
+            tone_duration: Duration::from_secs_f32(time_whole / 3.0),
             intensity: 1.0..1.0,
-            beat_emphasis: Some(1.0),
+            beat_emphasis: None,
         },
     ];
 
@@ -143,9 +148,11 @@ fn conversion_simple() {
 
 #[test]
 fn conversion_bpm() {
-    let mut track = UnboundTrack::new(instrument);
+    let one_four = TimeSignature::new(1, 4);
+    let mut track = MeasureTrack::new(instrument, one_four);
 
     track.note(QUARTER, first(4));
+    track.measure().unwrap();
 
     let info_1 = SectionInfo {
         bpm: 120.0,
@@ -188,7 +195,8 @@ fn conversion_bpm() {
 
 #[test]
 fn conversion_dynamics() {
-    let mut track = UnboundTrack::new(instrument);
+    let time_signature = TimeSignature::new(25, 8);
+    let mut track = MeasureTrack::new(instrument, time_signature);
     track.set_intensity(0.5);
     track.set_play_fraction(1.0);
 
@@ -217,6 +225,7 @@ fn conversion_dynamics() {
     track.note(HALF, first(4));
     track.note(EIGTH, first(4));
     track.end_dynamic_change(1.0);
+    track.measure().unwrap();
 
     let info = SectionInfo {
         bpm: 120.0,
