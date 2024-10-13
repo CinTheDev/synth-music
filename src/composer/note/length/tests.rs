@@ -67,6 +67,57 @@ fn test_tofloat() {
     assert_eq_f32(whole2_2dot, 2.0 + 1.0 + 0.5, epsilon);
 }
 
+#[test]
+fn test_count_lengths() {
+    let collection_1 = vec![
+        QUARTER,
+        QUARTER,
+        HALF,
+    ];
+
+    let collection_2 = vec![
+        HALF.dot(),
+        QUARTER,
+        QUARTER,
+    ];
+
+    let collection_3 = vec![
+        HALF.triole(),
+        HALF.triole(),
+        WHOLE,
+        HALF.triole(),
+    ];
+
+    let collection_4 = vec![
+        QUARTER.ntole(5),
+        HALF.ntole(3),
+        QUARTER.ntole(5),
+        QUARTER.ntole(5),
+        HALF.ntole(3),
+        QUARTER.ntole(5),
+        QUARTER.ntole(5),
+        HALF.ntole(3),
+    ];
+
+    let collection_5 = vec![
+        WHOLE,
+        WHOLE,
+        WHOLE.triole(),
+    ];
+
+    let count_1 = Length::count_lengths(&collection_1).unwrap();
+    let count_2 = Length::count_lengths(&collection_2).unwrap();
+    let count_3 = Length::count_lengths(&collection_3).unwrap();
+    let count_4 = Length::count_lengths(&collection_4).unwrap();
+    let count_5 = Length::count_lengths(&collection_5);
+
+    assert_eq!(count_1, WHOLE);
+    assert_eq!(count_2, QUARTER * 5);
+    assert_eq!(count_3, WHOLE + HALF);
+    assert_eq!(count_4, HALF + QUARTER);
+    assert!(count_5.is_err());
+}
+
 // Utility functions
 
 fn assert_eq_f32(a: f32, b: f32, epsilon: f32) {
