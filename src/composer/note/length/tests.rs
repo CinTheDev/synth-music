@@ -113,8 +113,8 @@ fn test_count_lengths() {
 
     assert_eq!(count_1, WHOLE);
     assert_eq!(count_2, QUARTER * 5);
-    assert_eq!(count_3, WHOLE + HALF);
-    assert_eq!(count_4, HALF + QUARTER);
+    assert_eq!(count_3, WHOLE * 2);
+    assert_eq!(count_4, WHOLE + HALF);
     assert!(count_5.is_err());
 }
 
