@@ -263,6 +263,77 @@ fn conversion_dynamics() {
     }
 }
 
+#[test]
+fn conversion_emphasis() {
+    let four_four = TimeSignature::new(4, 4)
+        .set_beat(0, 1.1)
+        .set_beat(2, 1.01);
+
+    let mut track = MeasureTrack::new(instrument, four_four);
+
+    sequential_notes!(track, QUARTER,
+        first(4),
+        first(4),
+        first(4),
+        first(4),
+    );
+    track.measure().unwrap();
+
+    track.note(HALF.dot(), first(4));
+    track.note(QUARTER, first(4));
+    track.measure().unwrap();
+
+    track.note(EIGTH, first(4));
+    track.note(EIGTH, first(4));
+    track.note(HALF, first(4));
+    sequential_notes!(track, EIGTH.triole(),
+        first(4),
+        first(4),
+        first(4),
+    );
+    track.measure().unwrap();
+
+    let expected_emphasis = vec![
+        Some(1.1),
+        Some(1.0),
+        Some(1.01),
+        Some(1.0),
+
+        Some(1.1),
+        Some(1.0),
+
+        Some(1.1),
+        None,
+        Some(1.0),
+        Some(1.0),
+        None,
+        None,
+    ];
+
+    let info = SectionInfo {
+        bpm: 120.0,
+        key: music_key::C_MAJOR,
+        settings: &SETTINGS,
+    };
+
+    let result = track.convert_to_export_track(info).tones;
+
+    let epsilon = 0.01;
+
+    for i in 0..result.len() {
+        let result_emphasis = result[i].beat_emphasis;
+        let expect_emphasis = expected_emphasis[i];
+
+        if expect_emphasis.is_some() {
+            assert_eq_f32(result_emphasis.unwrap(), expect_emphasis.unwrap(), epsilon);
+        }
+        else {
+            assert!(result_emphasis.is_none());
+            assert!(expect_emphasis.is_none());
+        }
+    }
+}
+
 // Utility functions
 
 fn assert_eq_tones<T>(a: &Vec<Tone<T>>, b: &Vec<Tone<T>>)
