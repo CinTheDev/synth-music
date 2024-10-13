@@ -190,18 +190,21 @@ fn test_frequency_conversion() {
 
     let epsilon = 0.001;
 
-    assert!(compare_f32(a4, a4_expected, epsilon));
-    assert!(compare_f32(b4, b4_expected, epsilon));
-    assert!(compare_f32(c5, c5_expected, epsilon));
-    assert!(compare_f32(d5, d5_expected, epsilon));
-    assert!(compare_f32(e5, e5_expected, epsilon));
-    assert!(compare_f32(f5, f5_expected, epsilon));
-    assert!(compare_f32(g5, g5_expected, epsilon));
+    assert_eq_f32(a4, a4_expected, epsilon);
+    assert_eq_f32(b4, b4_expected, epsilon);
+    assert_eq_f32(c5, c5_expected, epsilon);
+    assert_eq_f32(d5, d5_expected, epsilon);
+    assert_eq_f32(e5, e5_expected, epsilon);
+    assert_eq_f32(f5, f5_expected, epsilon);
+    assert_eq_f32(g5, g5_expected, epsilon);
 }
 
 // Utility functions
 
-fn compare_f32(a: f32, b: f32, epsilon: f32) -> bool {
+fn assert_eq_f32(a: f32, b: f32, epsilon: f32) {
     let delta = (a - b).abs();
-    return delta < epsilon;
+
+    if delta > epsilon {
+        panic!("assertion failed: {} != {}", a, b);
+    }
 }
