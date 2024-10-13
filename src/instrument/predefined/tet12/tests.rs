@@ -165,5 +165,43 @@ fn test_conversion_f_minor() {
     assert_eq!(b3_flat, TET12ConcreteTone( 2 - 12 - 1));
     assert_eq!(c4,      TET12ConcreteTone(-9         ));
     assert_eq!(d4_flat, TET12ConcreteTone(-7      - 1));
-    assert_eq!(e5_flat, TET12ConcreteTone(-5 - 12 - 1));
+    assert_eq!(e5_flat, TET12ConcreteTone(-5 + 12 - 1));
+}
+
+#[test]
+fn test_frequency_conversion() {
+    let key = crate::prelude::music_key::A_MINOR;
+
+    let a4 = first(4).to_concrete_value(key).to_frequency();
+    let b4 = second(4).to_concrete_value(key).to_frequency();
+    let c5 = third(5).to_concrete_value(key).to_frequency();
+    let d5 = fourth(5).to_concrete_value(key).to_frequency();
+    let e5 = fifth(5).to_concrete_value(key).to_frequency();
+    let f5 = sixth(5).to_concrete_value(key).to_frequency();
+    let g5 = seventh(5).to_concrete_value(key).to_frequency();
+
+    let a4_expected = 440.0 * 2_f32.powf(0.0  / 12.0);
+    let b4_expected = 440.0 * 2_f32.powf(2.0  / 12.0);
+    let c5_expected = 440.0 * 2_f32.powf(3.0  / 12.0);
+    let d5_expected = 440.0 * 2_f32.powf(5.0  / 12.0);
+    let e5_expected = 440.0 * 2_f32.powf(7.0  / 12.0);
+    let f5_expected = 440.0 * 2_f32.powf(8.0  / 12.0);
+    let g5_expected = 440.0 * 2_f32.powf(10.0 / 12.0);
+
+    let epsilon = 0.001;
+
+    assert!(compare_f32(a4, a4_expected, epsilon));
+    assert!(compare_f32(b4, b4_expected, epsilon));
+    assert!(compare_f32(c5, c5_expected, epsilon));
+    assert!(compare_f32(d5, d5_expected, epsilon));
+    assert!(compare_f32(e5, e5_expected, epsilon));
+    assert!(compare_f32(f5, f5_expected, epsilon));
+    assert!(compare_f32(g5, g5_expected, epsilon));
+}
+
+// Utility functions
+
+fn compare_f32(a: f32, b: f32, epsilon: f32) -> bool {
+    let delta = (a - b).abs();
+    return delta < epsilon;
 }
