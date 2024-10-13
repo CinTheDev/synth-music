@@ -110,6 +110,17 @@ fn test_offset() {
 
 // Tests for TET12ConcreteTone
 
+/// Note on conversions:
+///
+/// The octave is defined such that the tonic of the scale is always the first
+/// note of the octave. Thus, when going up the scale from the first note to
+/// the last note, the octave will remain the same.
+///
+/// Only with the C Major scale will this line up with the traditional note
+/// names. E.g. when going up an F Minor scale, the "traditional" octave will
+/// go up once the note goes from B to C, but in the crate's notation the octave
+/// should stay the same.
+
 #[test]
 fn test_conversion_c_major() {
     let key = crate::prelude::music_key::C_MAJOR;
@@ -157,7 +168,7 @@ fn test_conversion_d_major() {
     let g4 = fourth(4).to_concrete_value(key);
     let a4 = fifth(4).to_concrete_value(key);
     let b4 = sixth(4).to_concrete_value(key);
-    let c5 = seventh(5).to_concrete_value(key);
+    let c5 = seventh(4).to_concrete_value(key);
 
     assert_eq!(d4, TET12ConcreteTone(-7));
     assert_eq!(e4, TET12ConcreteTone(-5));
@@ -176,9 +187,9 @@ fn test_conversion_f_minor() {
     let g2 = second(2).to_concrete_value(key);
     let a3_flat = third(3).to_concrete_value(key);
     let b3_flat = fourth(3).to_concrete_value(key);
-    let c4 = fifth(4).to_concrete_value(key);
-    let d4_flat = sixth(4).to_concrete_value(key);
-    let e5_flat = seventh(5).to_concrete_value(key);
+    let c4 = fifth(3).to_concrete_value(key);
+    let d4_flat = sixth(3).to_concrete_value(key);
+    let e5_flat = seventh(4).to_concrete_value(key);
 
     assert_eq!(f2,      TET12ConcreteTone(-4 - 24    ));
     assert_eq!(g2,      TET12ConcreteTone(-2 - 24    ));
@@ -195,11 +206,11 @@ fn test_conversion_a_major() {
 
     let a4 = first(4).to_concrete_value(key);
     let b4 = second(4).to_concrete_value(key);
-    let c5 = third(5).to_concrete_value(key);
-    let d5 = fourth(5).to_concrete_value(key);
-    let e5 = fifth(5).to_concrete_value(key);
-    let f5 = sixth(5).to_concrete_value(key);
-    let g5 = seventh(5).to_concrete_value(key);
+    let c5 = third(4).to_concrete_value(key);
+    let d5 = fourth(4).to_concrete_value(key);
+    let e5 = fifth(4).to_concrete_value(key);
+    let f5 = sixth(4).to_concrete_value(key);
+    let g5 = seventh(4).to_concrete_value(key);
 
     assert_eq!(a4, TET12ConcreteTone( 0));
     assert_eq!(b4, TET12ConcreteTone( 2));
@@ -216,11 +227,11 @@ fn test_frequency_conversion() {
 
     let a4 = first(4).to_concrete_value(key).to_frequency();
     let b4 = second(4).to_concrete_value(key).to_frequency();
-    let c5 = third(5).to_concrete_value(key).to_frequency();
-    let d5 = fourth(5).to_concrete_value(key).to_frequency();
-    let e5 = fifth(5).to_concrete_value(key).to_frequency();
-    let f5 = sixth(5).to_concrete_value(key).to_frequency();
-    let g5 = seventh(5).to_concrete_value(key).to_frequency();
+    let c5 = third(4).to_concrete_value(key).to_frequency();
+    let d5 = fourth(4).to_concrete_value(key).to_frequency();
+    let e5 = fifth(4).to_concrete_value(key).to_frequency();
+    let f5 = sixth(4).to_concrete_value(key).to_frequency();
+    let g5 = seventh(4).to_concrete_value(key).to_frequency();
 
     let a4_expected = 440.0 * 2_f32.powf(0.0  / 12.0);
     let b4_expected = 440.0 * 2_f32.powf(2.0  / 12.0);
