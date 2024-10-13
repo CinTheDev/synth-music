@@ -21,7 +21,7 @@ pub struct TET12ScaledTone {
 /// 
 /// Notes in this form will be passed to instruments for generating sound.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
-pub struct TET12ConcreteTone(i32);
+pub struct TET12ConcreteTone(pub i32);
 
 impl ScaledValue for TET12ScaledTone {
     type ConcreteValue = TET12ConcreteTone;
