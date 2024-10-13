@@ -169,6 +169,27 @@ fn test_conversion_f_minor() {
 }
 
 #[test]
+fn test_conversion_a_major() {
+    let key = crate::prelude::music_key::A_MAJOR;
+
+    let a4 = first(4).to_concrete_value(key);
+    let b4 = second(4).to_concrete_value(key);
+    let c5 = third(5).to_concrete_value(key);
+    let d5 = fourth(5).to_concrete_value(key);
+    let e5 = fifth(5).to_concrete_value(key);
+    let f5 = sixth(5).to_concrete_value(key);
+    let g5 = seventh(5).to_concrete_value(key);
+
+    assert_eq!(a4, TET12ConcreteTone( 0));
+    assert_eq!(b4, TET12ConcreteTone( 2));
+    assert_eq!(c5, TET12ConcreteTone( 3));
+    assert_eq!(d5, TET12ConcreteTone( 5));
+    assert_eq!(e5, TET12ConcreteTone( 7));
+    assert_eq!(f5, TET12ConcreteTone( 8));
+    assert_eq!(g5, TET12ConcreteTone(10));
+}
+
+#[test]
 fn test_frequency_conversion() {
     let key = crate::prelude::music_key::A_MINOR;
 
