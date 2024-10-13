@@ -186,6 +186,74 @@ fn conversion_bpm() {
     assert_eq_f32(result_4, duration_4, epsilon);
 }
 
+#[test]
+fn conversion_dynamics() {
+    let mut track = UnboundTrack::new(instrument);
+    track.set_intensity(0.5);
+    track.set_play_fraction(1.0);
+
+    track.note(QUARTER, first(4));
+
+    track.set_intensity(0.1);
+    track.note(HALF, first(4));
+
+    track.start_dynamic_change();
+    sequential_notes!(track, QUARTER,
+        first(4),
+        first(4),
+        first(4),
+    );
+    track.end_dynamic_change(1.0);
+    track.start_dynamic_change();
+    sequential_notes!(track, QUARTER,
+        first(4),
+        first(4),
+        first(4),
+    );
+    track.end_dynamic_change(0.5);
+
+    track.start_dynamic_change();
+    track.note(QUARTER, first(4));
+    track.note(HALF, first(4));
+    track.note(EIGTH, first(4));
+    track.end_dynamic_change(1.0);
+
+    let info = SectionInfo {
+        bpm: 120.0,
+        key: music_key::C_MAJOR,
+        settings: &SETTINGS,
+    };
+
+    let export = track.convert_to_export_track(info);
+
+    let expected_intensities = vec![
+        0.5 .. 0.5,
+        0.1 .. 0.1,
+
+        0.1 .. 0.4,
+        0.4 .. 0.7,
+        0.7 .. 1.0,
+
+        1.0 .. 0.83333,
+        0.83333 .. 0.66666,
+        0.66666 .. 0.5,
+
+        0.5 .. 0.64285,
+        0.64285 .. 0.92857,
+        0.92857 .. 1.0,
+    ];
+
+    let epsilon = 0.01;
+
+    for i in 0..export.tones.len() {
+        let tone_intensity = &export.tones[i].intensity;
+        let expect_intensity = &expected_intensities[i];
+
+        assert_eq_f32(tone_intensity.start, expect_intensity.start, epsilon);
+        assert_eq_f32(tone_intensity.end, expect_intensity.end, epsilon);
+    }
+}
+
 // Utility functions
 
 fn assert_eq_tones<T>(a: &Vec<Tone<T>>, b: &Vec<Tone<T>>)
