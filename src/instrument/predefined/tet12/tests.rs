@@ -107,3 +107,63 @@ fn test_offset() {
         offset: -2,
     });
 }
+
+// Tests for TET12ConcreteTone
+
+#[test]
+fn test_conversion_c_major() {
+    let key = crate::prelude::music_key::C_MAJOR;
+
+    let c2 = first(2).to_concrete_value(key);
+    let d2 = second(2).to_concrete_value(key);
+    let e3 = third(3).to_concrete_value(key);
+    let f3 = fourth(3).to_concrete_value(key);
+    let g4 = fifth(4).to_concrete_value(key);
+    let a4 = sixth(4).to_concrete_value(key);
+    let b5 = seventh(5).to_concrete_value(key);
+
+    let c2_sharp = first(2).sharp().to_concrete_value(key);
+    let d2_flat = second(2).flat().to_concrete_value(key);
+    let e3_sharp = third(3).sharp().to_concrete_value(key);
+    let f3_flat = fourth(3).flat().to_concrete_value(key);
+    let g4_sharp = fifth(4).sharp().to_concrete_value(key);
+    let a4_flat = sixth(4).flat().to_concrete_value(key);
+    let b5_sharp = seventh(5).sharp().to_concrete_value(key);
+
+    assert_eq!(c2, TET12ConcreteTone(-9 - 24));
+    assert_eq!(d2, TET12ConcreteTone(-7 - 24));
+    assert_eq!(e3, TET12ConcreteTone(-5 - 12));
+    assert_eq!(f3, TET12ConcreteTone(-4 - 12));
+    assert_eq!(g4, TET12ConcreteTone(-2     ));
+    assert_eq!(a4, TET12ConcreteTone( 0     ));
+    assert_eq!(b5, TET12ConcreteTone( 2 + 12));
+
+    assert_eq!(c2_sharp, TET12ConcreteTone(-9 - 24 + 1));
+    assert_eq!(d2_flat,  TET12ConcreteTone(-7 - 24 - 1));
+    assert_eq!(e3_sharp, TET12ConcreteTone(-5 - 12 + 1));
+    assert_eq!(f3_flat,  TET12ConcreteTone(-4 - 12 - 1));
+    assert_eq!(g4_sharp, TET12ConcreteTone(-2      + 1));
+    assert_eq!(a4_flat,  TET12ConcreteTone( 0      - 1));
+    assert_eq!(b5_sharp, TET12ConcreteTone( 2 + 12 + 1));
+}
+
+#[test]
+fn test_conversion_f_minor() {
+    let key = crate::prelude::music_key::F_MINOR;
+
+    let f2 = first(2).to_concrete_value(key);
+    let g2 = second(2).to_concrete_value(key);
+    let a3_flat = third(3).to_concrete_value(key);
+    let b3_flat = fourth(3).to_concrete_value(key);
+    let c4 = fifth(4).to_concrete_value(key);
+    let d4_flat = sixth(4).to_concrete_value(key);
+    let e5_flat = seventh(5).to_concrete_value(key);
+
+    assert_eq!(f2,      TET12ConcreteTone(-4 - 24    ));
+    assert_eq!(g2,      TET12ConcreteTone(-2 - 24    ));
+    assert_eq!(a3_flat, TET12ConcreteTone( 0 - 12 - 1));
+    assert_eq!(b3_flat, TET12ConcreteTone( 2 - 12 - 1));
+    assert_eq!(c4,      TET12ConcreteTone(-9         ));
+    assert_eq!(d4_flat, TET12ConcreteTone(-7      - 1));
+    assert_eq!(e5_flat, TET12ConcreteTone(-5 - 12 - 1));
+}
