@@ -28,3 +28,17 @@ fn test_dot() {
     assert_eq!(whole_dot, WHOLE + HALF);
     assert_eq!(whole4_dot, WHOLE * 6);
 }
+
+#[test]
+fn test_multidot() {
+    let quarter_dot = QUARTER.multi_dot(1);
+    let quarter_2dot = QUARTER.multi_dot(2);
+
+    let whole_3dot = WHOLE.multi_dot(3);
+    let whole4_4dot = (WHOLE * 4).multi_dot(4);
+
+    assert_eq!(quarter_dot, QUARTER + EIGTH);
+    assert_eq!(quarter_2dot, QUARTER + EIGTH + SIXTEENTH);
+    assert_eq!(whole_3dot, WHOLE + HALF + QUARTER);
+    assert_eq!(whole4_4dot, WHOLE*4 + WHOLE*2 + WHOLE + HALF);
+}
