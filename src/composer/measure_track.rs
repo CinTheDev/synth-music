@@ -333,3 +333,5 @@ impl<T: ScaledValue> Measure<T> {
         self
     }
 }
+
+mod tests;
