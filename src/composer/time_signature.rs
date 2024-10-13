@@ -29,6 +29,9 @@ impl TimeSignature {
         if ! denominator.is_power_of_two() {
             panic!("The denominator can only be a power of two.");
         }
+        if nominator < 1 {
+            panic!("The nominator needs to be a positive integer.");
+        }
 
         let subdivision = Self::what_power_of_two(denominator);
 
