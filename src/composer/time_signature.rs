@@ -12,7 +12,7 @@ use super::Length;
 ///     .set_beat(0, 1.1)         // Strongly emphasize the first beat
 ///     .set_beat(2, 1.05);       // Weakly emphasize the third beat
 /// ```
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct TimeSignature {
     pub measure_length: Length,
     beat_length: Length,
@@ -83,3 +83,5 @@ impl TimeSignature {
         return result;
     }
 }
+
+mod tests;
