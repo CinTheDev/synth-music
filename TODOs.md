@@ -30,6 +30,5 @@ It would be good to at least implement the easy unit tests.
 
 Here a list of all submodules and items that need unit tests:
 
-- `TimeSignature`
 - `UnboundTrack`
 - `MeasureTrack`
