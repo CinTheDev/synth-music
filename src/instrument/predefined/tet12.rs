@@ -8,7 +8,7 @@ use crate::composer::ScaledValue;
 /// is the octave. If the scale e.g. is "C Major", the note `first(4)` is C4.
 /// 
 /// These can also be sharpened or flattened afterwards.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct TET12ScaledTone {
     index: u8,
     octave: i32,
@@ -20,7 +20,7 @@ pub struct TET12ScaledTone {
 /// `TET12ScaledTone`, this will be the result.
 /// 
 /// Notes in this form will be passed to instruments for generating sound.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct TET12ConcreteTone(i32);
 
 impl ScaledValue for TET12ScaledTone {
@@ -195,3 +195,5 @@ pub fn seventh(octave: i32) -> TET12ScaledTone {
         offset: 0,
     }
 }
+
+mod tests;
