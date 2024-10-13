@@ -6,6 +6,7 @@ fn main() {
     example_1();
     example_2();
     example_3();
+    example_4();
 }
 
 fn example_1() {
@@ -176,6 +177,39 @@ fn example_3() {
     let section = section!(section_info, track);
 
     export_buffer(section, "Triole_Test.wav");
+}
+
+fn example_4() {
+    use tet12::*;
+    use length::*;
+
+    let mut track = UnboundTrack::new(predefined::SineGenerator);
+    track.set_intensity(0.7);
+
+    sequential_notes!(track, HALF,
+        first(3),
+        second(3),
+        third(3),
+        fourth(3),
+        fifth(3),
+        sixth(3),
+        seventh(3),
+        first(4),
+    );
+
+    let settings = CompositionSettings {
+        sample_rate: 44100,
+    };
+
+    let section_info = SectionInfo {
+        bpm: 120.0,
+        key: music_key::A_MINOR,
+        settings: &settings,
+    };
+
+    let section = section!(section_info, track);
+
+    export_buffer(section, "Scale_Test.wav");
 }
 
 fn export_buffer(buffer: SoundBuffer, name: &str) {
