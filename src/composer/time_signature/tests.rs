@@ -50,6 +50,24 @@ fn test_construction() {
 }
 
 #[test]
+#[should_panic]
+fn test_wrong_construction_1() {
+    TimeSignature::new(4, 5);
+}
+
+#[test]
+#[should_panic]
+fn test_wrong_construction_2() {
+    TimeSignature::new(4, 0);
+}
+
+#[test]
+#[should_panic]
+fn test_wrong_construction_3() {
+    TimeSignature::new(0, 4);
+}
+
+#[test]
 fn test_measure_saturation() {
     let four_four = TimeSignature::new(4, 4);
     let two_four = TimeSignature::new(2, 4);
