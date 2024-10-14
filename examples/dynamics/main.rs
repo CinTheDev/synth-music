@@ -10,6 +10,7 @@ fn main() {
         cutoff_time: Duration::from_secs_f32(3.0),
     };
 
+    let track_constant_intensity = example_constant_intensity(linear_sine);
     let track_linear_sine = example_track(linear_sine);
     let track_punchy_sine = example_track(punchy_sine);
 
@@ -27,10 +28,12 @@ fn main() {
         settings: &settings,
     };
 
+    let constant_section = section!(section_info, track_constant_intensity);
     let linear_section = section!(section_info, track_linear_sine);
     let punchy_section = section!(section_info, track_punchy_sine);
 
     let composition = composition!(
+        constant_section,
         linear_section,
         punchy_section,
     );
@@ -50,9 +53,49 @@ fn main() {
     exporter.export(composition).unwrap();
 }
 
-fn example_track<T>(instrument: T) -> MeasureTrack<tet12::TET12ScaledTone, T>
+fn example_constant_intensity<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
 where 
-    T: Instrument<ConcreteValue = tet12::TET12ConcreteTone>
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    use length::*;
+    use tet12::*;
+
+    let time_signature = TimeSignature::new(4, 4);
+
+    let mut track = MeasureTrack::new(instrument, time_signature);
+    track.set_play_fraction(0.9);
+
+    track.set_intensity(0.1);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.3);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.5);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.7);
+    track.note(QUARTER, first(4));
+
+    track.measure().unwrap();
+
+    track.set_intensity(0.9);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.7);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.5);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.3);
+    track.note(QUARTER, first(4));
+
+    track.measure().unwrap();
+
+    track.pause(WHOLE);
+    track.measure().unwrap();
+
+    return track;
+}
+
+fn example_track<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
+where 
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
     use length::*;
     use tet12::*;
