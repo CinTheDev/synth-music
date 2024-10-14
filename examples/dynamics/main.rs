@@ -63,6 +63,10 @@ where
     let time_signature = TimeSignature::new(4, 4);
 
     let mut track = MeasureTrack::new(instrument, time_signature);
+
+    // track.set_intensity(x) will change the intensity for the notes placed
+    // after the call.
+
     track.set_play_fraction(0.9);
 
     track.set_intensity(0.1);
@@ -110,11 +114,11 @@ where
 
     track.set_intensity(0.1);
 
-    track.start_dynamic_change();
+    track.start_dynamic_change(); // Start changing loudness
     track.note(WHOLE, first(4));
     track.measure().unwrap();
     track.note(WHOLE, first(4));
-    track.end_dynamic_change(0.9);
+    track.end_dynamic_change(0.9); // Loudness changing stops here at the given value
     track.measure().unwrap();
     
     track.start_dynamic_change();
