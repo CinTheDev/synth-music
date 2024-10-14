@@ -48,12 +48,6 @@ List of all required examples:
 - Rendering
 - Exporing
 
-#### Dynamics
-
-- Show regular intensity
-- Show dynamic intensity
-- Make difference between possible implementations clear
-
 #### Time Signature
 
 - In combination with MeasureTrack
