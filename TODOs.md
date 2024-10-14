@@ -37,3 +37,46 @@ online what best practises for this are.
 All examples right now only serve testing purposes and aren't that great for
 showing the library's features. Write a bunch more examples with more isolated
 ideas and more comments so these can be used to learn this library.
+
+List of all required examples:
+
+#### Hello example
+
+- Show basic features like
+- Creating tracks
+- Placing notes
+- Rendering
+- Exporing
+
+#### Dynamics
+
+- Show regular intensity
+- Show dynamic intensity
+- Make difference between possible implementations clear
+
+#### Time Signature
+
+- In combination with MeasureTrack
+- Beat Emphasis feature
+
+#### UnboundTrack and MeasureTrack
+
+- Simple comparision between both
+
+#### Instruments
+
+- Different implementations
+- TODO
+
+#### Custom note system
+
+- Drumset example
+- Probably similar to what Tetris example is doing
+
+#### Tetris example
+
+- Rename old "melody" folder to "tetris"
+- Adjust old tracks with dynamics and everything
+- Use MeasureTrack
+- Improve the Drumset
+- Improve the melody if possible (make more interesting)
