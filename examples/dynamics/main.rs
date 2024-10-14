@@ -11,8 +11,8 @@ fn main() {
     };
 
     let track_constant_intensity = example_constant_intensity(linear_sine);
-    let track_linear_sine = example_track(linear_sine);
-    let track_punchy_sine = example_track(punchy_sine);
+    let track_linear_sine = example_dynamic_intensity(linear_sine);
+    let track_punchy_sine = example_dynamic_intensity(punchy_sine);
 
     let settings = CompositionSettings {
         sample_rate: 44100,
@@ -97,7 +97,7 @@ where
     return track;
 }
 
-fn example_track<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
+fn example_dynamic_intensity<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
 where 
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
