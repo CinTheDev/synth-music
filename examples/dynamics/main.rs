@@ -65,20 +65,20 @@ where
 
     // Held notes
 
-    track.set_intensity(0.3);
+    track.set_intensity(0.1);
 
     track.start_dynamic_change();
     track.note(WHOLE, first(4));
     track.measure().unwrap();
     track.note(WHOLE, first(4));
-    track.end_dynamic_change(1.0);
+    track.end_dynamic_change(0.9);
     track.measure().unwrap();
     
     track.start_dynamic_change();
     track.note(WHOLE, first(4));
     track.measure().unwrap();
     track.note(WHOLE, first(4));
-    track.end_dynamic_change(0.3);
+    track.end_dynamic_change(0.1);
     track.measure().unwrap();
 
     track.pause(WHOLE);
@@ -92,7 +92,7 @@ where
         track.note(QUARTER, first(4));
     }
     track.note(QUARTER, first(4));
-    track.end_dynamic_change(1.0);
+    track.end_dynamic_change(0.9);
     track.measure().unwrap();
 
     track.start_dynamic_change();
@@ -101,7 +101,7 @@ where
         track.note(QUARTER, first(4));
     }
     track.note(QUARTER, first(4));
-    track.end_dynamic_change(0.3);
+    track.end_dynamic_change(0.1);
     track.measure().unwrap();
 
     track.pause(WHOLE);
