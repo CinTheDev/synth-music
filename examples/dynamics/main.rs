@@ -174,6 +174,7 @@ impl LinearSine {
             result += Self::wave(frequency, time);
         }
 
+        // Here, the intensity is interpolated across the range
         return result * Self::current_intensity(
             time.as_secs_f32(),
             tones.tone_duration.as_secs_f32(),
@@ -201,6 +202,9 @@ impl PunchySine {
             result += Self::wave(frequency, time);
         }
 
+        // Here, intensity is already handled by decay(), so we don't need to
+        // change intensity throughout the note. We only use the intensity at
+        // the start as a base.
         return result * Self::decay(time.as_secs_f32()) * tones.intensity.start;
     }
 
