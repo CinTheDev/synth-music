@@ -44,8 +44,25 @@ impl Drumset {
         }
     }
 
-    pub fn apply_tone(&self, buffer: &mut Vec<f32>, tone: DrumsetAction) {
-        todo!();
+    pub fn apply_tone(&self, buffer: &mut Vec<f32>, sample_rate: u32, tone: DrumsetAction) {
+        // Let's apply simple filter first
+        use biquad::*;
+
+        let f_cutoff = 1000.hz();
+        let f_sample = sample_rate.hz();
+
+        let coeffs = Coefficients::<f32>::from_params(
+            Type::LowPass,
+            f_sample,
+            f_cutoff,
+            Q_BUTTERWORTH_F32,
+        ).unwrap();
+
+        let mut biquad = DirectForm1::<f32>::new(coeffs);
+        
+        for sample in buffer.iter_mut() {
+            *sample = biquad.run(*sample);
+        }
     }
 
     fn mix_buffers(mut a: Vec<f32>, b: Vec<f32>) -> Vec<f32> {
@@ -71,7 +88,7 @@ impl Instrument for Drumset {
         for tone in &tones.concrete_values {
             let mut buffer = vec![0_f32; target_samples];
             self.generate_white_noise(&mut buffer, intensity);
-            self.apply_tone(&mut buffer, *tone);
+            self.apply_tone(&mut buffer, buffer_info.sample_rate, *tone);
 
             result = Self::mix_buffers(result, buffer);
         }
