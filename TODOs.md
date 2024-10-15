@@ -42,11 +42,6 @@ Also, fill in the last references in documentation after examples are finished.
 
 List of all required examples:
 
-#### Time Signature
-
-- In combination with MeasureTrack
-- Beat Emphasis feature
-
 #### UnboundTrack and MeasureTrack
 
 - Simple comparision between both
