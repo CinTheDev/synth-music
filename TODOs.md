@@ -42,10 +42,6 @@ Also, fill in the last references in documentation after examples are finished.
 
 List of all required examples:
 
-#### UnboundTrack and MeasureTrack
-
-- Simple comparision between both
-
 #### Instruments
 
 - Different implementations
