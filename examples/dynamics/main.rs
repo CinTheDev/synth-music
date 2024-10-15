@@ -38,19 +38,7 @@ fn main() {
         punchy_section,
     );
 
-    // Export
-    use std::path::PathBuf;
-
-    if std::fs::read_dir("export").is_err() {
-        std::fs::create_dir("export").unwrap();
-    }
-
-    let path = PathBuf::from("export/dynamics.wav");
-    let exporter = WavExport {
-        path,
-        ..Default::default()
-    };
-    exporter.export(composition).unwrap();
+    export(composition);
 }
 
 fn example_constant_intensity<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
@@ -155,6 +143,23 @@ where
     track.measure().unwrap();
     
     return track;
+}
+
+fn export(buffer: SoundBuffer) {
+    use std::path::PathBuf;
+
+    if std::fs::read_dir("export").is_err() {
+        std::fs::create_dir("export").unwrap();
+    }
+
+    // Specify new exporter with given attributes
+    let wav_export = WavExport {
+        path: PathBuf::from("export/Dynamics.wav"),
+        ..Default::default()
+    };
+
+    // Actually export the piece.
+    wav_export.export(buffer).unwrap();
 }
 
 #[derive(Clone, Copy)]
