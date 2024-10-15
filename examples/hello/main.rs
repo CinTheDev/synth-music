@@ -4,6 +4,89 @@ fn main() {
     println!("Hello example");
 }
 
+fn create_track<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
+where
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    // For reducing excessive repetition
+    use tet12::*;
+    use length::*;
+
+    // Define a time signature
+    let four_four = TimeSignature::new(4, 4);
+
+    // Create a new track
+    let mut track = MeasureTrack::new(instrument, four_four);
+
+    // Place a bunch of notes behind each other with constant length
+    sequential_notes!(track, QUARTER,
+        first(3),
+        second(3),
+        third(3),
+        fourth(3),
+    );
+    // Place the end of the measure
+    track.measure().unwrap();
+
+    sequential_notes!(track, QUARTER,
+        fifth(3),
+        sixth(3),
+        seventh(3),
+        first(4),
+    );
+    track.measure().unwrap();
+
+    track.pause(WHOLE);
+    track.measure().unwrap();
+
+    // Change the intensity throughout the melody
+    track.set_intensity(0.5);
+
+    // You can also place notes without a macro
+    track.note(QUARTER, first(3));
+    track.note(QUARTER, third(3));
+    track.note(QUARTER, fifth(3));
+    track.note(QUARTER, third(3));
+    track.measure().unwrap();
+    track.note(WHOLE, first(3));
+    track.measure().unwrap();
+
+    // Notes placed this way can be modified afterwards
+    track.note(QUARTER, first(4)).staccato();
+    track.note(QUARTER, third(4)).staccato();
+    track.note(QUARTER, fifth(4)).staccato();
+    track.note(QUARTER, third(4));
+    track.measure().unwrap();
+    
+    // This will stack notes, so these will be played at the same time
+    notes!(track, WHOLE,
+        first(4),
+        fifth(3),
+        third(3),
+    );
+    track.measure().unwrap();
+
+    // Of course, note stacks can be modified too
+    notes!(track, QUARTER,
+        first(4),
+        fifth(3),
+        third(3),
+    ).staccato();
+    notes!(track, QUARTER,
+        first(4),
+        fifth(3),
+        third(3),
+    ).staccato();
+    notes!(track, HALF,
+        first(4),
+        fifth(3),
+        third(3),
+    );
+    track.measure().unwrap();
+
+    return track;
+}
+
 fn export(buffer: SoundBuffer, name: &str) {
     use std::path::PathBuf;
 
