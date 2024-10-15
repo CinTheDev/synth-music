@@ -71,22 +71,22 @@ where
 
     track.set_intensity(0.1);
     track.note(QUARTER, first(4));
+    track.set_intensity(0.2);
+    track.note(QUARTER, first(4));
     track.set_intensity(0.3);
     track.note(QUARTER, first(4));
-    track.set_intensity(0.5);
-    track.note(QUARTER, first(4));
-    track.set_intensity(0.7);
+    track.set_intensity(0.4);
     track.note(QUARTER, first(4));
 
     track.measure().unwrap();
 
-    track.set_intensity(0.9);
-    track.note(QUARTER, first(4));
-    track.set_intensity(0.7);
-    track.note(QUARTER, first(4));
     track.set_intensity(0.5);
     track.note(QUARTER, first(4));
+    track.set_intensity(0.4);
+    track.note(QUARTER, first(4));
     track.set_intensity(0.3);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.2);
     track.note(QUARTER, first(4));
 
     track.measure().unwrap();
@@ -118,7 +118,7 @@ where
     track.note(WHOLE, first(4));
     track.measure().unwrap();
     track.note(WHOLE, first(4));
-    track.end_dynamic_change(0.9); // Loudness changing stops here at the given value
+    track.end_dynamic_change(0.7); // Loudness changing stops here at the given value
     track.measure().unwrap();
     
     track.start_dynamic_change();
@@ -139,7 +139,7 @@ where
         track.note(QUARTER, first(4));
     }
     track.note(QUARTER, first(4));
-    track.end_dynamic_change(0.9);
+    track.end_dynamic_change(0.7);
     track.measure().unwrap();
 
     track.start_dynamic_change();
