@@ -1,3 +1,4 @@
+use rand::Rng;
 use synth_music::prelude::*;
 use std::time::Duration;
 
@@ -35,8 +36,24 @@ impl Drumset {
         }
     }
 
-    pub fn generate_white_noise(&self, buffer: &mut Vec<f32>) {
+    pub fn generate_white_noise(&self, buffer: &mut Vec<f32>, intensity: f32) {
+        let mut rng = rand::thread_rng();
 
+        for sample in buffer.iter_mut() {
+            *sample = rng.gen_range(-1.0..1.0) * intensity;
+        }
+    }
+
+    pub fn apply_tone(&self, buffer: &mut Vec<f32>, tone: DrumsetAction) {
+        todo!();
+    }
+
+    fn mix_buffers(mut a: Vec<f32>, b: Vec<f32>) -> Vec<f32> {
+        for i in 0..a.len() {
+            a[i] += b[i];
+        }
+
+        return a;
     }
 }
 
@@ -46,11 +63,20 @@ impl Instrument for Drumset {
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let target_samples = (self.play_duration.as_secs_f32() * buffer_info.sample_rate as f32)
             .ceil() as usize;
+
+        let intensity = tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
+
+        let mut result = vec![0_f32; target_samples];
         
-        let mut buffer = vec![0_f32; target_samples];
+        for tone in &tones.concrete_values {
+            let mut buffer = vec![0_f32; target_samples];
+            self.generate_white_noise(&mut buffer, intensity);
+            self.apply_tone(&mut buffer, *tone);
 
-        self.generate_white_noise(&mut buffer);
+            result = Self::mix_buffers(result, buffer);
+        }
 
-        InstrumentBuffer { samples: buffer }
+
+        InstrumentBuffer { samples: result }
     }
 }
