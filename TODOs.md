@@ -38,6 +38,8 @@ All examples right now only serve testing purposes and aren't that great for
 showing the library's features. Write a bunch more examples with more isolated
 ideas and more comments so these can be used to learn this library.
 
+Also, fill in the last references in documentation after examples are finished.
+
 List of all required examples:
 
 #### Time Signature
