@@ -40,14 +40,6 @@ ideas and more comments so these can be used to learn this library.
 
 List of all required examples:
 
-#### Hello example
-
-- Show basic features like
-- Creating tracks
-- Placing notes
-- Rendering
-- Exporing
-
 #### Time Signature
 
 - In combination with MeasureTrack
