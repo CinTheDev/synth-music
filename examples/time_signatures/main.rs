@@ -50,7 +50,7 @@ fn track_three_four() -> MeasureTrack<TET12ScaledTone, predefined::TriangleGener
         track.measure().unwrap();
     }
 
-    track.pause(WHOLE);
+    track.pause(HALF.dot());
     track.measure().unwrap();
 
     return track;
@@ -80,7 +80,7 @@ fn track_six_eight() -> MeasureTrack<TET12ScaledTone, predefined::TriangleGenera
         track.measure().unwrap();
     }
 
-    track.pause(WHOLE);
+    track.pause(HALF.dot());
     track.measure().unwrap();
 
     return track;
