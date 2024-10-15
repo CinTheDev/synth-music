@@ -92,7 +92,7 @@ fn track_six_eight() -> MeasureTrack<TET12ScaledTone, predefined::TriangleGenera
     let mut track = MeasureTrack::new(predefined::TriangleGenerator, time_signature);
 
     for _ in 0..4 {
-        sequential_notes!(track, QUARTER,
+        sequential_notes!(track, EIGTH,
             first(3),
             first(3),
             first(3),
