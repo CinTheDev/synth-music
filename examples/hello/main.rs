@@ -2,6 +2,8 @@ use synth_music::prelude::*;
 
 fn main() {
     println!("Hello example");
+
+    let example_instrument = SineInstrument;
 }
 
 fn create_track<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
@@ -107,9 +109,9 @@ fn export(buffer: SoundBuffer, name: &str) {
 use std::time::Duration;
 
 #[derive(Clone, Copy)]
-struct SineGenerator;
+struct SineInstrument;
 
-impl SineGenerator {
+impl SineInstrument {
     pub fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
         let mut result = 0.0;
 
@@ -127,7 +129,7 @@ impl SineGenerator {
     }
 }
 
-impl Instrument for SineGenerator {
+impl Instrument for SineInstrument {
     type ConcreteValue = tet12::TET12ConcreteTone;
 
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
