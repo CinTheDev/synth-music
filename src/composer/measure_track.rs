@@ -118,7 +118,7 @@ where
             measures: Vec::new(),
             time_signature,
             instrument,
-            current_intensity: 1.0,
+            current_intensity: 0.9,
             current_play_fraction: 1.0,
             next_note_dynamic_flag: None,
         }
