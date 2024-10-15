@@ -72,7 +72,7 @@ where
     track.measure().unwrap();
 
     // Change the intensity throughout the melody
-    track.set_intensity(0.5);
+    track.set_intensity(0.2);
 
     // You can also place notes without a macro
     track.note(QUARTER, first(3));
