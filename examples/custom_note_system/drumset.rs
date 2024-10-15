@@ -25,7 +25,7 @@ impl ScaledValue for DrumsetAction {
 }
 
 #[derive(Clone, Copy)]
-struct Drumset {
+pub struct Drumset {
     play_duration: Duration
 }
 
