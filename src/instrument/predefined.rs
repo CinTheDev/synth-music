@@ -53,7 +53,11 @@ impl SineGenerator {
             result += sine_wave(frequency, time);
         }
 
-        return result * tones.intensity.start;
+        return result * Self::get_intensity(tones);
+    }
+
+    fn get_intensity(tones: &Tone<tet12::TET12ConcreteTone>) -> f32 {
+        return tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
     }
 }
 
@@ -66,7 +70,11 @@ impl TriangleGenerator {
             result += triangle_wave(frequency, time);
         }
 
-        return result * tones.intensity.start;
+        return result * Self::get_intensity(tones);
+    }
+
+    fn get_intensity(tones: &Tone<tet12::TET12ConcreteTone>) -> f32 {
+        return tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
     }
 }
 
@@ -79,7 +87,11 @@ impl SquareGenerator {
             result += square_wave(frequency, time);
         }
 
-        return result * tones.intensity.start;
+        return result * Self::get_intensity(tones);
+    }
+
+    fn get_intensity(tones: &Tone<tet12::TET12ConcreteTone>) -> f32 {
+        return tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
     }
 }
 
