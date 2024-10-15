@@ -46,8 +46,14 @@ pub fn render<T: Instrument>(track: &ExportTrack<T>, settings: CompositionSettin
 
     progress.finish_and_clear();
     
-    if contains_loud_samples(&buffer) {
-        progress.println("WARNING: Track contains very loud samples. Play back at your own risk.");
+    if let Some(index) = contains_loud_samples(&buffer) {
+        let msg = format!(
+            "WARNING: Track contains very loud samples starting at sample {}; \
+            t = {:?}. Play back at your own risk.",
+            index,
+            buffer.time_from_index(index),
+        );
+        progress.println(msg);
     }
 
     return buffer;
@@ -108,16 +114,17 @@ fn smooth(t: f32) -> f32 {
     3.0*t*t - 2.0*t*t*t
 }
 
-fn contains_loud_samples(buffer: &SoundBuffer) -> bool {
-    for sample in &buffer.samples {
-        let value = (*sample).abs();
+fn contains_loud_samples(buffer: &SoundBuffer) -> Option<usize> {
+    for i in 0..buffer.samples.len() {
+        let sample = buffer.samples[i];
+        let value = sample.abs();
 
         if value > 1.0 {
-            return true;
+            return Some(i);
         }
     }
 
-    return false;
+    return None;
 }
 
 #[doc(hidden)]
