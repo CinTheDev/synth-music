@@ -32,10 +32,11 @@ fn track_four_four() -> MeasureTrack<TET12ScaledTone, predefined::TriangleGenera
     use tet12::*;
     use length::*;
 
+    // Create a new time signature
     let time_signature =
-        TimeSignature::new(4, 4)
-        .set_beat(0, 1.1)
-        .set_beat(2 , 1.05);
+        TimeSignature::new(4, 4) // The beat will be 4/4
+        .set_beat(0, 1.1) // The first beat is emphasized strongly
+        .set_beat(2 , 1.05); // The third beat is emphasized weakly
 
     let mut track = MeasureTrack::new(predefined::TriangleGenerator, time_signature);
     track.set_play_fraction(0.8);
@@ -60,9 +61,10 @@ fn track_three_four() -> MeasureTrack<TET12ScaledTone, predefined::TriangleGener
     use tet12::*;
     use length::*;
 
+    // Create new time signature
     let time_signature =
-        TimeSignature::new(3, 4)
-        .set_beat(0, 1.1);
+        TimeSignature::new(3, 4) // The beat will be 3/4
+        .set_beat(0, 1.1);  // The first beat is emphasized
 
     let mut track = MeasureTrack::new(predefined::TriangleGenerator, time_signature);
     track.set_play_fraction(0.8);
@@ -86,10 +88,11 @@ fn track_six_eight() -> MeasureTrack<TET12ScaledTone, predefined::TriangleGenera
     use tet12::*;
     use length::*;
 
+    // Create new time signature
     let time_signature =
-        TimeSignature::new(6, 8)
-        .set_beat(0, 1.1)
-        .set_beat(3 , 1.05);
+        TimeSignature::new(6, 8) // The beat will be 6/8
+        .set_beat(0, 1.1) // The first beat is emphasized strongly
+        .set_beat(3 , 1.05); // The fourth beat is emphasized weakly
 
     let mut track = MeasureTrack::new(predefined::TriangleGenerator, time_signature);
     track.set_play_fraction(0.8);
