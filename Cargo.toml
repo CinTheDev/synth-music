@@ -8,4 +8,5 @@ bytemuck = "1.18.0"
 indicatif = "0.17.8"
 
 [dev-dependencies]
+biquad = "0.4.2"
 rand = "0.8.5"
