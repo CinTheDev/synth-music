@@ -38,6 +38,7 @@ fn track_four_four() -> MeasureTrack<TET12ScaledTone, predefined::TriangleGenera
         .set_beat(2 , 1.05);
 
     let mut track = MeasureTrack::new(predefined::TriangleGenerator, time_signature);
+    track.set_play_fraction(0.8);
 
     for _ in 0..4 {
         sequential_notes!(track, QUARTER,
@@ -64,6 +65,7 @@ fn track_three_four() -> MeasureTrack<TET12ScaledTone, predefined::TriangleGener
         .set_beat(0, 1.1);
 
     let mut track = MeasureTrack::new(predefined::TriangleGenerator, time_signature);
+    track.set_play_fraction(0.8);
 
     for _ in 0..4 {
         sequential_notes!(track, QUARTER,
@@ -90,6 +92,7 @@ fn track_six_eight() -> MeasureTrack<TET12ScaledTone, predefined::TriangleGenera
         .set_beat(3 , 1.05);
 
     let mut track = MeasureTrack::new(predefined::TriangleGenerator, time_signature);
+    track.set_play_fraction(0.8);
 
     for _ in 0..4 {
         sequential_notes!(track, EIGTH,
