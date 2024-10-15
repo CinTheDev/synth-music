@@ -112,7 +112,7 @@ where
     notes!(track, HALF,
         first(4),
         fifth(3),
-        third(3),
+        third(3).flat(), // Flatten the third to create a minor chord
     );
     track.measure().unwrap();
 
