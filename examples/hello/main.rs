@@ -140,10 +140,12 @@ fn export(buffer: SoundBuffer) {
 
 use std::time::Duration;
 
+// Create a new instrument that will output notes as sine waves.
 #[derive(Clone, Copy)]
 struct SineInstrument;
 
 impl SineInstrument {
+    // Will take a point in time and generate the current amplitude for it.
     pub fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
         let mut result = 0.0;
 
@@ -155,14 +157,16 @@ impl SineInstrument {
         return result * tones.intensity.start * tones.beat_emphasis.unwrap_or(0.5);
     }
 
+    // Outputs the amplitude of the corresponding sine-wave at the specified time
     pub fn generate_frequency(frequency: f64, time: Duration) -> f32 {
         use std::f64::consts::PI;
         (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
     }
 }
 
+// Required to implement to use as an Instrument
 impl Instrument for SineInstrument {
-    type ConcreteValue = tet12::TET12ConcreteTone;
+    type ConcreteValue = TET12ConcreteTone;
 
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let mut buffer = Vec::new();
