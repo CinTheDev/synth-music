@@ -4,7 +4,7 @@ fn main() {
     println!("Hello example");
 }
 
-fn export_buffer(buffer: SoundBuffer, name: &str) {
+fn export(buffer: SoundBuffer, name: &str) {
     use std::path::PathBuf;
 
     if std::fs::read_dir("export").is_err() {
