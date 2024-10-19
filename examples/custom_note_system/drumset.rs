@@ -47,10 +47,18 @@ impl Drumset {
     }
 
     pub fn noised_tone(&self, buffer_info: &BufferInfo, buffer: &mut Vec<f32>, action: &DrumsetAction) {
-        todo!();
+        let frequency_range = match action {
+            DrumsetAction::Snare => 20.0 .. 20000.0,
+            DrumsetAction::HiHat => 10000.0 .. 20000.0,
+            
+            _ => panic!("Invalid action in noised_tone"),
+        };
+        
+        Self::generate_white_noise(buffer);
+        Self::filter(buffer, buffer_info, frequency_range);
     }
 
-    pub fn generate_white_noise(&self, buffer: &mut Vec<f32>) {
+    pub fn generate_white_noise(buffer: &mut Vec<f32>) {
         let mut rng = rand::thread_rng();
 
         for sample in buffer.iter_mut() {
@@ -58,24 +66,34 @@ impl Drumset {
         }
     }
 
-    pub fn apply_tone(&self, buffer: &mut Vec<f32>, buffer_info: &BufferInfo, tone: DrumsetAction) {
+    pub fn filter(buffer: &mut Vec<f32>, buffer_info: &BufferInfo, frequency: std::ops::Range<f32>) {
         // Let's apply simple filter first
         use biquad::*;
 
-        let f_cutoff = 1000.hz();
+        let f_lower = frequency.start.hz();
+        let f_upper = frequency.end.hz();
+        //let f_cutoff = 1000.hz();
         let f_sample = buffer_info.sample_rate.hz();
 
-        let coeffs = Coefficients::<f32>::from_params(
+        let coeffs_lp = Coefficients::<f32>::from_params(
             Type::LowPass,
             f_sample,
-            f_cutoff,
+            f_upper,
+            Q_BUTTERWORTH_F32,
+        ).unwrap();
+        let coeffs_hp = Coefficients::<f32>::from_params(
+            Type::HighPass,
+            f_sample,
+            f_lower,
             Q_BUTTERWORTH_F32,
         ).unwrap();
 
-        let mut biquad = DirectForm1::<f32>::new(coeffs);
+        let mut biquad_lp = DirectForm1::<f32>::new(coeffs_lp);
+        let mut biquad_hp = DirectForm1::<f32>::new(coeffs_hp);
         
         for sample in buffer.iter_mut() {
-            *sample = biquad.run(*sample);
+            *sample = biquad_lp.run(*sample);
+            *sample = biquad_hp.run(*sample);
         }
     }
 
