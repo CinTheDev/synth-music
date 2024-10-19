@@ -32,7 +32,7 @@ pub struct Drumset {
 impl Drumset {
     pub fn new() -> Self {
         Self {
-            play_duration: Duration::from_secs_f32(0.3),
+            play_duration: Duration::from_secs_f32(0.25),
         }
     }
 
