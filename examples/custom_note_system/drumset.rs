@@ -48,7 +48,7 @@ impl Drumset {
 
     pub fn noised_tone(&self, buffer_info: &BufferInfo, buffer: &mut Vec<f32>, action: &DrumsetAction) {
         let frequency_range = match action {
-            DrumsetAction::Snare => 20.0 .. 20000.0,
+            DrumsetAction::Snare => 500.0 .. 11000.0,
             DrumsetAction::HiHat => 10000.0 .. 20000.0,
             
             _ => panic!("Invalid action in noised_tone"),
