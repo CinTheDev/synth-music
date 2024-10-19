@@ -52,6 +52,18 @@ fn test_track() -> MeasureTrack<DrumsetAction, Drumset> {
     track.pause(WHOLE);
     track.measure().unwrap();
 
+    for _ in 0..2 {
+        notes!(track, EIGTH, Bass);
+        notes!(track, EIGTH, HiHat);
+        notes!(track, EIGTH, Bass, Snare);
+        notes!(track, EIGTH, HiHat);
+        notes!(track, EIGTH, Bass);
+        notes!(track, EIGTH, HiHat);
+        notes!(track, EIGTH, Bass, Snare);
+        notes!(track, EIGTH, HiHat);
+        track.measure().unwrap();
+    }
+
     return track;
 }
 
