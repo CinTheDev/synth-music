@@ -36,6 +36,11 @@ impl Drumset {
         }
     }
 
+    pub fn generate_tone(&self, time: Duration) -> f32 {
+        let frequency = 50.0;
+        predefined::sine_wave(frequency, time) * self.decay(time)
+    }
+
     pub fn generate_white_noise(&self, buffer: &mut Vec<f32>, intensity: f32) {
         let mut rng = rand::thread_rng();
 
@@ -72,6 +77,11 @@ impl Drumset {
 
         return a;
     }
+
+    fn decay(&self, time: Duration) -> f32 {
+        let factor = 5.0 / self.play_duration.as_secs_f32();
+        0.5_f32.powf(time.as_secs_f32() * factor)
+    }
 }
 
 impl Instrument for Drumset {
@@ -85,12 +95,16 @@ impl Instrument for Drumset {
 
         let mut result = vec![0_f32; target_samples];
         
-        for tone in &tones.concrete_values {
-            let mut buffer = vec![0_f32; target_samples];
-            self.generate_white_noise(&mut buffer, intensity);
-            self.apply_tone(&mut buffer, buffer_info.sample_rate, *tone);
+        for _ in &tones.concrete_values {
+            for i in 0..target_samples {
+                let time = buffer_info.time_from_index(i);
+                result[i] = self.generate_tone(time) * intensity;
+            }
+            //let mut buffer = vec![0_f32; target_samples];
+            //self.generate_white_noise(&mut buffer, intensity);
+            //self.apply_tone(&mut buffer, buffer_info.sample_rate, *tone);
 
-            result = Self::mix_buffers(result, buffer);
+            //result = Self::mix_buffers(result, buffer);
         }
 
 
