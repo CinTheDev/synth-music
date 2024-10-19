@@ -26,41 +26,63 @@ impl ScaledValue for DrumsetAction {
 
 #[derive(Clone, Copy)]
 pub struct Drumset {
-    play_duration: Duration
+    //play_duration: Duration
+    bass_duration: Duration,
+    snare_duration: Duration,
+    hihat_duration: Duration,
 }
 
 impl Drumset {
     pub fn new() -> Self {
         Self {
-            play_duration: Duration::from_secs_f32(0.25),
+            //play_duration: Duration::from_secs_f32(0.25),
+            bass_duration: Duration::from_secs_f32(0.4),
+            snare_duration: Duration::from_secs_f32(0.3),
+            hihat_duration: Duration::from_secs_f32(0.1),
         }
     }
 
-    pub fn bass(&self, buffer_info: &BufferInfo, buffer: &mut Vec<f32>) {
+    pub fn bass(&self, buffer_info: &BufferInfo) -> Vec<f32> {
+        let target_samples = Self::get_target_samples(buffer_info.sample_rate, self.bass_duration);
         let frequency = 50.0;
+
+        let mut buffer = vec![0_f32; target_samples];
 
         for i in 0..buffer.len() {
             let time = buffer_info.time_from_index(i);
             let value = predefined::sine_wave(frequency, time);
-            buffer[i] = value * self.decay(time);
+            buffer[i] = value * self.decay(time, self.bass_duration);
         }
+
+        return buffer;
     }
 
-    pub fn noised_tone(&self, buffer_info: &BufferInfo, buffer: &mut Vec<f32>, action: &DrumsetAction) {
+    pub fn noised_tone(&self, buffer_info: &BufferInfo, action: &DrumsetAction) -> Vec<f32> {
         let frequency_range = match action {
             DrumsetAction::Snare => 500.0 .. 11000.0,
             DrumsetAction::HiHat => 6000.0 .. 20000.0,
             
             _ => panic!("Invalid action in noised_tone"),
         };
+        let target_duration = match action {
+            DrumsetAction::Snare => self.snare_duration,
+            DrumsetAction::HiHat => self.hihat_duration,
+
+            _ => panic!("Invalid action in noised_tone"),
+        };
+
+        let target_samples = Self::get_target_samples(buffer_info.sample_rate, target_duration);
+        let mut buffer = vec![0_f32; target_samples];
         
-        Self::generate_white_noise(buffer);
-        Self::filter(buffer, buffer_info, frequency_range);
+        Self::generate_white_noise(&mut buffer);
+        Self::filter(&mut buffer, buffer_info, frequency_range);
 
         for i in 0..buffer.len() {
             let time = buffer_info.time_from_index(i);
-            buffer[i] *= self.decay(time) * 0.4;
+            buffer[i] *= self.decay(time, target_duration) * 0.4;
         }
+
+        return buffer;
     }
 
     pub fn generate_white_noise(buffer: &mut Vec<f32>) {
@@ -110,9 +132,13 @@ impl Drumset {
         return a;
     }
 
-    fn decay(&self, time: Duration) -> f32 {
-        let factor = 5.0 / self.play_duration.as_secs_f32();
+    fn decay(&self, time: Duration, target_duration: Duration) -> f32 {
+        let factor = 5.0 / target_duration.as_secs_f32();
         0.5_f32.powf(time.as_secs_f32() * factor)
+    }
+
+    fn get_target_samples(sample_rate: u32, target_duration: Duration) -> usize {
+        (target_duration.as_secs_f32() * sample_rate as f32).ceil() as usize
     }
 }
 
@@ -120,22 +146,17 @@ impl Instrument for Drumset {
     type ConcreteValue = DrumsetAction;
 
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let target_samples = (self.play_duration.as_secs_f32() * buffer_info.sample_rate as f32)
-            .ceil() as usize;
-
-        let mut result = vec![0_f32; target_samples];
+        let mut result = Vec::new();
         
         for action in &tones.concrete_values {
             match action {
                 DrumsetAction::Bass => {
-                    let mut buffer = vec![0_f32; target_samples];
-                    self.bass(&buffer_info, &mut buffer);
+                    let buffer = self.bass(&buffer_info);
                     result = Self::mix_buffers(result, buffer);
                 },
 
                 _ => {
-                    let mut buffer = vec![0_f32; target_samples];
-                    self.noised_tone(&buffer_info, &mut buffer, action);
+                    let buffer = self.noised_tone(&buffer_info, action);
                     result = Self::mix_buffers(result, buffer);
                 }
             }
