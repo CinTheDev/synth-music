@@ -26,7 +26,6 @@ impl ScaledValue for DrumsetAction {
 
 #[derive(Clone, Copy)]
 pub struct Drumset {
-    //play_duration: Duration
     bass_duration: Duration,
     snare_duration: Duration,
     hihat_duration: Duration,
@@ -35,10 +34,9 @@ pub struct Drumset {
 impl Drumset {
     pub fn new() -> Self {
         Self {
-            //play_duration: Duration::from_secs_f32(0.25),
             bass_duration: Duration::from_secs_f32(0.4),
             snare_duration: Duration::from_secs_f32(0.3),
-            hihat_duration: Duration::from_secs_f32(0.1),
+            hihat_duration: Duration::from_secs_f32(0.15),
         }
     }
 
@@ -94,12 +92,10 @@ impl Drumset {
     }
 
     pub fn filter(buffer: &mut Vec<f32>, buffer_info: &BufferInfo, frequency: std::ops::Range<f32>) {
-        // Let's apply simple filter first
         use biquad::*;
 
         let f_lower = frequency.start.hz();
         let f_upper = frequency.end.hz();
-        //let f_cutoff = 1000.hz();
         let f_sample = buffer_info.sample_rate.hz();
 
         let coeffs_lp = Coefficients::<f32>::from_params(
