@@ -56,6 +56,11 @@ impl Drumset {
         
         Self::generate_white_noise(buffer);
         Self::filter(buffer, buffer_info, frequency_range);
+
+        for i in 0..buffer.len() {
+            let time = buffer_info.time_from_index(i);
+            buffer[i] *= self.decay(time) * 0.5;
+        }
     }
 
     pub fn generate_white_noise(buffer: &mut Vec<f32>) {
