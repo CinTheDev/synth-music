@@ -124,12 +124,17 @@ impl Drumset {
         }
     }
 
-    fn mix_buffers(mut a: Vec<f32>, b: Vec<f32>) -> Vec<f32> {
-        for i in 0..a.len() {
-            a[i] += b[i];
+    fn mix_buffers(a: Vec<f32>, b: Vec<f32>) -> Vec<f32> {
+        let (mut larger, smaller) = match a.len() > b.len() {
+            true => (a, b),
+            false => (b, a),
+        };
+
+        for i in 0..smaller.len() {
+            larger[i] += smaller[i];
         }
 
-        return a;
+        return larger;
     }
 
     fn decay(&self, time: Duration, target_duration: Duration) -> f32 {
