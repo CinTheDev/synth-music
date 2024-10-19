@@ -29,6 +29,24 @@ beyond a single measure.
 Because these are in no way implemented right now, it only makes sense to tackle
 this redundancy issue if held notes are being implemented in the future.
 
+## Split track feature
+
+In traditional music notation (or at least in MuseScore) it's possible to
+"split" a staff into two, where both parts will no play independently. This
+is common for percussion, but not so much for melodies.
+
+This could be implemented as a track function that if called, consumes the
+current track and returns two more. Later, these should be merged together
+again automatically.
+
+## More control on attack, decay, sustain, etc
+
+The library has a hard-coded attack and decay to prevent unpleasant artifacts
+because of extreme onsets or tone cutoffs. Though, with specific cases this
+might interfere with desired sound. Furthermore, if users want to extend the
+attack duration, it should be easily done. Same goes for decay, sustain, and
+other values.
+
 ## Shortcut traits for instruments
 
 Users have to implement basically everything for every instrument over and over
