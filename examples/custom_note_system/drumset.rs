@@ -125,7 +125,7 @@ impl Drumset {
     }
 
     fn mix_buffers(a: Vec<f32>, b: Vec<f32>) -> Vec<f32> {
-        let (mut larger, smaller) = match a.len() > b.len() {
+        let (mut larger, smaller) = match a.len() >= b.len() {
             true => (a, b),
             false => (b, a),
         };
@@ -151,7 +151,7 @@ impl Instrument for Drumset {
     type ConcreteValue = DrumsetAction;
 
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let mut result = Vec::new();
+        let mut result = vec![0.0; buffer_info.tone_samples];
         
         for action in &tones.concrete_values {
             match action {
