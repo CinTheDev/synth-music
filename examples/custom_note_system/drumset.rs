@@ -36,25 +36,34 @@ impl Drumset {
         }
     }
 
-    pub fn generate_tone(&self, time: Duration) -> f32 {
+    pub fn bass(&self, buffer_info: &BufferInfo, buffer: &mut Vec<f32>) {
         let frequency = 50.0;
-        predefined::sine_wave(frequency, time) * self.decay(time)
-    }
 
-    pub fn generate_white_noise(&self, buffer: &mut Vec<f32>, intensity: f32) {
-        let mut rng = rand::thread_rng();
-
-        for sample in buffer.iter_mut() {
-            *sample = rng.gen_range(-1.0..1.0) * intensity;
+        for i in 0..buffer.len() {
+            let time = buffer_info.time_from_index(i);
+            let value = predefined::sine_wave(frequency, time);
+            buffer[i] = value * self.decay(time);
         }
     }
 
-    pub fn apply_tone(&self, buffer: &mut Vec<f32>, sample_rate: u32, tone: DrumsetAction) {
+    pub fn noised_tone(&self, buffer_info: &BufferInfo, buffer: &mut Vec<f32>, action: &DrumsetAction) {
+        todo!();
+    }
+
+    pub fn generate_white_noise(&self, buffer: &mut Vec<f32>) {
+        let mut rng = rand::thread_rng();
+
+        for sample in buffer.iter_mut() {
+            *sample = rng.gen_range(-1.0..1.0);
+        }
+    }
+
+    pub fn apply_tone(&self, buffer: &mut Vec<f32>, buffer_info: &BufferInfo, tone: DrumsetAction) {
         // Let's apply simple filter first
         use biquad::*;
 
         let f_cutoff = 1000.hz();
-        let f_sample = sample_rate.hz();
+        let f_sample = buffer_info.sample_rate.hz();
 
         let coeffs = Coefficients::<f32>::from_params(
             Type::LowPass,
@@ -91,22 +100,29 @@ impl Instrument for Drumset {
         let target_samples = (self.play_duration.as_secs_f32() * buffer_info.sample_rate as f32)
             .ceil() as usize;
 
-        let intensity = tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
-
         let mut result = vec![0_f32; target_samples];
         
-        for _ in &tones.concrete_values {
-            for i in 0..target_samples {
-                let time = buffer_info.time_from_index(i);
-                result[i] = self.generate_tone(time) * intensity;
-            }
-            //let mut buffer = vec![0_f32; target_samples];
-            //self.generate_white_noise(&mut buffer, intensity);
-            //self.apply_tone(&mut buffer, buffer_info.sample_rate, *tone);
+        for action in &tones.concrete_values {
+            match action {
+                DrumsetAction::Bass => {
+                    let mut buffer = vec![0_f32; target_samples];
+                    self.bass(&buffer_info, &mut buffer);
+                    result = Self::mix_buffers(result, buffer);
+                },
 
-            //result = Self::mix_buffers(result, buffer);
+                _ => {
+                    let mut buffer = vec![0_f32; target_samples];
+                    self.noised_tone(&buffer_info, &mut buffer, action);
+                    result = Self::mix_buffers(result, buffer);
+                }
+            }
         }
 
+        let intensity = tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
+
+        for value in result.iter_mut() {
+            *value *= intensity;
+        }
 
         InstrumentBuffer { samples: result }
     }
