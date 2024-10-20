@@ -109,7 +109,7 @@ impl Drumset {
 
         for i in 0..buffer.len() {
             let time = buffer_info.time_from_index(i);
-            buffer[i] *= self.decay(time, target_duration) * 0.4;
+            buffer[i] *= self.decay(time, target_duration) * 0.2;
         }
 
         return buffer;
