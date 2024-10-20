@@ -42,11 +42,12 @@ fn main() {
 
     let section_begin = section!(info,
         melody_begin,
-        chords_begin,
-        bass_begin,
-        tracks::drumset_4(instrument_drumset, 4)
+        //chords_begin,
+        //bass_begin,
+        //tracks::drumset_4(instrument_drumset, 4)
     );
 
+    /*
     let section_repeated_first = section!(info,
         melody_repeated_first,
         chords_repeated,
@@ -74,18 +75,19 @@ fn main() {
         bass_b_section,
         tracks::drumset_4(instrument_drumset, 4)
     );
+    */
 
     let composition = composition!(
         section_begin,
-        section_repeated_first,
-        section_repeated_second,
+        //section_repeated_first,
+        //section_repeated_second,
 
-        b_section_first,
-        b_section_second,
+        //b_section_first,
+        //b_section_second,
 
-        section_begin,
-        section_repeated_first,
-        section_repeated_second
+        //section_begin,
+        //section_repeated_first,
+        //section_repeated_second
     );
 
     export_buffer(composition);
