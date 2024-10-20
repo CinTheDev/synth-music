@@ -6,11 +6,6 @@ pub mod drumset;
 pub use drumset::{Drumset, DrumsetAction};
 
 #[derive(Clone, Copy)]
-pub struct SoftBass {
-    pub decay_speed: f32,
-}
-
-#[derive(Clone, Copy)]
 pub struct Decaying<T: Instrument> {
     pub instrument: T,
     pub decay_speed: f32,
@@ -22,38 +17,6 @@ pub struct HardBass {
 }
 
 impl<T: Instrument> Decaying<T> {
-    pub fn new(instrument: T, decay_speed: f32) -> Self {
-        Self {
-            instrument,
-            decay_speed,
-        }
-    }
-
-    fn decay_function(&self, time: Duration) -> f32 {
-        0.5_f32.powf(time.as_secs_f32() * self.decay_speed)
-    }
-}
-
-impl SoftBass {
-    pub fn new(decay_speed: f32) -> Self {
-        Self {
-            decay_speed,
-        }
-    }
-
-    fn generate(&self, tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
-        let mut result = 0.0;
-
-        for tone in &tones.concrete_values {
-            let frequency = tone.to_frequency() as f64;
-            result += predefined::triangle_wave(frequency, time);
-        }
-
-        let intensity = tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
-
-        return result * intensity * self.decay_function(time);
-    }
-
     fn decay_function(&self, time: Duration) -> f32 {
         0.5_f32.powf(time.as_secs_f32() * self.decay_speed)
     }
@@ -109,21 +72,6 @@ impl<T: Instrument> Instrument for Decaying<T> {
         }
 
         return instrument_buffer;
-    }
-}
-
-impl Instrument for SoftBass {
-    type ConcreteValue = TET12ConcreteTone;
-
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let mut buffer = Vec::new();
-
-        for i in 0..buffer_info.tone_samples {
-            let time = buffer_info.time_from_index(i);
-            buffer.push(self.generate(tones, time));
-        }
-
-        InstrumentBuffer { samples: buffer }
     }
 }
 
