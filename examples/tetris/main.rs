@@ -111,26 +111,23 @@ fn main() {
             tracks::drumset_eightbeat(drumset, 4),
         ),
 
-        // Second repetition
-        section!(info_fast,
-            tracks::drumset_bass(drumset, 1),
-        ),
-
         section!(info_fast,
             melody_begin,
             chords_begin,
             bass_begin,
+            tracks::drumset_quarterbeat(drumset, 4),
         ),
         section!(info_fast,
             melody_repeated_first,
             chords_repeated,
             bass_repeated,
+            tracks::drumset_eightbeat(drumset, 4),
         ),
         section!(info_fast,
             melody_repeated_second,
             chords_repeated,
             bass_repeated,
-            tracks::drumset_bass(drumset, 4),
+            tracks::drumset_eightbeat(drumset, 4),
         ),
 
         section!(info_fast,
@@ -162,7 +159,7 @@ fn main() {
             melody_repeated_second,
             chords_repeated,
             bass_repeated,
-            tracks::drumset_eightbeat(drumset, 4),
+            tracks::drumset_bass(drumset, 4),
         ),
     );
 
