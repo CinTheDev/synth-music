@@ -28,7 +28,7 @@ fn main() {
     };
 
     let instrument_chords = instruments::Decaying {
-        instrument: predefined::TriangleGenerator,
+        instrument: predefined::SawGenerator,
         decay_speed: 10.0,
     };
     
