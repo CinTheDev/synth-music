@@ -26,7 +26,7 @@ where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
     let mut track = MeasureTrack::new(instrument, melody_beat());
-    track.set_intensity(0.6);
+    track.set_intensity(0.5);
 
     track.note(QUARTER, fifth(3));
     track.note(EIGTH, second(3));
@@ -82,11 +82,11 @@ where
 {
     let mut track = MeasureTrack::new(instrument, bass_beat());
 
-    track.set_intensity(0.15);
+    track.set_intensity(0.25);
 
     for _ in 0..2 {
         // Chord V
-        track.note(WHOLE, fifth(0));
+        track.note(WHOLE, fifth(1));
         track.measure().unwrap();
 
         // Chord I

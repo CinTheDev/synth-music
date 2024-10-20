@@ -73,7 +73,7 @@ impl HardBass {
     fn harmonic(n: u32, frequency: f64, time: Duration) -> f32 {
         let factor = (2 * n + 1) as f32;
         let harmonic_frequency = frequency * factor as f64;
-        predefined::sine_wave(harmonic_frequency, time) / factor
+        predefined::sine_wave(harmonic_frequency, time) / factor.powf(1.7)
     }
 }
 
