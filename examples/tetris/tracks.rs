@@ -66,7 +66,7 @@ where
 {
     let mut track = MeasureTrack::new(instrument, chords_beat());
 
-    track.set_intensity(0.3);
+    track.set_intensity(0.2);
 
     for _ in 0..2 {
         apply_chord_fifth(&mut track);
@@ -149,7 +149,7 @@ where
 {
     let mut track = MeasureTrack::new(instrument, chords_beat());
 
-    track.set_intensity(0.3);
+    track.set_intensity(0.2);
 
     apply_chord_fourth(&mut track);
     apply_chord_third(&mut track);

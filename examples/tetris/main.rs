@@ -44,22 +44,22 @@ fn main() {
     let section_begin = section!(info,
         melody_begin,
         chords_begin,
-        //bass_begin,
-        //tracks::drumset_4(instrument_drumset, 4)
+        bass_begin,
+        tracks::drumset_4(drumset, 4)
     );
 
     let section_repeated_first = section!(info,
         melody_repeated_first,
         chords_repeated,
-        //bass_repeated,
-        //tracks::drumset_4(instrument_drumset, 4)
+        bass_repeated,
+        tracks::drumset_4(drumset, 4)
     );
 
     let section_repeated_second = section!(info,
         melody_repeated_second,
         chords_repeated,
-        //bass_repeated,
-        //tracks::drumset_4(instrument_drumset, 4)
+        bass_repeated,
+        tracks::drumset_4(drumset, 4)
     );
 
     let b_section_first = section!(info,
