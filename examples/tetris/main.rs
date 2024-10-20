@@ -22,23 +22,24 @@ fn main() {
         settings: &settings,
     };
 
-    let instrument_softbass = instruments::SoftBass::new(1.0);
-    let instrument_hardbass = instruments::HardBass::new(10);
-    let instrument_drumset = instruments::Drumset::new();
+    let instrument_melody = instruments::SoftBass::new(1.0);
+    let instrument_chords = instruments::SoftBass::new(5.0);
+    let instrument_bass = instruments::HardBass::new(10);
+    let drumset = instruments::Drumset::new();
 
-    let melody_begin = tracks::melody_begin(instrument_softbass);
-    let chords_begin = tracks::chords_begin(instrument_softbass);
-    let bass_begin = tracks::bass_begin(instrument_hardbass);
+    let melody_begin = tracks::melody_begin(instrument_melody);
+    let chords_begin = tracks::chords_begin(instrument_chords);
+    let bass_begin = tracks::bass_begin(instrument_bass);
 
-    let melody_repeated_first = tracks::melody_repeated(instrument_softbass, true);
-    let melody_repeated_second = tracks::melody_repeated(instrument_softbass, false);
-    let chords_repeated = tracks::chords_repeated(instrument_softbass);
-    let bass_repeated = tracks::bass_repeated(instrument_hardbass);
+    let melody_repeated_first = tracks::melody_repeated(instrument_melody, true);
+    let melody_repeated_second = tracks::melody_repeated(instrument_melody, false);
+    let chords_repeated = tracks::chords_repeated(instrument_chords);
+    let bass_repeated = tracks::bass_repeated(instrument_bass);
 
-    let melody_b_section_first = tracks::melody_b_section(instrument_softbass, true);
-    let melody_b_section_second = tracks::melody_b_section(instrument_softbass, false);
-    let chords_b_section = tracks::chords_b_section(instrument_softbass);
-    let bass_b_section = tracks::bass_b_section(instrument_hardbass);
+    let melody_b_section_first = tracks::melody_b_section(instrument_melody, true);
+    let melody_b_section_second = tracks::melody_b_section(instrument_melody, false);
+    let chords_b_section = tracks::chords_b_section(instrument_chords);
+    let bass_b_section = tracks::bass_b_section(instrument_bass);
 
     let section_begin = section!(info,
         melody_begin,
@@ -65,14 +66,14 @@ fn main() {
         melody_b_section_first,
         chords_b_section,
         bass_b_section,
-        tracks::drumset_4(instrument_drumset, 4)
+        tracks::drumset_4(drumset, 4)
     );
 
     let b_section_second = section!(info,
         melody_b_section_second,
         chords_b_section,
         bass_b_section,
-        tracks::drumset_4(instrument_drumset, 4)
+        tracks::drumset_4(drumset, 4)
     );
 
     let composition = composition!(
