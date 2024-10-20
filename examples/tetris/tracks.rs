@@ -27,14 +27,15 @@ where
 {
     let mut track = MeasureTrack::new(instrument, melody_beat());
     track.set_intensity(0.0);
-    track.start_dynamic_change();
-
+    
     track.note(QUARTER.dot(), sixth(3));
     track.note(EIGTH, seventh(3));
     track.note(QUARTER, first(4));
     track.note(EIGTH, seventh(3));
     track.note(EIGTH, sixth(3));
     track.measure().unwrap();
+    
+    track.start_dynamic_change();
 
     track.note(QUARTER.dot(), fifth(3));
     track.note(EIGTH, third(3));
@@ -53,7 +54,7 @@ where
     track.note(QUARTER, first(3));
     track.note(HALF, first(3));
     track.measure().unwrap();
-    
+
     track.end_dynamic_change(0.4);
 
     return track;
@@ -65,15 +66,16 @@ where
 {
     let mut track = MeasureTrack::new(instrument, chords_beat());
 
-    track.set_intensity(0.0);
+    track.set_intensity(0.05);
     track.start_dynamic_change();
-
+    
     apply_chord_fourth(&mut track);
     apply_chord_third(&mut track);
+
     apply_chord_fifth(&mut track);
     apply_chord_first(&mut track);
 
-    track.end_dynamic_change(0.2);
+    track.end_dynamic_change(0.1);
 
     return track;
 }
@@ -90,20 +92,20 @@ where
     // Chord IV
     track.note(WHOLE, fourth(1));
     track.measure().unwrap();
-
+    
     // Chord III
     track.note(WHOLE, third(1));
     track.measure().unwrap();
+    
+    track.end_dynamic_change(0.1);
 
     // Chord V
     track.note(WHOLE, fifth(1));
     track.measure().unwrap();
-
+    
     // Chord I
     track.note(WHOLE, first(1));
     track.measure().unwrap();
-
-    track.end_dynamic_change(0.15);
     
     return track;
 }
