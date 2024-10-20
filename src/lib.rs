@@ -40,7 +40,7 @@ has to implement themself, if they want to use it.
 
 A common non-standard note system is e.g. actions for a drumset. Here it doesn't
 make much sense to use notes, but rather actions. The user needs to implement
-this system for themself. [TODO: Reference to example with this]
+this system for themself. Check the "custom_note_system" example for details.
 
 ### Custom track handling
 
