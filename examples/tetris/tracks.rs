@@ -331,7 +331,7 @@ where
 
 // DRUMSET
 
-pub fn drumset_4<T>(instrument: T, measures: usize) -> MeasureTrack<DrumsetAction, T>
+pub fn drumset_bass<T>(instrument: T, measures: usize) -> MeasureTrack<DrumsetAction, T>
 where 
     T: Instrument<ConcreteValue = DrumsetAction>
 {
@@ -344,6 +344,52 @@ where
         sequential_notes!(track, QUARTER,
             Bass, Bass, Bass, Bass
         );
+        track.measure().unwrap();
+    }
+
+    return track;
+}
+
+pub fn drumset_quarterbeat<T>(instrument: T, measures: usize) -> MeasureTrack<DrumsetAction, T>
+where 
+    T: Instrument<ConcreteValue = DrumsetAction>
+{
+    use DrumsetAction::*;
+
+    let mut track = MeasureTrack::new(instrument, drums_beat());
+    track.set_intensity(0.5);
+
+    for _ in 0..measures {
+        notes!(track, QUARTER, Bass);
+        notes!(track, QUARTER, Bass, Snare);
+        notes!(track, QUARTER, Bass);
+        notes!(track, QUARTER, Bass, Snare);
+
+        track.measure().unwrap();
+    }
+
+    return track;
+}
+
+pub fn drumset_eightbeat<T>(instrument: T, measures: usize) -> MeasureTrack<DrumsetAction, T>
+where 
+    T: Instrument<ConcreteValue = DrumsetAction>
+{
+    use DrumsetAction::*;
+
+    let mut track = MeasureTrack::new(instrument, drums_beat());
+    track.set_intensity(0.5);
+
+    for _ in 0..measures {
+        notes!(track, EIGTH, Bass);
+        notes!(track, EIGTH, HiHat);
+        notes!(track, EIGTH, Bass, Snare);
+        notes!(track, EIGTH, HiHat);
+        notes!(track, EIGTH, Bass);
+        notes!(track, EIGTH, HiHat);
+        notes!(track, EIGTH, Bass, Snare);
+        notes!(track, EIGTH, HiHat);
+
         track.measure().unwrap();
     }
 

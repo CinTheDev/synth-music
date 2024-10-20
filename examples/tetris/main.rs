@@ -53,35 +53,35 @@ fn main() {
         melody_begin,
         chords_begin,
         bass_begin,
-        tracks::drumset_4(drumset, 4)
+        //tracks::drumset_4(drumset, 4)
     );
 
     let section_repeated_first = section!(info,
         melody_repeated_first,
         chords_repeated,
         bass_repeated,
-        tracks::drumset_4(drumset, 4)
+        //tracks::drumset_4(drumset, 4)
     );
 
     let section_repeated_second = section!(info,
         melody_repeated_second,
         chords_repeated,
         bass_repeated,
-        tracks::drumset_4(drumset, 4)
+        tracks::drumset_bass(drumset, 4)
     );
 
     let b_section_first = section!(info,
         melody_b_section_first,
         chords_b_section,
         bass_b_section,
-        tracks::drumset_4(drumset, 4)
+        tracks::drumset_quarterbeat(drumset, 4)
     );
 
     let b_section_second = section!(info,
         melody_b_section_second,
         chords_b_section,
         bass_b_section,
-        tracks::drumset_4(drumset, 4)
+        tracks::drumset_eightbeat(drumset, 4)
     );
 
     let composition = composition!(
