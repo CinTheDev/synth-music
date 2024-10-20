@@ -1,7 +1,7 @@
 use synth_music::prelude::*;
 use tet12::*;
 use length::*;
-use crate::instruments::drumset::DrumsetAction;
+use crate::instruments::DrumsetAction;
 
 // BEGIN PART
 
@@ -243,18 +243,22 @@ fn apply_chord_fifth<T: Instrument<ConcreteValue = TET12ConcreteTone>>(track: &m
 
 // DRUMSET
 
-pub fn drumset_4<T>(instrument: T, measures: usize) -> UnboundTrack<DrumsetAction, T>
+pub fn drumset_4<T>(instrument: T, measures: usize) -> MeasureTrack<DrumsetAction, T>
 where 
     T: Instrument<ConcreteValue = DrumsetAction>
 {
     use DrumsetAction::*;
-    let mut track = UnboundTrack::new(instrument);
+
+    let four_four = TimeSignature::new(4, 4);
+
+    let mut track = MeasureTrack::new(instrument, four_four);
     track.set_intensity(0.3);
 
     for _ in 0..measures {
         sequential_notes!(track, QUARTER,
             Bass, Bass, Bass, Bass
         );
+        track.measure().unwrap();
     }
 
     return track;
