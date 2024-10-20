@@ -6,19 +6,19 @@ mod tracks;
 fn main() {
     println!("Melody Example");
 
-    let key = MusicKey {
-        tonic: KeyTonic::A,
-        key_type: KeyType::Minor,
-    };
-
     let settings = CompositionSettings {
         sample_rate: 44100,
     };
 
-    let info = SectionInfo {
+    let info_normal = SectionInfo {
         bpm: 120.0,
-        key,
+        key: music_key::A_MINOR,
+        settings: &settings,
+    };
 
+    let info_fast = SectionInfo {
+        bpm: 130.0,
+        key: music_key::B_FLAT_MINOR,
         settings: &settings,
     };
 
@@ -54,54 +54,109 @@ fn main() {
     let bass_b_section = tracks::bass_b_section(instrument_bass);
 
     let composition = composition!(
-        section!(info,
+        // Intro
+        section!(info_normal,
             melody_intro,
             chords_intro,
             bass_intro,
         ),
-        section!(info,
+
+        // First repetition
+        section!(info_normal,
             melody_begin,
             chords_begin,
             bass_begin,
         ),
-        section!(info,
+        section!(info_normal,
             melody_repeated_first,
             chords_repeated,
             bass_repeated,
         ),
-        section!(info,
+        section!(info_normal,
             melody_repeated_second,
             chords_repeated,
             bass_repeated,
             tracks::drumset_bass(drumset, 4),
         ),
 
-        section!(info,
+        section!(info_normal,
             melody_b_section_first,
             chords_b_section,
             bass_b_section,
             tracks::drumset_quarterbeat(drumset, 4),
         ),
-        section!(info,
+        section!(info_normal,
             melody_b_section_second,
             chords_b_section,
             bass_b_section,
             tracks::drumset_eightbeat(drumset, 4),
         ),
 
-        section!(info,
+        section!(info_normal,
             melody_begin,
             chords_begin,
             bass_begin,
             tracks::drumset_quarterbeat(drumset, 4),
         ),
-        section!(info,
+        section!(info_normal,
             melody_repeated_first,
             chords_repeated,
             bass_repeated,
             tracks::drumset_eightbeat(drumset, 4),
         ),
-        section!(info,
+        section!(info_normal,
+            melody_repeated_second,
+            chords_repeated,
+            bass_repeated,
+            tracks::drumset_eightbeat(drumset, 4),
+        ),
+
+        // Second repetition
+
+
+        section!(info_fast,
+            melody_begin,
+            chords_begin,
+            bass_begin,
+        ),
+        section!(info_fast,
+            melody_repeated_first,
+            chords_repeated,
+            bass_repeated,
+        ),
+        section!(info_fast,
+            melody_repeated_second,
+            chords_repeated,
+            bass_repeated,
+            tracks::drumset_bass(drumset, 4),
+        ),
+
+        section!(info_fast,
+            melody_b_section_first,
+            chords_b_section,
+            bass_b_section,
+            tracks::drumset_quarterbeat(drumset, 4),
+        ),
+        section!(info_fast,
+            melody_b_section_second,
+            chords_b_section,
+            bass_b_section,
+            tracks::drumset_eightbeat(drumset, 4),
+        ),
+
+        section!(info_fast,
+            melody_begin,
+            chords_begin,
+            bass_begin,
+            tracks::drumset_quarterbeat(drumset, 4),
+        ),
+        section!(info_fast,
+            melody_repeated_first,
+            chords_repeated,
+            bass_repeated,
+            tracks::drumset_eightbeat(drumset, 4),
+        ),
+        section!(info_fast,
             melody_repeated_second,
             chords_repeated,
             bass_repeated,
