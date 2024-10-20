@@ -36,16 +36,20 @@ pub fn saw_wave(frequency: f64, time: Duration) -> f32 {
 #[derive(Clone, Copy)]
 pub struct SineGenerator;
 
-/// An implementor for `Instrument` that uses a triangle sine wave.
+/// An implementor for `Instrument` that uses a raw triangle wave.
 #[derive(Clone, Copy)]
 pub struct TriangleGenerator;
 
-/// An implementor for `Instrument` that uses a raw square wave wave.
+/// An implementor for `Instrument` that uses a raw square wave.
 #[derive(Clone, Copy)]
 pub struct SquareGenerator;
 
+/// An implementor for `Instrument` that uses a raw saw wave.
+#[derive(Clone, Copy)]
+pub struct SawGenerator;
+
 impl SineGenerator {
-    pub fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
+    pub fn generate(tones: &Tone<TET12ConcreteTone>, time: Duration) -> f32 {
         let mut result = 0.0;
 
         for tone in &tones.concrete_values {
@@ -56,13 +60,13 @@ impl SineGenerator {
         return result * Self::get_intensity(tones);
     }
 
-    fn get_intensity(tones: &Tone<tet12::TET12ConcreteTone>) -> f32 {
+    fn get_intensity(tones: &Tone<TET12ConcreteTone>) -> f32 {
         return tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
     }
 }
 
 impl TriangleGenerator {
-    pub fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
+    pub fn generate(tones: &Tone<TET12ConcreteTone>, time: Duration) -> f32 {
         let mut result = 0.0;
 
         for tone in &tones.concrete_values {
@@ -73,13 +77,13 @@ impl TriangleGenerator {
         return result * Self::get_intensity(tones);
     }
 
-    fn get_intensity(tones: &Tone<tet12::TET12ConcreteTone>) -> f32 {
+    fn get_intensity(tones: &Tone<TET12ConcreteTone>) -> f32 {
         return tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
     }
 }
 
 impl SquareGenerator {
-    pub fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
+    pub fn generate(tones: &Tone<TET12ConcreteTone>, time: Duration) -> f32 {
         let mut result = 0.0;
 
         for tone in &tones.concrete_values {
@@ -90,7 +94,24 @@ impl SquareGenerator {
         return result * Self::get_intensity(tones);
     }
 
-    fn get_intensity(tones: &Tone<tet12::TET12ConcreteTone>) -> f32 {
+    fn get_intensity(tones: &Tone<TET12ConcreteTone>) -> f32 {
+        return tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
+    }
+}
+
+impl SawGenerator {
+    pub fn generate(tones: &Tone<TET12ConcreteTone>, time: Duration) -> f32 {
+        let mut result = 0.0;
+
+        for tone in &tones.concrete_values {
+            let frequency = tone.to_frequency() as f64;
+            result += saw_wave(frequency, time);
+        }
+
+        return result * Self::get_intensity(tones);
+    }
+
+    fn get_intensity(tones: &Tone<TET12ConcreteTone>) -> f32 {
         return tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
     }
 }
@@ -128,6 +149,21 @@ impl Instrument for TriangleGenerator {
 impl Instrument for SquareGenerator {
     type ConcreteValue = TET12ConcreteTone;
 
+    fn render_buffer(&self, buffer_info: super::BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+        let mut buffer = Vec::new();
+
+        for i in 0..buffer_info.tone_samples {
+            let time = buffer_info.time_from_index(i);
+            buffer.push(Self::generate(tones, time));
+        }
+
+        InstrumentBuffer { samples: buffer }
+    }
+}
+
+impl Instrument for SawGenerator {
+    type ConcreteValue = TET12ConcreteTone;
+    
     fn render_buffer(&self, buffer_info: super::BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let mut buffer = Vec::new();
 
