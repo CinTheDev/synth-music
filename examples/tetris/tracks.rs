@@ -53,6 +53,7 @@ where
     track.note(QUARTER, first(3));
     track.note(HALF, first(3));
     track.measure().unwrap();
+    
     track.end_dynamic_change(0.4);
 
     return track;
@@ -71,6 +72,7 @@ where
     apply_chord_third(&mut track);
     apply_chord_fifth(&mut track);
     apply_chord_first(&mut track);
+
     track.end_dynamic_change(0.2);
 
     return track;
@@ -99,9 +101,10 @@ where
 
     // Chord I
     track.note(WHOLE, first(1));
-    track.end_dynamic_change(0.15);
     track.measure().unwrap();
 
+    track.end_dynamic_change(0.15);
+    
     return track;
 }
 

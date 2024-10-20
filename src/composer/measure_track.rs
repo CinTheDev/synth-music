@@ -79,7 +79,8 @@ where
     }
 
     fn end_dynamic_change(&mut self, intensity: f32) {
-        let active_note = self.get_active_measure().notes.last_mut().unwrap();
+        //let active_note = self.get_active_measure().notes.last_mut().unwrap();
+        let active_note = self.get_active_note();
 
         active_note.dynamics_flag = DynamicsFlag::EndChange;
         active_note.intensity = intensity;
@@ -143,6 +144,20 @@ where
 
     fn get_active_measure(&mut self) -> &mut Measure<T> {
         self.active_measure.as_mut().unwrap()
+    }
+
+    fn get_active_note(&mut self) -> &mut Note<T> {
+        let last_measure = {
+            let active_measure_empty = self.get_active_measure().is_empty();
+            if active_measure_empty {
+                self.measures.last_mut().unwrap()
+            }
+            else {
+                self.get_active_measure()
+            }
+        };
+
+        return last_measure.notes.last_mut().unwrap();
     }
 
     fn arrange_notes(&self) -> Vec<(Note<T>, Length)> {
