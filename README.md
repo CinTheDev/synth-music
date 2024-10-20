@@ -2,9 +2,10 @@
 
 A Rust library to synthesize sounds and to create music from scratch. There is
 no GUI, melodies are written out programmatically. For documentation and
-examples, check the crate documentation [TODO: Link]. The crate provides tools
-for composing music, synthetisizing sounds, and exporting the results into a
-WAV file.
+examples, check the
+[crate documentation](https://docs.rs/synth-music/0.1.0/synth_music/). The crate
+provides tools for composing music, synthetisizing sounds, and exporting the
+results into a WAV file.
 
 For getting started, check the documentation front page and the "Hello" example.
 
