@@ -63,7 +63,11 @@ impl Drumset {
         let max_time = self.bass_duration;
         let t = time.as_secs_f32() / max_time.as_secs_f32();
 
-        return t * (end_frequency - start_frequency) + start_frequency;
+        return Self::interpolation_linear(start_frequency, end_frequency, t);
+    }
+
+    fn interpolation_linear(a: f32, b: f32, t: f32) -> f32 {
+        t * (b - a) + a
     }
 
     pub fn noised_tone(&self, buffer_info: &BufferInfo, action: &DrumsetAction) -> Vec<f32> {
