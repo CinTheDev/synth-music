@@ -31,3 +31,8 @@ better to do this early while still familiar with the code.
 
 Also make sure to include some examples inline with documentation, research
 online what best practises for this are.
+
+### Fill in last TODO references
+
+There are some uncomplete references scattered throughout documentation. Now
+that the examples are complete, complete these references.
