@@ -7,10 +7,14 @@ use crate::instruments::DrumsetAction;
 
 fn melody_beat() -> TimeSignature {
     TimeSignature::new(4, 4)
+        .set_beat(0, 1.15)
+        .set_beat(2, 1.1)
 }
 
 fn chords_beat() -> TimeSignature {
     TimeSignature::new(4, 4)
+        .set_beat(0, 1.2)
+        .set_beat(2, 1.1)
 }
 
 fn bass_beat() -> TimeSignature {
@@ -19,6 +23,8 @@ fn bass_beat() -> TimeSignature {
 
 fn drums_beat() -> TimeSignature {
     TimeSignature::new(4, 4)
+        .set_beat(0, 1.15)
+        .set_beat(2, 1.1)
 }
 
 pub fn melody_intro<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
