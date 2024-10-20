@@ -26,6 +26,7 @@ where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
     let mut track = MeasureTrack::new(instrument, melody_beat());
+    track.set_intensity(0.1);
 
     track.note(QUARTER, fifth(3));
     track.note(EIGTH, second(3));
@@ -103,6 +104,7 @@ where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
     let mut track = MeasureTrack::new(instrument, melody_beat());
+    track.set_intensity(0.1);
 
     track.note(QUARTER.dot(), sixth(3));
     track.note(EIGTH, seventh(3));
@@ -191,6 +193,7 @@ where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
     let mut track = MeasureTrack::new(instrument, melody_beat());
+    track.set_intensity(0.1);
 
     sequential_notes!(
         track, HALF,
@@ -335,7 +338,7 @@ where
     use DrumsetAction::*;
 
     let mut track = MeasureTrack::new(instrument, drums_beat());
-    track.set_intensity(0.3);
+    track.set_intensity(0.1);
 
     for _ in 0..measures {
         sequential_notes!(track, QUARTER,
