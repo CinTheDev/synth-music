@@ -22,17 +22,3 @@ Once all tasks in this document are finished, it's time to publish this on
 Once version 0.1.0 has been published, create and push a new branch `v0.1.1`
 where the file `TODOs-0.1.1.md` will become `TODOs.md`. This will be where
 all work on version 0.1.1 will happen.
-
-## Thorough documentation
-
-It seems like the code structure is somewhat converging to a final state, so
-documenting the code is a good idea. The README.md also belongs to this. It's
-better to do this early while still familiar with the code.
-
-Also make sure to include some examples inline with documentation, research
-online what best practises for this are.
-
-### Fill in last TODO references
-
-There are some uncomplete references scattered throughout documentation. Now
-that the examples are complete, complete these references.
