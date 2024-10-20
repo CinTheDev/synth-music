@@ -86,9 +86,11 @@ where
     for _ in 0..2 {
         // Chord V
         track.note(WHOLE, fifth(0));
+        track.measure().unwrap();
 
         // Chord I
         track.note(WHOLE, first(1));
+        track.measure().unwrap();
     }
 
     return track;
@@ -107,17 +109,20 @@ where
     track.note(QUARTER, first(4));
     track.note(EIGTH, seventh(3));
     track.note(EIGTH, sixth(3));
+    track.measure().unwrap();
 
     track.note(QUARTER.dot(), fifth(3));
     track.note(EIGTH, third(3));
     track.note(QUARTER, fifth(3));
     track.note(EIGTH, fourth(3));
     track.note(EIGTH, third(3));
+    track.measure().unwrap();
 
     track.note(QUARTER.dot(), second(3));
     track.note(EIGTH, third(3));
     track.note(QUARTER, fourth(3));
     track.note(QUARTER, fifth(3));
+    track.measure().unwrap();
 
     if repeat {
         track.note(QUARTER, third(3));
@@ -131,6 +136,7 @@ where
         track.note(QUARTER, first(3));
         track.note(HALF, first(3));
     }
+    track.measure().unwrap();
 
     return track;
 }
@@ -161,15 +167,19 @@ where
 
     // Chord IV
     track.note(WHOLE, fourth(1));
+    track.measure().unwrap();
 
     // Chord III
     track.note(WHOLE, third(1));
+    track.measure().unwrap();
 
     // Chord V
     track.note(WHOLE, fifth(0));
+    track.measure().unwrap();
 
     // Chord I
     track.note(WHOLE, first(1));
+    track.measure().unwrap();
 
     return track;
 }
@@ -186,23 +196,32 @@ where
         track, HALF,
         fifth(3),
         third(3),
+    );
+    track.measure().unwrap();
+    sequential_notes!(
+        track, HALF,
         fourth(3),
         second(3)
     );
+    track.measure().unwrap();
 
     if repeat {
         track.note(HALF, third(3));
         track.note(HALF, first(3));
+        track.measure().unwrap();
 
         track.note(HALF, seventh(2).sharp());
         track.note(HALF, second(3));
+        track.measure().unwrap();
     }
     else {
         track.note(QUARTER, third(3));
         track.note(QUARTER, fifth(3));
         track.note(HALF, first(4));
+        track.measure().unwrap();
 
         track.note(WHOLE, seventh(3).sharp());
+        track.measure().unwrap();
     }
 
     return track;
@@ -232,7 +251,10 @@ where
 
     for _ in 0..2 {
         track.note(WHOLE, first(1));
+        track.measure().unwrap();
+
         track.note(WHOLE, fifth(0));
+        track.measure().unwrap();
     }
 
     return track;
@@ -253,6 +275,7 @@ where
             fifth(2)
         );
     }
+    track.measure().unwrap();
 }
 
 fn apply_chord_third<T>(track: &mut MeasureTrack<TET12ScaledTone, T>)
@@ -268,6 +291,7 @@ where
             seventh(2)
         );
     }
+    track.measure().unwrap();
 }
 
 fn apply_chord_fourth<T>(track: &mut MeasureTrack<TET12ScaledTone, T>)
@@ -283,6 +307,7 @@ where
             first(3)
         );
     }
+    track.measure().unwrap();
 }
 
 fn apply_chord_fifth<T>(track: &mut MeasureTrack<TET12ScaledTone, T>)
@@ -298,6 +323,7 @@ where
             second(2)
         );
     }
+    track.measure().unwrap();
 }
 
 // DRUMSET
