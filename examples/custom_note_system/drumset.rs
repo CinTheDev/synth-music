@@ -68,12 +68,12 @@ impl Drumset {
 
     fn interpolation_exponential(a: f32, b: f32, t: f32) -> f32 {
         use std::f32::consts::E;
-        let f2 = -4.0;
-        let e_f2 = E.powf(f2);
-        let f3 = e_f2 / (e_f2 - 1.0);
-        let f1 = 1.0 - f3;
+        let speed = -4.0;
+        let e_speed = E.powf(speed);
+        let offset = e_speed / (e_speed - 1.0);
+        let coef = 1.0 - offset;
 
-        let t_factor = f1 * E.powf(f2 * t) + f3;
+        let t_factor = coef * E.powf(speed * t) + offset;
 
         return t_factor * (a - b) + b;
     }
