@@ -5,8 +5,28 @@ use crate::instruments::DrumsetAction;
 
 // BEGIN PART
 
-pub fn melody_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument: T) -> UnboundTrack<TET12ScaledTone, T> {
-    let mut track = UnboundTrack::new(instrument);
+fn melody_beat() -> TimeSignature {
+    TimeSignature::new(4, 4)
+}
+
+fn chords_beat() -> TimeSignature {
+    TimeSignature::new(4, 4)
+}
+
+fn bass_beat() -> TimeSignature {
+    TimeSignature::new(4, 4)
+}
+
+fn drums_beat() -> TimeSignature {
+    TimeSignature::new(4, 4)
+}
+
+pub fn melody_begin<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
+where 
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    let beat = melody_beat();
+    let mut track = MeasureTrack::new(instrument, beat);
 
     track.note(QUARTER, fifth(3));
     track.note(EIGTH, second(3));
@@ -14,6 +34,7 @@ pub fn melody_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument
     track.note(QUARTER, fourth(3));
     track.note(EIGTH, third(3));
     track.note(EIGTH, second(3));
+    track.measure().unwrap();
 
     track.note(QUARTER, first(3));
     track.note(EIGTH, first(3));
@@ -21,17 +42,20 @@ pub fn melody_begin<T: Instrument<ConcreteValue = TET12ConcreteTone>>(instrument
     track.note(QUARTER, fifth(3));
     track.note(EIGTH, fourth(3));
     track.note(EIGTH, third(3));
+    track.measure().unwrap();
 
     track.note(QUARTER.dot(), second(3));
     track.note(EIGTH, third(3));
     track.note(QUARTER, fourth(3));
     track.note(QUARTER, fifth(3));
+    track.measure().unwrap();
 
     track.note(QUARTER, third(3));
     track.note(QUARTER, first(3));
     track.note(QUARTER, first(3));
     track.note(EIGTH, fourth(3));
     track.note(EIGTH, fifth(3));
+    track.measure().unwrap();
 
     return track;
 }
