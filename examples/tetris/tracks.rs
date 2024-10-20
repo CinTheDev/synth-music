@@ -21,6 +21,90 @@ fn drums_beat() -> TimeSignature {
     TimeSignature::new(4, 4)
 }
 
+pub fn melody_intro<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
+where 
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    let mut track = MeasureTrack::new(instrument, melody_beat());
+    track.set_intensity(0.0);
+    track.start_dynamic_change();
+
+    track.note(QUARTER.dot(), sixth(3));
+    track.note(EIGTH, seventh(3));
+    track.note(QUARTER, first(4));
+    track.note(EIGTH, seventh(3));
+    track.note(EIGTH, sixth(3));
+    track.measure().unwrap();
+
+    track.note(QUARTER.dot(), fifth(3));
+    track.note(EIGTH, third(3));
+    track.note(QUARTER, fifth(3));
+    track.note(EIGTH, fourth(3));
+    track.note(EIGTH, third(3));
+    track.measure().unwrap();
+
+    track.note(QUARTER.dot(), second(3));
+    track.note(EIGTH, third(3));
+    track.note(QUARTER, fourth(3));
+    track.note(QUARTER, fifth(3));
+    track.measure().unwrap();
+
+    track.note(QUARTER, third(3));
+    track.note(QUARTER, first(3));
+    track.note(HALF, first(3));
+    track.measure().unwrap();
+    track.end_dynamic_change(0.4);
+
+    return track;
+}
+
+pub fn chords_intro<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
+where 
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    let mut track = MeasureTrack::new(instrument, chords_beat());
+
+    track.set_intensity(0.0);
+    track.start_dynamic_change();
+
+    apply_chord_fourth(&mut track);
+    apply_chord_third(&mut track);
+    apply_chord_fifth(&mut track);
+    apply_chord_first(&mut track);
+    track.end_dynamic_change(0.2);
+
+    return track;
+}
+
+pub fn bass_intro<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
+where 
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    let mut track = MeasureTrack::new(instrument, bass_beat());
+
+    track.set_intensity(0.0);
+    track.start_dynamic_change();
+
+    // Chord IV
+    track.note(WHOLE, fourth(1));
+    track.measure().unwrap();
+
+    // Chord III
+    track.note(WHOLE, third(1));
+    track.measure().unwrap();
+
+    // Chord V
+    track.note(WHOLE, fifth(1));
+    track.measure().unwrap();
+
+    // Chord I
+    track.note(WHOLE, first(1));
+    track.end_dynamic_change(0.15);
+    track.measure().unwrap();
+
+    return track;
+}
+
 pub fn melody_begin<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
 where 
     T: Instrument<ConcreteValue = TET12ConcreteTone>

@@ -35,6 +35,10 @@ fn main() {
     let instrument_bass = instruments::HardBass::new(10);
     let drumset = instruments::Drumset::new();
 
+    let melody_intro = tracks::melody_intro(instrument_melody);
+    let chords_intro = tracks::chords_intro(instrument_chords);
+    let bass_intro = tracks::bass_intro(instrument_bass);
+
     let melody_begin = tracks::melody_begin(instrument_melody);
     let chords_begin = tracks::chords_begin(instrument_chords);
     let bass_begin = tracks::bass_begin(instrument_bass);
@@ -50,6 +54,11 @@ fn main() {
     let bass_b_section = tracks::bass_b_section(instrument_bass);
 
     let composition = composition!(
+        section!(info,
+            melody_intro,
+            chords_intro,
+            bass_intro,
+        ),
         section!(info,
             melody_begin,
             chords_begin,
