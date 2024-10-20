@@ -61,7 +61,7 @@ where
     track.note(HALF, first(3));
     track.measure().unwrap();
 
-    track.end_dynamic_change(0.55);
+    track.end_dynamic_change(0.5);
 
     return track;
 }
@@ -81,7 +81,7 @@ where
     apply_chord_fifth(&mut track);
     apply_chord_first(&mut track);
 
-    track.end_dynamic_change(0.1);
+    track.end_dynamic_change(0.05);
 
     return track;
 }
@@ -121,7 +121,7 @@ where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
     let mut track = MeasureTrack::new(instrument, melody_beat());
-    track.set_intensity(0.5);
+    track.set_intensity(0.45);
 
     track.note(QUARTER, fifth(3));
     track.note(EIGTH, second(3));
@@ -161,7 +161,7 @@ where
 {
     let mut track = MeasureTrack::new(instrument, chords_beat());
 
-    track.set_intensity(0.1);
+    track.set_intensity(0.08);
 
     for _ in 0..2 {
         apply_chord_fifth(&mut track);
@@ -244,7 +244,7 @@ where
 {
     let mut track = MeasureTrack::new(instrument, chords_beat());
 
-    track.set_intensity(0.1);
+    track.set_intensity(0.08);
 
     apply_chord_fourth(&mut track);
     apply_chord_third(&mut track);
@@ -288,7 +288,7 @@ where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
     let mut track = MeasureTrack::new(instrument, melody_beat());
-    track.set_intensity(0.5);
+    track.set_intensity(0.4);
 
     sequential_notes!(
         track, HALF,
@@ -330,7 +330,7 @@ where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
     let mut track = MeasureTrack::new(instrument, chords_beat());
-    track.set_intensity(0.08);
+    track.set_intensity(0.06);
 
     for _ in 0..2 {
         apply_chord_first(&mut track);
@@ -433,7 +433,7 @@ where
     use DrumsetAction::*;
 
     let mut track = MeasureTrack::new(instrument, drums_beat());
-    track.set_intensity(0.5);
+    track.set_intensity(0.4);
 
     for _ in 0..measures {
         sequential_notes!(track, QUARTER,
@@ -452,7 +452,7 @@ where
     use DrumsetAction::*;
 
     let mut track = MeasureTrack::new(instrument, drums_beat());
-    track.set_intensity(0.5);
+    track.set_intensity(0.4);
 
     for _ in 0..measures {
         notes!(track, QUARTER, Bass);
@@ -473,7 +473,7 @@ where
     use DrumsetAction::*;
 
     let mut track = MeasureTrack::new(instrument, drums_beat());
-    track.set_intensity(0.5);
+    track.set_intensity(0.4);
 
     for _ in 0..measures {
         notes!(track, EIGTH, Bass);
