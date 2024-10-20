@@ -47,11 +47,6 @@ List of all required examples:
 - Different implementations
 - TODO
 
-#### Custom note system
-
-- Drumset example
-- Probably similar to what Tetris example is doing
-
 #### Tetris example
 
 - Rename old "melody" folder to "tetris"
