@@ -37,9 +37,7 @@ impl HardBass {
             result += self.generate_frequency(frequency, time);
         }
 
-        let intensity = tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
-
-        return result * intensity;
+        return result * Self::get_intensity(tones, time);
     }
 
     fn generate_frequency(&self, frequency: f64, time: Duration) -> f32 {
@@ -56,6 +54,17 @@ impl HardBass {
         let factor = (2 * n + 1) as f32;
         let harmonic_frequency = frequency * factor as f64;
         predefined::sine_wave(harmonic_frequency, time) / factor.powf(1.7)
+    }
+
+    fn get_intensity(tones: &Tone<TET12ConcreteTone>, time: Duration) -> f32 {
+        let beat_emphasis = tones.beat_emphasis.unwrap_or(1.0);
+
+        let end_time = tones.play_duration.as_secs_f32();
+        let time = time.as_secs_f32();
+        let t = time / end_time;
+
+        let intensity = t * (tones.intensity.end - tones.intensity.start) + tones.intensity.start;
+        return intensity * beat_emphasis;
     }
 }
 
