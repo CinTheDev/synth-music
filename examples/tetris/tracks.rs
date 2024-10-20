@@ -176,7 +176,7 @@ where
     track.measure().unwrap();
 
     // Chord V
-    track.note(WHOLE, fifth(0));
+    track.note(WHOLE, fifth(1));
     track.measure().unwrap();
 
     // Chord I
@@ -193,7 +193,7 @@ where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
     let mut track = MeasureTrack::new(instrument, melody_beat());
-    track.set_intensity(0.1);
+    track.set_intensity(0.5);
 
     sequential_notes!(
         track, HALF,
@@ -235,7 +235,7 @@ where
     T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
     let mut track = MeasureTrack::new(instrument, chords_beat());
-    track.set_intensity(0.4);
+    track.set_intensity(0.08);
 
     for _ in 0..2 {
         apply_chord_first(&mut track);
@@ -256,7 +256,7 @@ where
         track.note(WHOLE, first(1));
         track.measure().unwrap();
 
-        track.note(WHOLE, fifth(0));
+        track.note(WHOLE, fifth(1));
         track.measure().unwrap();
     }
 
