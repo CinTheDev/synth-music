@@ -174,7 +174,7 @@ fn export_buffer(buffer: SoundBuffer) {
     }
 
     let exporter = WavExport {
-        path: PathBuf::from("export/tetris.wav"),
+        path: PathBuf::from("export/Tetris.wav"),
         ..Default::default()
     };
     exporter.export(buffer).unwrap();
