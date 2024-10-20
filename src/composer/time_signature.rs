@@ -1,14 +1,18 @@
-use super::note::Length;
+use super::Length;
 
-//pub const FOUR_FOUR: TimeSignature = TimeSignature::new(4, 4);
-//pub const THREE_FOUR: TimeSignature = TimeSignature::new(3, 4);
-//pub const TWO_FOUR: TimeSignature = TimeSignature::new(2, 4);
-
-//pub const SIX_EIGHT: TimeSignature = TimeSignature::new(6, 8);
-//pub const NINE_EIGHT: TimeSignature = TimeSignature::new(9, 8);
-//pub const TWELVE_EIGHT: TimeSignature = TimeSignature::new(12, 8);
-
-#[derive(Clone)]
+/// Represents a time signature from music for a Track.
+/// 
+/// It constraints how many notes of specific lengths can fit inside a single
+/// measure, and it determines which beats are emphasized.
+/// 
+/// ```
+/// # use synth_music::prelude::TimeSignature;
+/// let four_four =
+///     TimeSignature::new(4, 4)  // Create a time signature of type 4/4
+///     .set_beat(0, 1.1)         // Strongly emphasize the first beat
+///     .set_beat(2, 1.05);       // Weakly emphasize the third beat
+/// ```
+#[derive(Clone, PartialEq, Debug)]
 pub struct TimeSignature {
     pub measure_length: Length,
     beat_length: Length,
@@ -16,10 +20,17 @@ pub struct TimeSignature {
 }
 
 impl TimeSignature {
+    /// Create a new time signature without specified emphasis. The time
+    /// signature is of the form `nominator`/`denominator`.
+    /// 
+    /// Currently, only powers of two for the denominator are supported. Other
+    /// values will result in a panic.
     pub fn new(nominator: u8, denominator: u8) -> Self {
-        // For now only powers of two for denominator are supported
         if ! denominator.is_power_of_two() {
             panic!("The denominator can only be a power of two.");
+        }
+        if nominator < 1 {
+            panic!("The nominator needs to be a positive integer.");
         }
 
         let subdivision = Self::what_power_of_two(denominator);
@@ -35,19 +46,29 @@ impl TimeSignature {
         }
     }
 
+    /// Set the emphasis of a specific beat. The standard value for all beats
+    /// is `1.0`, a smaller value will weaken the beat, while a greater value
+    /// will emphasize the beat.
+    /// 
+    /// Will panic if the specified index is beyond the amount of beats. The
+    /// indexing works like an array, where `0` refers to the first beat, `1`
+    /// to the second, etc...
     pub fn set_beat(mut self, index: usize, emphasis: f32) -> Self {
         self.beat_intensities[index] = emphasis;
         self
     }
 
+    /// Checks if the given note length fits perfectly inside the measure.
     pub fn is_measure_saturated(&self, lengths: Length) -> bool {
         return self.measure_length == lengths;
     }
 
+    /// Return a reference to the beat emphasis values.
     pub fn beats(&self) -> &Vec<f32> {
         &self.beat_intensities
     }
 
+    /// Return the length of a single beat.
     pub fn beat_length(&self) -> Length {
         self.beat_length
     }
@@ -65,3 +86,5 @@ impl TimeSignature {
         return result;
     }
 }
+
+mod tests;

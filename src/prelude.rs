@@ -1,17 +1,19 @@
 // Composer imports
 pub use crate::composer;
-pub use composer::MusicTrack;
 
-pub use composer::unbound_track::UnboundTrack;
-pub use composer::measure_track::{MeasureTrack, Measure};
+pub use composer::{
+    music_key,
+    note::length,
+    Note,
+    ScaledValue,
 
-pub use composer::note;
-pub use composer::note::{Note, ScaledValue};
+    TimeSignature,
 
-pub use composer::music_key::{MusicKey, KeyTonic, KeyType};
-
-pub use composer::time_signature;
-pub use composer::TimeSignature;
+    MusicTrack,
+    UnboundTrack,
+    measure_track::*,
+};
+pub use music_key::{MusicKey, KeyTonic, KeyType};
 
 pub use crate::{notes, sequential_notes, section, composition};
 
@@ -20,6 +22,7 @@ pub use crate::instrument;
 pub use instrument::{Instrument, InstrumentBuffer, BufferInfo};
 pub use instrument::predefined;
 pub use predefined::tet12;
+pub use tet12::{TET12ScaledTone, TET12ConcreteTone};
 
 
 // File-export imports

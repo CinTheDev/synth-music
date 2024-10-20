@@ -3,27 +3,34 @@ pub mod wav_export;
 
 use std::time::Duration;
 
-use export_info::*;
+#[doc(inline)]
+pub use export_info::*;
 use crate::instrument::{Instrument, BufferInfo};
+use crate::progress_bars;
 
 const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
 const DEFAULT_FADE_OUT: Duration = Duration::from_millis(2);
 
+/// Represents saving a buffer as a file on the file system.
 pub trait FileExport {
     fn export(&self, buffer: SoundBuffer) -> std::io::Result<()>;
 }
 
+/// Renders an `ExportTrack` into a `SoundBuffer`
+/// 
+/// This function will automatically print a progress bar with the render
+/// progress.
 pub fn render<T: Instrument>(track: &ExportTrack<T>, settings: CompositionSettings) -> SoundBuffer {
     use indicatif::ProgressBar;
 
     let mut buffer = SoundBuffer::new(Vec::new(), 0, settings);
 
     let progress = ProgressBar::new(track.tones.len() as u64)
-        .with_style(crate::default_progress_style())
+        .with_style(progress_bars::default_progress_style())
         .with_message("Track");
 
     let progress = unsafe {
-        crate::add_progress_bar(progress)
+        progress_bars::add_progress_bar(progress)
     };
 
     for tone in &track.tones {
@@ -39,8 +46,14 @@ pub fn render<T: Instrument>(track: &ExportTrack<T>, settings: CompositionSettin
 
     progress.finish_and_clear();
     
-    if contains_loud_samples(&buffer) {
-        progress.println("WARNING: Track contains very loud samples. Play back at your own risk.");
+    if let Some(index) = contains_loud_samples(&buffer) {
+        let msg = format!(
+            "WARNING: Track contains very loud samples starting at sample {}; \
+            t = {:?}. Play back at your own risk.",
+            index,
+            buffer.time_from_index(index),
+        );
+        progress.println(msg);
     }
 
     return buffer;
@@ -101,30 +114,41 @@ fn smooth(t: f32) -> f32 {
     3.0*t*t - 2.0*t*t*t
 }
 
-fn contains_loud_samples(buffer: &SoundBuffer) -> bool {
-    for sample in &buffer.samples {
-        let value = (*sample).abs();
+fn contains_loud_samples(buffer: &SoundBuffer) -> Option<usize> {
+    for i in 0..buffer.samples.len() {
+        let sample = buffer.samples[i];
+        let value = sample.abs();
 
         if value > 1.0 {
-            return true;
+            return Some(i);
         }
     }
 
-    return false;
+    return None;
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! count {
     () => (0usize);
     ( $x:tt $($xs:tt)* ) => (1usize + count!($($xs)*));
 }
 
+/// Render a number of tracks into a buffer with the given section info. This
+/// represents a section, where all tracks play at once.
+/// 
+/// This will print a progress bar showing how many tracks have been rendered
+/// already.
+/// 
+/// Internally, multithreading is used for rendering multiple tracks in
+/// parallel.
 #[macro_export]
 macro_rules! section {
     ( $section_info:expr, $( $track:expr ),+ $(,)? ) => {
         {
             use indicatif::ProgressBar;
             use synth_music::count;
+            use synth_music::progress_bars;
 
             let settings = $section_info.settings.to_owned();
             
@@ -132,11 +156,11 @@ macro_rules! section {
             let amount_tracks = count!($($track)*);
             
             let progress = ProgressBar::new(amount_tracks as u64)
-                .with_style(synth_music::default_progress_style())
+                .with_style(progress_bars::default_progress_style())
                 .with_message("Section");
             
             let progress = unsafe {
-                synth_music::add_progress_bar(progress)
+                progress_bars::add_progress_bar(progress)
             };
             
             // Multithreading
@@ -171,6 +195,8 @@ macro_rules! section {
     };
 }
 
+/// Append multiple sections together to form a single buffer for the whole
+/// composition. This final buffer can then be exported into a file.
 #[macro_export]
 macro_rules! composition {
     ( $first_section:expr, $( $section:expr ),* $(,)? ) => {

@@ -1,14 +1,26 @@
-use crate::composer::music_key::{MusicKey, KeyType, KeyTonic};
-use crate::composer::note::ScaledValue;
+use crate::composer::{MusicKey, KeyType, KeyTonic};
+use crate::composer::ScaledValue;
 
-#[derive(Clone, Copy)]
+/// An abstract representation of a note value dependent on a `MusicKey`.
+/// Construct these with the functions `first(x)`, `second(x)`, ...
+/// 
+/// A `first(x)` note is the first note of the scale (or the tonic), where "x"
+/// is the octave. If the scale e.g. is "C Major", the note `first(4)` is C4.
+/// 
+/// These can also be sharpened or flattened afterwards.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct TET12ScaledTone {
     index: u8,
     octave: i32,
     offset: i32,
 }
 
-#[derive(Clone, Copy)]
+/// A concrete representation of a note value without a music key. This is
+/// equivalent to e.g. keys on a piano. If a `MusicKey` is applied to a
+/// `TET12ScaledTone`, this will be the result.
+/// 
+/// Notes in this form will be passed to instruments for generating sound.
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct TET12ConcreteTone(pub i32);
 
 impl ScaledValue for TET12ScaledTone {
@@ -20,6 +32,7 @@ impl ScaledValue for TET12ScaledTone {
 }
 
 impl TET12ConcreteTone {
+    /// Convert the tone into a frequency with unit Hz.
     pub fn to_frequency(self) -> f32 {
         Self::frequency_from_a4_distance(self.0)
     }
@@ -30,17 +43,21 @@ impl TET12ConcreteTone {
 }
 
 impl TET12ScaledTone {
+    /// Sharpen the note value (increase the note value by one semitone). Can be
+    /// called multiple times.
     pub fn sharp(mut self) -> Self {
         self.offset += 1;
         self
     }
 
+    /// Flatten the note value (decrease the note value by one semitone). Can be
+    /// called multiple times.
     pub fn flat(mut self) -> Self {
         self.offset -= 1;
         self
     }
 
-    pub fn get_concrete_value(self, key: MusicKey) -> i32 {
+    fn get_concrete_value(self, key: MusicKey) -> i32 {
         let distance_from_tonic = Self::get_distance_from_tonic(key.key_type, self.index);
         let distance_tonic_from_a4 = Self::distance_from_a4(key.tonic);
         let octave_offset = (self.octave - 4) * 12;
@@ -116,6 +133,7 @@ impl TET12ScaledTone {
     }
 }
 
+/// Construct the first note of the scale
 pub fn first(octave: i32) -> TET12ScaledTone {
     TET12ScaledTone {
         index: 0,
@@ -124,6 +142,7 @@ pub fn first(octave: i32) -> TET12ScaledTone {
     }
 }
 
+/// Construct the second note of the scale
 pub fn second(octave: i32) -> TET12ScaledTone {
     TET12ScaledTone {
         index: 1,
@@ -132,6 +151,7 @@ pub fn second(octave: i32) -> TET12ScaledTone {
     }
 }
 
+/// Construct the third note of the scale
 pub fn third(octave: i32) -> TET12ScaledTone {
     TET12ScaledTone {
         index: 2,
@@ -140,6 +160,7 @@ pub fn third(octave: i32) -> TET12ScaledTone {
     }
 }
 
+/// Construct the fourth note of the scale
 pub fn fourth(octave: i32) -> TET12ScaledTone {
     TET12ScaledTone {
         index: 3,
@@ -148,6 +169,7 @@ pub fn fourth(octave: i32) -> TET12ScaledTone {
     }
 }
 
+/// Construct the fifth note of the scale
 pub fn fifth(octave: i32) -> TET12ScaledTone {
     TET12ScaledTone {
         index: 4,
@@ -156,6 +178,7 @@ pub fn fifth(octave: i32) -> TET12ScaledTone {
     }
 }
 
+/// Construct the sixth note of the scale
 pub fn sixth(octave: i32) -> TET12ScaledTone {
     TET12ScaledTone {
         index: 5,
@@ -164,6 +187,7 @@ pub fn sixth(octave: i32) -> TET12ScaledTone {
     }
 }
 
+/// Construct the seventh note of the scale
 pub fn seventh(octave: i32) -> TET12ScaledTone {
     TET12ScaledTone {
         index: 6,
@@ -171,3 +195,5 @@ pub fn seventh(octave: i32) -> TET12ScaledTone {
         offset: 0,
     }
 }
+
+mod tests;

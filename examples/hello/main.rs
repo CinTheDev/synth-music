@@ -3,193 +3,136 @@ use synth_music::prelude::*;
 fn main() {
     println!("Hello example");
 
-    example_1();
-    example_2();
-    example_3();
-}
+    // Create implemented instrument and tracks
+    let example_instrument = SineInstrument;
+    let track = create_track(example_instrument);
 
-fn example_1() {
-    use tet12::*;
-    use note::length::*;
-
-    let four_four =
-        TimeSignature::new(4, 4)
-        .set_beat(0, 2.0)
-        .set_beat(2, 1.5);
-
-    let two_four =
-        TimeSignature::new(2, 4)
-        .set_beat(0, 2.0);
-
-    let mut track1 = MeasureTrack::new(SineGenerator, four_four);
-    let mut track2 = MeasureTrack::new(SineGenerator, two_four);
-
-    track1.set_intensity(0.5);
-    track2.set_intensity(0.5);
-
-    sequential_notes!(track1, QUARTER,
-        first(3),
-        second(3),
-        third(3),
-        fourth(3)
-    );
-    track1.measure().unwrap();
-    sequential_notes!(track1, QUARTER,
-        fifth(3),
-        sixth(3),
-        seventh(3),
-        first(4)
-    );
-    track1.measure().unwrap();
-
-    sequential_notes!(track2, QUARTER,
-        fifth(3),
-        sixth(3)
-    );
-    track2.measure().unwrap();
-    sequential_notes!(track2, QUARTER,
-        seventh(3),
-        first(4)
-    );
-    track2.measure().unwrap();
-    sequential_notes!(track2, QUARTER,
-        second(4),
-        third(4)
-    );
-    track2.measure().unwrap();
-    sequential_notes!(track2, QUARTER,
-        fourth(4),
-        fifth(4)
-    );
-    track2.measure().unwrap();
-
+    // Specify settings (must be constant throughout the whole composition)
     let settings = CompositionSettings {
         sample_rate: 44100,
     };
 
-    let section_info = SectionInfo {
+    // Specify attributes (can change if section transition occurs)
+    let info = SectionInfo {
         bpm: 120.0,
-        key: MusicKey {
-            tonic: KeyTonic::C,
-            key_type: KeyType::Major,
-        },
-
+        key: music_key::C_MAJOR,
         settings: &settings,
     };
 
-    let section = section!(section_info,
-        track1,
-        track2,
+    // Render the section, it's possible to enter any number of tracks.
+    // All tracks will play at the same time, parallel to one another.
+    let section = section!(info,
+        track,
     );
 
-    export_buffer(section, "first_example.wav");
+    // Append all sections together, any number of sections is accepted.
+    // In this example the given section is repeated.
+    let composition = composition!(
+        section,
+        section
+    );
+
+    // Export the composition. Check the function implementation below.
+    export(composition);
 }
 
-fn example_2() {
+fn create_track<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
+where
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    // For reducing excessive repetition
     use tet12::*;
-    use note::length::*;
+    use length::*;
 
-    let instrument = predefined::SineGenerator;
-
-    let mut track = UnboundTrack::new(instrument);
-
-    track.note(WHOLE, third(1));
-
-    let settings = CompositionSettings {
-        sample_rate: 44100,
-    };
-
-    let section_info = SectionInfo {
-        bpm: 120.0,
-        key: MusicKey {
-            tonic: KeyTonic::C,
-            key_type: KeyType::Major,
-        },
-
-        settings: &settings,
-    };
-
-    let section = section!(section_info, track);
-
-    export_buffer(section, "sound_test.wav");
-}
-
-fn example_3() {
-    use tet12::*;
-    use note::length::*;
-
-    let instrument = predefined::SineGenerator;
-
+    // Define a time signature
     let four_four = TimeSignature::new(4, 4);
 
+    // Create a new track
     let mut track = MeasureTrack::new(instrument, four_four);
-    track.set_intensity(0.7);
 
+    // Place a bunch of notes behind each other with constant length
     sequential_notes!(track, QUARTER,
         first(3),
         second(3),
         third(3),
-        fourth(3)
+        fourth(3),
+    );
+    // Place the end of the measure
+    track.measure().unwrap();
+
+    sequential_notes!(track, QUARTER,
+        fifth(3),
+        sixth(3),
+        seventh(3),
+        first(4),
     );
     track.measure().unwrap();
 
-    sequential_notes!(track, QUARTER.triole(),
-        first(3),
-        third(3),
-        second(3),
+    track.pause(WHOLE);
+    track.measure().unwrap();
 
-        third(3),
+    // Change the intensity throughout the melody
+    track.set_intensity(0.2);
+
+    // You can also place notes without a macro
+    track.note(QUARTER, first(3));
+    track.note(QUARTER, third(3));
+    track.note(QUARTER, fifth(3));
+    track.note(QUARTER, third(3));
+    track.measure().unwrap();
+    track.note(WHOLE, first(3));
+    track.measure().unwrap();
+
+    // Notes placed this way can be modified afterwards
+    track.note(QUARTER, first(4)).staccato();
+    track.note(QUARTER, third(4)).staccato();
+    track.note(QUARTER, fifth(4)).staccato();
+    track.note(QUARTER, third(4));
+    track.measure().unwrap();
+    
+    // This will stack notes, so these will be played at the same time
+    notes!(track, WHOLE,
+        first(4),
         fifth(3),
-        fourth(3)
+        third(3),
     );
     track.measure().unwrap();
 
-    sequential_notes!(track, QUARTER.ntole(5),
-        first(3),
-        second(3),
-        third(3),
-        fourth(3),
+    // Of course, note stacks can be modified too
+    notes!(track, QUARTER,
+        first(4),
         fifth(3),
-
         third(3),
-        fourth(3),
+    ).staccato();
+    notes!(track, QUARTER,
+        first(4),
         fifth(3),
-        fourth(3),
-        third(3)
+        third(3),
+    ).staccato();
+    notes!(track, HALF,
+        first(4),
+        fifth(3),
+        third(3).flat(), // Flatten the third to create a minor chord
     );
     track.measure().unwrap();
 
-    let settings = CompositionSettings {
-        sample_rate: 44100,
-    };
-
-    let section_info = SectionInfo {
-        bpm: 120.0,
-        key: MusicKey {
-            tonic: KeyTonic::A,
-            key_type: KeyType::Minor,
-        },
-
-        settings: &settings,
-    };
-
-    let section = section!(section_info, track);
-
-    export_buffer(section, "Triole_Test.wav");
+    return track;
 }
 
-fn export_buffer(buffer: SoundBuffer, name: &str) {
+fn export(buffer: SoundBuffer) {
     use std::path::PathBuf;
 
     if std::fs::read_dir("export").is_err() {
         std::fs::create_dir("export").unwrap();
     }
 
+    // Specify new exporter with given attributes
     let wav_export = WavExport {
-        path: PathBuf::from("export").join(name),
+        path: PathBuf::from("export/Hello.wav"),
         ..Default::default()
     };
 
+    // Actually export the piece.
     wav_export.export(buffer).unwrap();
 }
 
@@ -197,10 +140,12 @@ fn export_buffer(buffer: SoundBuffer, name: &str) {
 
 use std::time::Duration;
 
+// Create a new instrument that will output notes as sine waves.
 #[derive(Clone, Copy)]
-struct SineGenerator;
+struct SineInstrument;
 
-impl SineGenerator {
+impl SineInstrument {
+    // Will take a point in time and generate the current amplitude for it.
     pub fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
         let mut result = 0.0;
 
@@ -212,14 +157,16 @@ impl SineGenerator {
         return result * tones.intensity.start * tones.beat_emphasis.unwrap_or(0.5);
     }
 
+    // Outputs the amplitude of the corresponding sine-wave at the specified time
     pub fn generate_frequency(frequency: f64, time: Duration) -> f32 {
         use std::f64::consts::PI;
         (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
     }
 }
 
-impl Instrument for SineGenerator {
-    type ConcreteValue = tet12::TET12ConcreteTone;
+// Required to implement to use as an Instrument
+impl Instrument for SineInstrument {
+    type ConcreteValue = TET12ConcreteTone;
 
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let mut buffer = Vec::new();

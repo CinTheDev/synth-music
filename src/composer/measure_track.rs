@@ -1,11 +1,22 @@
-use super::note::{Note, ScaledValue, Length, DynamicsFlag};
-use super::{SectionInfo, MusicTrack};
-use super::TimeSignature;
+use super::{Note, ScaledValue, length, Length};
+use super::note::DynamicsFlag;
+
+use super::{TimeSignature, SectionInfo, MusicTrack};
+use super::{ExportTrack, Tone};
+
 use crate::instrument::Instrument;
-use crate::file_export::export_info::{ExportTrack, Tone};
+
 use std::time::Duration;
 use std::ops::Range;
 
+/// An implementation of MusicTrack with additional rules to ensure that
+/// Measures are filled with notes correctly. Use this as the standard Track.
+/// 
+/// With the existance of measures, it's also possible to have a time signature
+/// assigned to the track, which can even automatically emphasize specific beats
+/// (e.g. the first beat).
+/// 
+/// Read the front page of the crate for examples on how to use this.
 pub struct MeasureTrack<T, U>
 where 
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
@@ -22,6 +33,7 @@ where
     next_note_dynamic_flag: Option<DynamicsFlag>,
 }
 
+/// A single measure; managed by `MeasureTrack`
 pub struct Measure<T: ScaledValue> {
     time_signature: TimeSignature,
     notes: Vec<Note<T>>,
@@ -67,7 +79,7 @@ where
     }
 
     fn end_dynamic_change(&mut self, intensity: f32) {
-        let active_note = self.get_active_measure().notes.last_mut().unwrap();
+        let active_note = self.get_active_note();
 
         active_note.dynamics_flag = DynamicsFlag::EndChange;
         active_note.intensity = intensity;
@@ -99,18 +111,21 @@ where
     T: ScaledValue<ConcreteValue = U::ConcreteValue>,
     U: Instrument,
 {
+    /// Create a new track with the given instrument and time signature
     pub fn new(instrument: U, time_signature: TimeSignature) -> Self {
         Self {
             active_measure: Some(Measure::new(time_signature.clone())),
             measures: Vec::new(),
             time_signature,
             instrument,
-            current_intensity: 1.0,
+            current_intensity: 0.5,
             current_play_fraction: 1.0,
             next_note_dynamic_flag: None,
         }
     }
 
+    /// Place the end of a measure, which will automatically validate the
+    /// completed measure. An error is returned if the measure is invalid.
     pub fn measure(&mut self) -> Result<&mut Measure<T>, &str> {
         let active_measure_valid = self.get_active_measure().assert_measure_bounds();
 
@@ -130,6 +145,20 @@ where
         self.active_measure.as_mut().unwrap()
     }
 
+    fn get_active_note(&mut self) -> &mut Note<T> {
+        let last_measure = {
+            let active_measure_empty = self.get_active_measure().is_empty();
+            if active_measure_empty {
+                self.measures.last_mut().unwrap()
+            }
+            else {
+                self.get_active_measure()
+            }
+        };
+
+        return last_measure.notes.last_mut().unwrap();
+    }
+
     fn arrange_notes(&self) -> Vec<(Note<T>, Length)> {
         let mut notes = Vec::new();
 
@@ -145,7 +174,7 @@ where
             for note in &measure.notes {
                 let position_in_measure =
                     Length::count_lengths(&note_lengths)
-                    .unwrap_or(Length::INVALID);
+                    .unwrap_or(length::INVALID);
 
                 notes.push(((*note).clone(), position_in_measure));
                 note_lengths.push(note.length);
@@ -270,7 +299,7 @@ where
     fn get_beat_from_position(&self, position: Length) -> Option<f32> {
         let beats = self.time_signature.beats();
 
-        let mut position_in_measure = Length::from_ticks(0);
+        let mut position_in_measure = length::ZERO;
 
         for beat in beats {
             if position == position_in_measure {
@@ -312,8 +341,11 @@ impl<T: ScaledValue> Measure<T> {
         return self.time_signature.is_measure_saturated(total_length);
     }
 
+    /// Override the time signature for this measure.
     pub fn override_time_signature(&mut self, time_signature: TimeSignature) -> &mut Self {
         self.time_signature = time_signature;
         self
     }
 }
+
+mod tests;

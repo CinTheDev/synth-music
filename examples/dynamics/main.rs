@@ -10,8 +10,9 @@ fn main() {
         cutoff_time: Duration::from_secs_f32(3.0),
     };
 
-    let track_linear_sine = example_track(linear_sine);
-    let track_punchy_sine = example_track(punchy_sine);
+    let track_constant_intensity = example_constant_intensity(linear_sine);
+    let track_linear_sine = example_dynamic_intensity(linear_sine);
+    let track_punchy_sine = example_dynamic_intensity(punchy_sine);
 
     let settings = CompositionSettings {
         sample_rate: 44100,
@@ -27,34 +28,68 @@ fn main() {
         settings: &settings,
     };
 
+    let constant_section = section!(section_info, track_constant_intensity);
     let linear_section = section!(section_info, track_linear_sine);
     let punchy_section = section!(section_info, track_punchy_sine);
 
     let composition = composition!(
+        constant_section,
         linear_section,
         punchy_section,
     );
 
-    // Export
-    use std::path::PathBuf;
-
-    if std::fs::read_dir("export").is_err() {
-        std::fs::create_dir("export").unwrap();
-    }
-
-    let path = PathBuf::from("export/dynamics.wav");
-    let exporter = WavExport {
-        path,
-        ..Default::default()
-    };
-    exporter.export(composition).unwrap();
+    export(composition);
 }
 
-fn example_track<T>(instrument: T) -> MeasureTrack<tet12::TET12ScaledTone, T>
+fn example_constant_intensity<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
 where 
-    T: Instrument<ConcreteValue = tet12::TET12ConcreteTone>
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
 {
-    use note::length::*;
+    use length::*;
+    use tet12::*;
+
+    let time_signature = TimeSignature::new(4, 4);
+
+    let mut track = MeasureTrack::new(instrument, time_signature);
+
+    // track.set_intensity(x) will change the intensity for the notes placed
+    // after the call.
+
+    track.set_play_fraction(0.9);
+
+    track.set_intensity(0.1);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.2);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.3);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.4);
+    track.note(QUARTER, first(4));
+
+    track.measure().unwrap();
+
+    track.set_intensity(0.5);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.4);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.3);
+    track.note(QUARTER, first(4));
+    track.set_intensity(0.2);
+    track.note(QUARTER, first(4));
+
+    track.measure().unwrap();
+
+    track.pause(WHOLE);
+    track.measure().unwrap();
+
+    return track;
+}
+
+fn example_dynamic_intensity<T>(instrument: T) -> MeasureTrack<TET12ScaledTone, T>
+where 
+    T: Instrument<ConcreteValue = TET12ConcreteTone>
+{
+    use length::*;
     use tet12::*;
 
     let time_signature = TimeSignature::new(4, 4);
@@ -65,20 +100,20 @@ where
 
     // Held notes
 
-    track.set_intensity(0.3);
+    track.set_intensity(0.1);
 
-    track.start_dynamic_change();
+    track.start_dynamic_change(); // Start changing loudness
     track.note(WHOLE, first(4));
     track.measure().unwrap();
     track.note(WHOLE, first(4));
-    track.end_dynamic_change(1.0);
+    track.end_dynamic_change(0.7); // Loudness changing stops here at the given value
     track.measure().unwrap();
     
     track.start_dynamic_change();
     track.note(WHOLE, first(4));
     track.measure().unwrap();
     track.note(WHOLE, first(4));
-    track.end_dynamic_change(0.3);
+    track.end_dynamic_change(0.1);
     track.measure().unwrap();
 
     track.pause(WHOLE);
@@ -92,7 +127,7 @@ where
         track.note(QUARTER, first(4));
     }
     track.note(QUARTER, first(4));
-    track.end_dynamic_change(1.0);
+    track.end_dynamic_change(0.7);
     track.measure().unwrap();
 
     track.start_dynamic_change();
@@ -101,13 +136,30 @@ where
         track.note(QUARTER, first(4));
     }
     track.note(QUARTER, first(4));
-    track.end_dynamic_change(0.3);
+    track.end_dynamic_change(0.1);
     track.measure().unwrap();
 
     track.pause(WHOLE);
     track.measure().unwrap();
     
     return track;
+}
+
+fn export(buffer: SoundBuffer) {
+    use std::path::PathBuf;
+
+    if std::fs::read_dir("export").is_err() {
+        std::fs::create_dir("export").unwrap();
+    }
+
+    // Specify new exporter with given attributes
+    let wav_export = WavExport {
+        path: PathBuf::from("export/Dynamics.wav"),
+        ..Default::default()
+    };
+
+    // Actually export the piece.
+    wav_export.export(buffer).unwrap();
 }
 
 #[derive(Clone, Copy)]
@@ -127,6 +179,7 @@ impl LinearSine {
             result += Self::wave(frequency, time);
         }
 
+        // Here, the intensity is interpolated across the range
         return result * Self::current_intensity(
             time.as_secs_f32(),
             tones.tone_duration.as_secs_f32(),
@@ -154,6 +207,9 @@ impl PunchySine {
             result += Self::wave(frequency, time);
         }
 
+        // Here, intensity is already handled by decay(), so we don't need to
+        // change intensity throughout the note. We only use the intensity at
+        // the start as a base.
         return result * Self::decay(time.as_secs_f32()) * tones.intensity.start;
     }
 

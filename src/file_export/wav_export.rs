@@ -5,6 +5,7 @@ use std::io::{BufWriter, Write};
 use std::path::PathBuf;
 use std::str::FromStr;
 
+/// Exports buffers as WAV files.
 pub struct WavExport {
     pub path: PathBuf,
 }
@@ -65,7 +66,7 @@ impl FileExport for WavExport {
         let mut writer = BufWriter::new(f);
 
         self.write_header(&mut writer, buffer.settings(), buffer.samples.len() * 2)?;
-        let amplitude = i16::MAX as f32 * 0.5;
+        let amplitude = i16::MAX as f32 * 0.9;
 
         for sample in buffer.samples {
             let val = (sample * amplitude).round() as i16;
