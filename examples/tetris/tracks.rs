@@ -82,7 +82,7 @@ where
 {
     let mut track = MeasureTrack::new(instrument, bass_beat());
 
-    track.set_intensity(0.25);
+    track.set_intensity(0.15);
 
     for _ in 0..2 {
         // Chord V
@@ -165,7 +165,7 @@ where
 {
     let mut track = MeasureTrack::new(instrument, bass_beat());
 
-    track.set_intensity(0.25);
+    track.set_intensity(0.15);
 
     // Chord IV
     track.note(WHOLE, fourth(1));
