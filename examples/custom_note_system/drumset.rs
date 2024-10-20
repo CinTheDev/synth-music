@@ -40,6 +40,8 @@ impl Drumset {
         }
     }
 
+    /// The bass is a low-frequency sine wave. The frequency starts higher, and
+    /// quickly goes really low.
     pub fn bass(&self, buffer_info: &BufferInfo) -> Vec<f32> {
         let target_samples = Self::get_target_samples(buffer_info.sample_rate, self.bass_duration);
 
@@ -56,7 +58,6 @@ impl Drumset {
     }
 
     fn bass_frequency(&self, time: Duration) -> f32 {
-        // first experiment: linear interpolation
         let start_frequency = 90.0;
         let end_frequency = 55.0;
 
@@ -78,6 +79,9 @@ impl Drumset {
         return t_factor * (a - b) + b;
     }
 
+    /// Snares and HiHats are white noise with a frequency filter applied.
+    /// Snares have a broad range of middle frequencies, HiHats are higher
+    /// frequencies.
     pub fn noised_tone(&self, buffer_info: &BufferInfo, action: &DrumsetAction) -> Vec<f32> {
         let frequency_range = match action {
             DrumsetAction::Snare => 500.0 .. 11000.0,
