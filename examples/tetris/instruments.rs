@@ -30,7 +30,9 @@ impl SoftBass {
             result += predefined::triangle_wave(frequency, time);
         }
 
-        return result * self.decay_function(time);
+        let intensity = tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
+
+        return result * intensity * self.decay_function(time);
     }
 
     fn decay_function(&self, time: Duration) -> f32 {
