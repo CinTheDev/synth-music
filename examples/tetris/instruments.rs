@@ -9,10 +9,29 @@ pub use drumset::{Drumset, DrumsetAction};
 pub struct SoftBass {
     pub decay_speed: f32,
 }
+
+#[derive(Clone, Copy)]
+pub struct Decaying<T: Instrument> {
+    pub instrument: T,
+    pub decay_speed: f32,
+}
     
 #[derive(Clone, Copy)]
 pub struct HardBass {
     pub harmonics: u32,
+}
+
+impl<T: Instrument> Decaying<T> {
+    pub fn new(instrument: T, decay_speed: f32) -> Self {
+        Self {
+            instrument,
+            decay_speed,
+        }
+    }
+
+    fn decay_function(&self, time: Duration) -> f32 {
+        0.5_f32.powf(time.as_secs_f32() * self.decay_speed)
+    }
 }
 
 impl SoftBass {
@@ -74,6 +93,22 @@ impl HardBass {
         let factor = (2 * n + 1) as f32;
         let harmonic_frequency = frequency * factor as f64;
         predefined::sine_wave(harmonic_frequency, time) / factor.powf(1.7)
+    }
+}
+
+impl<T: Instrument> Instrument for Decaying<T> {
+    type ConcreteValue = T::ConcreteValue;
+
+    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+        let mut instrument_buffer = self.instrument.render_buffer(buffer_info.clone(), tones);
+
+        for i in 0..instrument_buffer.samples.len() {
+            let time = buffer_info.time_from_index(i);
+            let decay_factor = self.decay_function(time);
+            instrument_buffer.samples[i] *= decay_factor;
+        }
+
+        return instrument_buffer;
     }
 }
 

@@ -4,12 +4,14 @@ use crate::file_export::Tone;
 use std::time::Duration;
 
 /// A simple buffer that is returned by `render_buffer` of `Instrument`.
+#[derive(Clone)]
 pub struct InstrumentBuffer {
     pub samples: Vec<f32>,
 }
 
 /// Information that is necessary / useful for creating a buffer in the
 /// `render_buffer` function.
+#[derive(Clone)]
 pub struct BufferInfo {
     pub sample_rate: u32,
     pub tone_samples: usize,
