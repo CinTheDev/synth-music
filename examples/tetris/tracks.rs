@@ -55,7 +55,7 @@ where
     track.note(HALF, first(3));
     track.measure().unwrap();
 
-    track.end_dynamic_change(0.4);
+    track.end_dynamic_change(0.55);
 
     return track;
 }
