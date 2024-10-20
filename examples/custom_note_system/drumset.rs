@@ -42,17 +42,28 @@ impl Drumset {
 
     pub fn bass(&self, buffer_info: &BufferInfo) -> Vec<f32> {
         let target_samples = Self::get_target_samples(buffer_info.sample_rate, self.bass_duration);
-        let frequency = 50.0;
 
         let mut buffer = vec![0_f32; target_samples];
 
         for i in 0..buffer.len() {
             let time = buffer_info.time_from_index(i);
+            let frequency = self.bass_frequency(time) as f64;
             let value = predefined::sine_wave(frequency, time);
             buffer[i] = value * self.decay(time, self.bass_duration);
         }
 
         return buffer;
+    }
+
+    fn bass_frequency(&self, time: Duration) -> f32 {
+        // first experiment: linear interpolation
+        let start_frequency = 80.0;
+        let end_frequency = 20.0;
+
+        let max_time = self.bass_duration;
+        let t = time.as_secs_f32() / max_time.as_secs_f32();
+
+        return t * (end_frequency - start_frequency) + start_frequency;
     }
 
     pub fn noised_tone(&self, buffer_info: &BufferInfo, action: &DrumsetAction) -> Vec<f32> {
