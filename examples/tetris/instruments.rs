@@ -68,14 +68,10 @@ impl HardBass {
         return amplitude;
     }
 
-    fn sine_wave(time: Duration, frequency: f64) -> f32 {
-        use std::f64::consts::PI;
-        (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
-    }
-
     fn harmonic(n: u32, frequency: f64, time: Duration) -> f32 {
         let factor = (2 * n + 1) as f32;
-        Self::sine_wave(time, frequency * factor as f64) / factor
+        let harmonic_frequency = frequency * factor as f64;
+        predefined::sine_wave(harmonic_frequency, time) / factor
     }
 }
 
