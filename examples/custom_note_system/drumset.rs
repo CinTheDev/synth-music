@@ -57,13 +57,13 @@ impl Drumset {
 
     fn bass_frequency(&self, time: Duration) -> f32 {
         // first experiment: linear interpolation
-        let start_frequency = 80.0;
-        let end_frequency = 20.0;
+        let start_frequency = 90.0;
+        let end_frequency = 55.0;
 
         let max_time = self.bass_duration;
         let t = time.as_secs_f32() / max_time.as_secs_f32();
 
-        return Self::interpolation_smooth(start_frequency, end_frequency, t);
+        return Self::interpolation_exponential(start_frequency, end_frequency, t);
     }
 
     fn interpolation_linear(a: f32, b: f32, t: f32) -> f32 {
@@ -73,6 +73,15 @@ impl Drumset {
     fn interpolation_smooth(a: f32, b: f32, t: f32) -> f32 {
         let t_factor = 3.0*t*t - 2.0*t*t*t;
         return t_factor * (b - a) + a;
+    }
+
+    fn interpolation_exponential(a: f32, b: f32, t: f32) -> f32 {
+        use std::f32::consts::E;
+        let f_2 = -5.0;
+        let f_3 = (b - a * E.powf(f_2)) / (1.0 - E.powf(f_2));
+        let f_1 = a - f_3;
+
+        return f_1 * E.powf(f_2 * t) + f_3;
     }
 
     pub fn noised_tone(&self, buffer_info: &BufferInfo, action: &DrumsetAction) -> Vec<f32> {
