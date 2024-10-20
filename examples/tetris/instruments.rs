@@ -27,20 +27,10 @@ impl SoftBass {
 
         for tone in &tones.concrete_values {
             let frequency = tone.to_frequency() as f64;
-            result += Self::generate_frequency(frequency, time);
+            result += predefined::triangle_wave(frequency, time);
         }
 
         return result * self.decay_function(time);
-    }
-
-    fn generate_frequency(frequency: f64, time: Duration) -> f32 {
-        Self::triangle_wave(frequency, time)
-    }
-
-    fn triangle_wave(frequency: f64, time: Duration) -> f32 {
-        use std::f64::consts::PI;
-        let x = time.as_secs_f64() * frequency * 2.0 * PI;
-        x.sin().asin() as f32
     }
 
     fn decay_function(&self, time: Duration) -> f32 {
