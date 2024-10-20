@@ -7,7 +7,7 @@ composing music, synthetisizing sounds, and exporting the results into a file.
 
 Most important key information on how this crate is structured.
 
-## Terms
+## Terminology
 
 A whole music piece that would usually reside in a dedicated sound file is
 called a **composition**.
