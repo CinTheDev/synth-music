@@ -23,7 +23,7 @@ fn main() {
     };
 
     let instrument_softbass = instruments::SoftBass::new(1.0);
-    let instrument_hardbass = instruments::HardBass::new(10);
+    let instrument_hardbass = instruments::HardBass::new(5);
     let instrument_drumset = instruments::Drumset::new();
 
     let melody_begin = tracks::melody_begin(instrument_softbass);
@@ -42,7 +42,7 @@ fn main() {
 
     let section_begin = section!(info,
         melody_begin,
-        chords_begin,
+        //chords_begin,
         bass_begin,
         tracks::drumset_4(instrument_drumset, 4)
     );
