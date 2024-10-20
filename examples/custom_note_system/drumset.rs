@@ -66,15 +66,6 @@ impl Drumset {
         return Self::interpolation_exponential(start_frequency, end_frequency, t);
     }
 
-    fn interpolation_linear(a: f32, b: f32, t: f32) -> f32 {
-        t * (b - a) + a
-    }
-
-    fn interpolation_smooth(a: f32, b: f32, t: f32) -> f32 {
-        let t_factor = 3.0*t*t - 2.0*t*t*t;
-        return t_factor * (b - a) + a;
-    }
-
     fn interpolation_exponential(a: f32, b: f32, t: f32) -> f32 {
         use std::f32::consts::E;
         let f_2 = -5.0;
