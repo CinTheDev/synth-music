@@ -23,7 +23,7 @@ fn main() {
     };
 
     let instrument_melody = instruments::SoftBass::new(1.0);
-    let instrument_chords = instruments::SoftBass::new(5.0);
+    let instrument_chords = instruments::SoftBass::new(10.0);
     let instrument_bass = instruments::HardBass::new(10);
     let drumset = instruments::Drumset::new();
 
