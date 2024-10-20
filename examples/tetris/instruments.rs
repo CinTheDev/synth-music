@@ -3,7 +3,7 @@ use tet12::TET12ConcreteTone;
 use std::time::Duration;
 
 pub mod drumset;
-use drumset::DrumsetAction;
+pub use drumset::{Drumset, DrumsetAction};
 
 #[derive(Clone, Copy)]
 pub struct SoftBass {
@@ -13,11 +13,6 @@ pub struct SoftBass {
 #[derive(Clone, Copy)]
 pub struct HardBass {
     pub harmonics: u32,
-}
-
-#[derive(Clone, Copy)]
-pub struct Drumset {
-
 }
 
 impl SoftBass {
@@ -92,39 +87,6 @@ impl HardBass {
     }
 }
 
-// TODO: Improve this (make the DrumsetAction actually matter)
-impl Drumset {
-    fn random() -> f32 {
-        use rand::Rng;
-
-        let mut rng = rand::thread_rng();
-        rng.gen_range(-1.0..1.0)
-    }
-
-    fn frequency_range(action: DrumsetAction) -> (f32, f32) {
-        match action {
-            DrumsetAction::Bass => (0.0, 100.0),
-            DrumsetAction::Snare => (100.0, 200.0),
-            DrumsetAction::HiHat => (1000.0, 2000.0),
-        }
-    }
-
-    fn generate(&self, time: Duration) -> f32 {
-        if time > Duration::from_millis(100) {
-            return 0.0;
-        }
-
-        let value = Self::random();
-        return value;
-    }
-
-    pub fn new() -> Self {
-        Self {
-
-        }
-    }
-}
-
 impl Instrument for SoftBass {
     type ConcreteValue = TET12ConcreteTone;
 
@@ -149,22 +111,6 @@ impl Instrument for HardBass {
         for i in 0..buffer_info.tone_samples {
             let time = buffer_info.time_from_index(i);
             buffer.push(self.generate(tones, time));
-        }
-
-        InstrumentBuffer { samples: buffer }
-    }
-}
-
-impl Instrument for Drumset {
-    type ConcreteValue = DrumsetAction;
-
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let mut buffer = Vec::new();
-
-        for i in 0..buffer_info.tone_samples {
-            let time = buffer_info.time_from_index(i);
-            let value = self.generate(time) * tones.intensity.start;
-            buffer.push(value);
         }
 
         InstrumentBuffer { samples: buffer }
