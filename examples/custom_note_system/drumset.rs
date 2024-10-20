@@ -68,11 +68,14 @@ impl Drumset {
 
     fn interpolation_exponential(a: f32, b: f32, t: f32) -> f32 {
         use std::f32::consts::E;
-        let f_2 = -5.0;
-        let f_3 = (b - a * E.powf(f_2)) / (1.0 - E.powf(f_2));
-        let f_1 = a - f_3;
+        let f2 = -4.0;
+        let e_f2 = E.powf(f2);
+        let f3 = e_f2 / (e_f2 - 1.0);
+        let f1 = 1.0 - f3;
 
-        return f_1 * E.powf(f_2 * t) + f_3;
+        let t_factor = f1 * E.powf(f2 * t) + f3;
+
+        return t_factor * (a - b) + b;
     }
 
     pub fn noised_tone(&self, buffer_info: &BufferInfo, action: &DrumsetAction) -> Vec<f32> {
