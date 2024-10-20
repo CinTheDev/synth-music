@@ -42,11 +42,6 @@ Also, fill in the last references in documentation after examples are finished.
 
 List of all required examples:
 
-#### Instruments
-
-- Different implementations
-- TODO
-
 #### Tetris example
 
 - Rename old "melody" folder to "tetris"
