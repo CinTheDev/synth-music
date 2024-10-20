@@ -1,3 +1,8 @@
+///
+/// This implementation has been copied from the "custom_note_system" example.
+/// Check that example for details.
+/// 
+
 use synth_music::prelude::*;
 use std::time::Duration;
 use rand::Rng;
