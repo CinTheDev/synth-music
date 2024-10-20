@@ -112,7 +112,9 @@ fn main() {
         ),
 
         // Second repetition
-
+        section!(info_fast,
+            tracks::drumset_bass(drumset, 1),
+        ),
 
         section!(info_fast,
             melody_begin,
