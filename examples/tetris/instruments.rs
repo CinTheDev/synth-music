@@ -55,7 +55,9 @@ impl HardBass {
             result += self.generate_frequency(frequency, time);
         }
 
-        return result * tones.intensity.start;
+        let intensity = tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
+
+        return result * intensity;
     }
 
     fn generate_frequency(&self, frequency: f64, time: Duration) -> f32 {
