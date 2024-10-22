@@ -1,7 +1,7 @@
-# TODOs for version 0.1.1
+# TODOs for version 0.1.2
 
 A collection of ideas and improvements that won't introduce breaking changes.
-This file will become the active TODO file once development of version 0.1.1
+This file will become the active TODO file once development of version 0.1.2
 starts.
 
 After completion of a specific task here the description will be deleted.
