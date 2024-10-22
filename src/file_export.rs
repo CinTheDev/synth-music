@@ -134,6 +134,8 @@ macro_rules! count {
     ( $x:tt $($xs:tt)* ) => (1usize + count!($($xs)*));
 }
 
+pub extern crate indicatif;
+
 /// Render a number of tracks into a buffer with the given section info. This
 /// represents a section, where all tracks play at once.
 /// 
@@ -146,7 +148,7 @@ macro_rules! count {
 macro_rules! section {
     ( $section_info:expr, $( $track:expr ),+ $(,)? ) => {
         {
-            use indicatif::ProgressBar;
+            use synth_music::file_export::indicatif::ProgressBar;
             use synth_music::count;
             use synth_music::progress_bars;
 
