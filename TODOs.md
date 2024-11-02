@@ -97,3 +97,36 @@ it should be possible to read a MIDI file from the disk and automatically
 convert it to notes on a Track.
 
 Check the contents of a MIDI file and see how this could be implemented.
+
+## More synthesizer tools
+
+Provide a bunch of default implementations for things often needed for
+synthesizing.
+
+### EQ filter using FFT
+
+The FFT (fast fourier transform) can decompose a tone into it's frequencies and
+turn those back into a tone. The cool thing is that it's possible to modify
+these frequencies before turning them back, which effectively filters or even
+boosts those frequencies.
+
+### Noise generation
+
+Provide functions for generating multiple types of noise. White noise is the
+easiest because it's just random values, but using the EQ above we can create
+other types by filtering white noise.
+
+### Wave functions with phase
+
+Make it possible to specify the phase (which is unaffected by frequency) for
+the provided wave functions. If necessary, provide two seperate functions for
+every wave type where one has specifiable phase, whereas the other behaves the
+same as right now (phase is always zero).
+
+### Better buffer handling
+
+Right now, handling buffers inside an `Instrument` impl is cumbersome, because
+the buffers are raw `Vec<f32>`s, and other important info like `buffer_info`
+have to be handled seperately. Furthermore, some useful buffer implementations
+like mixing two variable length buffers should also be provided, so the user
+doesn't have to implement that for themself.
