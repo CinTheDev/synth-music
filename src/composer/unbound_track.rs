@@ -115,6 +115,10 @@ where
         }
     }
 
+    pub fn get_active_note(&mut self) -> Option<&mut Note<T>> {
+        self.notes.last_mut()
+    }
+
     fn conversion_first_pass(&self, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
         let mut tones = Vec::new();
 

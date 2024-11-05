@@ -139,17 +139,14 @@ where
     }
 
     fn get_active_note(&mut self) -> &mut Note<T> {
-        let last_measure = {
-            let active_measure_empty = self.get_active_measure().is_empty();
-            if active_measure_empty {
-                self.measures.last_mut().unwrap()
-            }
-            else {
-                self.get_active_measure()
-            }
-        };
+        let active_measure_empty = self.get_active_measure().is_empty();
 
-        return last_measure.notes.last_mut().unwrap();
+        if active_measure_empty {
+            return self.unbound_track.get_active_note().unwrap();
+        }
+
+        let active_measure = self.get_active_measure();
+        return active_measure.notes.last_mut().unwrap();
     }
 
     fn arrange_notes(&self) -> Vec<(Note<T>, Length)> {
