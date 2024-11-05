@@ -10,4 +10,6 @@
 
 ## v0.1.2
 
+- Fix getting the active Measure in MeasureTrack
+
 [ CURRENTLY ACTIVE ]
