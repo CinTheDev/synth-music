@@ -96,14 +96,7 @@ where
     }
 
     fn convert_to_export_track(&self, section_info: SectionInfo) -> ExportTrack<U> {
-        let notes = self.arrange_notes();
-        let mut tones = self.conversion_first_pass(&notes, section_info);
-        Self::conversion_pass_dynamics(&notes, &mut tones);
-
-        ExportTrack {
-            tones,
-            instrument: self.instrument.clone(),
-        }
+        self.unbound_track.convert_to_export_track(section_info)
     }
 }
 
