@@ -1,3 +1,5 @@
+use super::UnboundTrack;
+
 use super::{Note, ScaledValue, length, Length};
 use super::note::DynamicsFlag;
 
@@ -23,7 +25,8 @@ where
     U: Instrument,
 {
     active_measure: Option<Measure<T>>,
-    measures: Vec<Measure<T>>,
+    unbound_track: UnboundTrack<T, U>,
+    
     time_signature: TimeSignature,
     instrument: U,
 
