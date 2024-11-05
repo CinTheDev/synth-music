@@ -11,7 +11,7 @@ use crate::instrument::Instrument;
 /// An implementation of MusicTrack with additional rules to ensure that
 /// Measures are filled with notes correctly. Use this as the standard Track.
 /// 
-/// With the existance of measures, it's also possible to have a time signature
+/// With the existence of measures, it's also possible to have a time signature
 /// assigned to the track, which can even automatically emphasize specific beats
 /// (e.g. the first beat).
 /// 
