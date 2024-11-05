@@ -86,14 +86,6 @@ the provided wave functions. If necessary, provide two seperate functions for
 every wave type where one has specifiable phase, whereas the other behaves the
 same as right now (phase is always zero).
 
-### Better buffer handling
-
-Right now, handling buffers inside an `Instrument` impl is cumbersome, because
-the buffers are raw `Vec<f32>`s, and other important info like `buffer_info`
-have to be handled seperately. Furthermore, some useful buffer implementations
-like mixing two variable length buffers should also be provided, so the user
-doesn't have to implement that for themself.
-
 ## More exporter tools
 
 A collection of ideas for generic exporter features
