@@ -16,16 +16,6 @@ a function to get the active measure. Returning a reference to a validated
 measure is not only pointless, but might actually corrupt the measure (if
 valid data is overwritten with invalid data).
 
-## Fix intensity scale
-
-Right now, intensity (or loudness) is handles as if it were linear, which it
-isn't. This becomes and issue pretty much everytime tones are mixed together,
-like with multiple notes or tracks. The sound often becomes way too loud and
-starts clipping.
-
-Research a bit more on how the dB scale works and implement it here. This
-should apply either when mixing or when exporting to WAV.
-
 ## Get rid of redundancy between MeasureTrack and UnboundTrack
 
 I don't want to merge both structs into one and have it take a value as which
