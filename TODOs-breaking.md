@@ -17,6 +17,12 @@ an offbeat intensity every time. It would make more sense if the offbeat
 intensity was specified with the TimeSignature, and that `beat_emphasis` becomes
 a simple f32.
 
+## Add `get_active_note()` function to MusicTrack trait
+
+Both UnboundTrack and MeasureTrack implement this function in different ways,
+since this is a useful function it should be integrated into the MusicTrack
+trait.
+
 ## Support Stereo
 
 This will probably require some refactoring on the rendering side. Make it
