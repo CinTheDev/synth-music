@@ -109,6 +109,12 @@ where
         }
     }
 
+    pub fn append_notes(&mut self, notes: &[Note<T>]) {
+        for note in notes {
+            self.notes.push(note.clone());
+        }
+    }
+
     fn conversion_first_pass(&self, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
         let mut tones = Vec::new();
 

@@ -129,7 +129,8 @@ where
         let new_measure = Measure::new(self.time_signature.clone());
         let valid_measure = self.active_measure.replace(new_measure).unwrap();
 
-        self.measures.push(valid_measure);
+        self.unbound_track.append_notes(&valid_measure.notes);
+
         return Ok(());
     }
 
