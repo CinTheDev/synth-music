@@ -48,8 +48,10 @@ where
 
         let dynamics_flag = self.next_note_dynamic_flag.take().unwrap_or(DynamicsFlag::None);
 
+        let current_measure_length = self.get_active_measure().get_total_length();
+        let beat_emphasis = self.get_beat_from_position(current_measure_length);
+        
         let active_measure = self.get_active_measure();
-
 
         active_measure.notes.push(Note {
             values,
@@ -57,6 +59,7 @@ where
             intensity,
             play_fraction,
             dynamics_flag,
+            beat_emphasis,
             ..Default::default()
         });
 
@@ -189,6 +192,16 @@ impl<T: ScaledValue> Measure<T> {
         let total_length = Length::count_lengths(&all_lengths).unwrap();
 
         return self.time_signature.is_measure_saturated(total_length);
+    }
+
+    fn get_total_length(&self) -> Length {
+        let mut result = length::ZERO;
+
+        for note in &self.notes {
+            result += note.length;
+        }
+
+        return result;
     }
 
     /// Override the time signature for this measure.
