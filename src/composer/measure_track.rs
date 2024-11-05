@@ -141,7 +141,7 @@ where
         return Ok(&mut self.measures[last_index]);
     }
 
-    fn get_active_measure(&mut self) -> &mut Measure<T> {
+    pub fn get_active_measure(&mut self) -> &mut Measure<T> {
         self.active_measure.as_mut().unwrap()
     }
 
