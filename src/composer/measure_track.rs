@@ -1,6 +1,6 @@
 use super::UnboundTrack;
 
-use super::{Note, ScaledValue, Length};
+use super::{Note, ScaledValue, length, Length};
 use super::note::DynamicsFlag;
 
 use super::{TimeSignature, SectionInfo, MusicTrack};
@@ -144,6 +144,26 @@ where
 
         let active_measure = self.get_active_measure();
         return active_measure.notes.last_mut().unwrap();
+    }
+
+    fn get_beat_from_position(&self, position: Length) -> Option<f32> {
+        let beats = self.time_signature.beats();
+
+        let mut position_in_measure = length::ZERO;
+
+        for beat in beats {
+            if position == position_in_measure {
+                return Some(*beat);
+            }
+            // Missed the beat
+            if position.to_float() < position_in_measure.to_float() {
+                return None;
+            }
+
+            position_in_measure += self.time_signature.beat_length();
+        }
+
+        return None;
     }
 }
 

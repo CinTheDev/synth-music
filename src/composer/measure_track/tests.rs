@@ -345,7 +345,7 @@ where
     for i in 0..a.len() {
         let tone_a = &a[i];
         let tone_b = &b[i];
-
+        
         assert_eq_tone(tone_a, tone_b);
     }
 }
