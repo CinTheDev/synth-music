@@ -1,8 +1,8 @@
-# TODOs for version 0.1.2
+# Additions / fixes that won't introduce breaking changes
 
 A collection of ideas and improvements that won't introduce breaking changes.
-This file will become the active TODO file once development of version 0.1.2
-starts.
+An update with only unbreaking changes will increment the third number of the
+version.
 
 After completion of a specific task here the description will be deleted.
 Though, through versioning (git) it's possible to review finished (and therefore

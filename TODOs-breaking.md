@@ -1,8 +1,8 @@
-# TODOs for version 0.2.0
+# Features / fixes that will introduce breaking changes
 
 A collection of ideas, improvements and refactoring tasks that will introduce
-breaking changes. This file will become the active TODO file once development
-of version 0.2.0 starts.
+breaking changes. An update that contains breaking changes will increment the
+second number of the version.
 
 After completion of a specific task here the description will be deleted.
 Though, through versioning (git) it's possible to review finished (and therefore
