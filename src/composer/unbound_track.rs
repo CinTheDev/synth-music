@@ -109,6 +109,16 @@ where
         }
     }
 
+    pub fn append_notes(&mut self, notes: &[Note<T>]) {
+        for note in notes {
+            self.notes.push(note.clone());
+        }
+    }
+
+    pub fn get_active_note(&mut self) -> Option<&mut Note<T>> {
+        self.notes.last_mut()
+    }
+
     fn conversion_first_pass(&self, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {
         let mut tones = Vec::new();
 
@@ -208,7 +218,7 @@ where
             play_duration,
             tone_duration,
             intensity: note.intensity..note.intensity,
-            beat_emphasis: Some(1.0),
+            beat_emphasis: note.beat_emphasis,
         }
     }
 }

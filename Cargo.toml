@@ -2,7 +2,7 @@
 name = "synth-music"
 description = "A framework-like crate to compose and synthetisize music"
 
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 
 repository = "https://github.com/CinTheDev/synth-music"

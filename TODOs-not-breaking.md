@@ -1,33 +1,13 @@
-# TODOs for version 0.1.2
+# Additions / fixes that won't introduce breaking changes
 
 A collection of ideas and improvements that won't introduce breaking changes.
-This file will become the active TODO file once development of version 0.1.2
-starts.
+An update with only unbreaking changes will increment the third number of the
+version.
 
 After completion of a specific task here the description will be deleted.
 Though, through versioning (git) it's possible to review finished (and therefore
 deleted) tasks. Other ideas for future versions shall be written in another
 document.
-
-## Get rid of redundancy between MeasureTrack and UnboundTrack
-
-I don't want to merge both structs into one and have it take a value as which
-variant it should behave, I do want to keep these seperate.
-
-The problem is that they share a lot of functionality, so the implementation
-of both repeat each other a lot. It's probably difficult to extract that into
-functions.
-
-I have an idea how to circumvent this: We could make MeasureTrack the "main"
-struct with all the implementation, and the UnboundTrack will just store a
-MeasureTrack and automatically place measures and fill them correctly.
-
-There's one problem though: If we want this "conversion" to happen seamlessly,
-we need to implement held notes. Held notes are notes that extend their duration
-beyond a single measure.
-
-Because these are in no way implemented right now, it only makes sense to tackle
-this redundancy issue if held notes are being implemented in the future.
 
 ## Split track feature
 
@@ -80,3 +60,48 @@ it should be possible to read a MIDI file from the disk and automatically
 convert it to notes on a Track.
 
 Check the contents of a MIDI file and see how this could be implemented.
+
+## More synthesizer tools
+
+Provide a bunch of default implementations for things often needed for
+synthesizing.
+
+### EQ filter using FFT
+
+The FFT (fast fourier transform) can decompose a tone into it's frequencies and
+turn those back into a tone. The cool thing is that it's possible to modify
+these frequencies before turning them back, which effectively filters or even
+boosts those frequencies.
+
+### Noise generation
+
+Provide functions for generating multiple types of noise. White noise is the
+easiest because it's just random values, but using the EQ above we can create
+other types by filtering white noise.
+
+### Wave functions with phase
+
+Make it possible to specify the phase (which is unaffected by frequency) for
+the provided wave functions. If necessary, provide two seperate functions for
+every wave type where one has specifiable phase, whereas the other behaves the
+same as right now (phase is always zero).
+
+## More exporter tools
+
+A collection of ideas for generic exporter features
+
+### Loudness normalization
+
+For now, loudness (or intensity) is an absolute scale. A value of 0.0 is
+silence, while 1.0 represents maximum amplitude (or 0dB). It is generally not
+possible to have a larger amplitude, and if the rendered piece does have samples
+with a higher amplitude, the samples will be clipped, which is audible and in
+most cases unwanted.
+
+It would be an easy thing to implement an optional feature that will
+automatically adjust all amplitudes so that the loudest sample in the piece will
+lie exactly at 1.0.
+
+The only difficult thing would be to make sure that this is implemented in all
+exporters without repeating stuff. This could also be an individual trait with
+a default implementation.
