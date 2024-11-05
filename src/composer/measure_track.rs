@@ -26,9 +26,7 @@ where
 {
     active_measure: Option<Measure<T>>,
     unbound_track: UnboundTrack<T, U>,
-    
     time_signature: TimeSignature,
-    instrument: U,
 
     current_intensity: f32,
     current_play_fraction: f32,
@@ -118,9 +116,8 @@ where
     pub fn new(instrument: U, time_signature: TimeSignature) -> Self {
         Self {
             active_measure: Some(Measure::new(time_signature.clone())),
-            measures: Vec::new(),
+            unbound_track: UnboundTrack::new(instrument),
             time_signature,
-            instrument,
             current_intensity: 0.5,
             current_play_fraction: 1.0,
             next_note_dynamic_flag: None,
