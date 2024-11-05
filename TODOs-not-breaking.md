@@ -9,14 +9,6 @@ Though, through versioning (git) it's possible to review finished (and therefore
 deleted) tasks. Other ideas for future versions shall be written in another
 document.
 
-## Make `beat_emphasis` not an Option<>
-
-Right now, `beat_emphasis` provided with `Tone` is an Option, indicating whether
-a tone is an offbeat or not. In practice, the user needs to unwrap and specify
-an offbeat intensity every time. It would make more sense if the offbeat
-intensity was specified with the TimeSignature, and that `beat_emphasis` becomes
-a simple f32.
-
 ## Add function in MeasureTrack to get mutable reference to active Measure
 
 Since we want to be able to modify a measure *before* validating it, we'll need
