@@ -9,13 +9,6 @@ Though, through versioning (git) it's possible to review finished (and therefore
 deleted) tasks. Other ideas for future versions shall be written in another
 document.
 
-## Add function in MeasureTrack to get mutable reference to active Measure
-
-Since we want to be able to modify a measure *before* validating it, we'll need
-a function to get the active measure. Returning a reference to a validated
-measure is not only pointless, but might actually corrupt the measure (if
-valid data is overwritten with invalid data).
-
 ## Get rid of redundancy between MeasureTrack and UnboundTrack
 
 I don't want to merge both structs into one and have it take a value as which

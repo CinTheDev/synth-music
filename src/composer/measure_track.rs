@@ -126,7 +126,7 @@ where
 
     /// Place the end of a measure, which will automatically validate the
     /// completed measure. An error is returned if the measure is invalid.
-    pub fn measure(&mut self) -> Result<&mut Measure<T>, &str> {
+    pub fn measure(&mut self) -> Result<(), &str> {
         let active_measure_valid = self.get_active_measure().assert_measure_bounds();
 
         if !active_measure_valid {
@@ -137,11 +137,10 @@ where
         let valid_measure = self.active_measure.replace(new_measure).unwrap();
 
         self.measures.push(valid_measure);
-        let last_index = self.measures.len() - 1;
-        return Ok(&mut self.measures[last_index]);
+        return Ok(());
     }
 
-    fn get_active_measure(&mut self) -> &mut Measure<T> {
+    pub fn get_active_measure(&mut self) -> &mut Measure<T> {
         self.active_measure.as_mut().unwrap()
     }
 
