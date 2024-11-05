@@ -11,5 +11,6 @@
 ## v0.1.2
 
 - Fix getting the active Measure in MeasureTrack
+- Remove redundancy of MeasureTrack by wrapping UnboundTrack
 
 [ CURRENTLY ACTIVE ]
