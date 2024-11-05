@@ -195,13 +195,15 @@ impl<T: ScaledValue> Measure<T> {
     }
 
     fn get_total_length(&self) -> Length {
-        let mut result = length::ZERO;
+        let mut note_lengths = Vec::new();
 
         for note in &self.notes {
-            result += note.length;
+            note_lengths.push(note.length);
         }
 
-        return result;
+        return
+            Length::count_lengths(&note_lengths)
+            .unwrap_or(length::INVALID);
     }
 
     /// Override the time signature for this measure.
