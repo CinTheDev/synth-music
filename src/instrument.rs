@@ -37,6 +37,12 @@ pub trait Instrument: Clone {
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer;
 }
 
+pub trait TimeInstrument: Clone {
+    type ConcreteValue: Clone + Copy;
+
+    fn render_sample(&self, tones: &Tone<Self::ConcreteValue>) -> f32;
+}
+
 
 // TODO: Remove doubled implementation
 impl BufferInfo {
