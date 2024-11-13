@@ -35,9 +35,10 @@ pub trait Instrument: Clone {
     type ConcreteValue: Clone + Copy;
 
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let mut buffer = Vec::with_capacity(buffer_info.tone_samples);
+        let num_samples = self.get_num_samples(&buffer_info, tones);
+        let mut buffer = Vec::with_capacity(num_samples);
 
-        for i in 0..buffer_info.tone_samples {
+        for i in 0..num_samples {
             let time = buffer_info.time_from_index(i);
 
             let intensity = self.get_intensity(tones, time);
@@ -55,12 +56,16 @@ pub trait Instrument: Clone {
 
         let mut buffer = InstrumentBuffer { samples: buffer };
 
-        self.post_process(buffer_info, &mut buffer);
+        self.post_process(&buffer_info, &mut buffer);
 
         return buffer;
     }
 
     fn render_sample(&self, _tone: Self::ConcreteValue, _time: Duration) -> f32 { 0.0 }
+
+    fn get_num_samples(&self, buffer_info: &BufferInfo, _tones: &Tone<Self::ConcreteValue>) -> usize {
+        buffer_info.tone_samples
+    }
 
     fn mix_tone_samples(&self, samples: &[f32]) -> f32 {
         let mut result = 0.0;
@@ -81,7 +86,7 @@ pub trait Instrument: Clone {
         return intensity * emphasis;
     }
 
-    fn post_process(&self, _buffer_info: BufferInfo, _buffer: &mut InstrumentBuffer) { }
+    fn post_process(&self, _buffer_info: &BufferInfo, _buffer: &mut InstrumentBuffer) { }
 }
 
 // TODO: Remove doubled implementation
