@@ -53,7 +53,11 @@ pub trait Instrument: Clone {
             buffer.push(mixed_samples);
         }
 
-        return InstrumentBuffer { samples: buffer };
+        let mut buffer = InstrumentBuffer { samples: buffer };
+
+        self.post_process(buffer_info, &mut buffer);
+
+        return buffer;
     }
 
     fn render_sample(&self, _tone: Self::ConcreteValue, _time: Duration) -> f32 { 0.0 }
@@ -74,6 +78,8 @@ pub trait Instrument: Clone {
         let emphasis = tones.beat_emphasis.unwrap_or(1.0);
         return base * emphasis;
     }
+
+    fn post_process(&self, _buffer_info: BufferInfo, _buffer: &mut InstrumentBuffer) { }
 }
 
 // TODO: Remove doubled implementation
