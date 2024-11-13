@@ -26,6 +26,7 @@ pub struct ExportTrack<T: Instrument> {
 /// emphasis level. If there's no value then the note is an offbeat.
 pub struct Tone<T> {
     pub concrete_values: Vec<T>,
+    // TODO: Extract all properties into seperate struct
     pub play_duration: Duration,
     pub tone_duration: Duration,
 
