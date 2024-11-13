@@ -46,12 +46,9 @@ pub trait Instrument: Clone {
         let mut mixed_samples = self.mix_tone_samples(tone_buffers);
 
         self.apply_intensity(&buffer_info, tones, &mut mixed_samples);
+        self.post_process(&buffer_info, &mut mixed_samples);
 
-        let mut buffer = InstrumentBuffer { samples: mixed_samples };
-
-        self.post_process(&buffer_info, &mut buffer);
-
-        return buffer;
+        return InstrumentBuffer { samples: mixed_samples };
     }
 
     fn render_tone_buffer(
@@ -113,7 +110,7 @@ pub trait Instrument: Clone {
         return intensity * emphasis;
     }
 
-    fn post_process(&self, _buffer_info: &BufferInfo, _buffer: &mut InstrumentBuffer) { }
+    fn post_process(&self, _buffer_info: &BufferInfo, _buffer: &mut Vec<f32>) { }
 }
 
 // TODO: Remove doubled implementation
