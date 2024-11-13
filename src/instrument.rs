@@ -72,11 +72,13 @@ pub trait Instrument: Clone {
         result
     }
 
-    // TODO: Interpolate intensity
     fn get_intensity(&self, tones: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
-        let base = tones.intensity.start;
+        let t = time.as_secs_f32() / tones.play_duration.as_secs_f32();
+        let intensity = t * (tones.intensity.end - tones.intensity.start) + tones.intensity.start;
+
         let emphasis = tones.beat_emphasis.unwrap_or(1.0);
-        return base * emphasis;
+
+        return intensity * emphasis;
     }
 
     fn post_process(&self, _buffer_info: BufferInfo, _buffer: &mut InstrumentBuffer) { }
