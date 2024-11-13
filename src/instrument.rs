@@ -37,10 +37,10 @@ pub trait Instrument: Clone {
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer;
 }
 
-pub trait TimeInstrument: Clone {
-    type ConcreteValue: Clone + Copy;
+pub trait TimeInstrument {
+    type A: Clone + Copy;
 
-    fn render_sample(&self, tones: &Tone<Self::ConcreteValue>) -> f32;
+    fn render_sample(&self, tones: &Tone<Self::A>) -> f32;
 }
 
 

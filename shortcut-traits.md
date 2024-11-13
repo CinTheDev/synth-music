@@ -26,3 +26,8 @@ I want to keep it unbreaking for now, and that would be rather difficult.
 
 The second problem is that I only have a faint idea of how this even might look
 like. I feel like the way I want to do this doesn't actually make sense.
+
+## Using macros
+
+Macros could be useful, but I think that this will turn everything into a mess.
+If other options yield diminishing results, this might be the way to go.
