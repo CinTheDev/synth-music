@@ -37,6 +37,19 @@ pub trait Instrument: Clone {
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer;
 }
 
+// Mixes all samples at one point in time
+pub trait InstrumentMix: Clone {
+    fn mix_tone_samples(&self, samples: &[f32]) -> f32 {
+        let mut result = 0.0;
+
+        for sample in samples {
+            result += sample;
+        }
+
+        result
+    }
+}
+
 // Return the intensity of the tone at a given point in time
 pub trait InstrumentDynamics: Clone {
     type ConcreteValue: Clone + Copy;
