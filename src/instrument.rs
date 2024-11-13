@@ -39,11 +39,13 @@ pub trait Instrument: Clone {
         let mut tone_buffers = Vec::with_capacity(tones.concrete_values.len());
 
         for tone in &tones.concrete_values {
-            let buffer = self.render_tone_buffer(&buffer_info, *tone, tones, num_samples);
+            let buffer = self.render_tone_buffer(&buffer_info, *tone, num_samples);
             tone_buffers.push(buffer);
         }
 
-        let mixed_samples = self.mix_tone_samples(tone_buffers);
+        let mut mixed_samples = self.mix_tone_samples(tone_buffers);
+
+        self.apply_intensity(&buffer_info, tones, &mut mixed_samples);
 
         let mut buffer = InstrumentBuffer { samples: mixed_samples };
 
@@ -56,7 +58,6 @@ pub trait Instrument: Clone {
         &self,
         buffer_info: &BufferInfo,
         tone: Self::ConcreteValue,
-        tones: &Tone<Self::ConcreteValue>,
         num_samples: usize,
     ) -> Vec<f32> {
         let mut buffer = Vec::with_capacity(num_samples);
@@ -64,9 +65,8 @@ pub trait Instrument: Clone {
         for i in 0..num_samples {
             let time = buffer_info.time_from_index(i);
 
-            let intensity = self.get_intensity(tones, time);
             let sample = self.render_sample(tone, time);
-            buffer.push(sample * intensity);
+            buffer.push(sample);
         }
 
         return buffer;
@@ -94,6 +94,14 @@ pub trait Instrument: Clone {
         }
 
         return result;
+    }
+
+    fn apply_intensity(&self, buffer_info: &BufferInfo, tones: &Tone<Self::ConcreteValue>, buffer: &mut [f32]) {
+        for i in 0..buffer.len() {
+            let time = buffer_info.time_from_index(i);
+            let intensity = self.get_intensity(tones, time);
+            buffer[i] *= intensity;
+        }
     }
 
     fn get_intensity(&self, tones: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
