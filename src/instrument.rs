@@ -36,25 +36,25 @@ pub trait Instrument: Clone {
 
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let num_samples = self.get_num_samples(&buffer_info, tones);
-        let mut buffer = Vec::with_capacity(num_samples);
+        let mut tone_buffers = Vec::with_capacity(tones.concrete_values.len());
 
-        for i in 0..num_samples {
-            let time = buffer_info.time_from_index(i);
+        for tone in &tones.concrete_values {
+            let mut buffer = Vec::with_capacity(num_samples);
 
-            let intensity = self.get_intensity(tones, time);
-            let mut point_samples = Vec::with_capacity(tones.concrete_values.len());
+            for i in 0..num_samples {
+                let time = buffer_info.time_from_index(i);
 
-            for tone in &tones.concrete_values {
+                let intensity = self.get_intensity(tones, time);
                 let sample = self.render_sample(*tone, time);
-                point_samples.push(sample);
+                buffer.push(sample * intensity);
             }
 
-            let mixed_samples = self.mix_tone_samples(&point_samples) * intensity;
-
-            buffer.push(mixed_samples);
+            tone_buffers.push(buffer);
         }
 
-        let mut buffer = InstrumentBuffer { samples: buffer };
+        let mixed_samples = self.mix_tone_samples(tone_buffers);
+
+        let mut buffer = InstrumentBuffer { samples: mixed_samples };
 
         self.post_process(&buffer_info, &mut buffer);
 
@@ -67,14 +67,22 @@ pub trait Instrument: Clone {
         buffer_info.tone_samples
     }
 
-    fn mix_tone_samples(&self, samples: &[f32]) -> f32 {
-        let mut result = 0.0;
+    // TODO: Improve this implementation
+    //       best to do when buffer handling has been improved
+    fn mix_tone_samples(&self, tone_buffers: Vec<Vec<f32>>) -> Vec<f32> {
+        let mut result = Vec::new();
 
-        for sample in samples {
-            result += sample;
+        for buffer in tone_buffers {
+            for i in 0..buffer.len() {
+                if i >= result.len() {
+                    result.push(0.0);
+                }
+
+                result[i] += buffer[i];
+            }
         }
 
-        result
+        return result;
     }
 
     fn get_intensity(&self, tones: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
