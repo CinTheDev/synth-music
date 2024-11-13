@@ -39,14 +39,24 @@ pub trait Instrument: Clone {
 
         for i in 0..buffer_info.tone_samples {
             let time = buffer_info.time_from_index(i);
-            buffer.push(self.render_sample(tones, time));
+
+            let intensity = self.get_intensity(tones, time);
+            let mut point_samples = Vec::with_capacity(tones.concrete_values.len());
+
+            for tone in &tones.concrete_values {
+                let sample = self.render_sample(*tone, time);
+                point_samples.push(sample);
+            }
+
+            let mixed_samples = self.mix_tone_samples(&point_samples) * intensity;
+
+            buffer.push(mixed_samples);
         }
 
         return InstrumentBuffer { samples: buffer };
     }
 
-    // TODO: Make this operate on a single tone
-    fn render_sample(&self, tones: &Tone<Self::ConcreteValue>, time: Duration) -> f32 { 0.0 }
+    fn render_sample(&self, _tone: Self::ConcreteValue, _time: Duration) -> f32 { 0.0 }
 
     fn mix_tone_samples(&self, samples: &[f32]) -> f32 {
         let mut result = 0.0;
@@ -58,7 +68,12 @@ pub trait Instrument: Clone {
         result
     }
 
-    fn get_intensity(&self, tones: &Tone<Self::ConcreteValue>, time: Duration) -> f32;
+    // TODO: Interpolate intensity
+    fn get_intensity(&self, tones: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
+        let base = tones.intensity.start;
+        let emphasis = tones.beat_emphasis.unwrap_or(1.0);
+        return base * emphasis;
+    }
 }
 
 // TODO: Remove doubled implementation
