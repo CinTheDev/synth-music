@@ -13,6 +13,8 @@ nature of the Instrument trait, there are some weird errors regarding a "vTable"
 and the "ConcreteType". I don't think I could fix these without massively
 refactoring how the Instrument trait works, so it is out of the question now.
 
+It will also not be possible to combine multiple shortcuts together.
+
 ## Splitting Instrument into multiple traits; default implementations
 
 If I were to split the Instrument trait into multiple traits, e.g. one is

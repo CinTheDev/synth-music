@@ -37,10 +37,11 @@ pub trait Instrument: Clone {
     fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer;
 }
 
-pub trait TimeInstrument {
-    type A: Clone + Copy;
+// Return the intensity of the tone at a given point in time
+pub trait InstrumentDynamics: Clone {
+    type ConcreteValue: Clone + Copy;
 
-    fn render_sample(&self, tones: &Tone<Self::A>) -> f32;
+    fn get_intensity(&self, tones: &Tone<Self::ConcreteValue>, time: Duration) -> f32;
 }
 
 
