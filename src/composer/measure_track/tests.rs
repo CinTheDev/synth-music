@@ -68,14 +68,12 @@ fn conversion_simple() {
             play_duration: Duration::from_secs_f32(time_whole * 0.25),
             tone_duration: Duration::from_secs_f32(time_whole * 0.25),
             intensity: 1.0..1.0,
-            beat_emphasis: Some(1.0),
         },
         Tone {
             concrete_values: vec![TET12ConcreteTone(D4)],
             play_duration: Duration::from_secs_f32(time_whole * 0.5),
             tone_duration: Duration::from_secs_f32(time_whole * 0.5),
             intensity: 1.0..1.0,
-            beat_emphasis: Some(1.0),
         },
 
         Tone {
@@ -83,28 +81,24 @@ fn conversion_simple() {
             play_duration: Duration::from_secs_f32(time_whole * 0.0625),
             tone_duration: Duration::from_secs_f32(time_whole * 0.0625),
             intensity: 1.0..1.0,
-            beat_emphasis: Some(1.0),
         },
         Tone {
             concrete_values: vec![TET12ConcreteTone(F4 - 12)],
             play_duration: Duration::from_secs_f32(time_whole * 0.0625),
             tone_duration: Duration::from_secs_f32(time_whole * 0.0625),
             intensity: 1.0..1.0,
-            beat_emphasis: None,
         },
         Tone {
             concrete_values: vec![TET12ConcreteTone(G4 - 12 + 1)],
             play_duration: Duration::from_secs_f32(time_whole * 0.0625),
             tone_duration: Duration::from_secs_f32(time_whole * 0.0625),
             intensity: 1.0..1.0,
-            beat_emphasis: None,
         },
         Tone {
             concrete_values: vec![TET12ConcreteTone(A4 - 12)],
             play_duration: Duration::from_secs_f32(time_whole * 0.0625),
             tone_duration: Duration::from_secs_f32(time_whole * 0.0625),
             intensity: 1.0..1.0,
-            beat_emphasis: None,
         },
 
         Tone {
@@ -117,7 +111,6 @@ fn conversion_simple() {
             play_duration: Duration::from_secs_f32(time_whole * 1.0),
             tone_duration: Duration::from_secs_f32(time_whole * 1.0),
             intensity: 1.0..1.0,
-            beat_emphasis: Some(1.0),
         },
 
         Tone {
@@ -125,21 +118,18 @@ fn conversion_simple() {
             play_duration: Duration::from_secs_f32(time_whole / 3.0),
             tone_duration: Duration::from_secs_f32(time_whole / 3.0),
             intensity: 1.0..1.0,
-            beat_emphasis: Some(1.0),
         },
         Tone {
             concrete_values: vec![TET12ConcreteTone(E4)],
             play_duration: Duration::from_secs_f32(time_whole / 3.0),
             tone_duration: Duration::from_secs_f32(time_whole / 3.0),
             intensity: 1.0..1.0,
-            beat_emphasis: None,
         },
         Tone {
             concrete_values: vec![TET12ConcreteTone(G4)],
             play_duration: Duration::from_secs_f32(time_whole / 3.0),
             tone_duration: Duration::from_secs_f32(time_whole / 3.0),
             intensity: 1.0..1.0,
-            beat_emphasis: None,
         },
     ];
 
@@ -263,6 +253,8 @@ fn conversion_dynamics() {
     }
 }
 
+// TODO: Rewrite this
+/*
 #[test]
 fn conversion_emphasis() {
     let four_four = TimeSignature::new(4, 4)
@@ -333,6 +325,7 @@ fn conversion_emphasis() {
         }
     }
 }
+*/
 
 // Utility functions
 
@@ -361,14 +354,6 @@ where
     assert_eq_f32(a.tone_duration.as_secs_f32(), b.tone_duration.as_secs_f32(), epsilon);
     assert_eq_f32(a.intensity.start, b.intensity.start, epsilon);
     assert_eq_f32(a.intensity.end, b.intensity.end, epsilon);
-    
-    if a.beat_emphasis.is_some() {
-        assert_eq_f32(a.beat_emphasis.unwrap(), b.beat_emphasis.unwrap(), epsilon);
-    }
-    else {
-        assert!(a.beat_emphasis.is_none());
-        assert!(b.beat_emphasis.is_none());
-    }
 }
 
 fn assert_eq_f32(a: f32, b: f32, epsilon: f32) {
