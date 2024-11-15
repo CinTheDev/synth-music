@@ -253,15 +253,15 @@ fn conversion_dynamics() {
     }
 }
 
-// TODO: Rewrite this
-/*
 #[test]
 fn conversion_emphasis() {
     let four_four = TimeSignature::new(4, 4)
-        .set_beat(0, 1.1)
-        .set_beat(2, 1.01);
+        .set_beat(0, 2.0)
+        .set_beat(2, 1.5)
+        .set_offbeat(0.5);
 
     let mut track = MeasureTrack::new(instrument, four_four);
+    track.set_intensity(1.0);
 
     sequential_notes!(track, QUARTER,
         first(4),
@@ -285,21 +285,21 @@ fn conversion_emphasis() {
     );
     track.measure().unwrap();
 
-    let expected_emphasis = vec![
-        Some(1.1),
-        Some(1.0),
-        Some(1.01),
-        Some(1.0),
+    let expected_intensity = vec![
+        2.0,
+        1.0,
+        1.5,
+        1.0,
 
-        Some(1.1),
-        Some(1.0),
+        2.0,
+        1.0,
 
-        Some(1.1),
-        None,
-        Some(1.0),
-        Some(1.0),
-        None,
-        None,
+        2.0,
+        0.5,
+        1.0,
+        1.0,
+        0.5,
+        0.5,
     ];
 
     let info = SectionInfo {
@@ -313,19 +313,12 @@ fn conversion_emphasis() {
     let epsilon = 0.01;
 
     for i in 0..result.len() {
-        let result_emphasis = result[i].beat_emphasis;
-        let expect_emphasis = expected_emphasis[i];
+        let result_intensity = result[i].intensity.start;
+        let expect_intensity = expected_intensity[i];
 
-        if expect_emphasis.is_some() {
-            assert_eq_f32(result_emphasis.unwrap(), expect_emphasis.unwrap(), epsilon);
-        }
-        else {
-            assert!(result_emphasis.is_none());
-            assert!(expect_emphasis.is_none());
-        }
+        assert_eq_f32(result_intensity, expect_intensity, epsilon);
     }
 }
-*/
 
 // Utility functions
 

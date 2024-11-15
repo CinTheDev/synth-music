@@ -61,6 +61,14 @@ impl TimeSignature {
         self
     }
 
+    /// Set the emphasis when no specified beat is hit. This works the same way
+    /// as regular beats, it's just that this emphasis applies when there is no
+    /// beat at the current note.
+    pub fn set_offbeat(mut self, emphasis: f32) -> Self {
+        self.offbeat_intensity = emphasis;
+        self
+    }
+
     /// Checks if the given note length fits perfectly inside the measure.
     pub fn is_measure_saturated(&self, lengths: Length) -> bool {
         return self.measure_length == lengths;
