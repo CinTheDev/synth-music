@@ -81,6 +81,10 @@ fn render_tone<T: Instrument>(
         settings,
     );
 
+    // This fails if the sound buffer is too short, and we can't extend this
+    // buffer because we need to know when it actually ends. So:
+    // TODO: Fix panic, probably when redoing this with more advanced attack,
+    // decay, sustain controls.
     apply_fade_amplitude(&mut sound_buffer);
     sound_buffer.extend_to_active_samples();
 
