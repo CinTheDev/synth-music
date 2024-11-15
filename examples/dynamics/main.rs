@@ -171,90 +171,54 @@ struct PunchySine {
 }
 
 impl LinearSine {
-    fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
-        let mut result = 0.0;
-
-        for tone in &tones.concrete_values {
-            let frequency = tone.to_frequency() as f64;
-            result += Self::wave(frequency, time);
-        }
-
-        // Here, the intensity is interpolated across the range
-        return result * Self::current_intensity(
-            time.as_secs_f32(),
-            tones.tone_duration.as_secs_f32(),
-            &tones.intensity
-        );
-    }
-
     fn wave(frequency: f64, time: Duration) -> f32 {
         use std::f64::consts::PI;
         (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
-    }
-
-    fn current_intensity(current_secs: f32, total_secs: f32, intensity: &std::ops::Range<f32>) -> f32 {
-        let t =  current_secs / total_secs;
-        return (intensity.start) + (intensity.end - intensity.start) * t;
     }
 }
 
 impl PunchySine {
-    fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
-        let mut result = 0.0;
-
-        for tone in &tones.concrete_values {
-            let frequency = tone.to_frequency() as f64;
-            result += Self::wave(frequency, time);
-        }
-
-        // Here, intensity is already handled by decay(), so we don't need to
-        // change intensity throughout the note. We only use the intensity at
-        // the start as a base.
-        return result * Self::decay(time.as_secs_f32()) * tones.intensity.start;
-    }
-
     fn wave(frequency: f64, time: Duration) -> f32 {
         use std::f64::consts::PI;
         (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
     }
 
-    fn decay(secs: f32) -> f32 {
-        0.5_f32.powf(secs * 2.0)
-    }
-
-    fn total_samples(&self, sample_rate: u32) -> usize {
-        (sample_rate as f64 * self.cutoff_time.as_secs_f64()).ceil() as usize
+    fn decay(time: Duration) -> f32 {
+        0.5_f32.powf(time.as_secs_f32() * 2.0)
     }
 }
 
 impl Instrument for LinearSine {
     type ConcreteValue = tet12::TET12ConcreteTone;
 
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let mut buffer = Vec::new();
+    fn render_sample(&self, tone: Self::ConcreteValue, time: Duration) -> f32 {
+        let frequency = tone.to_frequency() as f64;
+        return Self::wave(frequency, time);
+    }
 
-        for i in 0..buffer_info.tone_samples {
-            let time = buffer_info.time_from_index(i);
-            buffer.push(Self::generate(tones, time));
-        }
+    fn get_intensity(&self, tones: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
+        let t = time.as_secs_f32() / tones.play_duration.as_secs_f32();
+        let intensity = &tones.intensity;
 
-        return InstrumentBuffer { samples: buffer }
+        return (intensity.end - intensity.start) * t + intensity.start;
     }
 }
 
 impl Instrument for PunchySine {
     type ConcreteValue = tet12::TET12ConcreteTone;
 
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let mut buffer = Vec::new();
+    fn render_sample(&self, tone: Self::ConcreteValue, time: Duration) -> f32 {
+        let frequency = tone.to_frequency() as f64;
+        return Self::wave(frequency, time);
+    }
 
-        let samples = self.total_samples(buffer_info.sample_rate);
+    fn get_intensity(&self, tones: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
+        let base = tones.intensity.start;
+        let decay_factor = Self::decay(time);
+        return base * decay_factor;
+    }
 
-        for i in 0..samples {
-            let time = buffer_info.time_from_index(i);
-            buffer.push(Self::generate(tones, time));
-        }
-
-        return InstrumentBuffer { samples: buffer }
+    fn get_num_samples(&self, buffer_info: &BufferInfo, _tones: &Tone<Self::ConcreteValue>) -> usize {
+        return (buffer_info.sample_rate as f64 * self.cutoff_time.as_secs_f64()).ceil() as usize
     }
 }

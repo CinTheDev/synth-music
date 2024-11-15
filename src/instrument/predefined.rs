@@ -119,7 +119,7 @@ impl SawGenerator {
 impl Instrument for SineGenerator {
     type ConcreteValue = TET12ConcreteTone;
 
-    fn render_buffer(&self, buffer_info: super::BufferInfo, tones: &Tone<Self::ConcreteValue>) -> super::InstrumentBuffer {
+    fn render(&self, buffer_info: super::BufferInfo, tones: &Tone<Self::ConcreteValue>) -> super::InstrumentBuffer {
         let mut buffer = Vec::new();
 
         for i in 0..buffer_info.tone_samples {
@@ -134,7 +134,7 @@ impl Instrument for SineGenerator {
 impl Instrument for TriangleGenerator {
     type ConcreteValue = TET12ConcreteTone;
 
-    fn render_buffer(&self, buffer_info: super::BufferInfo, tones: &Tone<Self::ConcreteValue>) -> super::InstrumentBuffer {
+    fn render(&self, buffer_info: super::BufferInfo, tones: &Tone<Self::ConcreteValue>) -> super::InstrumentBuffer {
         let mut buffer = Vec::new();
 
         for i in 0..buffer_info.tone_samples {
@@ -149,7 +149,7 @@ impl Instrument for TriangleGenerator {
 impl Instrument for SquareGenerator {
     type ConcreteValue = TET12ConcreteTone;
 
-    fn render_buffer(&self, buffer_info: super::BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+    fn render(&self, buffer_info: super::BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let mut buffer = Vec::new();
 
         for i in 0..buffer_info.tone_samples {
@@ -164,7 +164,7 @@ impl Instrument for SquareGenerator {
 impl Instrument for SawGenerator {
     type ConcreteValue = TET12ConcreteTone;
     
-    fn render_buffer(&self, buffer_info: super::BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+    fn render(&self, buffer_info: super::BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let mut buffer = Vec::new();
 
         for i in 0..buffer_info.tone_samples {

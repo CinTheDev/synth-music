@@ -147,19 +147,6 @@ impl Drumset {
         }
     }
 
-    fn mix_buffers(a: Vec<f32>, b: Vec<f32>) -> Vec<f32> {
-        let (mut larger, smaller) = match a.len() >= b.len() {
-            true => (a, b),
-            false => (b, a),
-        };
-
-        for i in 0..smaller.len() {
-            larger[i] += smaller[i];
-        }
-
-        return larger;
-    }
-
     fn decay(&self, time: Duration, target_duration: Duration) -> f32 {
         let factor = 5.0 / target_duration.as_secs_f32();
         0.5_f32.powf(time.as_secs_f32() * factor)
@@ -173,29 +160,20 @@ impl Drumset {
 impl Instrument for Drumset {
     type ConcreteValue = DrumsetAction;
 
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let mut result = vec![0.0; buffer_info.tone_samples];
-        
-        for action in &tones.concrete_values {
-            match action {
-                DrumsetAction::Bass => {
-                    let buffer = self.bass(&buffer_info);
-                    result = Self::mix_buffers(result, buffer);
-                },
+    fn render_tone_buffer(
+        &self,
+        buffer_info: &BufferInfo,
+        tone: Self::ConcreteValue,
+        _num_samples: usize,
+    ) -> Vec<f32> {
+        match tone {
+            DrumsetAction::Bass => {
+                return self.bass(&buffer_info);
+            },
 
-                _ => {
-                    let buffer = self.noised_tone(&buffer_info, action);
-                    result = Self::mix_buffers(result, buffer);
-                }
+            _ => {
+                return self.noised_tone(&buffer_info, &tone);
             }
         }
-
-        let intensity = tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
-
-        for value in result.iter_mut() {
-            *value *= intensity;
-        }
-
-        InstrumentBuffer { samples: result }
     }
 }
