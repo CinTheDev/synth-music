@@ -81,6 +81,10 @@ where
         self.current_play_fraction = play_fraction;
     }
 
+    fn get_active_note(&mut self) -> Option<&mut Note<T>> {
+        self.notes.last_mut()
+    }
+
     fn convert_to_export_track(&self, section_info: SectionInfo) -> ExportTrack<U> {
         let mut tones = self.conversion_first_pass(section_info);
 
@@ -113,10 +117,6 @@ where
         for note in notes {
             self.notes.push(note.clone());
         }
-    }
-
-    pub fn get_active_note(&mut self) -> Option<&mut Note<T>> {
-        self.notes.last_mut()
     }
 
     fn conversion_first_pass(&self, section_info: SectionInfo) -> Vec<Tone<U::ConcreteValue>> {

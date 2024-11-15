@@ -95,6 +95,17 @@ where
         self.current_play_fraction = play_fraction;
     }
 
+    fn get_active_note(&mut self) -> &mut Note<T> {
+        let active_measure_empty = self.get_active_measure().is_empty();
+
+        if active_measure_empty {
+            return self.unbound_track.get_active_note().unwrap();
+        }
+
+        let active_measure = self.get_active_measure();
+        return active_measure.notes.last_mut().unwrap();
+    }
+
     fn convert_to_export_track(&self, section_info: SectionInfo) -> ExportTrack<U> {
         self.unbound_track.convert_to_export_track(section_info)
     }
@@ -136,17 +147,6 @@ where
 
     pub fn get_active_measure(&mut self) -> &mut Measure<T> {
         self.active_measure.as_mut().unwrap()
-    }
-
-    fn get_active_note(&mut self) -> &mut Note<T> {
-        let active_measure_empty = self.get_active_measure().is_empty();
-
-        if active_measure_empty {
-            return self.unbound_track.get_active_note().unwrap();
-        }
-
-        let active_measure = self.get_active_measure();
-        return active_measure.notes.last_mut().unwrap();
     }
 
     fn get_beat_from_position(&self, position: Length) -> f32 {
