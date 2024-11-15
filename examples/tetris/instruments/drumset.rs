@@ -178,7 +178,7 @@ impl Drumset {
 impl Instrument for Drumset {
     type ConcreteValue = DrumsetAction;
 
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+    fn render(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let mut result = vec![0.0; buffer_info.tone_samples];
         
         for action in &tones.concrete_values {

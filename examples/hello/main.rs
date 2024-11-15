@@ -168,7 +168,7 @@ impl SineInstrument {
 impl Instrument for SineInstrument {
     type ConcreteValue = TET12ConcreteTone;
 
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+    fn render(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let mut buffer = Vec::new();
 
         for i in 0..buffer_info.tone_samples {

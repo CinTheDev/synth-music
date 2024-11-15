@@ -230,7 +230,7 @@ impl PunchySine {
 impl Instrument for LinearSine {
     type ConcreteValue = tet12::TET12ConcreteTone;
 
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+    fn render(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let mut buffer = Vec::new();
 
         for i in 0..buffer_info.tone_samples {
@@ -245,7 +245,7 @@ impl Instrument for LinearSine {
 impl Instrument for PunchySine {
     type ConcreteValue = tet12::TET12ConcreteTone;
 
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+    fn render(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let mut buffer = Vec::new();
 
         let samples = self.total_samples(buffer_info.sample_rate);

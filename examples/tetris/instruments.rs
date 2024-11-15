@@ -71,8 +71,8 @@ impl HardBass {
 impl<T: Instrument> Instrument for Decaying<T> {
     type ConcreteValue = T::ConcreteValue;
 
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let mut instrument_buffer = self.instrument.render_buffer(buffer_info.clone(), tones);
+    fn render(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+        let mut instrument_buffer = self.instrument.render(buffer_info.clone(), tones);
 
         for i in 0..instrument_buffer.samples.len() {
             let time = buffer_info.time_from_index(i);
@@ -87,7 +87,7 @@ impl<T: Instrument> Instrument for Decaying<T> {
 impl Instrument for HardBass {
     type ConcreteValue = TET12ConcreteTone;
 
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+    fn render(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let mut buffer = Vec::new();
 
         for i in 0..buffer_info.tone_samples {
