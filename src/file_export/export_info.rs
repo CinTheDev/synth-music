@@ -71,6 +71,7 @@ impl<T: Instrument> ExportTrack<T> {
 impl SoundBuffer {
     /// Create a new SoundBuffer with the specified values. This shouldn't be
     /// used by the user.
+    // TODO: Use something safer and more convenient
     pub fn new(samples: Vec<f32>, active_samples: usize, settings: CompositionSettings) -> Self {
         Self {
             samples,
