@@ -160,14 +160,13 @@ where
             }
             // Missed the beat
             if position.to_float() < position_in_measure.to_float() {
-                // TODO: Make offbeat intensity configurable
-                return 0.0;
+                return self.time_signature.offbeat_intensity();
             }
 
             position_in_measure += self.time_signature.beat_length();
         }
 
-        return 0.0;
+        return self.time_signature.offbeat_intensity();
     }
 }
 

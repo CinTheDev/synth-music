@@ -76,6 +76,11 @@ impl TimeSignature {
         self.beat_length
     }
 
+    /// Return the intensity of an offbeat.
+    pub fn offbeat_intensity(&self) -> f32 {
+        self.offbeat_intensity
+    }
+
     fn what_power_of_two(mut value: u8) -> u8 {
         let mut result = 0;
 
