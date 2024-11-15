@@ -95,15 +95,15 @@ where
         self.current_play_fraction = play_fraction;
     }
 
-    fn get_active_note(&mut self) -> &mut Note<T> {
+    fn get_active_note(&mut self) -> Option<&mut Note<T>> {
         let active_measure_empty = self.get_active_measure().is_empty();
 
         if active_measure_empty {
-            return self.unbound_track.get_active_note().unwrap();
+            return self.unbound_track.get_active_note();
         }
 
         let active_measure = self.get_active_measure();
-        return active_measure.notes.last_mut().unwrap();
+        return active_measure.notes.last_mut();
     }
 
     fn convert_to_export_track(&self, section_info: SectionInfo) -> ExportTrack<U> {
