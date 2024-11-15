@@ -80,7 +80,7 @@ where
     }
 
     fn end_dynamic_change(&mut self, intensity: f32) {
-        let active_note = self.get_active_note();
+        let active_note = self.get_active_note().unwrap();
 
         active_note.dynamics_flag = DynamicsFlag::EndChange;
         active_note.intensity = intensity;
@@ -93,6 +93,17 @@ where
 
     fn set_play_fraction(&mut self, play_fraction: f32) {
         self.current_play_fraction = play_fraction;
+    }
+
+    fn get_active_note(&mut self) -> Option<&mut Note<T>> {
+        let active_measure_empty = self.get_active_measure().is_empty();
+
+        if active_measure_empty {
+            return self.unbound_track.get_active_note();
+        }
+
+        let active_measure = self.get_active_measure();
+        return active_measure.notes.last_mut();
     }
 
     fn convert_to_export_track(&self, section_info: SectionInfo) -> ExportTrack<U> {
@@ -136,17 +147,6 @@ where
 
     pub fn get_active_measure(&mut self) -> &mut Measure<T> {
         self.active_measure.as_mut().unwrap()
-    }
-
-    fn get_active_note(&mut self) -> &mut Note<T> {
-        let active_measure_empty = self.get_active_measure().is_empty();
-
-        if active_measure_empty {
-            return self.unbound_track.get_active_note().unwrap();
-        }
-
-        let active_measure = self.get_active_measure();
-        return active_measure.notes.last_mut().unwrap();
     }
 
     fn get_beat_from_position(&self, position: Length) -> f32 {
