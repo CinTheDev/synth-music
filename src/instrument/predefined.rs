@@ -116,6 +116,7 @@ impl SawGenerator {
     }
 }
 
+/*
 impl Instrument for SineGenerator {
     type ConcreteValue = TET12ConcreteTone;
 
@@ -175,3 +176,4 @@ impl Instrument for SawGenerator {
         InstrumentBuffer { samples: buffer }
     }
 }
+*/

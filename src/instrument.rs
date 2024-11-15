@@ -35,7 +35,7 @@ pub trait Instrument: Clone {
     type ConcreteValue: Clone + Copy;
 
     // TODO: Rename to something better, e.g. "render"
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
+    fn render(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
         let num_samples = self.get_num_samples(&buffer_info, tones);
         let mut tone_buffers = Vec::with_capacity(tones.concrete_values.len());
 

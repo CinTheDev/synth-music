@@ -77,7 +77,7 @@ fn render_tone<T: Instrument>(
         tone_samples: played_samples,
     };
 
-    let instrument_buffer = instrument.render_buffer(buffer_info, tone);
+    let instrument_buffer = instrument.render(buffer_info, tone);
 
     let mut sound_buffer = SoundBuffer::new(
         instrument_buffer.samples,
