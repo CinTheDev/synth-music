@@ -59,10 +59,6 @@ impl SineGenerator {
 
         return result * Self::get_intensity(tones);
     }
-
-    fn get_intensity(tones: &Tone<TET12ConcreteTone>) -> f32 {
-        return tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
-    }
 }
 
 impl TriangleGenerator {
@@ -75,10 +71,6 @@ impl TriangleGenerator {
         }
 
         return result * Self::get_intensity(tones);
-    }
-
-    fn get_intensity(tones: &Tone<TET12ConcreteTone>) -> f32 {
-        return tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
     }
 }
 
@@ -93,10 +85,6 @@ impl SquareGenerator {
 
         return result * Self::get_intensity(tones);
     }
-
-    fn get_intensity(tones: &Tone<TET12ConcreteTone>) -> f32 {
-        return tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
-    }
 }
 
 impl SawGenerator {
@@ -109,10 +97,6 @@ impl SawGenerator {
         }
 
         return result * Self::get_intensity(tones);
-    }
-
-    fn get_intensity(tones: &Tone<TET12ConcreteTone>) -> f32 {
-        return tones.intensity.start * tones.beat_emphasis.unwrap_or(1.0);
     }
 }
 
