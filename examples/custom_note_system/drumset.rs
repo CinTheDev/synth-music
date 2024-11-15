@@ -161,6 +161,7 @@ impl Instrument for Drumset {
         &self,
         tone: Self::ConcreteValue,
         buffer: &mut SoundBuffer,
+        _num_samples: usize,
     ) {
         match tone {
             DrumsetAction::Bass => {
