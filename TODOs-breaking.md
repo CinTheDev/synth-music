@@ -30,12 +30,6 @@ Following features could be implemented as shortcut traits:
 This has been mostly implemented. The only thing for now is to update the
 documentation or maybe some Unit Tests if they're affected.
 
-## Add `get_active_note()` function to MusicTrack trait
-
-Both UnboundTrack and MeasureTrack implement this function in different ways,
-since this is a useful function it should be integrated into the MusicTrack
-trait.
-
 ## Better buffer handling
 
 Right now, handling buffers inside an `Instrument` impl is cumbersome, because
