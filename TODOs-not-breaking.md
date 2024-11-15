@@ -27,22 +27,6 @@ might interfere with desired sound. Furthermore, if users want to extend the
 attack duration, it should be easily done. Same goes for decay, sustain, and
 other values.
 
-## Shortcut traits for instruments
-
-Users have to implement basically everything for every instrument over and over
-again, which gets really repetitive. This is only because we cannot generalize
-instruments to e.g. have predictable wave functions, and therefore not need to
-know about other values in the same buffer. These "shortcut traits" should make
-the struct also implement Instrument, and handle some of these general
-implementations. If possible, make it possible that multiple shortcut traits
-can be used at once.
-
-Following features could be implemented as shortcut traits:
-
-- Instead of all tones at once only call for one tone
-- Instead of filling whole buffer call for every sample
-- Automatic dynamics calculations
-
 ## Feature held notes (for MeasureTrack)
 
 A thing you can do in music theory is to "combine" two consecutive notes with

@@ -9,6 +9,27 @@ Though, through versioning (git) it's possible to review finished (and therefore
 deleted) tasks. Other ideas for future versions shall be written in another
 document.
 
+## Shortcut traits for instruments
+
+Users have to implement basically everything for every instrument over and over
+again, which gets really repetitive. This is only because we cannot generalize
+instruments to e.g. have predictable wave functions, and therefore not need to
+know about other values in the same buffer. These "shortcut traits" should make
+the struct also implement Instrument, and handle some of these general
+implementations. If possible, make it possible that multiple shortcut traits
+can be used at once.
+
+Following features could be implemented as shortcut traits:
+
+- Instead of all tones at once only call for one tone
+- Instead of filling whole buffer call for every sample
+- Automatic dynamics calculations
+
+### Update: Only documentation missing
+
+This has been mostly implemented. The only thing for now is to update the
+documentation or maybe some Unit Tests if they're affected.
+
 ## Make `beat_emphasis` not an Option<>
 
 Right now, `beat_emphasis` provided with `Tone` is an Option, indicating whether
