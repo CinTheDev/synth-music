@@ -23,9 +23,10 @@ pub trait Instrument: Clone {
 
     fn render(&self, tones: &Tone<Self::ConcreteValue>, buffer: &mut SoundBuffer) {
         let mut tone_buffers = Vec::with_capacity(tones.concrete_values.len() + 1);
+        let num_samples = self.get_num_samples(&buffer, tones);
 
         let empty = SoundBuffer::new(
-            vec![0.0],
+            vec![0.0; num_samples],
             self.get_num_samples(buffer, tones),
             buffer.settings()
         );
@@ -33,11 +34,11 @@ pub trait Instrument: Clone {
 
         for tone in &tones.concrete_values {
             let mut tone_buffer = SoundBuffer::new(
-                vec![0.0],
+                vec![0.0; num_samples],
                 0,
                 buffer.settings()
             );
-            self.render_tone_buffer(*tone, &mut tone_buffer);
+            self.render_tone_buffer(*tone, &mut tone_buffer, num_samples);
             tone_buffers.push(tone_buffer);
         }
 
@@ -51,9 +52,8 @@ pub trait Instrument: Clone {
         &self,
         tone: Self::ConcreteValue,
         buffer: &mut SoundBuffer,
+        num_samples: usize,
     ) {
-        let num_samples = buffer.active_samples();
-
         for i in 0..num_samples {
             let time = buffer.time_from_index(i);
 
