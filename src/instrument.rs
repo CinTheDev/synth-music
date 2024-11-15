@@ -22,7 +22,14 @@ pub trait Instrument: Clone {
     type ConcreteValue: Clone + Copy;
 
     fn render(&self, tones: &Tone<Self::ConcreteValue>, buffer: &mut SoundBuffer) {
-        let mut tone_buffers = Vec::with_capacity(tones.concrete_values.len());
+        let mut tone_buffers = Vec::with_capacity(tones.concrete_values.len() + 1);
+
+        let empty = SoundBuffer::new(
+            vec![0.0],
+            self.get_num_samples(buffer, tones),
+            buffer.settings()
+        );
+        tone_buffers.push(empty);
 
         for tone in &tones.concrete_values {
             let mut tone_buffer = SoundBuffer::new(vec![0.0], 0, buffer.settings());
@@ -31,7 +38,6 @@ pub trait Instrument: Clone {
         }
 
         self.mix_tone_samples(tone_buffers, buffer);
-        buffer.extend_to_active_samples();
 
         self.apply_intensity(tones, buffer);
         self.post_process(tones, buffer);
