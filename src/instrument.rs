@@ -32,7 +32,11 @@ pub trait Instrument: Clone {
         tone_buffers.push(empty);
 
         for tone in &tones.concrete_values {
-            let mut tone_buffer = SoundBuffer::new(vec![0.0], 0, buffer.settings());
+            let mut tone_buffer = SoundBuffer::new(
+                vec![0.0],
+                0,
+                buffer.settings()
+            );
             self.render_tone_buffer(*tone, &mut tone_buffer);
             tone_buffers.push(tone_buffer);
         }
