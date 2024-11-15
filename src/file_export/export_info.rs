@@ -29,9 +29,7 @@ pub struct Tone<T> {
     // TODO: Extract all properties into seperate struct
     pub play_duration: Duration,
     pub tone_duration: Duration,
-
     pub intensity: Range<f32>,
-    pub beat_emphasis: Option<f32>,
 }
 
 /// A collection of important values that are global for the entire composition.

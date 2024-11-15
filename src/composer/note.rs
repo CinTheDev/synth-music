@@ -46,7 +46,6 @@ pub struct Note<T: ScaledValue> {
     pub play_fraction: f32,
 
     pub intensity: f32,
-    pub beat_emphasis: Option<f32>,
     pub dynamics_flag: DynamicsFlag,
 }
 
@@ -58,7 +57,6 @@ impl<T: ScaledValue> Default for Note<T> {
             play_fraction: 1.0,
             
             intensity: 1.0,
-            beat_emphasis: Some(1.0),
             dynamics_flag: DynamicsFlag::None,
         }
     }

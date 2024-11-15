@@ -30,19 +30,6 @@ Following features could be implemented as shortcut traits:
 This has been mostly implemented. The only thing for now is to update the
 documentation or maybe some Unit Tests if they're affected.
 
-## Make `beat_emphasis` not an Option<>
-
-Right now, `beat_emphasis` provided with `Tone` is an Option, indicating whether
-a tone is an offbeat or not. In practice, the user needs to unwrap and specify
-an offbeat intensity every time. It would make more sense if the offbeat
-intensity was specified with the TimeSignature, and that `beat_emphasis` becomes
-a simple f32.
-
-We could go even further: It's probably not necessary to keep beat_emphasis and
-intensity seperate, as emphasized beats are more intense by default. With that,
-remove the `beat_emphasis` field in `Tone` and maybe in `Note` completely, and
-instead alter the intensity of the Note.
-
 ## Add `get_active_note()` function to MusicTrack trait
 
 Both UnboundTrack and MeasureTrack implement this function in different ways,

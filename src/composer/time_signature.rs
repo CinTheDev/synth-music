@@ -17,6 +17,7 @@ pub struct TimeSignature {
     pub measure_length: Length,
     beat_length: Length,
     beat_intensities: Vec<f32>,
+    offbeat_intensity: f32,
 }
 
 impl TimeSignature {
@@ -38,11 +39,13 @@ impl TimeSignature {
         let beat_length = Length::from_subdivisions(subdivision.into());
         let measure_length = beat_length * nominator.into();
         let beat_intensities = vec![1.0; nominator.into()];
+        let offbeat_intensity = 1.0;
 
         Self {
             measure_length,
             beat_length,
             beat_intensities,
+            offbeat_intensity,
         }
     }
 
@@ -55,6 +58,14 @@ impl TimeSignature {
     /// to the second, etc...
     pub fn set_beat(mut self, index: usize, emphasis: f32) -> Self {
         self.beat_intensities[index] = emphasis;
+        self
+    }
+
+    /// Set the emphasis when no specified beat is hit. This works the same way
+    /// as regular beats, it's just that this emphasis applies when there is no
+    /// beat at the current note.
+    pub fn set_offbeat(mut self, emphasis: f32) -> Self {
+        self.offbeat_intensity = emphasis;
         self
     }
 
@@ -71,6 +82,11 @@ impl TimeSignature {
     /// Return the length of a single beat.
     pub fn beat_length(&self) -> Length {
         self.beat_length
+    }
+
+    /// Return the intensity of an offbeat.
+    pub fn offbeat_intensity(&self) -> f32 {
+        self.offbeat_intensity
     }
 
     fn what_power_of_two(mut value: u8) -> u8 {

@@ -106,11 +106,9 @@ pub trait Instrument: Clone {
 
     fn get_intensity(&self, tones: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
         let t = time.as_secs_f32() / tones.play_duration.as_secs_f32();
-        let intensity = t * (tones.intensity.end - tones.intensity.start) + tones.intensity.start;
+        let intensity = &tones.intensity;
 
-        let emphasis = tones.beat_emphasis.unwrap_or(1.0);
-
-        return intensity * emphasis;
+        return t * (intensity.end - intensity.start) + intensity.start;
     }
 
     fn post_process(&self, _buffer_info: &BufferInfo, _buffer: &mut Vec<f32>) { }
