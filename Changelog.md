@@ -15,4 +15,6 @@
 
 ## v0.2.0
 
+- Make the `Instrument` trait more modular and provide default implementations
+
 [IN PROGRESS]
