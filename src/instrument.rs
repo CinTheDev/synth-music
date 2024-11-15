@@ -4,14 +4,6 @@ use crate::file_export::Tone;
 use crate::file_export::SoundBuffer;
 use std::time::Duration;
 
-/// Information that is necessary / useful for creating a buffer in the
-/// `render_buffer` function.
-#[derive(Clone)]
-pub struct BufferInfo {
-    pub sample_rate: u32,
-    pub tone_samples: usize,
-}
-
 /// Implementors can be used as instruments for Tracks.
 /// 
 /// This implementation takes care of the whole sound synthesis when rendering
@@ -88,15 +80,4 @@ pub trait Instrument: Clone {
     }
 
     fn post_process(&self, _tones: &Tone<Self::ConcreteValue>, _buffer: &mut SoundBuffer) { }
-}
-
-// TODO: Remove doubled implementation
-impl BufferInfo {
-    /// Calculate the time for an index at the `sample_rate`. If the sample rate
-    /// is 44.1 kHz, then the 44100th sample is at the time of 1 second.
-    pub fn time_from_index(&self, index: usize) -> Duration {
-        Duration::from_secs_f64(
-            index as f64 / self.sample_rate as f64
-        )
-    }
 }
