@@ -12,3 +12,7 @@
 
 - Fix getting the active Measure in MeasureTrack
 - Remove redundancy of MeasureTrack by wrapping UnboundTrack
+
+## v0.2.0
+
+[IN PROGRESS]
