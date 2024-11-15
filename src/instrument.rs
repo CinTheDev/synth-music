@@ -27,15 +27,15 @@ pub trait Instrument: Clone {
 
         let empty = SoundBuffer::new(
             vec![0.0; num_samples],
-            self.get_num_samples(buffer, tones),
+            buffer.active_samples(),
             buffer.settings()
         );
         tone_buffers.push(empty);
 
         for tone in &tones.concrete_values {
             let mut tone_buffer = SoundBuffer::new(
-                vec![0.0; num_samples],
-                0,
+                Vec::new(),
+                buffer.active_samples(),
                 buffer.settings()
             );
             self.render_tone_buffer(*tone, &mut tone_buffer, num_samples);
