@@ -17,6 +17,7 @@ pub struct TimeSignature {
     pub measure_length: Length,
     beat_length: Length,
     beat_intensities: Vec<f32>,
+    offbeat_intensity: f32,
 }
 
 impl TimeSignature {
@@ -38,11 +39,13 @@ impl TimeSignature {
         let beat_length = Length::from_subdivisions(subdivision.into());
         let measure_length = beat_length * nominator.into();
         let beat_intensities = vec![1.0; nominator.into()];
+        let offbeat_intensity = 1.0;
 
         Self {
             measure_length,
             beat_length,
             beat_intensities,
+            offbeat_intensity,
         }
     }
 
