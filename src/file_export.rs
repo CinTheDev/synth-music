@@ -5,7 +5,7 @@ use std::time::Duration;
 
 #[doc(inline)]
 pub use export_info::*;
-use crate::instrument::{Instrument, BufferInfo};
+use crate::instrument::Instrument;
 use crate::progress_bars;
 
 const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
@@ -72,12 +72,8 @@ fn render_tone<T: Instrument>(
         (tone.tone_duration.as_secs_f32() * settings.sample_rate as f32)
         .floor() as usize;
 
-    let buffer_info = BufferInfo {
-        sample_rate: settings.sample_rate,
-        tone_samples: played_samples,
-    };
-
-    let instrument_buffer = instrument.render(buffer_info, tone);
+    let mut instrument_buffer = SoundBuffer::new(Vec::new(), played_samples, settings);
+    instrument.render(tone, &mut instrument_buffer);
 
     let mut sound_buffer = SoundBuffer::new(
         instrument_buffer.samples,
