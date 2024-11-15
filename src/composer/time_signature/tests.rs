@@ -16,36 +16,42 @@ fn test_construction() {
         measure_length: WHOLE,
         beat_length: QUARTER,
         beat_intensities: vec![1.0; 4],
+        offbeat_intensity: 1.0,
     });
 
     assert_eq!(one_four, TimeSignature {
         measure_length: QUARTER,
         beat_length: QUARTER,
         beat_intensities: vec![1.0; 1],
+        offbeat_intensity: 1.0,
     });
 
     assert_eq!(three_eight, TimeSignature {
         measure_length: EIGTH * 3,
         beat_length: EIGTH,
         beat_intensities: vec![1.0; 3],
+        offbeat_intensity: 1.0,
     });
 
     assert_eq!(six_eight, TimeSignature {
         measure_length: EIGTH * 6,
         beat_length: EIGTH,
         beat_intensities: vec![1.0; 6],
+        offbeat_intensity: 1.0,
     });
 
     assert_eq!(five_four, TimeSignature {
         measure_length: WHOLE + QUARTER,
         beat_length: QUARTER,
         beat_intensities: vec![1.0; 5],
+        offbeat_intensity: 1.0,
     });
 
     assert_eq!(thirtytwo_one, TimeSignature {
         measure_length: WHOLE * 32,
         beat_length: WHOLE,
         beat_intensities: vec![1.0; 32],
+        offbeat_intensity: 1.0,
     });
 }
 
