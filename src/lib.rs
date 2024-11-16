@@ -330,7 +330,7 @@ impl Instrument for ExampleInstrument {
 }
 ```
 
-This is a simple instrument that has a variable amount of harmonics in it's base
+This is a simple instrument that has a variable amount of harmonics in its base
 sine-wave tone. These harmonics don't get quieter with higher frequencies, so
 the sound is harsh and loud, especially with many harmonics.
 
