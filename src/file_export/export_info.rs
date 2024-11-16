@@ -172,6 +172,14 @@ impl SoundBuffer {
     pub fn active_samples(&self) -> usize {
         self.active_samples
     }
+
+    /// Set the amount of "active samples".
+    /// 
+    /// Only overwrite if you know what you're doing, as wrong values will break
+    /// synchronization of the tones.
+    pub fn set_active_samples(&mut self, value: usize) {
+        self.active_samples = value;
+    }
 }
 
 mod tests;

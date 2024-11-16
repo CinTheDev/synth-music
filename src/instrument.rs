@@ -25,7 +25,7 @@ pub trait Instrument: Clone {
         let mut tone_buffers = Vec::with_capacity(tones.concrete_values.len() + 1);
         let num_samples = self.get_num_samples(&buffer, tones);
 
-        let empty = SoundBuffer::new(
+        let empty = SoundBuffer::from_parts(
             vec![0.0; num_samples],
             buffer.active_samples(),
             buffer.settings()
@@ -33,7 +33,7 @@ pub trait Instrument: Clone {
         tone_buffers.push(empty);
 
         for tone in &tones.concrete_values {
-            let mut tone_buffer = SoundBuffer::new(
+            let mut tone_buffer = SoundBuffer::from_parts(
                 Vec::new(),
                 buffer.active_samples(),
                 buffer.settings()
