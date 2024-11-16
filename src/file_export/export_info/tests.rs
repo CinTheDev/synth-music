@@ -22,7 +22,7 @@ fn assert_soundbuffer_equal(a: SoundBuffer, b: SoundBuffer) {
 
 #[test]
 fn soundbuffer_extend_none() {
-    let mut soundbuffer = SoundBuffer::new(
+    let mut soundbuffer = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3],
         2,
         CompositionSettings::default(),
@@ -30,7 +30,7 @@ fn soundbuffer_extend_none() {
 
     soundbuffer.extend_to_active_samples();
 
-    let expected = SoundBuffer::new(
+    let expected = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3],
         2,
         CompositionSettings::default(),
@@ -41,7 +41,7 @@ fn soundbuffer_extend_none() {
 
 #[test]
 fn soundbuffer_extend_none_equal() {
-    let mut soundbuffer = SoundBuffer::new(
+    let mut soundbuffer = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3],
         3,
         CompositionSettings::default(),
@@ -49,7 +49,7 @@ fn soundbuffer_extend_none_equal() {
 
     soundbuffer.extend_to_active_samples();
 
-    let expected = SoundBuffer::new(
+    let expected = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3],
         3,
         CompositionSettings::default(),
@@ -60,7 +60,7 @@ fn soundbuffer_extend_none_equal() {
 
 #[test]
 fn soundbuffer_extend_active() {
-    let mut soundbuffer = SoundBuffer::new(
+    let mut soundbuffer = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3],
         5,
         CompositionSettings::default(),
@@ -68,7 +68,7 @@ fn soundbuffer_extend_active() {
 
     soundbuffer.extend_to_active_samples();
 
-    let expected = SoundBuffer::new(
+    let expected = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3, 0.0, 0.0],
         5,
         CompositionSettings::default(),
@@ -81,12 +81,12 @@ fn soundbuffer_extend_active() {
 
 #[test]
 fn soundbuffer_mix_simple() {
-    let first_buffer = SoundBuffer::new(
+    let first_buffer = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3],
         3,
         CompositionSettings::default(),
     );
-    let second_buffer = SoundBuffer::new(
+    let second_buffer = SoundBuffer::from_parts(
         vec![0.4, 0.2, 0.0],
         3,
         CompositionSettings::default(),
@@ -94,7 +94,7 @@ fn soundbuffer_mix_simple() {
 
     let result = first_buffer.mix(second_buffer);
 
-    let expected = SoundBuffer::new(
+    let expected = SoundBuffer::from_parts(
         vec![
             0.1 + 0.4,
             0.2 + 0.2,
@@ -109,12 +109,12 @@ fn soundbuffer_mix_simple() {
 
 #[test]
 fn soundbuffer_mix_partial_full() {
-    let first_buffer = SoundBuffer::new(
+    let first_buffer = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3, 0.4],
         4,
         CompositionSettings::default(),
     );
-    let second_buffer = SoundBuffer::new(
+    let second_buffer = SoundBuffer::from_parts(
         vec![0.4, 0.2, 0.0],
         3,
         CompositionSettings::default(),
@@ -122,7 +122,7 @@ fn soundbuffer_mix_partial_full() {
 
     let result = first_buffer.mix(second_buffer);
 
-    let expected = SoundBuffer::new(
+    let expected = SoundBuffer::from_parts(
         vec![
             0.1 + 0.4,
             0.2 + 0.2,
@@ -138,12 +138,12 @@ fn soundbuffer_mix_partial_full() {
 
 #[test]
 fn soundbuffer_mix_partial_half_full() {
-    let first_buffer = SoundBuffer::new(
+    let first_buffer = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3, 0.4],
         3,
         CompositionSettings::default(),
     );
-    let second_buffer = SoundBuffer::new(
+    let second_buffer = SoundBuffer::from_parts(
         vec![0.4, 0.2, 0.0],
         3,
         CompositionSettings::default(),
@@ -151,7 +151,7 @@ fn soundbuffer_mix_partial_half_full() {
 
     let result = first_buffer.mix(second_buffer);
 
-    let expected = SoundBuffer::new(
+    let expected = SoundBuffer::from_parts(
         vec![
             0.1 + 0.4,
             0.2 + 0.2,
@@ -167,12 +167,12 @@ fn soundbuffer_mix_partial_half_full() {
 
 #[test]
 fn soundbuffer_mix_partial_not_full() {
-    let first_buffer = SoundBuffer::new(
+    let first_buffer = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3, 0.4, 0.5],
         2,
         CompositionSettings::default(),
     );
-    let second_buffer = SoundBuffer::new(
+    let second_buffer = SoundBuffer::from_parts(
         vec![0.4, 0.2, 0.0, -0.3],
         3,
         CompositionSettings::default(),
@@ -180,7 +180,7 @@ fn soundbuffer_mix_partial_not_full() {
 
     let result = first_buffer.mix(second_buffer);
 
-    let expected = SoundBuffer::new(
+    let expected = SoundBuffer::from_parts(
         vec![
             0.1 + 0.4,
             0.2 + 0.2,
@@ -199,12 +199,12 @@ fn soundbuffer_mix_partial_not_full() {
 
 #[test]
 fn soundbuffer_append_simple() {
-    let mut first_buffer = SoundBuffer::new(
+    let mut first_buffer = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3],
         3,
         CompositionSettings::default(),
     );
-    let second_buffer = SoundBuffer::new(
+    let second_buffer = SoundBuffer::from_parts(
         vec![0.4, 0.2, 0.0],
         3,
         CompositionSettings::default(),
@@ -230,12 +230,12 @@ fn soundbuffer_append_simple() {
 
 #[test]
 fn soundbuffer_append_partialmix() {
-    let mut first_buffer = SoundBuffer::new(
+    let mut first_buffer = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3],
         1,
         CompositionSettings::default(),
     );
-    let second_buffer = SoundBuffer::new(
+    let second_buffer = SoundBuffer::from_parts(
         vec![0.4, 0.2, 0.0],
         3,
         CompositionSettings::default(),
@@ -259,12 +259,12 @@ fn soundbuffer_append_partialmix() {
 
 #[test]
 fn soundbuffer_append_fullmix() {
-    let mut first_buffer = SoundBuffer::new(
+    let mut first_buffer = SoundBuffer::from_parts(
         vec![0.1, 0.2, 0.3, 0.4, 0.5],
         1,
         CompositionSettings::default(),
     );
-    let second_buffer = SoundBuffer::new(
+    let second_buffer = SoundBuffer::from_parts(
         vec![0.4, 0.2, 0.0],
         3,
         CompositionSettings::default(),
