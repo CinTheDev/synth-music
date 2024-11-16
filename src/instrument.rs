@@ -34,7 +34,7 @@ pub trait Instrument: Clone {
 
         for tone in &tones.concrete_values {
             let mut tone_buffer = SoundBuffer::from_parts(
-                Vec::new(),
+                Vec::with_capacity(num_samples),
                 buffer.active_samples(),
                 buffer.settings()
             );
