@@ -8,7 +8,6 @@ use std::str::FromStr;
 /// Exports buffers as WAV files.
 pub struct WavExport {
     pub path: PathBuf,
-    pub normalize: bool,
 }
 
 impl WavExport {
@@ -59,37 +58,10 @@ impl WavExport {
 
         Ok(())
     }
-
-    // TODO: Implement this for all Exporters; This should run before the
-    //       export process
-    fn normalize_buffer(buffer: &mut SoundBuffer) {
-        let loudest_sample = Self::find_loudest_sample(buffer);
-
-        for sample in buffer.samples.iter_mut() {
-            *sample /= loudest_sample;
-        }
-    }
-
-    fn find_loudest_sample(buffer: &SoundBuffer) -> f32 {
-        let mut loudest = 0.0;
-
-        for sample in &buffer.samples {
-            let amplitude = sample.abs();
-            if amplitude > loudest {
-                loudest = amplitude;
-            }
-        }
-
-        return loudest;
-    }
 }
 
 impl FileExport for WavExport {
-    fn export(&self, mut buffer: SoundBuffer) -> std::io::Result<()> {
-        if self.normalize {
-            Self::normalize_buffer(&mut buffer);
-        }
-
+    fn export(&self, buffer: SoundBuffer) -> std::io::Result<()> {
         let f = File::create(&self.path)?;
         let mut writer = BufWriter::new(f);
 
@@ -109,7 +81,6 @@ impl Default for WavExport {
     fn default() -> Self {
         Self {
             path: PathBuf::from_str("unnamed.wav").unwrap(),
-            normalize: false,
         }
     }
 }
