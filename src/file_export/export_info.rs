@@ -72,11 +72,19 @@ impl SoundBuffer {
     /// Create a new SoundBuffer with the specified values. This shouldn't be
     /// used by the user.
     // TODO: Use something safer and more convenient
-    pub fn new(samples: Vec<f32>, active_samples: usize, settings: CompositionSettings) -> Self {
+    pub fn new(settings: CompositionSettings) -> Self {
+        Self {
+            samples: Vec::new(),
+            active_samples: 0,
+            settings,
+        }
+    }
+
+    pub fn from_parts(samples: Vec<f32>, active_samples: usize, settings: CompositionSettings) -> Self {
         Self {
             samples,
-            settings,
             active_samples,
+            settings,
         }
     }
 
