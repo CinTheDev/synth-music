@@ -18,5 +18,6 @@
 - Make the `Instrument` trait more modular and provide default implementations
 - Bake `offbeat_intensity` into the general intensity
 - Make `get_active_note()` part of `MusicTrack` trait
+- Use `SoundBuffer` for Instrument implementation
 
 [IN PROGRESS]
