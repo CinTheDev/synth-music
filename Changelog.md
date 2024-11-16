@@ -22,4 +22,6 @@
 
 ## v0.2.1
 
+- Provide wave functions with phase
+
 [IN PROGRESS]
