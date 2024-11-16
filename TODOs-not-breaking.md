@@ -63,13 +63,6 @@ Provide functions for generating multiple types of noise. White noise is the
 easiest because it's just random values, but using the EQ above we can create
 other types by filtering white noise.
 
-### Wave functions with phase
-
-Make it possible to specify the phase (which is unaffected by frequency) for
-the provided wave functions. If necessary, provide two seperate functions for
-every wave type where one has specifiable phase, whereas the other behaves the
-same as right now (phase is always zero).
-
 ## More exporter tools
 
 A collection of ideas for generic exporter features
