@@ -196,6 +196,8 @@ impl Instrument for LinearSine {
         return Self::wave(frequency, time);
     }
 
+    // This is the default behaviour for this function, so it does not need to
+    // be overriden. Now it is written out for clarity.
     fn get_intensity(&self, tones: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
         let t = time.as_secs_f32() / tones.play_duration.as_secs_f32();
         let intensity = &tones.intensity;
