@@ -1,4 +1,4 @@
-use super::{CompositionSettings, FileExport};
+use super::{CompositionSettings, FileExport, SoundBuffer};
 
 use std::fs::File;
 use std::io::{BufWriter, Write};
@@ -61,7 +61,7 @@ impl WavExport {
 }
 
 impl FileExport for WavExport {
-    fn export(&self, buffer: super::SoundBuffer) -> std::io::Result<()> {
+    fn export(&self, buffer: SoundBuffer) -> std::io::Result<()> {
         let f = File::create(&self.path)?;
         let mut writer = BufWriter::new(f);
 

@@ -180,6 +180,32 @@ impl SoundBuffer {
     pub fn set_active_samples(&mut self, value: usize) {
         self.active_samples = value;
     }
+
+    /// Will adjust the intensity of every sample so that the loudest sample
+    /// will be at 1.0 (or -1.0). This effectively removes clipping artifacts
+    /// at the cost of making the intensity scale relative.
+    pub fn normalized(mut self) -> Self {
+        let loudest_sample = Self::find_loudest_sample(&self);
+
+        for sample in self.samples.iter_mut() {
+            *sample /= loudest_sample;
+        }
+
+        self
+    }
+
+    fn find_loudest_sample(&self) -> f32 {
+        let mut loudest = 0.0;
+
+        for sample in &self.samples {
+            let amplitude = sample.abs();
+            if amplitude > loudest {
+                loudest = amplitude;
+            }
+        }
+
+        return loudest;
+    }
 }
 
 mod tests;
