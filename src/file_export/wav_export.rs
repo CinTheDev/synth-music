@@ -8,6 +8,7 @@ use std::str::FromStr;
 /// Exports buffers as WAV files.
 pub struct WavExport {
     pub path: PathBuf,
+    pub normalize: bool,
 }
 
 impl WavExport {
@@ -81,6 +82,7 @@ impl Default for WavExport {
     fn default() -> Self {
         Self {
             path: PathBuf::from_str("unnamed.wav").unwrap(),
+            normalize: false,
         }
     }
 }
