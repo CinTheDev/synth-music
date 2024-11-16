@@ -23,5 +23,6 @@
 ## v0.2.1
 
 - Provide wave functions with phase
+- Add function to normalize a `SoundBuffer`
 
 [IN PROGRESS]

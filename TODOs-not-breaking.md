@@ -66,19 +66,3 @@ other types by filtering white noise.
 ## More exporter tools
 
 A collection of ideas for generic exporter features
-
-### Loudness normalization
-
-For now, loudness (or intensity) is an absolute scale. A value of 0.0 is
-silence, while 1.0 represents maximum amplitude (or 0dB). It is generally not
-possible to have a larger amplitude, and if the rendered piece does have samples
-with a higher amplitude, the samples will be clipped, which is audible and in
-most cases unwanted.
-
-It would be an easy thing to implement an optional feature that will
-automatically adjust all amplitudes so that the loudest sample in the piece will
-lie exactly at 1.0.
-
-The only difficult thing would be to make sure that this is implemented in all
-exporters without repeating stuff. This could also be an individual trait with
-a default implementation.
