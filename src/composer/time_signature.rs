@@ -10,7 +10,8 @@ use super::Length;
 /// let four_four =
 ///     TimeSignature::new(4, 4)  // Create a time signature of type 4/4
 ///     .set_beat(0, 1.1)         // Strongly emphasize the first beat
-///     .set_beat(2, 1.05);       // Weakly emphasize the third beat
+///     .set_beat(2, 1.05)        // Weakly emphasize the third beat
+///     .set_offbeat(0.8);        // Weaken offbeats
 /// ```
 #[derive(Clone, PartialEq, Debug)]
 pub struct TimeSignature {

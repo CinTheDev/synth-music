@@ -229,15 +229,41 @@ implementation is left to the user, the crate will only provide useful info for
 generating the sound, but the actual sound synthesis is the responsibility of
 the user. There is an exposed trait `Instrument` that needs to be implemented.
 
-Before going to an example, a brief explanation on what the Trait expects
-from the user:
+All trait functions of `Instrument` already have a default implementation. This
+is to avoid repeating the same implementation, since synthesis for almost all
+instruments works the same. If you do not implement any functions, the
+instrument will only render silence.
 
-- The Trait provides info regarding the output buffer and the input tones.
-- The output buffer should generally have `buffer_info.tone_samples` entries.
-- A `tone` actually can represent multiple tones at once (like in a chord), every value needs to be handled.
-- There are provided functions for calculating a time from the sample index
-- The whole output buffer represents a whole note / multiple stacked notes.
-- Dynamics are handled by the user
+Before going to an example, a brief explanation on all trait functions sorted
+after how likely you're going to need to override them:
+
+- `render_sample` - Render a sample of a tone at a given time. Use this if the
+samples can be computed independent of each other (given the time). The
+amplitude of the tone should always be at `1.0`.
+
+- `get_intensity` - Return the intensity at a given time. Override if you want
+the intensity e.g. to become quieter with time.
+
+- `get_num_samples` - Return the amount of samples the buffer should consist of
+in total.
+
+- `post_process` - Called after everything else with write access to the buffer.
+
+- `render_tone_buffer` - Wraps `render_sample`, override if you need to render
+the whole buffer for a single tone in a single function. `render_sample` will
+become useless (will never be called) if you override this and not call it
+yourself.
+
+- `apply_intensity` - Wraps `get_intensity` the same way as `render_tone_buffer`
+does with `render_sample`.
+
+- `render` - This function is called by the crate during the rendering stage,
+and it calls all other functions above for rendering. Only overwrite if you want
+to have absolute control over the render. If you do override this function,
+every other function here will become useless (not called) if you do not do so
+yourself.
+
+Look for the `Instrument` documentation for more details
 
 The buffer works with f32 samples, where 1.0 or -1.0 are the maximum amplitude,
 which should generally not be exceeded. The output buffer can be shorter or
@@ -254,38 +280,15 @@ use std::time::Duration;
 #[derive(Clone, Copy)]
 struct ExampleInstrument {
     count: u32,
+    decay_speed: f32,
 }
 
 impl ExampleInstrument {
-    pub fn new(count: u32) -> Self {
+    pub fn new(count: u32, decay_speed: f32) -> Self {
         Self {
             count,
+            decay_speed,
         }
-    }
-
-    // Generate the tones given a point in time
-    fn generate_tones(&self, tones: &Tone<TET12ConcreteTone>, time: Duration) -> f32 {
-        let mut sample_amplitude = 0.0;
-
-        for tone in &tones.concrete_values {
-            let frequency = tone.to_frequency() as f64;
-            sample_amplitude += self.generate_frequency(frequency, time);
-        }
-
-        return sample_amplitude * tones.intensity.start;
-    }
-
-    // Generate a single tone given a point in time and frequency
-    // The tone contains multiple harmonics
-    fn generate_frequency(&self, frequency: f64, time: Duration) -> f32 {
-        let mut sample_amplitude = 0.0;
-
-        for n in 0..self.count {
-            let factor = (2 * n + 1) as f64;
-            sample_amplitude += Self::wave(frequency * factor, time);
-        }
-
-        return sample_amplitude;
     }
 
     // Wave function (sine)
@@ -293,48 +296,50 @@ impl ExampleInstrument {
         use std::f64::consts::PI;
         (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32
     }
+
+    // Exponential decay over time
+    fn decay_factor(&self, time: Duration) -> f32 {
+        0.5_f32.powf(time.as_secs_f32() * self.decay_speed)
+    }
 }
 
 impl Instrument for ExampleInstrument {
     // Specify that this instrument operates on 12-TET notes
     type ConcreteValue = TET12ConcreteTone;
 
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let mut buffer = Vec::new();
+    // The sample consists of several harmonic frequencies.
+    fn render_sample(&self, tone: Self::ConcreteValue, time: Duration) -> f32 {
+        let frequency = tone.to_frequency() as f64;
+        let mut sample = 0.0;
 
-        // We will push the required amount of samples to completely fill the length of the tone
-        for i in 0..buffer_info.tone_samples {
-            let time = buffer_info.time_from_index(i);
-            buffer.push(self.generate_tones(tones, time));
+        for n in 0..self.count {
+            let factor = (2 * n + 1) as f64;
+            sample += Self::wave(frequency * factor, time);
         }
 
-        InstrumentBuffer { samples: buffer }
+        return sample;
+    }
+
+    // The intensity will become exponentially quieter with time
+    fn get_intensity(&self, tones: &Tone<Self::ConcreteValue>, time: Duration) -> f32 {
+        let base = tones.intensity.start;
+        let factor = self.decay_factor(time);
+
+        return base * factor;
     }
 }
 ```
 
-This is a simple instrument that has a variable amount of harmonics in it's base
+This is a simple instrument that has a variable amount of harmonics in its base
 sine-wave tone. These harmonics don't get quieter with higher frequencies, so
 the sound is harsh and loud, especially with many harmonics.
 
-The instrument struct implements all of the sound generation, while the code
-directly within the trait implementation only manages the buffer, and calls
-the sound generation functions. Though, you can implement this however you want
-or need to. Stuff like post-processing the tone should also be possible within
-the trait implementation.
+This is the most simple use case, which you'll need 90% of the time when the
+instrument is based on predictable waves. If you needed access to the whole
+buffer while rendering for some reason, you would need to implement
+`render_tone_buffer`, etc..
 
-This example does not implement features like making the tone quieter with time
-(similar to a piano), and adjusting the intensity throughout the tone.
-
-The reason why the user needs to implement that is because if we have an
-instrument like a piano during a crescendo, one long note wouldn't get louder,
-while several short notes would get progressively louder. An instrument like
-a trumpet can have constant loudness over a note, or even dynamically change
-the intensity throughout a note. Neither of these things are implemented in
-this example.
-
-For examples that do implement these things, check the examples folder of this
-crate.
+For more examples please look into the examples folder.
 
 ## Exporting
 

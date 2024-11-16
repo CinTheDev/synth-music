@@ -45,6 +45,11 @@ pub use crate::file_export::export_info::{ExportTrack, SectionInfo, Tone};
 /// placed after the function call are affected; all notes that are already
 /// placed remain unchanged.
 /// 
+/// ## get_active_note
+/// 
+/// Retrieves a mutable reference to the most recent note placed on the track.
+/// The return value is wrapped in an Option in case there are no notes placed.
+/// 
 /// 
 /// ## convert_to_export_track
 /// 
