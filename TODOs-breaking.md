@@ -30,17 +30,6 @@ Following features could be implemented as shortcut traits:
 This has been mostly implemented. The only thing for now is to update the
 documentation or maybe some Unit Tests if they're affected.
 
-## Better buffer handling
-
-Right now, handling buffers inside an `Instrument` impl is cumbersome, because
-the buffers are raw `Vec<f32>`s, and other important info like `buffer_info`
-have to be handled seperately. Furthermore, some useful buffer implementations
-like mixing two variable length buffers should also be provided, so the user
-doesn't have to implement that for themself.
-
-It could be viable to recycle SoundBuffer with some adjustments because it
-already contains most of the helpful implementations.
-
 ## Support Stereo
 
 This will probably require some refactoring on the rendering side. Make it

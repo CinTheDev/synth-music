@@ -218,7 +218,8 @@ impl Instrument for PunchySine {
         return base * decay_factor;
     }
 
-    fn get_num_samples(&self, buffer_info: &BufferInfo, _tones: &Tone<Self::ConcreteValue>) -> usize {
-        return (buffer_info.sample_rate as f64 * self.cutoff_time.as_secs_f64()).ceil() as usize
+    fn get_num_samples(&self, buffer_info: &SoundBuffer, _tones: &Tone<Self::ConcreteValue>) -> usize {
+        let sample_rate = buffer_info.settings().sample_rate;
+        return (sample_rate as f64 * self.cutoff_time.as_secs_f64()).ceil() as usize
     }
 }

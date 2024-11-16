@@ -5,7 +5,7 @@ use std::time::Duration;
 
 #[doc(inline)]
 pub use export_info::*;
-use crate::instrument::{Instrument, BufferInfo};
+use crate::instrument::Instrument;
 use crate::progress_bars;
 
 const DEFAULT_FADE_IN: Duration = Duration::from_millis(2);
@@ -23,7 +23,7 @@ pub trait FileExport {
 pub fn render<T: Instrument>(track: &ExportTrack<T>, settings: CompositionSettings) -> SoundBuffer {
     use indicatif::ProgressBar;
 
-    let mut buffer = SoundBuffer::new(Vec::new(), 0, settings);
+    let mut buffer = SoundBuffer::new(settings);
 
     let progress = ProgressBar::new(track.tones.len() as u64)
         .with_style(progress_bars::default_progress_style())
@@ -72,23 +72,19 @@ fn render_tone<T: Instrument>(
         (tone.tone_duration.as_secs_f32() * settings.sample_rate as f32)
         .floor() as usize;
 
-    let buffer_info = BufferInfo {
-        sample_rate: settings.sample_rate,
-        tone_samples: played_samples,
-    };
+    let mut instrument_buffer = SoundBuffer::from_parts(Vec::new(), played_samples, settings);
+    instrument.render(tone, &mut instrument_buffer);
 
-    let instrument_buffer = instrument.render(buffer_info, tone);
+    instrument_buffer.set_active_samples(samples);
 
-    let mut sound_buffer = SoundBuffer::new(
-        instrument_buffer.samples,
-        samples,
-        settings,
-    );
+    // This fails if the sound buffer is too short, and we can't extend this
+    // buffer because we need to know when it actually ends. So:
+    // TODO: Fix panic, probably when redoing this with more advanced attack,
+    // decay, sustain controls.
+    apply_fade_amplitude(&mut instrument_buffer);
+    instrument_buffer.extend_to_active_samples();
 
-    apply_fade_amplitude(&mut sound_buffer);
-    sound_buffer.extend_to_active_samples();
-
-    return sound_buffer;
+    return instrument_buffer;
 }
 
 fn apply_fade_amplitude(buffer: &mut SoundBuffer) {
@@ -183,7 +179,7 @@ macro_rules! section {
             )*
             
             drop(tx);
-            let mut buffer = SoundBuffer::new(Vec::new(), 0, settings);
+            let mut buffer = SoundBuffer::new(settings);
 
             // Mixing all tracks together
             while let Ok(export_buffer) = rx.recv() {

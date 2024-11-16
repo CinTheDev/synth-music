@@ -47,19 +47,17 @@ impl Drumset {
 
     /// The bass is a low-frequency sine wave. The frequency starts higher, and
     /// quickly goes really low.
-    pub fn bass(&self, buffer_info: &BufferInfo) -> Vec<f32> {
-        let target_samples = Self::get_target_samples(buffer_info.sample_rate, self.bass_duration);
+    pub fn bass(&self, buffer: &mut SoundBuffer) {
+        let sample_rate = buffer.settings().sample_rate;
+        let num_samples = Self::get_target_samples(sample_rate, self.bass_duration);
+        buffer.samples = vec![0.0; num_samples];
 
-        let mut buffer = vec![0_f32; target_samples];
-
-        for i in 0..buffer.len() {
-            let time = buffer_info.time_from_index(i);
+        for i in 0..num_samples {
+            let time = buffer.time_from_index(i);
             let frequency = self.bass_frequency(time) as f64;
             let value = predefined::sine_wave(frequency, time);
-            buffer[i] = value * self.decay(time, self.bass_duration);
+            buffer.samples[i] = value * self.decay(time, self.bass_duration);
         }
-
-        return buffer;
     }
 
     fn bass_frequency(&self, time: Duration) -> f32 {
@@ -87,7 +85,7 @@ impl Drumset {
     /// Snares and HiHats are white noise with a frequency filter applied.
     /// Snares have a broad range of middle frequencies, HiHats are higher
     /// frequencies.
-    pub fn noised_tone(&self, buffer_info: &BufferInfo, action: &DrumsetAction) -> Vec<f32> {
+    pub fn noised_tone(&self, buffer: &mut SoundBuffer, action: &DrumsetAction) {
         let frequency_range = match action {
             DrumsetAction::Snare => 500.0 .. 11000.0,
             DrumsetAction::HiHat => 6000.0 .. 20000.0,
@@ -101,18 +99,17 @@ impl Drumset {
             _ => panic!("Invalid action in noised_tone"),
         };
 
-        let target_samples = Self::get_target_samples(buffer_info.sample_rate, target_duration);
-        let mut buffer = vec![0_f32; target_samples];
+        let sample_rate = buffer.settings().sample_rate;
+        let num_samples = Self::get_target_samples(sample_rate, target_duration);
+        buffer.samples = vec![0.0; num_samples];
         
-        Self::generate_white_noise(&mut buffer);
-        Self::filter(&mut buffer, buffer_info, frequency_range);
+        Self::generate_white_noise(&mut buffer.samples);
+        Self::filter(buffer, frequency_range);
 
-        for i in 0..buffer.len() {
-            let time = buffer_info.time_from_index(i);
-            buffer[i] *= self.decay(time, target_duration) * 0.2;
+        for i in 0..buffer.samples.len() {
+            let time = buffer.time_from_index(i);
+            buffer.samples[i] *= self.decay(time, target_duration) * 0.2;
         }
-
-        return buffer;
     }
 
     pub fn generate_white_noise(buffer: &mut Vec<f32>) {
@@ -123,12 +120,12 @@ impl Drumset {
         }
     }
 
-    pub fn filter(buffer: &mut Vec<f32>, buffer_info: &BufferInfo, frequency: std::ops::Range<f32>) {
+    pub fn filter(buffer: &mut SoundBuffer, frequency: std::ops::Range<f32>) {
         use biquad::*;
 
         let f_lower = frequency.start.hz();
         let f_upper = frequency.end.hz();
-        let f_sample = buffer_info.sample_rate.hz();
+        let f_sample = buffer.settings().sample_rate.hz();
 
         let coeffs_lp = Coefficients::<f32>::from_params(
             Type::LowPass,
@@ -146,7 +143,7 @@ impl Drumset {
         let mut biquad_lp = DirectForm1::<f32>::new(coeffs_lp);
         let mut biquad_hp = DirectForm1::<f32>::new(coeffs_hp);
         
-        for sample in buffer.iter_mut() {
+        for sample in buffer.samples.iter_mut() {
             *sample = biquad_lp.run(*sample);
             *sample = biquad_hp.run(*sample);
         }
@@ -167,17 +164,17 @@ impl Instrument for Drumset {
 
     fn render_tone_buffer(
         &self,
-        buffer_info: &BufferInfo,
         tone: Self::ConcreteValue,
+        buffer: &mut SoundBuffer,
         _num_samples: usize,
-    ) -> Vec<f32> {
+    ) {
         match tone {
             DrumsetAction::Bass => {
-                return self.bass(&buffer_info);
+                self.bass(buffer);
             },
 
             _ => {
-                return self.noised_tone(&buffer_info, &tone);
+                self.noised_tone(buffer, &tone);
             }
         }
     }

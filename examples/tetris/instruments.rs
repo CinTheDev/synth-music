@@ -49,16 +49,14 @@ impl HardBass {
 impl<T: Instrument> Instrument for Decaying<T> {
     type ConcreteValue = T::ConcreteValue;
 
-    fn render(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let mut instrument_buffer = self.instrument.render(buffer_info.clone(), tones);
+    fn render(&self, tones: &Tone<Self::ConcreteValue>, buffer: &mut SoundBuffer) {
+        self.instrument.render(tones, buffer);
 
-        for i in 0..instrument_buffer.samples.len() {
-            let time = buffer_info.time_from_index(i);
+        for i in 0..buffer.samples.len() {
+            let time = buffer.time_from_index(i);
             let decay_factor = self.decay_function(time);
-            instrument_buffer.samples[i] *= decay_factor;
+            buffer.samples[i] *= decay_factor;
         }
-
-        return instrument_buffer;
     }
 }
 

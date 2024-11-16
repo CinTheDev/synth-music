@@ -71,11 +71,20 @@ impl<T: Instrument> ExportTrack<T> {
 impl SoundBuffer {
     /// Create a new SoundBuffer with the specified values. This shouldn't be
     /// used by the user.
-    pub fn new(samples: Vec<f32>, active_samples: usize, settings: CompositionSettings) -> Self {
+    // TODO: Use something safer and more convenient
+    pub fn new(settings: CompositionSettings) -> Self {
+        Self {
+            samples: Vec::new(),
+            active_samples: 0,
+            settings,
+        }
+    }
+
+    pub fn from_parts(samples: Vec<f32>, active_samples: usize, settings: CompositionSettings) -> Self {
         Self {
             samples,
-            settings,
             active_samples,
+            settings,
         }
     }
 
@@ -162,6 +171,14 @@ impl SoundBuffer {
     /// internally, and the user shouldn't need to work with this.
     pub fn active_samples(&self) -> usize {
         self.active_samples
+    }
+
+    /// Set the amount of "active samples".
+    /// 
+    /// Only overwrite if you know what you're doing, as wrong values will break
+    /// synchronization of the tones.
+    pub fn set_active_samples(&mut self, value: usize) {
+        self.active_samples = value;
     }
 }
 

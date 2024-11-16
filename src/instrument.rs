@@ -1,21 +1,8 @@
 pub mod predefined;
 
 use crate::file_export::Tone;
+use crate::file_export::SoundBuffer;
 use std::time::Duration;
-
-/// A simple buffer that is returned by `render_buffer` of `Instrument`.
-#[derive(Clone)]
-pub struct InstrumentBuffer {
-    pub samples: Vec<f32>,
-}
-
-/// Information that is necessary / useful for creating a buffer in the
-/// `render_buffer` function.
-#[derive(Clone)]
-pub struct BufferInfo {
-    pub sample_rate: u32,
-    pub tone_samples: usize,
-}
 
 /// Implementors can be used as instruments for Tracks.
 /// 
@@ -34,73 +21,64 @@ pub struct BufferInfo {
 pub trait Instrument: Clone {
     type ConcreteValue: Clone + Copy;
 
-    fn render(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let num_samples = self.get_num_samples(&buffer_info, tones);
+    fn render(&self, tones: &Tone<Self::ConcreteValue>, buffer: &mut SoundBuffer) {
         let mut tone_buffers = Vec::with_capacity(tones.concrete_values.len() + 1);
+        let num_samples = self.get_num_samples(&buffer, tones);
 
-        let empty_buffer = vec![0.0; num_samples];
-        tone_buffers.push(empty_buffer);
+        let empty = SoundBuffer::from_parts(
+            vec![0.0; num_samples],
+            buffer.active_samples(),
+            buffer.settings()
+        );
+        tone_buffers.push(empty);
 
         for tone in &tones.concrete_values {
-            let buffer = self.render_tone_buffer(&buffer_info, *tone, num_samples);
-            tone_buffers.push(buffer);
+            let mut tone_buffer = SoundBuffer::from_parts(
+                Vec::with_capacity(num_samples),
+                buffer.active_samples(),
+                buffer.settings()
+            );
+            self.render_tone_buffer(*tone, &mut tone_buffer, num_samples);
+            tone_buffers.push(tone_buffer);
         }
 
-        let mut mixed_samples = self.mix_tone_samples(tone_buffers);
+        self.mix_tone_samples(tone_buffers, buffer);
 
-        self.apply_intensity(&buffer_info, tones, &mut mixed_samples);
-        self.post_process(&buffer_info, &mut mixed_samples);
-
-        return InstrumentBuffer { samples: mixed_samples };
+        self.apply_intensity(tones, buffer);
+        self.post_process(tones, buffer);
     }
 
     fn render_tone_buffer(
         &self,
-        buffer_info: &BufferInfo,
         tone: Self::ConcreteValue,
+        buffer: &mut SoundBuffer,
         num_samples: usize,
-    ) -> Vec<f32> {
-        let mut buffer = Vec::with_capacity(num_samples);
-
+    ) {
         for i in 0..num_samples {
-            let time = buffer_info.time_from_index(i);
+            let time = buffer.time_from_index(i);
 
             let sample = self.render_sample(tone, time);
-            buffer.push(sample);
+            buffer.samples.push(sample);
         }
-
-        return buffer;
     }
 
     fn render_sample(&self, _tone: Self::ConcreteValue, _time: Duration) -> f32 { 0.0 }
 
-    fn get_num_samples(&self, buffer_info: &BufferInfo, _tones: &Tone<Self::ConcreteValue>) -> usize {
-        buffer_info.tone_samples
+    fn get_num_samples(&self, buffer_info: &SoundBuffer, _tones: &Tone<Self::ConcreteValue>) -> usize {
+        buffer_info.active_samples()
     }
 
-    // TODO: Improve this implementation
-    //       best to do when buffer handling has been improved
-    fn mix_tone_samples(&self, tone_buffers: Vec<Vec<f32>>) -> Vec<f32> {
-        let mut result = Vec::new();
-
-        for buffer in tone_buffers {
-            for i in 0..buffer.len() {
-                if i >= result.len() {
-                    result.push(0.0);
-                }
-
-                result[i] += buffer[i];
-            }
+    fn mix_tone_samples(&self, tone_buffers: Vec<SoundBuffer>, out_buffer: &mut SoundBuffer) {
+        for tone_buffer in tone_buffers {
+            *out_buffer = tone_buffer.mix(out_buffer.clone());
         }
-
-        return result;
     }
 
-    fn apply_intensity(&self, buffer_info: &BufferInfo, tones: &Tone<Self::ConcreteValue>, buffer: &mut [f32]) {
-        for i in 0..buffer.len() {
-            let time = buffer_info.time_from_index(i);
+    fn apply_intensity(&self, tones: &Tone<Self::ConcreteValue>, buffer: &mut SoundBuffer) {
+        for i in 0..buffer.samples.len() {
+            let time = buffer.time_from_index(i);
             let intensity = self.get_intensity(tones, time);
-            buffer[i] *= intensity;
+            buffer.samples[i] *= intensity;
         }
     }
 
@@ -111,16 +89,5 @@ pub trait Instrument: Clone {
         return t * (intensity.end - intensity.start) + intensity.start;
     }
 
-    fn post_process(&self, _buffer_info: &BufferInfo, _buffer: &mut Vec<f32>) { }
-}
-
-// TODO: Remove doubled implementation
-impl BufferInfo {
-    /// Calculate the time for an index at the `sample_rate`. If the sample rate
-    /// is 44.1 kHz, then the 44100th sample is at the time of 1 second.
-    pub fn time_from_index(&self, index: usize) -> Duration {
-        Duration::from_secs_f64(
-            index as f64 / self.sample_rate as f64
-        )
-    }
+    fn post_process(&self, _tones: &Tone<Self::ConcreteValue>, _buffer: &mut SoundBuffer) { }
 }
