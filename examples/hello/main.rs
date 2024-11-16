@@ -145,18 +145,6 @@ use std::time::Duration;
 struct SineInstrument;
 
 impl SineInstrument {
-    // Will take a point in time and generate the current amplitude for it.
-    pub fn generate(tones: &Tone<tet12::TET12ConcreteTone>, time: Duration) -> f32 {
-        let mut result = 0.0;
-
-        for tone in &tones.concrete_values {
-            let frequency = tone.to_frequency() as f64;
-            result += Self::generate_frequency(frequency, time);
-        }
-
-        return result * tones.intensity.start * tones.beat_emphasis.unwrap_or(0.5);
-    }
-
     // Outputs the amplitude of the corresponding sine-wave at the specified time
     pub fn generate_frequency(frequency: f64, time: Duration) -> f32 {
         use std::f64::consts::PI;
@@ -168,14 +156,8 @@ impl SineInstrument {
 impl Instrument for SineInstrument {
     type ConcreteValue = TET12ConcreteTone;
 
-    fn render_buffer(&self, buffer_info: BufferInfo, tones: &Tone<Self::ConcreteValue>) -> InstrumentBuffer {
-        let mut buffer = Vec::new();
-
-        for i in 0..buffer_info.tone_samples {
-            let time = buffer_info.time_from_index(i);
-            buffer.push(Self::generate(tones, time));
-        }
-
-        return InstrumentBuffer { samples: buffer }
+    fn render_sample(&self, tone: Self::ConcreteValue, time: Duration) -> f32 {
+        let frequency = tone.to_frequency() as f64;
+        return Self::generate_frequency(frequency, time);
     }
 }

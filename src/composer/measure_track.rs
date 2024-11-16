@@ -43,13 +43,14 @@ where
     U: Instrument,
 {
     fn notes(&mut self, length: Length, values: Vec<T>) -> &mut Note<T> {
-        let intensity = self.current_intensity;
         let play_fraction = self.current_play_fraction;
-
+        
         let dynamics_flag = self.next_note_dynamic_flag.take().unwrap_or(DynamicsFlag::None);
-
+        
         let current_measure_length = self.get_active_measure().get_total_length();
         let beat_emphasis = self.get_beat_from_position(current_measure_length);
+
+        let intensity = self.current_intensity * beat_emphasis;
         
         let active_measure = self.get_active_measure();
 
@@ -59,7 +60,6 @@ where
             intensity,
             play_fraction,
             dynamics_flag,
-            beat_emphasis,
             ..Default::default()
         });
 
@@ -80,7 +80,7 @@ where
     }
 
     fn end_dynamic_change(&mut self, intensity: f32) {
-        let active_note = self.get_active_note();
+        let active_note = self.get_active_note().unwrap();
 
         active_note.dynamics_flag = DynamicsFlag::EndChange;
         active_note.intensity = intensity;
@@ -93,6 +93,17 @@ where
 
     fn set_play_fraction(&mut self, play_fraction: f32) {
         self.current_play_fraction = play_fraction;
+    }
+
+    fn get_active_note(&mut self) -> Option<&mut Note<T>> {
+        let active_measure_empty = self.get_active_measure().is_empty();
+
+        if active_measure_empty {
+            return self.unbound_track.get_active_note();
+        }
+
+        let active_measure = self.get_active_measure();
+        return active_measure.notes.last_mut();
     }
 
     fn convert_to_export_track(&self, section_info: SectionInfo) -> ExportTrack<U> {
@@ -138,35 +149,24 @@ where
         self.active_measure.as_mut().unwrap()
     }
 
-    fn get_active_note(&mut self) -> &mut Note<T> {
-        let active_measure_empty = self.get_active_measure().is_empty();
-
-        if active_measure_empty {
-            return self.unbound_track.get_active_note().unwrap();
-        }
-
-        let active_measure = self.get_active_measure();
-        return active_measure.notes.last_mut().unwrap();
-    }
-
-    fn get_beat_from_position(&self, position: Length) -> Option<f32> {
+    fn get_beat_from_position(&self, position: Length) -> f32 {
         let beats = self.time_signature.beats();
 
         let mut position_in_measure = length::ZERO;
 
         for beat in beats {
             if position == position_in_measure {
-                return Some(*beat);
+                return *beat;
             }
             // Missed the beat
             if position.to_float() < position_in_measure.to_float() {
-                return None;
+                return self.time_signature.offbeat_intensity();
             }
 
             position_in_measure += self.time_signature.beat_length();
         }
 
-        return None;
+        return self.time_signature.offbeat_intensity();
     }
 }
 

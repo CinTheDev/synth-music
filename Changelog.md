@@ -12,3 +12,10 @@
 
 - Fix getting the active Measure in MeasureTrack
 - Remove redundancy of MeasureTrack by wrapping UnboundTrack
+
+## v0.2.0
+
+- Make the `Instrument` trait more modular and provide default implementations
+- Bake `offbeat_intensity` into the general intensity
+- Make `get_active_note()` part of `MusicTrack` trait
+- Use `SoundBuffer` for Instrument implementation
