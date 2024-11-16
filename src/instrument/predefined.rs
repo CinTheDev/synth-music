@@ -7,26 +7,49 @@ use std::time::Duration;
 
 /// Return a point of a sine wave given a frequency and time
 pub fn sine_wave(frequency: f64, time: Duration) -> f32 {
+    sine_wave_phase(frequency, time, 0.0)
+}
+
+/// Return a point of a sine wave given a frequency, time, and phase
+pub fn sine_wave_phase(frequency: f64, time: Duration, phase: f64) -> f32 {
     use std::f64::consts::PI;
-    return (time.as_secs_f64() * frequency * 2.0 * PI).sin() as f32;
+    let x = time.as_secs_f64() * frequency * 2.0 * PI + phase;
+    return x.sin() as f32;
 }
 
 /// Return a point of a square wave given a frequency and time
 pub fn square_wave(frequency: f64, time: Duration) -> f32 {
-    let x = (2.0 * time.as_secs_f64() * frequency + 1.0).floor() as u32;
-    return 2.0 * (x % 2) as f32 - 1.0;
+    square_wave_phase(frequency, time, 0.0)
+}
+
+/// Return a point of a square wave given a frequency, time, and phase
+pub fn square_wave_phase(frequency: f64, time: Duration, phase: f64) -> f32 {
+    use std::f64::consts::PI;
+    let x = (2.0 * time.as_secs_f64() * frequency + phase / PI) as f32;
+    return -2.0 * (x % 2.0) + 1.0;
 }
 
 /// Return a point of a triangle wave given a frequency and time
 pub fn triangle_wave(frequency: f64, time: Duration) -> f32 {
+    triangle_wave_phase(frequency, time, 0.0)
+}
+
+/// Return a point of a triangle wave given a frequency, time, and phase
+pub fn triangle_wave_phase(frequency: f64, time: Duration, phase: f64) -> f32 {
     use std::f64::consts::PI;
-    let x = time.as_secs_f64() * frequency * 2.0 * PI;
+    let x = time.as_secs_f64() * frequency * 2.0 * PI + phase;
     return ((2.0 / PI) * x.sin().asin()) as f32;
 }
 
 /// Return a point of a saw wave given a frequency and time
 pub fn saw_wave(frequency: f64, time: Duration) -> f32 {
-    let x = (2.0 * time.as_secs_f64() * frequency + 1.0) as f32;
+    saw_wave_phase(frequency, time, 0.0)
+}
+
+/// Return a point of a saw wave given a frequency, time, and phase
+pub fn saw_wave_phase(frequency: f64, time: Duration, phase: f64) -> f32 {
+    use std::f64::consts::PI;
+    let x = (2.0 * time.as_secs_f64() * frequency + phase / PI + 1.0) as f32;
     return (x % 2.0) - 1.0;
 }
 
