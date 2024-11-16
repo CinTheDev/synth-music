@@ -19,3 +19,7 @@
 - Bake `offbeat_intensity` into the general intensity
 - Make `get_active_note()` part of `MusicTrack` trait
 - Use `SoundBuffer` for Instrument implementation
+
+## v0.2.1
+
+[IN PROGRESS]
