@@ -184,14 +184,25 @@ impl SoundBuffer {
     /// Will adjust the intensity of every sample so that the loudest sample
     /// will be at 1.0 (or -1.0). This effectively removes clipping artifacts
     /// at the cost of making the intensity scale relative.
+    /// 
+    /// Equivalent to `normalize`; this variant consumes and returns self.
     pub fn normalized(mut self) -> Self {
+        self.normalize();
+        self
+    }
+
+    /// Will adjust the intensity of every sample so that the loudest sample
+    /// will be at 1.0 (or -1.0). This effectively removes clipping artifacts
+    /// at the cost of making the intensity scale relative.
+    /// 
+    /// Equivalent to `normalized`; this variant operates on a mutable
+    /// reference.
+    pub fn normalize(&mut self) {
         let loudest_sample = Self::find_loudest_sample(&self);
 
         for sample in self.samples.iter_mut() {
             *sample /= loudest_sample;
         }
-
-        self
     }
 
     fn find_loudest_sample(&self) -> f32 {
