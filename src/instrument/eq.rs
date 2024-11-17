@@ -25,18 +25,41 @@ pub fn filter_fft_sized(
     let mut index_start = 0;
     let mut index_end = fft_len;
 
-    while index_end <= buffer.samples.len() {
-        let samples = &mut buffer.samples[index_start .. index_end];
-        filter_fft_part(samples, sample_rate, frequency_amplitude);
+    let mut part_results = Vec::new();
 
+    while index_end <= buffer.samples.len() {
+        let samples = &buffer.samples[index_start .. index_end];
+        let mut part_buffer = samples.to_vec();
+        filter_fft_part(&mut part_buffer, sample_rate, frequency_amplitude);
+        
         let offset = fft_len - window_overlap;
         index_start += offset;
         index_end += offset;
+
+        part_results.push(SoundBuffer::from_parts(
+            part_buffer,
+            offset,
+            buffer.settings(),
+        ));
     }
 
     index_end = buffer.samples.len();
-    let samples = &mut buffer.samples[index_start .. index_end];
-    filter_fft_part(samples, sample_rate, frequency_amplitude);
+
+    let samples = &buffer.samples[index_start .. index_end];
+    let mut part_buffer = samples.to_vec();
+    filter_fft_part(&mut part_buffer, sample_rate, frequency_amplitude);
+
+    part_results.push(SoundBuffer::from_parts(
+        part_buffer,
+        index_end - index_start,
+        buffer.settings(),
+    ));
+
+    *buffer = SoundBuffer::new(buffer.settings());
+
+    for part_buffer in part_results {
+        buffer.transition(part_buffer);
+    }
 }
 
 fn filter_fft_part(

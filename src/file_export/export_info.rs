@@ -147,6 +147,36 @@ impl SoundBuffer {
         }
     }
 
+    /// Transition from the current buffer to the given buffer.
+    /// 
+    /// This acts similar as `append()`, but instead of adding mixed samples,
+    /// they are averaged.
+    pub fn transition(&mut self, other: Self) {
+        let inactive_samples = self.samples.len() - self.active_samples;
+
+        let mix_samples = usize::min(inactive_samples, other.samples.len());
+
+        // Mix end of self and start of other
+        for i in 0..mix_samples {
+            let index_self = i + self.active_samples;
+            let index_other = i;
+
+            //self.samples[index_self] += other.samples[index_other];
+            let average = (self.samples[index_self] + other.samples[index_other]) / 2.0;
+            self.samples[index_self] = average;
+        }
+
+        self.active_samples += other.active_samples;
+
+        // If other has been fully mixed in already
+        if inactive_samples > other.samples.len() { return }
+
+        let remaining_buffer = &other.samples[inactive_samples..];
+        for value in remaining_buffer {
+            self.samples.push(*value);
+        }
+    }
+
     /// If the buffer is shorter than expected, extend the buffer with silence
     /// until the expected length is met.
     pub fn extend_to_active_samples(&mut self) {
