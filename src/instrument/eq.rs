@@ -10,29 +10,8 @@ use realfft::RealFftPlanner;
 /// desired amplitude for that frequency. At the end the signal is reconstructed
 /// using the altered frequencies.
 pub fn filter_fft_whole(buffer: &mut SoundBuffer, frequency_amplitude: fn(f32) -> f32) {
-    let fft_len = buffer.samples.len();
-
-    let mut planner = RealFftPlanner::new();
-    let fft_forward = planner.plan_fft_forward(fft_len);
-    let fft_inverse = planner.plan_fft_inverse(fft_len);
-
-    let mut spectrum = fft_forward.make_output_vec();
-
-    fft_forward.process(&mut buffer.samples, &mut spectrum).unwrap();
-
-    let delta = buffer.settings().sample_rate as f32 / 2.0 / fft_len as f32;
-
-    for i in 0..spectrum.len() {
-        let frequency = i as f32 * delta;
-        let factor = frequency_amplitude(frequency);
-        spectrum[i] *= factor;
-    }
-
-    fft_inverse.process(&mut spectrum, &mut buffer.samples).unwrap();
-
-    for sample in buffer.samples.iter_mut() {
-        *sample /= fft_len as f32;
-    }
+    let sample_rate = buffer.settings().sample_rate;
+    filter_fft_part(&mut buffer.samples, sample_rate, frequency_amplitude);
 }
 
 pub fn filter_fft_sized(
@@ -75,5 +54,35 @@ pub fn filter_fft_sized(
     
     for i in valid_length..buffer.samples.len() {
         buffer.samples[i] = 0.0;
+    }
+}
+
+fn filter_fft_part(
+    buffer: &mut Vec<f32>,
+    sample_rate: u32,
+    frequency_amplitude: fn(f32) -> f32,
+) {
+    let fft_len = buffer.len();
+
+    let mut planner = RealFftPlanner::new();
+    let fft_forward = planner.plan_fft_forward(fft_len);
+    let fft_inverse = planner.plan_fft_inverse(fft_len);
+
+    let mut spectrum = fft_forward.make_output_vec();
+
+    fft_forward.process(buffer, &mut spectrum).unwrap();
+
+    let delta = sample_rate as f32 / 2.0 / fft_len as f32;
+
+    for i in 0..spectrum.len() {
+        let frequency = i as f32 * delta;
+        let factor = frequency_amplitude(frequency);
+        spectrum[i] *= factor;
+    }
+
+    fft_inverse.process(&mut spectrum, buffer).unwrap();
+
+    for sample in buffer.iter_mut() {
+        *sample /= fft_len as f32;
     }
 }
