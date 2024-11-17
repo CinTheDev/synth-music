@@ -53,7 +53,11 @@ pub fn red_noise(buffer: &mut Vec<f32>) {
 /// 
 /// **Not implemented yet**
 pub fn blue_noise(buffer: &mut Vec<f32>) {
-    unimplemented!();
+    let frequency_amplitude = |f: f32| {
+        return f.sqrt();
+    };
+
+    custom_noise(buffer, frequency_amplitude);
 }
 
 /// Fill a given buffer with purple noise. In purple noise, the amplitude of
