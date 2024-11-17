@@ -27,6 +27,19 @@ pub fn filter_fft_whole_highpass(buffer: &mut SoundBuffer, frequency: f32) {
     });
 }
 
+/// Apply a bandpass filter to a periodic sound using a FFT. Only frequencies
+/// in the specified range `frequency` will remain.
+pub fn filter_fft_whole_bandpass(buffer: &mut SoundBuffer, frequency: std::ops::Range<f32>) {
+    filter_fft_whole(buffer, |f: f32| -> f32 {
+        if f > frequency.start && f < frequency.end {
+            return 1.0;
+        }
+        else {
+            return 0.0;
+        }
+    })
+}
+
 /// Apply a FFT filter across the whole buffer, where the FFT length matches
 /// the buffer length. Only do this for periodic signals (e.g. tones).
 /// 
