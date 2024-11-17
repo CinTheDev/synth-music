@@ -20,10 +20,10 @@ pub fn pink_noise(buffer: &mut Vec<f32>) {
     unimplemented!();
 }
 
-/// Fill a given buffer with red noise. In red noise, the amplitude of a
-/// specific frequency is inversly proportional to the frequency, which
-/// effectively makes higher frequencies quieter; it's similar to pink noise.
-/// This makes it sound less harsh.
+/// Fill a given buffer with red noise (also called brown noise). In red noise,
+/// the amplitude of a specific frequency is inversly proportional to the
+/// frequency, which effectively makes higher frequencies quieter; it's similar
+/// to pink noise. This makes it sound less harsh.
 /// 
 /// **Not implemented yet**
 pub fn red_noise(buffer: &mut Vec<f32>) {
