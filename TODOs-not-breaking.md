@@ -57,11 +57,7 @@ turn those back into a tone. The cool thing is that it's possible to modify
 these frequencies before turning them back, which effectively filters or even
 boosts those frequencies.
 
-### Noise generation
-
-Provide functions for generating multiple types of noise. White noise is the
-easiest because it's just random values, but using the EQ above we can create
-other types by filtering white noise.
+TODO: Implement `custom_noise` using EQ.
 
 ## More exporter tools
 

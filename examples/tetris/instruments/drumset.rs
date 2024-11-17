@@ -5,7 +5,6 @@
 
 use synth_music::prelude::*;
 use std::time::Duration;
-use rand::Rng;
 
 // Specify possible drumset actions
 #[derive(Clone, Copy)]
@@ -103,20 +102,12 @@ impl Drumset {
         let num_samples = Self::get_target_samples(sample_rate, target_duration);
         buffer.samples = vec![0.0; num_samples];
         
-        Self::generate_white_noise(&mut buffer.samples);
+        noise::white_noise(&mut buffer.samples);
         Self::filter(buffer, frequency_range);
 
         for i in 0..buffer.samples.len() {
             let time = buffer.time_from_index(i);
             buffer.samples[i] *= self.decay(time, target_duration) * 0.2;
-        }
-    }
-
-    pub fn generate_white_noise(buffer: &mut Vec<f32>) {
-        let mut rng = rand::thread_rng();
-
-        for sample in buffer.iter_mut() {
-            *sample = rng.gen_range(-1.0..1.0);
         }
     }
 
