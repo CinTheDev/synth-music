@@ -10,10 +10,22 @@ pub fn white_noise(buffer: &mut Vec<f32>) {
     }
 }
 
-/// Fill a given buffer with pink noise. In pink noise, higher frequencies are
-/// quieter than low frequencies, which makes the sound less harsh.
+/// Fill a given buffer with pink noise. In pink noise, the amplitude of a
+/// specific frequency is proportional to the square root of the frequency,
+/// which effectively makes higher frequencies quieter; it's similar to red
+/// noise. This makes it sound less harsh.
 /// 
 /// **Not implemented yet**
 pub fn pink_noise(buffer: &mut Vec<f32>) {
+    unimplemented!();
+}
+
+/// Fill a given buffer with red noise. In red noise, the amplitude of a
+/// specific frequency is proportional to the frequency, which effectively makes
+/// higher frequencies quieter; it's similar to pink noise. This makes it sound
+/// less harsh.
+/// 
+/// **Not implemented yet**
+pub fn red_noise(buffer: &mut Vec<f32>) {
     unimplemented!();
 }
