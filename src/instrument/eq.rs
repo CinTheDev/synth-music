@@ -58,7 +58,7 @@ pub fn filter_fft_sized(
         let samples = &mut buffer.samples[index_start .. index_end];
         fft_forward.process(samples, &mut spectrum).unwrap();
 
-        for i in 0..fft_len {
+        for i in 0..fft_len/2 {
             let frequency = i as f32 * delta;
             let factor = frequency_amplitude(frequency);
             spectrum[i] *= factor;
