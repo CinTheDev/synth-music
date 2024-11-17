@@ -14,6 +14,16 @@ pub fn filter_fft_whole(buffer: &mut SoundBuffer, frequency_amplitude: fn(f32) -
     filter_fft_part(&mut buffer.samples, sample_rate, frequency_amplitude);
 }
 
+/// Apply a FFT filter across the whole buffer, where the FFT length is given
+/// as a parameter. The FFT window is overlapped by `window_overlap` samples.
+/// Without overlap there will be noticable seams between the FFT windows, and
+/// higher overlap will make the seams less apparent.
+/// 
+/// This function is considered unfinished as it does not transition between
+/// FFT windows seamlessly even with high overlap. Please use `filter_fft_whole`
+/// unless you really need a specific fft window size.
+/// 
+/// TODO: Fix the overlap problem.
 pub fn filter_fft_sized(
     buffer: &mut SoundBuffer,
     frequency_amplitude: fn(f32) -> f32,
