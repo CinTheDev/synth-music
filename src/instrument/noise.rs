@@ -1,3 +1,5 @@
+use super::SoundBuffer;
+use super::eq;
 use rand::Rng;
 
 /// Fill a given buffer with white noise. The samples are randomly generated
@@ -14,9 +16,7 @@ pub fn white_noise(buffer: &mut Vec<f32>) {
 /// specific frequency is inversly proportional to the square root of the
 /// frequency, which effectively makes higher frequencies quieter; it's similar
 /// to red noise. This makes it sound less harsh.
-/// 
-/// **Not implemented yet**
-pub fn pink_noise(buffer: &mut Vec<f32>) {
+pub fn pink_noise(buffer: &mut SoundBuffer) {
     let frequency_amplitude = |f: f32| {
         if f < 0.1 {
             return 0.0;
@@ -32,9 +32,7 @@ pub fn pink_noise(buffer: &mut Vec<f32>) {
 /// the amplitude of a specific frequency is inversly proportional to the
 /// frequency, which effectively makes higher frequencies quieter; it's similar
 /// to pink noise. This makes it sound less harsh.
-/// 
-/// **Not implemented yet**
-pub fn red_noise(buffer: &mut Vec<f32>) {
+pub fn red_noise(buffer: &mut SoundBuffer) {
     let frequency_amplitude = |f: f32| {
         if f < 0.1 {
             return 0.0;
@@ -50,9 +48,7 @@ pub fn red_noise(buffer: &mut Vec<f32>) {
 /// specific frequency is proportional to the square root of the frequency,
 /// which effectively makes lower frequencies quieter; it's similar to purple
 /// noise.
-/// 
-/// **Not implemented yet**
-pub fn blue_noise(buffer: &mut Vec<f32>) {
+pub fn blue_noise(buffer: &mut SoundBuffer) {
     let frequency_amplitude = |f: f32| {
         let max_value = 20_000_f32.sqrt();
         return f.sqrt() / max_value;
@@ -64,9 +60,7 @@ pub fn blue_noise(buffer: &mut Vec<f32>) {
 /// Fill a given buffer with purple noise. In purple noise, the amplitude of
 /// a specific frequency is proportional to the freqeuncy, which effectively
 /// makes lower frequencies quieter; it's similar to blue noise.
-/// 
-/// **Not implemented yet**
-pub fn purple_noise(buffer: &mut Vec<f32>) {
+pub fn purple_noise(buffer: &mut SoundBuffer) {
     let frequency_amplitude = |f: f32| {
         let max_value = 20_000.0;
         return f / max_value;
@@ -84,8 +78,8 @@ pub fn purple_noise(buffer: &mut Vec<f32>) {
 /// the amplitude of the 1000Hz-portion of the noise will have 40% of the
 /// amplitude of what it would have in white noise. If every frequency has
 /// amplitude `1.0`. the white noise would remain unfiltered.
-/// 
-/// **Not implemented yet**
-pub fn custom_noise(buffer: &mut Vec<f32>, frequency_amplitude: fn(f32) -> f32) {
-    unimplemented!();
+pub fn custom_noise<F: Fn(f32) -> f32>(buffer: &mut SoundBuffer, frequency_amplitude: F) {
+    white_noise(&mut buffer.samples);
+    eq::filter_fft_whole(buffer, frequency_amplitude);
+    buffer.normalize();
 }

@@ -97,8 +97,21 @@ impl Drumset {
         let num_samples = Self::get_target_samples(sample_rate, target_duration);
 
         buffer.samples = vec![0.0; num_samples];
-        noise::white_noise(&mut buffer.samples);
-        Self::filter(buffer, frequency_range);
+        noise::custom_noise(buffer, |f: f32| -> f32 {
+            let leakage_distance = 5000.0;
+            if f < frequency_range.start {
+                let dist = frequency_range.start - f;
+                let t = (dist / leakage_distance).min(1.0);
+                return Self::lerp(1.0, 0.0, t);
+            }
+            if f > frequency_range.end {
+                let dist = f - frequency_range.end;
+                let t = (dist / leakage_distance).min(1.0);
+                return Self::lerp(1.0, 0.0, t);
+            }
+
+            return 1.0;
+        });
 
         for i in 0..buffer.samples.len() {
             let time = buffer.time_from_index(i);
@@ -106,33 +119,8 @@ impl Drumset {
         }
     }
 
-    pub fn filter(buffer: &mut SoundBuffer, frequency: std::ops::Range<f32>) {
-        use biquad::*;
-
-        let f_lower = frequency.start.hz();
-        let f_upper = frequency.end.hz();
-        let f_sample = buffer.settings().sample_rate.hz();
-
-        let coeffs_lp = Coefficients::<f32>::from_params(
-            Type::LowPass,
-            f_sample,
-            f_upper,
-            Q_BUTTERWORTH_F32,
-        ).unwrap();
-        let coeffs_hp = Coefficients::<f32>::from_params(
-            Type::HighPass,
-            f_sample,
-            f_lower,
-            Q_BUTTERWORTH_F32,
-        ).unwrap();
-
-        let mut biquad_lp = DirectForm1::<f32>::new(coeffs_lp);
-        let mut biquad_hp = DirectForm1::<f32>::new(coeffs_hp);
-        
-        for sample in buffer.samples.iter_mut() {
-            *sample = biquad_lp.run(*sample);
-            *sample = biquad_hp.run(*sample);
-        }
+    fn lerp(a: f32, b: f32, t: f32) -> f32 {
+        return t * (b - a) + a;
     }
 
     fn decay(&self, time: Duration, target_duration: Duration) -> f32 {

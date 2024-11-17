@@ -50,14 +50,36 @@ Check the contents of a MIDI file and see how this could be implemented.
 Provide a bunch of default implementations for things often needed for
 synthesizing.
 
-### EQ filter using FFT
+### More research on EQ filtering
 
-The FFT (fast fourier transform) can decompose a tone into it's frequencies and
-turn those back into a tone. The cool thing is that it's possible to modify
-these frequencies before turning them back, which effectively filters or even
-boosts those frequencies.
+The current implementation features a FFT filter applied over the whole buffer,
+which works fine, and a filter that applies several FFT windows over a buffer.
 
-TODO: Implement `custom_noise` using EQ.
+This second, more advanced filter works fine for the most part. Unfortunately,
+with certain sounds there are noticable seams in between windows even though
+they're overlapped. There are also "windowing functions", but I probably
+understood them wrong as they messed up the results.
+
+Please invest more reseach into this topic and fix the windowed FFT filter.
+
+### More easy usage for FFT filtering
+
+The current filter requires a closure that will compute the amplitude of the
+given frequency. On one hand, this allows the user to have maxmimum control
+over the filter, but on the other hand, it's tedious to use it this way,
+especially if smoother functions are desired.
+
+There are already a few wrapper functions for hard frequency cutoffs, but such
+hard cutoffs don't sound great.
+
+The problem with providing such wrappers is that they severly limit the possible
+amount of curves representable.
+
+Please think about this problem, it's probably best to come up with some
+"function builder" struct that will make creating a smooth curve very easy.
+
+Also consider transformations (e.g. linear), because falloffs might need to
+operate on the logarithmic frequency instead of linear.
 
 ## More exporter tools
 

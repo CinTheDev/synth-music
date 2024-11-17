@@ -23,6 +23,7 @@ pub use instrument::{
     Instrument,
     predefined,
     noise,
+    eq,
 };
 pub use predefined::tet12;
 pub use tet12::{TET12ScaledTone, TET12ConcreteTone};
