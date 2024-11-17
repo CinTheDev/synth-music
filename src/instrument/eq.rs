@@ -89,10 +89,10 @@ pub fn make_seamless(first: &mut [f32], second: &mut [f32], distance: usize) {
     for i in 0..distance {
         let index_end = first.len() - 1 - i;
         let index_start = i;
-        let t = 1.0 - (i as f32 / distance as f32);
+        let t = 1.0 - ((i as f32 + 0.5) / distance as f32);
 
-        lerp(first[index_end], midpoint, t);
-        lerp(second[index_start], midpoint, t);
+        first[index_end] = lerp(first[index_end], midpoint, t);
+        second[index_start] = lerp(second[index_start], midpoint, t);
     }
 }
 
