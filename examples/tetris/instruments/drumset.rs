@@ -103,40 +103,11 @@ impl Drumset {
         buffer.samples = vec![0.0; num_samples];
         
         noise::white_noise(&mut buffer.samples);
-        Self::filter(buffer, frequency_range);
+        eq::filter_fft_whole_bandpass(buffer, frequency_range);
 
         for i in 0..buffer.samples.len() {
             let time = buffer.time_from_index(i);
             buffer.samples[i] *= self.decay(time, target_duration) * 0.2;
-        }
-    }
-
-    pub fn filter(buffer: &mut SoundBuffer, frequency: std::ops::Range<f32>) {
-        use biquad::*;
-
-        let f_lower = frequency.start.hz();
-        let f_upper = frequency.end.hz();
-        let f_sample = buffer.settings().sample_rate.hz();
-
-        let coeffs_lp = Coefficients::<f32>::from_params(
-            Type::LowPass,
-            f_sample,
-            f_upper,
-            Q_BUTTERWORTH_F32,
-        ).unwrap();
-        let coeffs_hp = Coefficients::<f32>::from_params(
-            Type::HighPass,
-            f_sample,
-            f_lower,
-            Q_BUTTERWORTH_F32,
-        ).unwrap();
-
-        let mut biquad_lp = DirectForm1::<f32>::new(coeffs_lp);
-        let mut biquad_hp = DirectForm1::<f32>::new(coeffs_hp);
-        
-        for sample in buffer.samples.iter_mut() {
-            *sample = biquad_lp.run(*sample);
-            *sample = biquad_hp.run(*sample);
         }
     }
 
