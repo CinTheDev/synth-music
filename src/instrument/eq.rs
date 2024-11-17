@@ -1,6 +1,8 @@
 use super::SoundBuffer;
 use realfft::RealFftPlanner;
 
+/// Apply a lowpass filter to a periodic sound using a FFT. Only frequencies
+/// lower than `frequency` will remain.
 pub fn filter_fft_whole_lowpass(buffer: &mut SoundBuffer, frequency: f32) {
     filter_fft_whole(buffer, |f: f32| -> f32 {
         if f < frequency {
@@ -12,6 +14,8 @@ pub fn filter_fft_whole_lowpass(buffer: &mut SoundBuffer, frequency: f32) {
     });
 }
 
+/// Apply a highpass filter to a periodic sound using a FFT. Only frequencies
+/// higher than `frequency` will remain.
 pub fn filter_fft_whole_highpass(buffer: &mut SoundBuffer, frequency: f32) {
     filter_fft_whole(buffer, |f: f32| -> f32 {
         if f > frequency {
