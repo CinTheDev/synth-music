@@ -80,7 +80,7 @@ fn filter_fft_part(
     }
 }
 
-fn make_seamless(first: &mut [f32], second: &mut [f32], distance: usize) {
+pub fn make_seamless(first: &mut [f32], second: &mut [f32], distance: usize) {
     let end_first = first.last().unwrap();
     let start_second = second.first().unwrap();
 
