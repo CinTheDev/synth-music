@@ -12,6 +12,17 @@ pub fn filter_fft_whole_lowpass(buffer: &mut SoundBuffer, frequency: f32) {
     });
 }
 
+pub fn filter_fft_whole_highpass(buffer: &mut SoundBuffer, frequency: f32) {
+    filter_fft_whole(buffer, |f: f32| -> f32 {
+        if f > frequency {
+            return 1.0;
+        }
+        else {
+            return 0.0;
+        }
+    });
+}
+
 /// Apply a FFT filter across the whole buffer, where the FFT length matches
 /// the buffer length. Only do this for periodic signals (e.g. tones).
 /// 
