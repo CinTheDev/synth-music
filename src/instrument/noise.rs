@@ -9,3 +9,11 @@ pub fn white_noise(buffer: &mut Vec<f32>) {
         *sample = rng.gen_range(-1.0 .. 1.0);
     }
 }
+
+/// Fill a given buffer with pink noise. In pink noise, higher frequencies are
+/// quieter than low frequencies, which makes the sound less harsh.
+/// 
+/// **Not implemented yet**
+pub fn pink_noise(buffer: &mut Vec<f32>) {
+    unimplemented!();
+}
