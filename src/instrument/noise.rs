@@ -54,7 +54,8 @@ pub fn red_noise(buffer: &mut Vec<f32>) {
 /// **Not implemented yet**
 pub fn blue_noise(buffer: &mut Vec<f32>) {
     let frequency_amplitude = |f: f32| {
-        return f.sqrt();
+        let max_value = 20_000_f32.sqrt();
+        return f.sqrt() / max_value;
     };
 
     custom_noise(buffer, frequency_amplitude);
@@ -67,7 +68,8 @@ pub fn blue_noise(buffer: &mut Vec<f32>) {
 /// **Not implemented yet**
 pub fn purple_noise(buffer: &mut Vec<f32>) {
     let frequency_amplitude = |f: f32| {
-        return f;
+        let max_value = 20_000.0;
+        return f / max_value;
     };
 
     custom_noise(buffer, frequency_amplitude);
