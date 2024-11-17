@@ -91,4 +91,6 @@ pub fn purple_noise(buffer: &mut SoundBuffer) {
 pub fn custom_noise(buffer: &mut SoundBuffer, frequency_amplitude: fn(f32) -> f32) {
     white_noise(&mut buffer.samples);
     eq::filter_fft_whole(buffer, frequency_amplitude);
+    // TODO: Make this more efficient please
+    *buffer = buffer.clone().normalized();
 }
