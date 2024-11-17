@@ -72,6 +72,12 @@ fn filter_fft_part(
 
     let mut spectrum = fft_forward.make_output_vec();
 
+    // Apply window function
+    for n in 0..buffer.len() {
+        let factor = hann_window(n, buffer.len());
+        buffer[n] *= factor;
+    }
+
     fft_forward.process(buffer, &mut spectrum).unwrap();
 
     let delta = sample_rate as f32 / 2.0 / fft_len as f32;
