@@ -98,12 +98,30 @@ impl Drumset {
 
         buffer.samples = vec![0.0; num_samples];
         noise::white_noise(&mut buffer.samples);
-        eq::filter_fft_whole_bandpass(buffer, frequency_range);
+        eq::filter_fft_whole(buffer, |f: f32| -> f32 {
+            let leakage_distance = 5000.0;
+            if f < frequency_range.start {
+                let dist = frequency_range.start - f;
+                let t = (dist / leakage_distance).min(1.0);
+                return Self::lerp(1.0, 0.0, t);
+            }
+            if f > frequency_range.end {
+                let dist = f - frequency_range.end;
+                let t = (dist / leakage_distance).min(1.0);
+                return Self::lerp(1.0, 0.0, t);
+            }
+
+            return 1.0;
+        });
 
         for i in 0..buffer.samples.len() {
             let time = buffer.time_from_index(i);
             buffer.samples[i] *= self.decay(time, target_duration) * 0.4;
         }
+    }
+
+    fn lerp(a: f32, b: f32, t: f32) -> f32 {
+        return t * (b - a) + a;
     }
 
     fn decay(&self, time: Duration, target_duration: Duration) -> f32 {
