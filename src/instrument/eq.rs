@@ -68,3 +68,11 @@ fn filter_fft_part(
         *sample /= fft_len as f32;
     }
 }
+
+fn hann_window(n: usize, n_max: usize) -> f32 {
+    use std::f32::consts::PI;
+    let n = n as f32;
+    let n_max = n_max as f32;
+
+    return 0.5 - 0.5 * (2.0 * PI * n / n_max).cos();
+}
