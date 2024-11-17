@@ -25,18 +25,6 @@ fn main() {
     let mut blue_noise = empty_buffer.clone();
     let mut purple_noise = empty_buffer.clone();
 
-    let mut test_1 = SoundBuffer::from_parts(
-        vec![1.0; sample_num],
-        sample_num,
-        settings,
-    );
-    let mut test_2 = SoundBuffer::from_parts(
-        vec![-1.0; sample_num],
-        sample_num,
-        settings,
-    );
-    eq::make_seamless(&mut test_1.samples, &mut test_2.samples, 10);
-
     noise::white_noise(&mut white_noise.samples);
     noise::pink_noise(&mut pink_noise);
     noise::red_noise(&mut red_noise);
@@ -53,9 +41,6 @@ fn main() {
         blue_noise,
         silence_inbetween,
         purple_noise,
-        silence_inbetween,
-        test_1,
-        test_2,
     );
 
     export(out_buffer);
