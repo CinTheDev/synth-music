@@ -97,8 +97,7 @@ impl Drumset {
         let num_samples = Self::get_target_samples(sample_rate, target_duration);
 
         buffer.samples = vec![0.0; num_samples];
-        noise::white_noise(&mut buffer.samples);
-        eq::filter_fft_whole(buffer, |f: f32| -> f32 {
+        noise::custom_noise(buffer, |f: f32| -> f32 {
             let leakage_distance = 5000.0;
             if f < frequency_range.start {
                 let dist = frequency_range.start - f;
