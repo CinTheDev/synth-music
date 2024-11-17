@@ -18,11 +18,28 @@ pub fn filter_fft_sized(
     buffer: &mut SoundBuffer,
     frequency_amplitude: fn(f32) -> f32,
     fft_len: usize,
+    window_overlap: usize,
 ) {
+    let sample_rate = buffer.settings().sample_rate;
+
+    let mut index_start = 0;
+    let mut index_end = fft_len;
+
+    while index_end <= buffer.samples.len() {
+        let samples = &mut buffer.samples[index_start .. index_end];
+        filter_fft_part(samples, sample_rate, frequency_amplitude);
+
+        let offset = fft_len - window_overlap;
+        index_start += offset;
+        index_end += offset;
+    }
+
+    // TODO: Filter remaining part
+
+    /*
     let number_of_transforms = buffer.samples.len() / fft_len;
     let sample_rate = buffer.settings().sample_rate;
 
-    // First pass: Filter using FFT
     for transform_index in 0..number_of_transforms {
         let index_start = transform_index * fft_len;
         let index_end = (transform_index + 1) * fft_len;
@@ -30,13 +47,16 @@ pub fn filter_fft_sized(
         let samples = &mut buffer.samples[index_start .. index_end];
         filter_fft_part(samples, sample_rate, frequency_amplitude);
     }
+    */
 
+    /*
     let remaining_start_index = fft_len * number_of_transforms;
 
     if remaining_start_index < buffer.samples.len() {
         let remaining_samples = &mut buffer.samples[remaining_start_index..];
         filter_fft_part(remaining_samples, sample_rate, frequency_amplitude);
     }
+    */
 }
 
 fn filter_fft_part(
