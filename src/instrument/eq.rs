@@ -19,7 +19,6 @@ pub fn filter_fft_sized(
     frequency_amplitude: fn(f32) -> f32,
     fft_len: usize,
 ) {
-    // TODO: Also transform the "end bit" that does not fit a whole transform
     let number_of_transforms = buffer.samples.len() / fft_len;
     let sample_rate = buffer.settings().sample_rate;
 
@@ -31,11 +30,14 @@ pub fn filter_fft_sized(
         filter_fft_part(samples, sample_rate, frequency_amplitude);
     }
 
-    let valid_length = number_of_transforms * fft_len;
-    
-    for i in valid_length..buffer.samples.len() {
-        buffer.samples[i] = 0.0;
+    let remaining_start_index = fft_len * number_of_transforms;
+
+    if remaining_start_index >= buffer.samples.len() {
+        return;
     }
+
+    let remaining_samples = &mut buffer.samples[remaining_start_index..];
+    filter_fft_part(remaining_samples, sample_rate, frequency_amplitude);
 }
 
 fn filter_fft_part(
