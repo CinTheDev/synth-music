@@ -21,4 +21,8 @@ pub fn filter_fft_whole(buffer: &mut SoundBuffer, frequency_amplitude: fn(f32) -
     }
 
     fft_inverse.process(&mut spectrum, &mut buffer.samples).unwrap();
+
+    for sample in buffer.samples.iter_mut() {
+        *sample /= fft_len as f32;
+    }
 }
