@@ -34,29 +34,9 @@ pub fn filter_fft_sized(
         index_end += offset;
     }
 
-    // TODO: Filter remaining part
-
-    /*
-    let number_of_transforms = buffer.samples.len() / fft_len;
-    let sample_rate = buffer.settings().sample_rate;
-
-    for transform_index in 0..number_of_transforms {
-        let index_start = transform_index * fft_len;
-        let index_end = (transform_index + 1) * fft_len;
-
-        let samples = &mut buffer.samples[index_start .. index_end];
-        filter_fft_part(samples, sample_rate, frequency_amplitude);
-    }
-    */
-
-    /*
-    let remaining_start_index = fft_len * number_of_transforms;
-
-    if remaining_start_index < buffer.samples.len() {
-        let remaining_samples = &mut buffer.samples[remaining_start_index..];
-        filter_fft_part(remaining_samples, sample_rate, frequency_amplitude);
-    }
-    */
+    index_end = buffer.samples.len();
+    let samples = &mut buffer.samples[index_start .. index_end];
+    filter_fft_part(samples, sample_rate, frequency_amplitude);
 }
 
 fn filter_fft_part(
