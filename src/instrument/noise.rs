@@ -48,3 +48,18 @@ pub fn blue_noise(buffer: &mut Vec<f32>) {
 pub fn purple_noise(buffer: &mut Vec<f32>) {
     unimplemented!();
 }
+
+/// Fill the given buffer with filtered white noise. `frequency_amplitude` is a
+/// function pointer; the given parameter is the frequency, and the function
+/// shall return the amplitude of that frequency. The maximum amplitude is 1.0,
+/// and the minimum amplitude is 0.0.
+/// 
+/// If e.g. the function is given the value `1000.0` and it returns `0.4`, then
+/// the amplitude of the 1000Hz-portion of the noise will have 40% of the
+/// amplitude of what it would have in white noise. If every frequency has
+/// amplitude `1.0`. the white noise would remain unfiltered.
+/// 
+/// **Not implemented yet**
+pub fn custom_noise(buffer: &mut Vec<f32>, frequency_amplitude: fn(f32) -> f32) {
+    unimplemented!();
+}
