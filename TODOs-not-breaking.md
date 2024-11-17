@@ -50,15 +50,6 @@ Check the contents of a MIDI file and see how this could be implemented.
 Provide a bunch of default implementations for things often needed for
 synthesizing.
 
-### EQ filter using FFT
-
-The FFT (fast fourier transform) can decompose a tone into it's frequencies and
-turn those back into a tone. The cool thing is that it's possible to modify
-these frequencies before turning them back, which effectively filters or even
-boosts those frequencies.
-
-TODO: Implement `custom_noise` using EQ.
-
 ## More exporter tools
 
 A collection of ideas for generic exporter features

@@ -25,5 +25,6 @@
 - Provide wave functions with phase
 - Add function to normalize a `SoundBuffer`
 - Provide noise generation functions
+- Provide frequency filter functions, similar to an EQ.
 
 [IN PROGRESS]
