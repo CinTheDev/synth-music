@@ -119,22 +119,6 @@ impl SoundBuffer {
         }
     }
 
-    pub fn make_seamless(&mut self, other: &mut Self, distance: usize) {
-        let end_first = self.samples.last().unwrap();
-        let start_second = other.samples.first().unwrap();
-
-        let midpoint = (end_first + start_second) / 2.0;
-
-        for i in 0..distance {
-            let index_end = self.samples.len() - 1 - i;
-            let index_start = i;
-            let t = 1.0 - (i as f32 / distance as f32);
-
-            Self::lerp(self.samples[index_end], midpoint, t);
-            Self::lerp(other.samples[index_start], midpoint, t);
-        }
-    }
-
     /// Append the given buffer to the current buffer.
     /// 
     /// Depending on the internal state, this function might partially mix both
@@ -232,11 +216,6 @@ impl SoundBuffer {
         }
 
         return loudest;
-    }
-
-    // TODO: Move this to a more general place
-    fn lerp(a: f32, b: f32, t: f32) -> f32 {
-        t * (b - a) + a
     }
 }
 
