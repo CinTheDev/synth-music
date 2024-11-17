@@ -126,7 +126,7 @@ fn filter_fft_part<F: Fn(f32) -> f32>(
 
     fft_forward.process(buffer, &mut spectrum).unwrap();
 
-    let delta = sample_rate as f32 / 2.0 / fft_len as f32;
+    let delta = sample_rate as f32 / fft_len as f32;
 
     for i in 0..spectrum.len() {
         let frequency = i as f32 * delta;
