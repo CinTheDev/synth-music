@@ -70,4 +70,10 @@ pub fn filter_fft_sized(
             *sample /= fft_len as f32;
         }
     }
+
+    let valid_length = number_of_transforms * fft_len;
+    
+    for i in valid_length..buffer.samples.len() {
+        buffer.samples[i] = 0.0;
+    }
 }
