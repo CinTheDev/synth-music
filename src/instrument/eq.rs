@@ -52,12 +52,6 @@ fn filter_fft_part(
 
     let mut spectrum = fft_forward.make_output_vec();
 
-    // Apply window function
-    for n in 0..buffer.len() {
-        let factor = hann_window(n, buffer.len());
-        buffer[n] *= factor;
-    }
-
     fft_forward.process(buffer, &mut spectrum).unwrap();
 
     let delta = sample_rate as f32 / 2.0 / fft_len as f32;
@@ -73,12 +67,4 @@ fn filter_fft_part(
     for sample in buffer.iter_mut() {
         *sample /= fft_len as f32;
     }
-}
-
-fn hann_window(n: usize, n_max: usize) -> f32 {
-    use std::f32::consts::PI;
-    let n = n as f32;
-    let n_max = n_max as f32;
-
-    return 0.5 - 0.5 * (2.0 * PI * n / n_max).cos();
 }
