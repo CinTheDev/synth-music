@@ -37,17 +37,6 @@ pub fn filter_fft_sized(
         let remaining_samples = &mut buffer.samples[remaining_start_index..];
         filter_fft_part(remaining_samples, sample_rate, frequency_amplitude);
     }
-
-    // Second pass: Make all parts seamless
-    for transform_index in 0..(number_of_transforms-1) {
-        let first_index_start = transform_index * fft_len;
-
-        let (_, first_buffer) = buffer.samples.split_at_mut(first_index_start);
-        let (first_buffer, second_buffer) = first_buffer.split_at_mut(fft_len);
-        let (second_buffer, _) = second_buffer.split_at_mut(fft_len);
-
-        make_seamless(first_buffer, second_buffer, 100);
-    }
 }
 
 fn filter_fft_part(
@@ -78,25 +67,4 @@ fn filter_fft_part(
     for sample in buffer.iter_mut() {
         *sample /= fft_len as f32;
     }
-}
-
-pub fn make_seamless(first: &mut [f32], second: &mut [f32], distance: usize) {
-    let end_first = first.last().unwrap();
-    let start_second = second.first().unwrap();
-
-    let midpoint = (end_first + start_second) / 2.0;
-
-    for i in 0..distance {
-        let index_end = first.len() - 1 - i;
-        let index_start = i;
-        let t = 1.0 - ((i as f32 + 0.5) / distance as f32);
-
-        first[index_end] = lerp(first[index_end], midpoint, t);
-        second[index_start] = lerp(second[index_start], midpoint, t);
-    }
-}
-
-// TODO: Move this to a more general place
-fn lerp(a: f32, b: f32, t: f32) -> f32 {
-    t * (b - a) + a
 }
