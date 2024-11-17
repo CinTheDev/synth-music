@@ -19,35 +19,16 @@ pub fn filter_fft_sized(
     frequency_amplitude: fn(f32) -> f32,
     fft_len: usize,
 ) {
-    let mut planner = RealFftPlanner::new();
-    let fft_forward = planner.plan_fft_forward(fft_len);
-    let fft_inverse = planner.plan_fft_inverse(fft_len);
-
-    let mut spectrum = fft_forward.make_output_vec();
-
     // TODO: Also transform the "end bit" that does not fit a whole transform
     let number_of_transforms = buffer.samples.len() / fft_len;
-
-    let delta = buffer.settings().sample_rate as f32 / 2.0 / fft_len as f32;
+    let sample_rate = buffer.settings().sample_rate;
 
     for transform_index in 0..number_of_transforms {
         let index_start = transform_index * fft_len;
         let index_end = (transform_index + 1) * fft_len;
 
         let samples = &mut buffer.samples[index_start .. index_end];
-        fft_forward.process(samples, &mut spectrum).unwrap();
-
-        for i in 0..fft_len/2 {
-            let frequency = i as f32 * delta;
-            let factor = frequency_amplitude(frequency);
-            spectrum[i] *= factor;
-        }
-
-        fft_inverse.process(&mut spectrum, samples).unwrap();
-
-        for sample in samples.iter_mut() {
-            *sample /= fft_len as f32;
-        }
+        filter_fft_part(samples, sample_rate, frequency_amplitude);
     }
 
     let valid_length = number_of_transforms * fft_len;
@@ -58,7 +39,7 @@ pub fn filter_fft_sized(
 }
 
 fn filter_fft_part(
-    buffer: &mut Vec<f32>,
+    buffer: &mut [f32],
     sample_rate: u32,
     frequency_amplitude: fn(f32) -> f32,
 ) {
