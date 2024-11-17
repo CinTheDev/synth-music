@@ -17,7 +17,15 @@ pub fn white_noise(buffer: &mut Vec<f32>) {
 /// 
 /// **Not implemented yet**
 pub fn pink_noise(buffer: &mut Vec<f32>) {
-    unimplemented!();
+    let frequency_amplitude = |f: f32| {
+        if f < 0.1 {
+            return 0.0;
+        }
+
+        return 1.0 / f.sqrt();
+    };
+
+    custom_noise(buffer, frequency_amplitude);
 }
 
 /// Fill a given buffer with red noise (also called brown noise). In red noise,
