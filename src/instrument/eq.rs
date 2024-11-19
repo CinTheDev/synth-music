@@ -4,7 +4,7 @@ use realfft::RealFftPlanner;
 /// Apply a lowpass filter to a periodic sound using a FFT. Only frequencies
 /// lower than `frequency` will remain.
 pub fn filter_fft_whole_lowpass(buffer: &mut SoundBuffer, frequency: f32) {
-    filter_fft_whole(buffer, |f: f32| -> f32 {
+    filter_fft(buffer, |f: f32| -> f32 {
         if f < frequency {
             return 1.0;
         }
@@ -17,7 +17,7 @@ pub fn filter_fft_whole_lowpass(buffer: &mut SoundBuffer, frequency: f32) {
 /// Apply a highpass filter to a periodic sound using a FFT. Only frequencies
 /// higher than `frequency` will remain.
 pub fn filter_fft_whole_highpass(buffer: &mut SoundBuffer, frequency: f32) {
-    filter_fft_whole(buffer, |f: f32| -> f32 {
+    filter_fft(buffer, |f: f32| -> f32 {
         if f > frequency {
             return 1.0;
         }
@@ -30,7 +30,7 @@ pub fn filter_fft_whole_highpass(buffer: &mut SoundBuffer, frequency: f32) {
 /// Apply a bandpass filter to a periodic sound using a FFT. Only frequencies
 /// in the specified range `frequency` will remain.
 pub fn filter_fft_whole_bandpass(buffer: &mut SoundBuffer, frequency: std::ops::Range<f32>) {
-    filter_fft_whole(buffer, |f: f32| -> f32 {
+    filter_fft(buffer, |f: f32| -> f32 {
         if f > frequency.start && f < frequency.end {
             return 1.0;
         }
@@ -48,7 +48,7 @@ pub fn filter_fft_whole_bandpass(buffer: &mut SoundBuffer, frequency: std::ops::
 /// argument is a function that is given a frequency, and must return the
 /// desired amplitude for that frequency. At the end the signal is reconstructed
 /// using the altered frequencies.
-pub fn filter_fft_whole<F: Fn(f32) -> f32>(buffer: &mut SoundBuffer, frequency_amplitude: F) {
+pub fn filter_fft<F: Fn(f32) -> f32>(buffer: &mut SoundBuffer, frequency_amplitude: F) {
     let sample_rate = buffer.settings().sample_rate;
     let fft_len = buffer.samples.len();
 

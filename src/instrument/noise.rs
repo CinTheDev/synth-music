@@ -80,6 +80,6 @@ pub fn purple_noise(buffer: &mut SoundBuffer) {
 /// amplitude `1.0`. the white noise would remain unfiltered.
 pub fn custom_noise<F: Fn(f32) -> f32>(buffer: &mut SoundBuffer, frequency_amplitude: F) {
     white_noise(&mut buffer.samples);
-    eq::filter_fft_whole(buffer, frequency_amplitude);
+    eq::filter_fft(buffer, frequency_amplitude);
     buffer.normalize();
 }
