@@ -16,7 +16,8 @@ impl ScaleType {
             Self::Linear => { t * (b - a) + a },
 
             Self::Logarithmic => {
-                todo!();
+                let lerp = t * (b.log10() - a.log10()) + a.log10();
+                10_f32.powf(lerp)
             },
         }
     }
@@ -26,7 +27,7 @@ impl ScaleType {
             Self::Linear => { (p - a) / (b - a) },
 
             Self::Logarithmic => {
-                todo!();
+                (p.log10() - a.log10()) / (b.log10() - a.log10())
             },
         }
     }

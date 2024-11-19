@@ -56,7 +56,9 @@ fn filter_curve_test(buffer: &mut SoundBuffer) {
 
     let curve = LinearCurve::new()
         .add_point(1000.0, 1.0).unwrap()
-        .add_point(10000.0, 0.0).unwrap();
+        .add_point(10000.0, 0.0001).unwrap()
+        .set_horizontal_scale(ScaleType::Logarithmic)
+        .set_vertical_scale(ScaleType::Logarithmic);
 
     eq::filter_fft(buffer, |f| {
         curve.get(f)
