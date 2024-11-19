@@ -53,64 +53,6 @@ pub fn filter_fft_whole<F: Fn(f32) -> f32>(buffer: &mut SoundBuffer, frequency_a
     filter_fft_part(&mut buffer.samples, sample_rate, &frequency_amplitude);
 }
 
-/// Apply a FFT filter across the whole buffer, where the FFT length is given
-/// as a parameter. The FFT window is overlapped by `window_overlap` samples.
-/// Without overlap there will be noticable seams between the FFT windows, and
-/// higher overlap will make the seams less apparent.
-/// 
-/// This function is considered unfinished as it does not transition between
-/// FFT windows seamlessly even with high overlap. Please use `filter_fft_whole`
-/// unless you really need a specific fft window size.
-/// 
-/// TODO: Fix the overlap problem.
-pub fn filter_fft_sized<F: Fn(f32) -> f32>(
-    buffer: &mut SoundBuffer,
-    frequency_amplitude: F,
-    fft_len: usize,
-    window_overlap: usize,
-) {
-    let sample_rate = buffer.settings().sample_rate;
-
-    let mut index_start = 0;
-    let mut index_end = fft_len;
-
-    let mut part_results = Vec::new();
-
-    while index_end <= buffer.samples.len() {
-        let samples = &buffer.samples[index_start .. index_end];
-        let mut part_buffer = samples.to_vec();
-        filter_fft_part(&mut part_buffer, sample_rate, &frequency_amplitude);
-        
-        let offset = fft_len - window_overlap;
-        index_start += offset;
-        index_end += offset;
-
-        part_results.push(SoundBuffer::from_parts(
-            part_buffer,
-            offset,
-            buffer.settings(),
-        ));
-    }
-
-    index_end = buffer.samples.len();
-
-    let samples = &buffer.samples[index_start .. index_end];
-    let mut part_buffer = samples.to_vec();
-    filter_fft_part(&mut part_buffer, sample_rate, &frequency_amplitude);
-
-    part_results.push(SoundBuffer::from_parts(
-        part_buffer,
-        index_end - index_start,
-        buffer.settings(),
-    ));
-
-    *buffer = SoundBuffer::new(buffer.settings());
-
-    for part_buffer in part_results {
-        buffer.transition(part_buffer);
-    }
-}
-
 fn filter_fft_part<F: Fn(f32) -> f32>(
     buffer: &mut [f32],
     sample_rate: u32,
