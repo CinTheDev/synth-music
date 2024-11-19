@@ -58,7 +58,7 @@ impl Curve for LinearCurve {
             return left_point.1;
         }
 
-        let t = (x - left_point.0) / (right_point.0 - left_point.0);
-        return t * (right_point.1 - left_point.1) + left_point.1;
+        let t = self.horizontal_scale.interpolate_inverse(left_point.0, right_point.0, x);
+        return self.vertical_scale.interpolate(left_point.1, right_point.1, t);
     }
 }
