@@ -41,7 +41,7 @@ pub fn filter_fft_whole_bandpass(buffer: &mut SoundBuffer, frequency: std::ops::
 }
 
 /// Apply a FFT filter across the whole buffer, where the FFT length matches
-/// the buffer length. Only do this for periodic signals (e.g. tones).
+/// the buffer length. More samples will result in a more precise filter.
 /// 
 /// This function will decompose the signal into its frequencies using a FFT,
 /// and will multiply them with numbers given by `frequency_amplitude`. This
