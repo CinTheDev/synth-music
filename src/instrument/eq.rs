@@ -50,15 +50,7 @@ pub fn filter_fft_whole_bandpass(buffer: &mut SoundBuffer, frequency: std::ops::
 /// using the altered frequencies.
 pub fn filter_fft_whole<F: Fn(f32) -> f32>(buffer: &mut SoundBuffer, frequency_amplitude: F) {
     let sample_rate = buffer.settings().sample_rate;
-    filter_fft_part(&mut buffer.samples, sample_rate, &frequency_amplitude);
-}
-
-fn filter_fft_part<F: Fn(f32) -> f32>(
-    buffer: &mut [f32],
-    sample_rate: u32,
-    frequency_amplitude: &F,
-) {
-    let fft_len = buffer.len();
+    let fft_len = buffer.samples.len();
 
     let mut planner = RealFftPlanner::new();
     let fft_forward = planner.plan_fft_forward(fft_len);
@@ -66,7 +58,7 @@ fn filter_fft_part<F: Fn(f32) -> f32>(
 
     let mut spectrum = fft_forward.make_output_vec();
 
-    fft_forward.process(buffer, &mut spectrum).unwrap();
+    fft_forward.process(&mut buffer.samples, &mut spectrum).unwrap();
 
     let delta = sample_rate as f32 / fft_len as f32;
 
@@ -76,9 +68,9 @@ fn filter_fft_part<F: Fn(f32) -> f32>(
         spectrum[i] *= factor;
     }
 
-    fft_inverse.process(&mut spectrum, buffer).unwrap();
+    fft_inverse.process(&mut spectrum, &mut buffer.samples).unwrap();
 
-    for sample in buffer.iter_mut() {
+    for sample in buffer.samples.iter_mut() {
         *sample /= fft_len as f32;
     }
 }
