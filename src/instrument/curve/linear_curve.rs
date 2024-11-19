@@ -1,13 +1,17 @@
-use super::Curve;
+use super::{Curve, ScaleType};
 
 pub struct LinearCurve {
     points: Vec<(f32, f32)>,
+    horizontal_scale: ScaleType,
+    vertical_scale: ScaleType,
 }
 
 impl LinearCurve {
     pub fn new() -> Self {
         Self {
             points: Vec::new(),
+            horizontal_scale: ScaleType::Linear,
+            vertical_scale: ScaleType::Linear,
         }
     }
 
@@ -20,6 +24,16 @@ impl LinearCurve {
 
         self.points.push((x, y));
         Ok(self)
+    }
+
+    pub fn set_horizontal_scale(mut self, scale_type: ScaleType) -> Self {
+        self.horizontal_scale = scale_type;
+        self
+    }
+
+    pub fn set_vertical_scale(mut self, scale_type: ScaleType) -> Self {
+        self.vertical_scale = scale_type;
+        self
     }
 }
 
