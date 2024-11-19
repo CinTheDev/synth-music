@@ -11,14 +11,14 @@ impl LinearCurve {
         }
     }
 
-    pub fn add_point(mut self, point: (f32, f32)) -> Self {
+    pub fn add_point(mut self, x: f32, y: f32) -> Self {
         let last_point = self.points.last().unwrap_or(&(std::f32::NEG_INFINITY, 0.0));
 
-        if point.0 < last_point.0 {
+        if x < last_point.0 {
             panic!("Cannot add point left to other points.");
         }
 
-        self.points.push(point);
+        self.points.push((x, y));
         self
     }
 }
