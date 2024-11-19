@@ -28,6 +28,7 @@ pub use instrument::{
 };
 pub use predefined::tet12;
 pub use tet12::{TET12ScaledTone, TET12ConcreteTone};
+pub use curve::Curve;
 pub use curve::linear_curve::LinearCurve;
 
 

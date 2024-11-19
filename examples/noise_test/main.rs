@@ -25,11 +25,14 @@ fn main() {
     let mut blue_noise = empty_buffer.clone();
     let mut purple_noise = empty_buffer.clone();
 
+    let mut filter_curve_noise = empty_buffer.clone();
+
     noise::white_noise(&mut white_noise.samples);
     noise::pink_noise(&mut pink_noise);
     noise::red_noise(&mut red_noise);
     noise::blue_noise(&mut blue_noise);
     noise::purple_noise(&mut purple_noise);
+    filter_curve_test(&mut filter_curve_noise);
 
     let out_buffer = composition!(
         white_noise,
@@ -41,9 +44,25 @@ fn main() {
         blue_noise,
         silence_inbetween,
         purple_noise,
+        silence_inbetween,
+        filter_curve_noise,
     );
 
     export(out_buffer);
+}
+
+fn filter_curve_test(buffer: &mut SoundBuffer) {
+    noise::white_noise(&mut buffer.samples);
+
+    let mut curve = LinearCurve::new();
+
+    curve
+        .add_point((1000.0, 1.0))
+        .add_point((10000.0, 0.0));
+
+    eq::filter_fft(buffer, |f| {
+        curve.get(f)
+    });
 }
 
 fn export(buffer: SoundBuffer) {
