@@ -1,5 +1,5 @@
 pub mod linear_curve;
 
 pub trait Curve {
-    fn get(x: f32) -> f32;
+    fn get(&self, x: f32) -> f32;
 }

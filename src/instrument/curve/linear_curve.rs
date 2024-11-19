@@ -18,7 +18,27 @@ impl LinearCurve {
 }
 
 impl Curve for LinearCurve {
-    fn get(x: f32) -> f32 {
-        return 0.0;
+    fn get(&self, x: f32) -> f32 {
+        let mut left_point = (std::f32::NAN, std::f32::NAN);
+        let mut right_point = (std::f32::NAN, std::f32::NAN);
+
+        for point in &self.points {
+            if point.0 > x {
+                right_point = *point;
+                break;
+            }
+
+            left_point = *point;
+        }
+
+        if left_point.0.is_nan() {
+            return right_point.1;
+        }
+        if right_point.0.is_nan() {
+            return left_point.1;
+        }
+
+        let t = (x - left_point.0) / (right_point.0 - left_point.0);
+        return t * (right_point.1 - left_point.1) + left_point.1;
     }
 }
