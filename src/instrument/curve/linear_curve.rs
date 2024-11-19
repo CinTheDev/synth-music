@@ -11,7 +11,7 @@ impl LinearCurve {
         }
     }
 
-    pub fn add_point(&mut self, point: (f32, f32)) -> &mut Self {
+    pub fn add_point(mut self, point: (f32, f32)) -> Self {
         let last_point = self.points.last().unwrap_or(&(std::f32::NEG_INFINITY, 0.0));
 
         if point.0 < last_point.0 {

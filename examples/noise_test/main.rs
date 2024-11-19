@@ -54,9 +54,7 @@ fn main() {
 fn filter_curve_test(buffer: &mut SoundBuffer) {
     noise::white_noise(&mut buffer.samples);
 
-    let mut curve = LinearCurve::new();
-
-    curve
+    let curve = LinearCurve::new()
         .add_point((1000.0, 1.0))
         .add_point((10000.0, 0.0));
 
