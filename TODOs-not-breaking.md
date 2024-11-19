@@ -50,18 +50,6 @@ Check the contents of a MIDI file and see how this could be implemented.
 Provide a bunch of default implementations for things often needed for
 synthesizing.
 
-### More research on EQ filtering
-
-The current implementation features a FFT filter applied over the whole buffer,
-which works fine, and a filter that applies several FFT windows over a buffer.
-
-This second, more advanced filter works fine for the most part. Unfortunately,
-with certain sounds there are noticable seams in between windows even though
-they're overlapped. There are also "windowing functions", but I probably
-understood them wrong as they messed up the results.
-
-Please invest more reseach into this topic and fix the windowed FFT filter.
-
 ### More easy usage for FFT filtering
 
 The current filter requires a closure that will compute the amplitude of the
