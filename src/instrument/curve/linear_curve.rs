@@ -10,6 +10,11 @@ impl LinearCurve {
             points: Vec::new(),
         }
     }
+
+    pub fn add_point(&mut self, point: (f32, f32)) -> &mut Self {
+        self.points.push(point);
+        self
+    }
 }
 
 impl Curve for LinearCurve {
