@@ -124,7 +124,37 @@ fn linear_interpolation_inverse() {
 
 #[test]
 fn logarithmic_interpolation() {
-    todo!();
+    assert!(check_interpolation(
+        1.0,
+        3.0,
+        0.0,
+        1.0,
+        ScaleType::Logarithmic,
+    ));
+
+    assert!(check_interpolation(
+        1.0,
+        3.0,
+        1.0,
+        3.0,
+        ScaleType::Logarithmic,
+    ));
+
+    assert!(check_interpolation(
+        1.0,
+        100.0,
+        0.5,
+        10.0,
+        ScaleType::Logarithmic,
+    ));
+
+    assert!(check_interpolation(
+        1.0,
+        10.0,
+        2.0,
+        100.0,
+        ScaleType::Logarithmic,
+    ));
 }
 
 #[test]
