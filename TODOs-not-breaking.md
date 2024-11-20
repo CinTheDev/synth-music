@@ -50,25 +50,6 @@ Check the contents of a MIDI file and see how this could be implemented.
 Provide a bunch of default implementations for things often needed for
 synthesizing.
 
-### More easy usage for FFT filtering
-
-The current filter requires a closure that will compute the amplitude of the
-given frequency. On one hand, this allows the user to have maxmimum control
-over the filter, but on the other hand, it's tedious to use it this way,
-especially if smoother functions are desired.
-
-There are already a few wrapper functions for hard frequency cutoffs, but such
-hard cutoffs don't sound great.
-
-The problem with providing such wrappers is that they severly limit the possible
-amount of curves representable.
-
-Please think about this problem, it's probably best to come up with some
-"function builder" struct that will make creating a smooth curve very easy.
-
-Also consider transformations (e.g. linear), because falloffs might need to
-operate on the logarithmic frequency instead of linear.
-
 ## More exporter tools
 
 A collection of ideas for generic exporter features

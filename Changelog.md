@@ -26,5 +26,7 @@
 - Add function to normalize a `SoundBuffer`
 - Provide noise generation functions
 - Provide frequency filter functions, similar to an EQ.
+- Add `Curve` trait and `LinearCurve` implementor for intuitively constructing a
+graph function (e.g. for frequency filter)
 
 [IN PROGRESS]

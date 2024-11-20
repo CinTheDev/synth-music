@@ -78,6 +78,8 @@ pub fn purple_noise(buffer: &mut SoundBuffer) {
 /// the amplitude of the 1000Hz-portion of the noise will have 40% of the
 /// amplitude of what it would have in white noise. If every frequency has
 /// amplitude `1.0`. the white noise would remain unfiltered.
+/// 
+/// You can construct a frequency curve using [`crate::prelude::LinearCurve`]
 pub fn custom_noise<F: Fn(f32) -> f32>(buffer: &mut SoundBuffer, frequency_amplitude: F) {
     white_noise(&mut buffer.samples);
     eq::filter_fft(buffer, frequency_amplitude);
