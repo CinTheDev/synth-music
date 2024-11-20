@@ -42,17 +42,17 @@ use super::{Curve, ScaleType};
 /// #
 /// // This is the same as...
 /// let curve = LinearCurve::new()
-///     .add_point(0.2, 0.0).unwrap()
-///     .add_point(0.4, 0.8).unwrap()
-///     .add_point(0.5, 1.0).unwrap()
-///     .add_point(0.8, 0.0).unwrap();
+///     .add_point(0.2, 0.0)
+///     .add_point(0.4, 0.8)
+///     .add_point(0.5, 1.0)
+///     .add_point(0.8, 0.0);
 /// 
 /// // ...this curve
 /// let curve = LinearCurve::new()
-///     .add_point(0.2, 0.0).unwrap()
-///     .add_point(0.5, 1.0).unwrap() // this and the element below are swapped.
-///     .add_point(0.4, 0.8).unwrap()
-///     .add_point(0.8, 0.0).unwrap();
+///     .add_point(0.2, 0.0)
+///     .add_point(0.5, 1.0) // this and the element below are swapped.
+///     .add_point(0.4, 0.8)
+///     .add_point(0.8, 0.0);
 /// ```
 /// 
 /// It is not checked if new points have precisely the same x value as other
