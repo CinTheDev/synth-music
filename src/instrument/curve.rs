@@ -2,6 +2,7 @@ pub mod linear_curve;
 
 pub trait Curve {
     fn get(&self, x: f32) -> f32;
+    fn into_closure(self) -> impl Fn(f32) -> f32;
 }
 
 #[derive(Clone, Copy)]

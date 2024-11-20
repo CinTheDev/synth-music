@@ -61,4 +61,10 @@ impl Curve for LinearCurve {
         let t = self.horizontal_scale.interpolate_inverse(left_point.0, right_point.0, x);
         return self.vertical_scale.interpolate(left_point.1, right_point.1, t);
     }
+
+    fn into_closure(self) -> impl Fn(f32) -> f32 {
+        move |x| {
+            self.get(x)
+        }
+    }
 }
