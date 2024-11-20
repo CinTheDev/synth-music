@@ -12,7 +12,7 @@ use super::{Curve, ScaleType};
 /// #     sample_rate: 48000,
 /// # };
 /// # let mut buffer = SoundBuffer::new(settings);
-/// 
+/// #
 /// let curve = LinearCurve::new()
 ///     .add_point(0.1, 0.0).unwrap()
 ///     .add_point(0.3, 0.5).unwrap()
@@ -30,7 +30,7 @@ use super::{Curve, ScaleType};
 /// 
 /// ```should_panic
 /// # use synth_music::prelude::*;
-/// 
+/// #
 /// let curve = LinearCurve::new()
 ///     .add_point(0.2, 0.0).unwrap()
 ///     .add_point(0.5, 1.0).unwrap()
