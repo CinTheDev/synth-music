@@ -54,17 +54,18 @@ impl LinearCurve {
         }
     }
 
-    /// Add a point to the function. Will return an error if the resulting
-    /// function were to "go backwards".
-    pub fn add_point(mut self, x: f32, y: f32) -> Result<Self, &'static str> {
-        let last_point = self.points.last().unwrap_or(&(std::f32::NEG_INFINITY, 0.0));
+    /// Add a point to the function.
+    pub fn add_point(mut self, x: f32, y: f32) -> Self {
+        for i in 0..self.points.len() {
+            let right_point = self.points[i];
 
-        if x < last_point.0 {
-            return Err("Cannot add point left to other points.");
+            if x < right_point.0 {
+                self.points.insert(i, (x, y));
+                break
+            }
         }
 
-        self.points.push((x, y));
-        Ok(self)
+        self
     }
 
     /// Set the scale type of the horizontal x-axis.
