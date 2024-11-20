@@ -14,28 +14,53 @@ use super::{Curve, ScaleType};
 /// # let mut buffer = SoundBuffer::new(settings);
 /// #
 /// let curve = LinearCurve::new()
-///     .add_point(0.1, 0.0).unwrap()
-///     .add_point(0.3, 0.5).unwrap()
-///     .add_point(0.4, 1.0).unwrap()
-///     .add_point(0.5, 0.0).unwrap()
+///     .add_point(0.1, 0.0)
+///     .add_point(0.3, 0.5)
+///     .add_point(0.4, 1.0)
+///     .add_point(0.5, 0.0)
 ///     .set_vertical_scale(ScaleType::Logarithmic);
 /// 
 /// eq::filter_fft(&mut buffer, curve.into_closure());
 /// ```
 /// 
-/// It's impossible to add new points inbetween already existing points. So
-/// newly placed points must always be to the right of all already placed
-/// points. If you do place it inbetween other points, `add_point` will return
-/// an error.
+/// If you place a new point inbetween two already existing points, the new
+/// point will then be next to the old points; the old points are no longer
+/// next to each other.
 /// 
-/// ```should_panic
+/// This way it's impossible to have the function "go backwards". It also means
+/// that the order in which points are added does not matter.
+/// 
+/// ```
 /// # use synth_music::prelude::*;
 /// #
+/// // This is the same as...
 /// let curve = LinearCurve::new()
 ///     .add_point(0.2, 0.0).unwrap()
+///     .add_point(0.4, 0.8).unwrap()
 ///     .add_point(0.5, 1.0).unwrap()
-///     .add_point(0.4, 0.8).unwrap()  // will panic!
 ///     .add_point(0.8, 0.0).unwrap();
+/// 
+/// // ...this curve
+/// let curve = LinearCurve::new()
+///     .add_point(0.2, 0.0).unwrap()
+///     .add_point(0.5, 1.0).unwrap() // this and the element below are swapped.
+///     .add_point(0.4, 0.8).unwrap()
+///     .add_point(0.8, 0.0).unwrap();
+/// ```
+/// 
+/// It is not checked if new points have precisely the same x value as other
+/// points, so this will result in undefined behaviour:
+/// 
+/// ```
+/// # use synth_music::prelude::*;
+/// #
+/// // This won't panic, but we do not know if the value at `x = 0` will get us
+/// // `0` or `1`. Furthermore, it's not defined which value is used for
+/// // interpolation.
+/// let curve = LinearCurve::new()
+///     .add_point(0.0, 0.0)
+///     .add_point(0.0, 1.0)
+///     .add_point(1.0, 0.5);
 /// ```
 pub struct LinearCurve {
     points: Vec<(f32, f32)>,
