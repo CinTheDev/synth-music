@@ -60,9 +60,7 @@ fn filter_curve_test(buffer: &mut SoundBuffer) {
         .set_horizontal_scale(ScaleType::Logarithmic)
         .set_vertical_scale(ScaleType::Logarithmic);
 
-    eq::filter_fft(buffer, |f| {
-        curve.get(f)
-    });
+    eq::filter_fft(buffer, curve.into_closure());
 }
 
 fn export(buffer: SoundBuffer) {
