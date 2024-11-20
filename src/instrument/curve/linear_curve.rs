@@ -5,6 +5,13 @@ use super::{Curve, ScaleType};
 /// other types than linear for e.g. interpolating values across a logarithmic
 /// scale.
 /// 
+/// The leftmost and rightmost points cannot interpolate between two values
+/// (as there's only one value specified), so the curve is extended as a
+/// constant function from these points. If you e.g. want to get a value that
+/// is to the left of all specified points, the value will just be the height
+/// of the leftmost point. Visually, this is a horizontal line attached to the
+/// left of the leftmost point and to the right of the rightmost point.
+/// 
 /// ```
 /// use synth_music::prelude::*;
 /// 
