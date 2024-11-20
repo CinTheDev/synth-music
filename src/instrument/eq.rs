@@ -48,6 +48,8 @@ pub fn filter_fft_whole_bandpass(buffer: &mut SoundBuffer, frequency: std::ops::
 /// argument is a function that is given a frequency, and must return the
 /// desired amplitude for that frequency. At the end the signal is reconstructed
 /// using the altered frequencies.
+/// 
+/// You can construct a frequency curve using [`crate::prelude::LinearCurve`]
 pub fn filter_fft<F: Fn(f32) -> f32>(buffer: &mut SoundBuffer, frequency_amplitude: F) {
     let sample_rate = buffer.settings().sample_rate;
     let fft_len = buffer.samples.len();
