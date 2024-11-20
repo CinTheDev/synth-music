@@ -54,3 +54,5 @@ impl ScaleType {
         }
     }
 }
+
+mod tests;

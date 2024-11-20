@@ -140,3 +140,5 @@ impl Curve for LinearCurve {
         return self.vertical_scale.interpolate(left_point.1, right_point.1, t);
     }
 }
+
+mod tests;
