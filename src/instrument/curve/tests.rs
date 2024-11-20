@@ -159,7 +159,37 @@ fn logarithmic_interpolation() {
 
 #[test]
 fn logarithmic_interpolation_inverse() {
-    todo!();
+    assert!(check_interpolation_inverse(
+        1.0,
+        5.0,
+        1.0,
+        0.0,
+        ScaleType::Logarithmic,
+    ));
+
+    assert!(check_interpolation_inverse(
+        1.0,
+        5.0,
+        5.0,
+        1.0,
+        ScaleType::Logarithmic,
+    ));
+
+    assert!(check_interpolation_inverse(
+        1.0,
+        100.0,
+        10.0,
+        0.5,
+        ScaleType::Logarithmic,
+    ));
+
+    assert!(check_interpolation_inverse(
+        1.0,
+        10.0,
+        100.0,
+        2.0,
+        ScaleType::Logarithmic,
+    ));
 }
 
 fn check_interpolation(
