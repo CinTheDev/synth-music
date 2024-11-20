@@ -65,7 +65,61 @@ fn linear_interpolation() {
 
 #[test]
 fn linear_interpolation_inverse() {
-    todo!();
+    assert!(check_interpolation_inverse(
+        0.0,
+        1.0,
+        0.5,
+        0.5,
+        ScaleType::Linear,
+    ));
+
+    assert!(check_interpolation_inverse(
+        0.0,
+        1.0,
+        0.1,
+        0.1,
+        ScaleType::Linear,
+    ));
+
+    assert!(check_interpolation_inverse(
+        0.0,
+        2.0,
+        0.5,
+        0.25,
+        ScaleType::Linear,
+    ));
+
+    assert!(check_interpolation_inverse(
+        1.0,
+        3.0,
+        2.0,
+        0.5,
+        ScaleType::Linear,
+    ));
+
+    assert!(check_interpolation_inverse(
+        -1.0,
+        5.0,
+        -1.0,
+        0.0,
+        ScaleType::Linear,
+    ));
+
+    assert!(check_interpolation_inverse(
+        13.0,
+        0.0,
+        0.0,
+        1.0,
+        ScaleType::Linear,
+    ));
+
+    assert!(check_interpolation_inverse(
+        0.0,
+        0.5,
+        1.0,
+        2.0,
+        ScaleType::Linear,
+    ));
 }
 
 #[test]
@@ -86,6 +140,17 @@ fn check_interpolation(
     scale_type: ScaleType,
 ) -> bool {
     let result = scale_type.interpolate(a, b, t);
+    return eq_f32(result, expected, 0.001);
+}
+
+fn check_interpolation_inverse(
+    a: f32,
+    b: f32,
+    p: f32,
+    expected: f32,
+    scale_type: ScaleType,
+) -> bool {
+    let result = scale_type.interpolate_inverse(a, b, p);
     return eq_f32(result, expected, 0.001);
 }
 
