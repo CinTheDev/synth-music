@@ -28,5 +28,6 @@
 - Provide frequency filter functions, similar to an EQ.
 - Add `Curve` trait and `LinearCurve` implementor for intuitively constructing a
 graph function (e.g. for frequency filter)
+- Move TODOs to GitHub
 
 [IN PROGRESS]
