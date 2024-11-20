@@ -93,11 +93,13 @@ impl LinearCurve {
 
             if x < right_point.0 {
                 self.points.insert(i, (x, y));
-                break
+                return self
             }
         }
 
-        self
+        // If the new point is to the right of all other points
+        self.points.push((x, y));
+        return self;
     }
 
     /// Set the scale type of the horizontal x-axis.
