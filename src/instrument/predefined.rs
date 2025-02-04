@@ -25,7 +25,7 @@ pub fn square_wave(frequency: f64, time: Duration) -> f32 {
 /// Return a point of a square wave given a frequency, time, and phase
 pub fn square_wave_phase(frequency: f64, time: Duration, phase: f64) -> f32 {
     use std::f64::consts::PI;
-    let x = (2.0 * time.as_secs_f64() * frequency + phase / PI) as f32;
+    let x = (2.0 * time.as_secs_f64() * frequency + phase / PI).floor() as f32;
     return -2.0 * (x % 2.0) + 1.0;
 }
 
