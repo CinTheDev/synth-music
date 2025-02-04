@@ -1,4 +1,7 @@
 pub mod predefined;
+pub mod noise;
+pub mod eq;
+pub mod curve;
 
 use crate::file_export::Tone;
 use crate::file_export::SoundBuffer;

@@ -1,5 +1,6 @@
+use std::sync::Mutex;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
-static mut MULTI_PROGRESS: Option<MultiProgress> = None;
+static MULTI_PROGRESS: Mutex<Option<MultiProgress>> = Mutex::new(None);
 
 pub fn default_progress_style() -> ProgressStyle {
     ProgressStyle::with_template(
@@ -8,11 +9,13 @@ pub fn default_progress_style() -> ProgressStyle {
 }
 
 pub unsafe fn add_progress_bar(bar: ProgressBar) -> ProgressBar {
-    if MULTI_PROGRESS.is_none() {
-        MULTI_PROGRESS = Some(MultiProgress::new());
+    let mut multi_progress = MULTI_PROGRESS.lock().unwrap();
+
+    if multi_progress.is_none() {
+        *multi_progress = Some(MultiProgress::new());
     }
 
-    let multi = MULTI_PROGRESS.as_ref().unwrap();
+    let multi = multi_progress.as_ref().unwrap();
 
     multi.add(bar)
 }

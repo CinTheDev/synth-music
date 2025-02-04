@@ -19,10 +19,17 @@ pub use crate::{notes, sequential_notes, section, composition};
 
 // Instrument imports
 pub use crate::instrument;
-pub use instrument::Instrument;
-pub use instrument::predefined;
+pub use instrument::{
+    Instrument,
+    predefined,
+    noise,
+    eq,
+    curve,
+};
 pub use predefined::tet12;
 pub use tet12::{TET12ScaledTone, TET12ConcreteTone};
+pub use curve::{Curve, ScaleType};
+pub use curve::linear_curve::LinearCurve;
 
 
 // File-export imports

@@ -147,6 +147,36 @@ impl SoundBuffer {
         }
     }
 
+    /// Transition from the current buffer to the given buffer.
+    /// 
+    /// This acts similar as `append()`, but instead of adding mixed samples,
+    /// they are averaged.
+    pub fn transition(&mut self, other: Self) {
+        let inactive_samples = self.samples.len() - self.active_samples;
+
+        let mix_samples = usize::min(inactive_samples, other.samples.len());
+
+        // Mix end of self and start of other
+        for i in 0..mix_samples {
+            let index_self = i + self.active_samples;
+            let index_other = i;
+
+            //self.samples[index_self] += other.samples[index_other];
+            let average = (self.samples[index_self] + other.samples[index_other]) / 2.0;
+            self.samples[index_self] = average;
+        }
+
+        self.active_samples += other.active_samples;
+
+        // If other has been fully mixed in already
+        if inactive_samples > other.samples.len() { return }
+
+        let remaining_buffer = &other.samples[inactive_samples..];
+        for value in remaining_buffer {
+            self.samples.push(*value);
+        }
+    }
+
     /// If the buffer is shorter than expected, extend the buffer with silence
     /// until the expected length is met.
     pub fn extend_to_active_samples(&mut self) {
@@ -179,6 +209,43 @@ impl SoundBuffer {
     /// synchronization of the tones.
     pub fn set_active_samples(&mut self, value: usize) {
         self.active_samples = value;
+    }
+
+    /// Will adjust the intensity of every sample so that the loudest sample
+    /// will be at 1.0 (or -1.0). This effectively removes clipping artifacts
+    /// at the cost of making the intensity scale relative.
+    /// 
+    /// Equivalent to `normalize`; this variant consumes and returns self.
+    pub fn normalized(mut self) -> Self {
+        self.normalize();
+        self
+    }
+
+    /// Will adjust the intensity of every sample so that the loudest sample
+    /// will be at 1.0 (or -1.0). This effectively removes clipping artifacts
+    /// at the cost of making the intensity scale relative.
+    /// 
+    /// Equivalent to `normalized`; this variant operates on a mutable
+    /// reference.
+    pub fn normalize(&mut self) {
+        let loudest_sample = Self::find_loudest_sample(&self);
+
+        for sample in self.samples.iter_mut() {
+            *sample /= loudest_sample;
+        }
+    }
+
+    fn find_loudest_sample(&self) -> f32 {
+        let mut loudest = 0.0;
+
+        for sample in &self.samples {
+            let amplitude = sample.abs();
+            if amplitude > loudest {
+                loudest = amplitude;
+            }
+        }
+
+        return loudest;
     }
 }
 

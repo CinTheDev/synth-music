@@ -19,3 +19,15 @@
 - Bake `offbeat_intensity` into the general intensity
 - Make `get_active_note()` part of `MusicTrack` trait
 - Use `SoundBuffer` for Instrument implementation
+
+## v0.2.1
+
+- Provide wave functions with phase
+- Add function to normalize a `SoundBuffer`
+- Provide noise generation functions
+- Provide frequency filter functions, similar to an EQ.
+- Add `Curve` trait and `LinearCurve` implementor for intuitively constructing a
+graph function (e.g. for frequency filter)
+- Move TODOs to GitHub
+
+[IN PROGRESS]

@@ -161,7 +161,7 @@ fn main() {
             bass_repeated,
             tracks::drumset_bass(drumset, 4),
         ),
-    );
+    ).normalized();
 
     export_buffer(composition);
 }
